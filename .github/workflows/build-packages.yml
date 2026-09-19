@@ -1,0 +1,112 @@
+name: Build OpenWrt packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_targets:
+        description: "Optional recipe paths for a targeted build (empty builds everything)"
+        required: false
+        type: string
+      publish_pages:
+        description: "Publish the completed feed to GitHub Pages"
+        required: true
+        default: false
+        type: boolean
+  pull_request:
+    paths:
+      - ".github/workflows/build-packages.yml"
+      - "build/**"
+      - "scripts/**"
+  push:
+    branches: [kernel-4.1]
+    paths:
+      - ".github/workflows/build-packages.yml"
+      - "build/**"
+      - "scripts/**"
+
+concurrency:
+  group: packages-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      PACKAGE_TARGETS: ${{ inputs.package_targets }}
+      GH_TOKEN: ${{ github.token }}
+      BUILD_INPUTS_TAG: build-inputs-v1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select build scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [[ "$EVENT_NAME" != workflow_dispatch && -z "$PACKAGE_TARGETS" ]]; then
+            echo "PACKAGE_TARGETS=zlib" >> "$GITHUB_ENV"
+          fi
+
+      - name: Restore source archive cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/sources
+          key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
+
+      - name: Install archive downloader
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+
+      - name: Download and verify build inputs
+        run: scripts/fetch-build-inputs.sh
+
+      - name: Build compatibility image
+        run: docker build --platform linux/amd64 --tag gui-ipk-builder --file build/Dockerfile .
+
+      - name: Compile packages
+        run: |
+          docker run --rm \
+            --platform linux/amd64 \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --env JOBS="$(nproc)" \
+            --env PACKAGE_TARGETS \
+            --env WORK_DIR=/tmp/openwrt \
+            --volume "$PWD:/repo" \
+            gui-ipk-builder
+
+      - name: Verify package feed
+        run: scripts/verify-feed.sh dist
+
+      - name: Upload package feed
+        uses: actions/upload-artifact@v4
+        with:
+          name: gui-ipk-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload GitHub Pages artifact
+        if: github.event_name == 'workflow_dispatch' && inputs.publish_pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_pages
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy package feed
+        id: deployment
+        uses: actions/deploy-pages@v4

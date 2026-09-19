@@ -1,0 +1,41 @@
+name: Bootstrap build inputs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  upload:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BUILD_INPUTS_TAG: build-inputs-v1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Refuse to replace an existing input release
+        run: |
+          if gh release view "$BUILD_INPUTS_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $BUILD_INPUTS_TAG already exists; input releases are immutable." >&2
+            exit 1
+          fi
+
+      - name: Install Mega downloader
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+
+      - name: Download and verify original archives
+        run: scripts/fetch-build-inputs.sh
+
+      - name: Store inputs in this repository
+        run: |
+          gh release create "$BUILD_INPUTS_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "OpenWrt build inputs v1" \
+            --notes "Immutable legacy buildroot and toolchain inputs. Integrity is pinned in build/checksums.sha256." \
+            .cache/sources/openwrt_18.x_tch_buildroot_based_custom.tar.xz \
+            .cache/sources/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar

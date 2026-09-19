@@ -1,0 +1,11 @@
+.DS_Store
+.idea/
+
+# Large, reproducible build inputs. GitHub Actions downloads and caches them.
+/openwrt_18.x_tch_buildroot_based_custom.tar.xz
+/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar
+
+# Local build state and generated feed.
+/.cache/
+/.work/
+/dist/
