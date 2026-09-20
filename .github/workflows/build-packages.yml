@@ -10,7 +10,8 @@ on:
         type: choice
         options:
           - full
-          - kmod-tun
+          - kmod-tun-4.1.38
+          - kmod-tun-4.1.52
       package_targets:
         description: "Optional recipe paths for the full profile (empty builds everything)"
         required: false
@@ -58,12 +59,13 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
         run: |
           if [[ "$EVENT_NAME" != workflow_dispatch ]]; then
-            BUILD_PROFILE=kmod-tun
+            BUILD_PROFILE=kmod-tun-4.1.38
           fi
-          if [[ "$BUILD_PROFILE" == kmod-tun ]]; then
+          if [[ "$BUILD_PROFILE" == kmod-tun-4.1.38 || "$BUILD_PROFILE" == kmod-tun-4.1.52 ]]; then
             echo "BUILD_CONFIG=/repo/build/kmod-tun.config" >> "$GITHUB_ENV"
             echo "PACKAGE_TARGETS=kernel/linux" >> "$GITHUB_ENV"
             echo "VERIFY_KMOD_TUN=1" >> "$GITHUB_ENV"
+            echo "KERNEL_VERSION=${BUILD_PROFILE#kmod-tun-}" >> "$GITHUB_ENV"
           fi
 
       - name: Restore source archive cache
@@ -93,6 +95,7 @@ jobs:
             --env HOME=/tmp \
             --env JOBS="$(nproc)" \
             --env BUILD_CONFIG \
+            --env KERNEL_VERSION \
             --env PACKAGE_TARGETS \
             --env VERIFY_KMOD_TUN \
             --env WORK_DIR=/tmp/openwrt \

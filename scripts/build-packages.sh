@@ -9,6 +9,15 @@ download_dir="${DOWNLOAD_DIR:-$repo_root/.cache/downloads}"
 jobs="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 package_targets="${PACKAGE_TARGETS:-}"
 build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
+kernel_version="${KERNEL_VERSION:-4.1.38}"
+
+case "$kernel_version" in
+  4.1.38|4.1.52) ;;
+  *)
+    echo "Unsupported KERNEL_VERSION: $kernel_version" >&2
+    exit 1
+    ;;
+esac
 
 buildroot_archive="$source_dir/openwrt_18.x_tch_buildroot_based_custom.tar.xz"
 toolchain_archive="$source_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar"
@@ -46,9 +55,48 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# This archived target defaults to 4.1.38. Keep the override explicit so each
+# generated package and kernel tree carries the requested ABI version.
+kernel_patchlevel="${kernel_version#4.1.}"
+sed -i -E \
+  "s/^LINUX_VERSION-4\\.1 = \\..*/LINUX_VERSION-4.1 = .$kernel_patchlevel/" \
+  "$work_dir/target/linux/brcm63xx-tch/Makefile"
+
 mkdir -p "$download_dir"
 rm -rf "$work_dir/dl"
-ln -s "$download_dir" "$work_dir/dl"
+if [[ "$kernel_version" == 4.1.52 ]]; then
+  # The vendor patch stack is based on 4.1.38 and cannot be applied directly
+  # to a pristine 4.1.52 tree. Present a renamed 4.1.38 base to OpenWrt, then
+  # apply the official 4.1.38 -> 4.1.52 stable delta after the vendor patches.
+  kernel_base_archive="$download_dir/linux-4.1.38.tar.xz"
+  kernel_base_sha256="b8c23117cb08cb0bfc9660375130caaee2fabb39bc5d680557d4521e7e08bd56"
+  if [[ ! -f "$kernel_base_archive" ]]; then
+    kernel_base_tmp="$download_dir/.linux-4.1.38.tar.xz.tmp"
+    curl --fail --location --retry 3 \
+      --output "$kernel_base_tmp" \
+      https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.1.38.tar.xz
+    mv "$kernel_base_tmp" "$kernel_base_archive"
+  fi
+  echo "$kernel_base_sha256  $kernel_base_archive" | sha256sum --check --status || {
+    echo "Invalid Linux 4.1.38 base archive: $kernel_base_archive" >&2
+    exit 1
+  }
+  mkdir -p "$work_dir/dl"
+  find "$download_dir" -mindepth 1 -maxdepth 1 -type f \
+    -exec ln -s {} "$work_dir/dl/" \;
+  rm -f "$work_dir/dl/linux-4.1.52.tar.xz"
+  kernel_base_dir="$work_dir/.kernel-base"
+  rm -rf "$kernel_base_dir"
+  mkdir -p "$kernel_base_dir"
+  tar --extract --xz --file "$kernel_base_archive" \
+    --directory "$kernel_base_dir"
+  mv "$kernel_base_dir/linux-4.1.38" "$kernel_base_dir/linux-4.1.52"
+  XZ_OPT="-T0 -1" tar --create --xz --file "$work_dir/dl/linux-4.1.52.tar.xz" \
+    --directory "$kernel_base_dir" linux-4.1.52
+  rm -rf "$kernel_base_dir"
+else
+  ln -s "$download_dir" "$work_dir/dl"
+fi
 
 mkdir -p "$work_dir/staging_dir"
 tar --extract --file "$toolchain_archive" \
@@ -58,12 +106,21 @@ tar --extract --file "$toolchain_archive" \
 # VBNTS shares the VANTW 4.1 patch directory in this buildroot snapshot.
 kernel_patch_source="$repo_root/patches/kernel-4.1"
 kernel_patch_target="$work_dir/target/linux/brcm63xx-tch/VANTW/patches-4.1"
-if [[ -d "$kernel_patch_source" ]]; then
+if [[ "$kernel_version" == 4.1.38 && -d "$kernel_patch_source" ]]; then
   if [[ ! -d "$kernel_patch_target" ]]; then
     echo "Expected kernel patch directory was not found: $kernel_patch_target" >&2
     exit 1
   fi
   cp "$kernel_patch_source"/*.patch "$kernel_patch_target/"
+fi
+if [[ "$kernel_version" == 4.1.52 ]]; then
+  stable_delta="$repo_root/patches/kernel-4.1.52/vendor-linux-stable-4.1.38-to-4.1.52.patch.gz"
+  if [[ ! -f "$stable_delta" ]]; then
+    echo "Missing Linux stable delta: $stable_delta" >&2
+    exit 1
+  fi
+  gzip -cd "$stable_delta" > \
+    "$kernel_patch_target/899-linux-stable-4.1.38-to-4.1.52.patch"
 fi
 
 # The archived buildroot contains generated absolute symlinks in the board
@@ -124,7 +181,7 @@ if [[ -n "$target_packages" ]]; then
 fi
 
 if [[ "${VERIFY_KMOD_TUN:-0}" == 1 ]]; then
-  "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir"
+  "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir" "$kernel_version"
 fi
 
 ipk_count="$(find "$output_dir" -type f -name '*.ipk' | wc -l | tr -d ' ')"

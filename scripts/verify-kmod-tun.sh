@@ -3,6 +3,7 @@ set -euo pipefail
 
 feed_root="${1:-dist}"
 work_dir="${2:-}"
+expected_version="${3:-4.1.38}"
 
 mapfile -t packages < <(find "$feed_root" -type f -name 'kmod-tun_*.ipk' -print)
 if [[ "${#packages[@]}" -ne 1 ]]; then
@@ -53,30 +54,36 @@ grep -Eq 'Machine:[[:space:]]+ARM' <<<"$elf_header" || {
 }
 
 vermagic="$(strings "$module" | sed -n 's/^vermagic=//p' | head -n 1)"
-if [[ "$vermagic" != 4.1.38* ]]; then
+if [[ "$vermagic" != "$expected_version"* ]]; then
   echo "Unexpected tun.ko vermagic: ${vermagic:-missing}" >&2
   exit 1
 fi
 
 symbol_table="$(readelf --symbols --wide "$module")"
-if grep -q ' UND .*dev_get_valid_name$' <<<"$symbol_table"; then
+if [[ "$expected_version" == 4.1.38 ]] && \
+    grep -q ' UND .*dev_get_valid_name$' <<<"$symbol_table"; then
   echo "tun.ko unexpectedly depends on unexported dev_get_valid_name" >&2
   exit 1
 fi
 
 if [[ -n "$work_dir" ]]; then
-  source_file="$(find "$work_dir/build_dir" -path '*/linux-4.1.38/drivers/net/tun.c' -print -quit)"
+  source_file="$(find "$work_dir/build_dir" -path "*/linux-$expected_version/drivers/net/tun.c" -print -quit)"
   if [[ -z "$source_file" ]]; then
     echo "Could not find the patched tun.c in $work_dir" >&2
     exit 1
   fi
   grep -Fq 'u8 ip_version = skb->len ? (skb->data[0] >> 4) : 0;' "$source_file"
   grep -Fq 'if (sndbuf <= 0)' "$source_file"
+  if grep -q ' UND .*dev_get_valid_name$' <<<"$symbol_table"; then
+    grep -Fq 'EXPORT_SYMBOL(dev_get_valid_name);' \
+      "$(dirname "$source_file")/../../net/core/dev.c"
+  fi
 fi
 
 manifest="$feed_root/kmod-tun-inspection.txt"
 {
   echo "package=$package"
+  echo "kernel_version=$expected_version"
   echo "sha256=$(sha256sum "$package" | awk '{print $1}')"
   echo "module=$(realpath --relative-to="$inspection_dir" "$module")"
   echo "file=$(file -b "$module")"
