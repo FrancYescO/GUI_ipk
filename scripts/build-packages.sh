@@ -5,8 +5,10 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source_dir="${SOURCE_DIR:-$repo_root/.cache/sources}"
 work_dir="${WORK_DIR:-$repo_root/.work/openwrt}"
 output_dir="${OUTPUT_DIR:-$repo_root/dist}"
+download_dir="${DOWNLOAD_DIR:-$repo_root/.cache/downloads}"
 jobs="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 package_targets="${PACKAGE_TARGETS:-}"
+build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
 
 buildroot_archive="$source_dir/openwrt_18.x_tch_buildroot_based_custom.tar.xz"
 toolchain_archive="$source_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar"
@@ -17,6 +19,11 @@ for archive in "$buildroot_archive" "$toolchain_archive"; do
     exit 1
   fi
 done
+
+if [[ ! -f "$build_config" ]]; then
+  echo "Build configuration does not exist: $build_config" >&2
+  exit 1
+fi
 
 (
   cd "$source_dir"
@@ -39,11 +46,38 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+mkdir -p "$download_dir"
+rm -rf "$work_dir/dl"
+ln -s "$download_dir" "$work_dir/dl"
+
 mkdir -p "$work_dir/staging_dir"
 tar --extract --file "$toolchain_archive" \
   --directory "$work_dir/staging_dir" --no-same-owner
 
-cp "$repo_root/build/openwrt.config" "$work_dir/.config"
+# Add repository-maintained kernel fixes after the archived vendor patch set.
+# VBNTS shares the VANTW 4.1 patch directory in this buildroot snapshot.
+kernel_patch_source="$repo_root/patches/kernel-4.1"
+kernel_patch_target="$work_dir/target/linux/brcm63xx-tch/VANTW/patches-4.1"
+if [[ -d "$kernel_patch_source" ]]; then
+  if [[ ! -d "$kernel_patch_target" ]]; then
+    echo "Expected kernel patch directory was not found: $kernel_patch_target" >&2
+    exit 1
+  fi
+  cp "$kernel_patch_source"/*.patch "$kernel_patch_target/"
+fi
+
+# The archived buildroot contains generated absolute symlinks in the board
+# patch directory that only worked on the original maintainer's machine.
+# Point it back to the complete in-archive patch set shared by VANTW/VBNTS.
+active_kernel_patches="$work_dir/target/linux/brcm63xx-tch/patches-4.1"
+autodetected_patch="$active_kernel_patches/900-410-autodetected-bcmdrivers-kconfig.patch"
+if [[ -f "$autodetected_patch" ]]; then
+  cp "$autodetected_patch" "$kernel_patch_target/"
+fi
+rm -rf "$active_kernel_patches"
+ln -s VANTW/patches-4.1 "$active_kernel_patches"
+
+cp "$build_config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)
 make "${make_args[@]}" defconfig
@@ -57,6 +91,11 @@ if [[ -n "$package_targets" ]]; then
   ln -sf "$(command -v cmake)" "$work_dir/staging_dir/host/bin/cmake"
   ln -sf "$(command -v flock)" "$work_dir/staging_dir/host/bin/flock"
   ln -sf "$(command -v patchelf)" "$work_dir/staging_dir/host/bin/patchelf"
+  if [[ " $package_targets " == *" kernel/linux "* ]]; then
+    # Kernel module packages require the configured kernel tree, generated
+    # headers, Module.symvers and modules.builtin before packaging can start.
+    make "${make_args[@]}" target/linux/compile
+  fi
   for target in $package_targets; do
     make "${make_args[@]}" "package/$target/compile"
   done
@@ -82,6 +121,10 @@ if [[ -n "$target_packages" ]]; then
   find "$target_packages" -maxdepth 1 -type f \
     \( -name '*.ipk' -o -name 'Packages*' \) \
     -exec cp -a {} "$output_dir/target/packages/" \;
+fi
+
+if [[ "${VERIFY_KMOD_TUN:-0}" == 1 ]]; then
+  "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir"
 fi
 
 ipk_count="$(find "$output_dir" -type f -name '*.ipk' | wc -l | tr -d ' ')"

@@ -3,8 +3,16 @@ name: Build OpenWrt packages
 on:
   workflow_dispatch:
     inputs:
+      build_profile:
+        description: "Build profile"
+        required: true
+        default: full
+        type: choice
+        options:
+          - full
+          - kmod-tun
       package_targets:
-        description: "Optional recipe paths for a targeted build (empty builds everything)"
+        description: "Optional recipe paths for the full profile (empty builds everything)"
         required: false
         type: string
       publish_pages:
@@ -16,12 +24,14 @@ on:
     paths:
       - ".github/workflows/build-packages.yml"
       - "build/**"
+      - "patches/**"
       - "scripts/**"
   push:
     branches: [kernel-4.1]
     paths:
       - ".github/workflows/build-packages.yml"
       - "build/**"
+      - "patches/**"
       - "scripts/**"
 
 concurrency:
@@ -36,6 +46,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
+      BUILD_PROFILE: ${{ inputs.build_profile }}
       PACKAGE_TARGETS: ${{ inputs.package_targets }}
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
@@ -46,14 +57,21 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [[ "$EVENT_NAME" != workflow_dispatch && -z "$PACKAGE_TARGETS" ]]; then
-            echo "PACKAGE_TARGETS=zlib" >> "$GITHUB_ENV"
+          if [[ "$EVENT_NAME" != workflow_dispatch ]]; then
+            BUILD_PROFILE=kmod-tun
+          fi
+          if [[ "$BUILD_PROFILE" == kmod-tun ]]; then
+            echo "BUILD_CONFIG=/repo/build/kmod-tun.config" >> "$GITHUB_ENV"
+            echo "PACKAGE_TARGETS=kernel/linux" >> "$GITHUB_ENV"
+            echo "VERIFY_KMOD_TUN=1" >> "$GITHUB_ENV"
           fi
 
       - name: Restore source archive cache
         uses: actions/cache@v4
         with:
-          path: .cache/sources
+          path: |
+            .cache/sources
+            .cache/downloads
           key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
 
       - name: Install archive downloader
@@ -74,7 +92,9 @@ jobs:
             --user "$(id -u):$(id -g)" \
             --env HOME=/tmp \
             --env JOBS="$(nproc)" \
+            --env BUILD_CONFIG \
             --env PACKAGE_TARGETS \
+            --env VERIFY_KMOD_TUN \
             --env WORK_DIR=/tmp/openwrt \
             --volume "$PWD:/repo" \
             gui-ipk-builder

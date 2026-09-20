@@ -8,18 +8,19 @@ toolchain.
 ## Building packages
 
 Use **Actions → Build OpenWrt packages → Run workflow**. Leave
-`package_targets` empty to build the complete feed. For a quicker targeted
-build, enter one or more OpenWrt recipe paths such as `zlib` or
-`feeds/packages/curl`.
+the `full` profile and `package_targets` empty to build the complete feed. For
+a quicker targeted build, enter one or more OpenWrt recipe paths such as
+`zlib` or `feeds/packages/curl`. Select the `kmod-tun` profile to build and
+inspect only the TUN kernel module for the stock VBNTS 4.1.38 kernel ABI.
 
 Every run verifies the input archives by SHA-256, builds in Ubuntu 18.04 for
 compatibility with the legacy toolchain, validates the generated package
 indexes, and uploads the feed as a workflow artifact. A manual full build can
 also publish the result to GitHub Pages.
 
-Pull requests and pushes that change the build infrastructure run a `zlib`
-smoke build; full builds are manual because this configuration selects more
-than 1,400 packages and can take several hours.
+Pull requests and pushes that change the build infrastructure or kernel patch
+set run the `kmod-tun` profile. Full builds are manual because the full
+configuration selects more than 1,400 packages and can take several hours.
 
 The two source archives are deliberately not committed, extracted, or kept on
 an orphan branch: together they are about 908 MB compressed, expand beyond
@@ -46,6 +47,23 @@ docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" -e HOME=/tmp \
   -v "$PWD:/repo" gui-ipk-builder
 scripts/verify-feed.sh dist
 ```
+
+To reproduce the conservative 4.1.38 TUN backport locally, use the same image
+with the dedicated configuration:
+
+```bash
+docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" -e HOME=/tmp \
+  -e WORK_DIR=/tmp/openwrt -e BUILD_CONFIG=/repo/build/kmod-tun.config \
+  -e PACKAGE_TARGETS=kernel/linux -e VERIFY_KMOD_TUN=1 \
+  -v "$PWD:/repo" gui-ipk-builder
+scripts/verify-feed.sh dist
+```
+
+This profile backports only the empty `IFF_NO_PI` frame guard and the invalid
+`TUNSETSNDBUF` rejection from Linux 4.1.52. It deliberately does not backport
+the `dev_get_valid_name()` change, which could introduce an unavailable module
+symbol. The resulting package is tied to the VBNTS Linux 4.1.38 ABI; builds for
+4.1.52 or another BSP must use a separate branch and matching build inputs.
 
 To use this repo /etc/opkg.conf MUST be changed and include this 4 lines
 
