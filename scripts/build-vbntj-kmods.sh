@@ -78,6 +78,10 @@ echo "$sdk_archive_sha256  $sdk_archive" | sha256sum --check --status || {
   exit 1
 }
 
+# The public GPL repository intentionally omits the prebuilt cross-toolchain.
+# Build the configured OpenWrt GCC 5.5.0 toolchain before the kernel prepare
+# target tries to invoke it.
+make -j1 V=s toolchain/install
 make -j1 V=s target/linux/prepare
 
 kernel_base="$source_dir/build_dir/target-arm_v7-a_glibc-2.26_eabi/linux-brcm963xx_vmg8825_b50b"
