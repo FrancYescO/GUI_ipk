@@ -11,7 +11,7 @@ on:
         options:
           - full
           - kmod-tun-4.1.38
-          - kmod-tun-4.1.52
+          - kmod-tun-vbnts-4.1.52
       package_targets:
         description: "Optional recipe paths for the full profile (empty builds everything)"
         required: false
@@ -61,11 +61,15 @@ jobs:
           if [[ "$EVENT_NAME" != workflow_dispatch ]]; then
             BUILD_PROFILE=kmod-tun-4.1.38
           fi
-          if [[ "$BUILD_PROFILE" == kmod-tun-4.1.38 || "$BUILD_PROFILE" == kmod-tun-4.1.52 ]]; then
+          if [[ "$BUILD_PROFILE" == kmod-tun-4.1.38 || "$BUILD_PROFILE" == kmod-tun-vbnts-4.1.52 ]]; then
             echo "BUILD_CONFIG=/repo/build/kmod-tun.config" >> "$GITHUB_ENV"
             echo "PACKAGE_TARGETS=kernel/linux" >> "$GITHUB_ENV"
             echo "VERIFY_KMOD_TUN=1" >> "$GITHUB_ENV"
-            echo "KERNEL_VERSION=${BUILD_PROFILE#kmod-tun-}" >> "$GITHUB_ENV"
+            if [[ "$BUILD_PROFILE" == kmod-tun-vbnts-4.1.52 ]]; then
+              echo "KERNEL_VERSION=4.1.52" >> "$GITHUB_ENV"
+            else
+              echo "KERNEL_VERSION=4.1.38" >> "$GITHUB_ENV"
+            fi
           fi
 
       - name: Restore source archive cache

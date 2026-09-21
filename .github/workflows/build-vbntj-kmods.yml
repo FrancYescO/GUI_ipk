@@ -1,0 +1,83 @@
+name: Build VBNTJ Damson kernel modules
+
+on:
+  workflow_dispatch:
+    inputs:
+      module_set:
+        description: "Allowlisted kernel modules to build"
+        required: true
+        default: tun
+        type: choice
+        options:
+          - tun
+          - network-smoke
+  pull_request:
+    paths:
+      - ".github/workflows/build-vbntj-kmods.yml"
+      - "build/vbntj/**"
+      - "build/vbntj-canary/**"
+      - "patches/vbntj-4.1.52/**"
+      - "scripts/build-vbntj-kmods.sh"
+  push:
+    branches:
+      - codex/kmod-tun-4.1.52
+      - kernel-4.1
+    paths:
+      - ".github/workflows/build-vbntj-kmods.yml"
+      - "build/vbntj/**"
+      - "build/vbntj-canary/**"
+      - "patches/vbntj-4.1.52/**"
+      - "scripts/build-vbntj-kmods.sh"
+
+concurrency:
+  group: vbntj-kmods-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      GPL_REPOSITORY: https://github.com/avwarez/vmg8825_b50b.git
+      GPL_REF: V5.17(ABNY.6)C0
+      GPL_COMMIT: af23960e39003ba7788f5ced0c256b1bc676a712
+      MODULE_SET: ${{ inputs.module_set || 'network-smoke' }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Clone pinned GPL buildsystem
+        run: |
+          git clone --branch "$GPL_REF" --depth 1 "$GPL_REPOSITORY" .work/vbntj-gpl
+          test "$(git -C .work/vbntj-gpl rev-parse HEAD)" = "$GPL_COMMIT"
+
+      - name: Build Ubuntu 12.04 compatibility image
+        run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
+
+      - name: Prepare kernel and compile modules
+        run: |
+          mkdir -p dist/vbntj-kmods
+          sudo chown -R 1000:1000 .work/vbntj-gpl dist/vbntj-kmods
+          docker run --rm \
+            --platform linux/amd64 \
+            --env MODULE_SET \
+            --env OUTPUT_DIR=/out \
+            --env SOURCE_DIR=/app \
+            --volume "$PWD:/repo" \
+            --volume "$PWD/.work/vbntj-gpl:/app" \
+            --volume "$PWD/dist/vbntj-kmods:/out" \
+            vbntj-gpl-builder \
+            /repo/scripts/build-vbntj-kmods.sh
+
+      - name: Verify checksums
+        run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
+
+      - name: Upload VBNTJ modules
+        uses: actions/upload-artifact@v4
+        with:
+          name: vbntj-damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}
+          path: dist/vbntj-kmods/
+          if-no-files-found: error
+          retention-days: 30

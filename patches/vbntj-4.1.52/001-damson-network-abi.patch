@@ -1,0 +1,46 @@
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1699,6 +1699,8 @@ struct net_device {
+ 	bool uc_promisc;
+ 	struct netdev_hw_addr_list	uc;
+ 	struct netdev_hw_addr_list	mc;
++	/* Present in the Technicolor Damson 4.1.52 net_device ABI. */
++	unsigned char		tch_abi_pad_after_mc[32];
+ 	struct netdev_hw_addr_list	dev_addrs;
+ 
+ #ifdef CONFIG_SYSFS
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1065,7 +1065,6 @@ struct sk_buff {
+ #define IPT_TARGET_CHECK	(1 << 25)
+ #endif
+-	/* Physical device where this pkt is received */
+-	struct net_device	*in_dev;
++	/* Technicolor Damson 4.1.52 ABI has no in_dev member here. */
+ #endif
+ 	/* These elements must be at the end, see alloc_skb() for details.  */
+ 	sk_buff_data_t		tail;
+diff --git a/net/wireless/Kconfig b/net/wireless/Kconfig
+--- a/net/wireless/Kconfig
++++ b/net/wireless/Kconfig
+@@ -1,5 +1,6 @@
+ config WIRELESS_EXT
+ 	bool
++	default y
+ 
+ config WEXT_CORE
+ 	def_bool y
+@@ -12,8 +13,10 @@ config WEXT_PROC
+ 
+ config WEXT_SPY
+ 	bool
++	default y
+ 
+ config WEXT_PRIV
+ 	bool
++	default y
+ 
+ config CFG80211
+ 	tristate "cfg80211 - wireless configuration API"

@@ -11,8 +11,8 @@ Use **Actions → Build OpenWrt packages → Run workflow**. Leave
 the `full` profile and `package_targets` empty to build the complete feed. For
 a quicker targeted build, enter one or more OpenWrt recipe paths such as
 `zlib` or `feeds/packages/curl`. Select `kmod-tun-4.1.38` or
-`kmod-tun-4.1.52` to build and inspect only the TUN kernel module for that
-VBNTS kernel ABI.
+`kmod-tun-vbnts-4.1.52` to build and inspect only the TUN kernel module for
+that VBNTS kernel ABI.
 
 Every run verifies the input archives by SHA-256, builds in Ubuntu 18.04 for
 compatibility with the legacy toolchain, validates the generated package
@@ -74,6 +74,27 @@ separate branch because their module ABI differs from the stock 4.1.38 build.
 The build applies the official 4.1.38-to-4.1.52 stable changes, rebased onto
 the Technicolor patch stack, after the vendor patches. Applying the Broadcom
 base patch directly to a pristine 4.1.52 tree is not supported.
+
+That workflow profile targets VBNTS and must not be used for VBNTJ merely
+because both kernels report Linux 4.1.x.
+
+## Building VBNTJ/Damson kernel modules
+
+Use **Actions → Build VBNTJ Damson kernel modules → Run workflow** for the
+VBNTJ `VBNTJ_502L07p1` Linux 4.1.52 ABI. The default `tun` module set builds
+TUN plus a compile-time ABI canary. The `network-smoke` set additionally
+builds `usbnet.ko` and `cdc_ether.ko` to exercise the shared networking ABI.
+
+This separate workflow pins the GPL buildsystem and OpenWrt GCC 5.5.0,
+prepares the kernel on a case-sensitive Linux filesystem, then applies the
+Damson compatibility patch and the router-matched kernel configuration before
+any module is compiled. It rejects wrong structure offsets, WEXT
+configuration, compiler version, vermagic, or TUN undefined-symbol set. The
+module selector is an allowlisted choice rather than an arbitrary shell
+target.
+
+The exact router-tested artifact and non-persistent test guidance are in
+[`artifacts/README.md`](artifacts/README.md).
 
 To use this repo /etc/opkg.conf MUST be changed and include this 4 lines
 
