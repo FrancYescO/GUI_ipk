@@ -53,11 +53,14 @@ jobs:
           git clone --branch "$GPL_REF" --depth 1 "$GPL_REPOSITORY" .work/vbntj-gpl
           test "$(git -C .work/vbntj-gpl rev-parse HEAD)" = "$GPL_COMMIT"
 
-      - name: Cache Linux 4.1.52 source
+      - name: Cache pinned GPL source archives
         uses: actions/cache@v4
         with:
-          path: .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
-          key: linux-4.1.52-6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c
+          path: |
+            .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
+            .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.xz
+            .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.bz2
+          key: vbntj-gpl-inputs-v1-87b0bd62c8988e01aae24a1c37bfe19805217900ef0b5b44348c5f3fd4b2927f
 
       - name: Build Ubuntu 12.04 compatibility image
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj

@@ -53,6 +53,31 @@ echo "$kernel_archive_sha256  $kernel_archive" | sha256sum --check --status || {
   exit 1
 }
 
+sdk_archive_xz="$source_dir/dl/broadcom_sdk_502L07_pkg.tar.xz"
+sdk_archive_xz_sha256="73b1888527dfb3792df82ff6f48c44a0423165e128f4d1ea9e7f07561618a9ac"
+sdk_archive="$source_dir/dl/broadcom_sdk_502L07_pkg.tar.bz2"
+sdk_archive_sha256="87b0bd62c8988e01aae24a1c37bfe19805217900ef0b5b44348c5f3fd4b2927f"
+if [[ ! -f "$sdk_archive_xz" ]]; then
+  sdk_archive_xz_tmp="$sdk_archive_xz.tmp"
+  wget --tries=3 --timeout=30 \
+    --output-document="$sdk_archive_xz_tmp" \
+    https://raw.githubusercontent.com/threader/DX5401-B0-V517ABYO6C0_GPL/5df85c8c423ee935eed37b81f0d76dc569e2deb0/dl/broadcom_sdk_502L07_pkg.tar.xz
+  mv "$sdk_archive_xz_tmp" "$sdk_archive_xz"
+fi
+echo "$sdk_archive_xz_sha256  $sdk_archive_xz" | sha256sum --check --status || {
+  echo "Invalid Broadcom 502L07 GPL SDK source archive: $sdk_archive_xz" >&2
+  exit 1
+}
+if [[ ! -f "$sdk_archive" ]]; then
+  sdk_archive_tmp="$sdk_archive.tmp"
+  xz --decompress --stdout "$sdk_archive_xz" | bzip2 -9 > "$sdk_archive_tmp"
+  mv "$sdk_archive_tmp" "$sdk_archive"
+fi
+echo "$sdk_archive_sha256  $sdk_archive" | sha256sum --check --status || {
+  echo "Invalid Broadcom 502L07 GPL SDK build archive: $sdk_archive" >&2
+  exit 1
+}
+
 make -j1 V=s target/linux/prepare
 
 kernel_base="$source_dir/build_dir/target-arm_v7-a_glibc-2.26_eabi/linux-brcm963xx_vmg8825_b50b"
