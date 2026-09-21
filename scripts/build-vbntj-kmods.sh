@@ -37,6 +37,22 @@ export P=vmg8825_b50b
 export TOPDIR="$source_dir"
 ./configs/preCfg.sh "$P"
 make -j1 defconfig
+
+kernel_archive="$source_dir/dl/linux-4.1.52.tar.xz"
+kernel_archive_sha256="6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c"
+mkdir -p "$source_dir/dl"
+if [[ ! -f "$kernel_archive" ]]; then
+  kernel_archive_tmp="$kernel_archive.tmp"
+  wget --tries=3 --timeout=30 \
+    --output-document="$kernel_archive_tmp" \
+    https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.1.52.tar.xz
+  mv "$kernel_archive_tmp" "$kernel_archive"
+fi
+echo "$kernel_archive_sha256  $kernel_archive" | sha256sum --check --status || {
+  echo "Invalid Linux 4.1.52 source archive: $kernel_archive" >&2
+  exit 1
+}
+
 make -j1 V=s target/linux/prepare
 
 kernel_base="$source_dir/build_dir/target-arm_v7-a_glibc-2.26_eabi/linux-brcm963xx_vmg8825_b50b"
