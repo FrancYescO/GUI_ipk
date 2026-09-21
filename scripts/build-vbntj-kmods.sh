@@ -78,6 +78,43 @@ echo "$sdk_archive_sha256  $sdk_archive" | sha256sum --check --status || {
   exit 1
 }
 
+fetch_verified_source() {
+  local filename="$1"
+  local expected_sha256="$2"
+  local url="$3"
+  local destination="$source_dir/dl/$filename"
+
+  if [[ ! -f "$destination" ]]; then
+    wget --tries=3 --timeout=30 \
+      --output-document="$destination.tmp" "$url"
+    mv "$destination.tmp" "$destination"
+  fi
+  echo "$expected_sha256  $destination" | sha256sum --check --status || {
+    echo "Invalid pinned toolchain source archive: $destination" >&2
+    exit 1
+  }
+}
+
+toolchain_source_base="https://raw.githubusercontent.com/threader/DX5401-B0-V517ABYO6C0_GPL/5df85c8c423ee935eed37b81f0d76dc569e2deb0/dl"
+fetch_verified_source binutils-2.28.1.tar.bz2 \
+  d06a446d5bad9828bf1f1ad35b312ccc45e272def70faac6f4517197053e5afb \
+  "$toolchain_source_base/binutils-2.28.1.tar.bz2"
+fetch_verified_source gcc-5.5.0.tar.bz2 \
+  af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50 \
+  "https://media.githubusercontent.com/media/threader/DX5401-B0-V517ABYO6C0_GPL/5df85c8c423ee935eed37b81f0d76dc569e2deb0/dl/gcc-5.5.0.tar.bz2"
+fetch_verified_source glibc-2.26.tar.bz2 \
+  5690dbde0a12973102289eb67c09173ab757657f26f405747b3d19c363956391 \
+  "$toolchain_source_base/glibc-2.26.tar.bz2"
+fetch_verified_source gmp-6.1.0.tar.xz \
+  68dadacce515b0f8a54f510edf07c1b636492bcdb8e8d54c56eb216225d16989 \
+  "$toolchain_source_base/gmp-6.1.0.tar.xz"
+fetch_verified_source mpc-1.0.3.tar.gz \
+  617decc6ea09889fb08ede330917a00b16809b8db88c29c31bfbb49cbf88ecc3 \
+  "$toolchain_source_base/mpc-1.0.3.tar.gz"
+fetch_verified_source mpfr-3.1.4.tar.bz2 \
+  d3103a80cdad2407ed581f3618c4bed04e0c92d1cf771a65ead662cc397f7775 \
+  "$toolchain_source_base/mpfr-3.1.4.tar.bz2"
+
 # The public GPL repository intentionally omits the prebuilt cross-toolchain.
 # Build the configured OpenWrt GCC 5.5.0 toolchain before the kernel prepare
 # target tries to invoke it.

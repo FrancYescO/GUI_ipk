@@ -60,7 +60,13 @@ jobs:
             .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
             .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.xz
             .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.bz2
-          key: vbntj-gpl-inputs-v1-87b0bd62c8988e01aae24a1c37bfe19805217900ef0b5b44348c5f3fd4b2927f
+            .work/vbntj-gpl/dl/binutils-2.28.1.tar.bz2
+            .work/vbntj-gpl/dl/gcc-5.5.0.tar.bz2
+            .work/vbntj-gpl/dl/glibc-2.26.tar.bz2
+            .work/vbntj-gpl/dl/gmp-6.1.0.tar.xz
+            .work/vbntj-gpl/dl/mpc-1.0.3.tar.gz
+            .work/vbntj-gpl/dl/mpfr-3.1.4.tar.bz2
+          key: vbntj-gpl-inputs-v2-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
 
       - name: Build Ubuntu 12.04 compatibility image
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
