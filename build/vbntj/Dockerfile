@@ -18,6 +18,7 @@ RUN apt-get update \
       libc6:i386 libncurses5:i386 libstdc++6:i386 \
  && useradd -u "$BUILD_UID" "$BUILD_USER" \
  && echo "$BUILD_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
+ && ln -sf /bin/bash /bin/sh \
  && mkdir -p "$HOME" \
  && chmod 0777 "$HOME" \
  && rm -rf /var/lib/apt/lists/*
