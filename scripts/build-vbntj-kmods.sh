@@ -14,6 +14,9 @@ case "$module_set" in
   network-smoke)
     module_targets=(drivers/net/tun.ko drivers/net/usb/usbnet.ko drivers/net/usb/cdc_ether.ko)
     ;;
+  qos-probe)
+    module_targets=(net/sched/act_connmark.ko)
+    ;;
   *)
     echo "Unsupported MODULE_SET: $module_set" >&2
     exit 1
@@ -180,6 +183,10 @@ cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
   --module TUN \
   --module USB_USBNET \
   --module USB_NET_CDCETHER
+if [[ "$module_set" == qos-probe ]]; then
+  "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
+    --module NET_ACT_CONNMARK
+fi
 
 export PATH="$toolchain_dir/bin:$PATH"
 export BCM_BUILD_DIR="$sdk_dir"
@@ -207,6 +214,18 @@ if grep -qx 'CONFIG_MODVERSIONS=y' "$kernel_dir/.config"; then
   echo "Damson runtime has CONFIG_MODVERSIONS disabled" >&2
   exit 1
 fi
+if [[ "$module_set" == qos-probe ]]; then
+  for symbol in IFB NET_SCH_INGRESS NET_CLS_U32 NET_ACT_POLICE; do
+    if ! grep -qx "CONFIG_${symbol}=y" "$kernel_dir/.config"; then
+      echo "Required built-in QoS option CONFIG_${symbol}=y was lost" >&2
+      exit 1
+    fi
+  done
+  if ! grep -qx 'CONFIG_NET_ACT_CONNMARK=m' "$kernel_dir/.config"; then
+    echo "QoS probe requires CONFIG_NET_ACT_CONNMARK=m" >&2
+    exit 1
+  fi
+fi
 
 "${kernel_make[@]}" "${module_targets[@]}"
 rm -rf "$canary_dir"
@@ -216,9 +235,9 @@ cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
 mkdir -p "$output_dir"
 rm -f -- \
   "$output_dir"/*.ko \
+  "$output_dir"/*.undefined-symbols \
   "$output_dir/SHA256SUMS" \
-  "$output_dir/BUILD-METADATA.txt" \
-  "$output_dir/tun.undefined-symbols"
+  "$output_dir/BUILD-METADATA.txt"
 for target in "${module_targets[@]}"; do
   module_name="$(basename "$target")"
   cp "$kernel_dir/$target" "$output_dir/$module_name"
@@ -235,9 +254,14 @@ for module in "$output_dir"/*.ko; do
   fi
 done
 
-"$cross_nm" --undefined-only "$output_dir/tun.ko" \
-  | awk '{print $NF}' | LC_ALL=C sort -u > "$output_dir/tun.undefined-symbols"
-if ! cmp -s "$repo_root/build/vbntj/tun.undefined-symbols" "$output_dir/tun.undefined-symbols"; then
+for module in "$output_dir"/*.ko; do
+  module_name="$(basename "$module" .ko)"
+  "$cross_nm" --undefined-only "$module" \
+    | awk '{print $NF}' | LC_ALL=C sort -u \
+    > "$output_dir/${module_name}.undefined-symbols"
+done
+if [[ -f "$output_dir/tun.ko" ]] && \
+   ! cmp -s "$repo_root/build/vbntj/tun.undefined-symbols" "$output_dir/tun.undefined-symbols"; then
   echo "tun.ko undefined-symbol ABI differs from the router-validated baseline" >&2
   diff -u "$repo_root/build/vbntj/tun.undefined-symbols" "$output_dir/tun.undefined-symbols" || true
   exit 1

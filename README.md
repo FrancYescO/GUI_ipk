@@ -78,12 +78,15 @@ base patch directly to a pristine 4.1.52 tree is not supported.
 That workflow profile targets VBNTS and must not be used for VBNTJ merely
 because both kernels report Linux 4.1.x.
 
-## Building VBNTJ/Damson kernel modules
+## Building Damson 4.1.52 kernel modules
 
-Use **Actions → Build VBNTJ Damson kernel modules → Run workflow** for the
-VBNTJ `VBNTJ_502L07p1` Linux 4.1.52 ABI. The default `tun` module set builds
+Use **Actions → Build Damson 4.1.52 kernel modules → Run workflow** for the
+Damson Linux 4.1.52 ABI reconstructed from the pinned `VBNTJ_502L07p1` GPL
+source. The default `tun` module set builds
 TUN plus a compile-time ABI canary. The `network-smoke` set additionally
 builds `usbnet.ko` and `cdc_ether.ko` to exercise the shared networking ABI.
+The `qos-probe` set preserves the firmware's built-in IFB, ingress, U32 and
+police support and builds only the missing `act_connmark.ko` module.
 
 This separate workflow pins the GPL buildsystem and OpenWrt GCC 5.5.0,
 prepares the kernel on a case-sensitive Linux filesystem, then applies the
