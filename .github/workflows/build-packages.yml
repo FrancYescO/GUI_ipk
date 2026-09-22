@@ -106,6 +106,9 @@ jobs:
             --volume "$PWD:/repo" \
             gui-ipk-builder
 
+      - name: Prepare safe shared OPKG feed
+        run: scripts/sanitize-opkg-feed.sh dist
+
       - name: Verify package feed
         run: scripts/verify-feed.sh dist
 
@@ -118,13 +121,13 @@ jobs:
           retention-days: 30
 
       - name: Upload GitHub Pages artifact
-        if: github.event_name == 'workflow_dispatch' && inputs.publish_pages
+        if: github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist/
 
   deploy:
-    if: github.event_name == 'workflow_dispatch' && inputs.publish_pages
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
     needs: build
     runs-on: ubuntu-24.04
     permissions:
