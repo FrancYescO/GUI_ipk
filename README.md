@@ -14,8 +14,9 @@ build, enter one or more OpenWrt recipe paths such as `zlib` or
 
 Every run verifies the input archives by SHA-256, builds in Ubuntu 18.04 for
 compatibility with the legacy toolchain, validates the generated package
-indexes, and uploads the feed as a workflow artifact. A manual full build can
-also publish the result to GitHub Pages.
+indexes, and uploads the feed as a workflow artifact. A manual full build also
+publishes the result to GitHub Pages by default; clear `publish_pages` to keep
+that run artifact-only.
 
 Pull requests and pushes that change the build infrastructure run a `zlib`
 smoke build; full builds are manual because this configuration selects more

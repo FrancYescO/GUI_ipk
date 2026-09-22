@@ -10,7 +10,7 @@ on:
       publish_pages:
         description: "Publish the completed feed to GitHub Pages"
         required: true
-        default: false
+        default: true
         type: boolean
   pull_request:
     paths:
