@@ -47,6 +47,19 @@ tar --extract --xz --file "$buildroot_archive" \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
 mkdir -p "$download_dir"
+kernel_archive="$download_dir/linux-4.1.38.tar.xz"
+kernel_sha256="b8c23117cb08cb0bfc9660375130caaee2fabb39bc5d680557d4521e7e08bd56"
+if [[ ! -f "$kernel_archive" ]]; then
+  kernel_archive_tmp="$download_dir/.linux-4.1.38.tar.xz.tmp"
+  curl --fail --location --retry 3 \
+    --output "$kernel_archive_tmp" \
+    https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.1.38.tar.xz
+  mv "$kernel_archive_tmp" "$kernel_archive"
+fi
+echo "$kernel_sha256  $kernel_archive" | sha256sum --check --status || {
+  echo "Invalid Linux 4.1.38 source archive: $kernel_archive" >&2
+  exit 1
+}
 rm -rf "$work_dir/dl"
 ln -s "$download_dir" "$work_dir/dl"
 
