@@ -1,6 +1,6 @@
 name: Damson 4.1.52 kernel-module artifacts
 
-run-name: Damson 4.1.52 — ${{ inputs.module_set || 'network-smoke' }}
+run-name: Damson 4.1.52 — ${{ inputs.module_set || 'router-tested' }}
 
 on:
   workflow_dispatch:
@@ -8,12 +8,13 @@ on:
       module_set:
         description: "Allowlisted kernel modules to build"
         required: true
-        default: tun
+        default: router-tested
         type: choice
         options:
           - tun
           - network-smoke
           - qos-probe
+          - router-tested
   pull_request:
     paths:
       - ".github/workflows/build-vbntj-kmods.yml"
@@ -41,14 +42,14 @@ permissions:
 
 jobs:
   build:
-    name: Compile and verify ${{ inputs.module_set || 'network-smoke' }} modules
+    name: Compile and verify ${{ inputs.module_set || 'router-tested' }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
       GPL_REPOSITORY: https://github.com/avwarez/vmg8825_b50b.git
       GPL_REF: V5.17(ABNY.6)C0
       GPL_COMMIT: af23960e39003ba7788f5ced0c256b1bc676a712
-      MODULE_SET: ${{ inputs.module_set || 'network-smoke' }}
+      MODULE_SET: ${{ inputs.module_set || 'router-tested' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -102,7 +103,10 @@ jobs:
       - name: Verify checksums
         run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
 
-      - name: Upload Damson modules
+      - name: Verify manual-only IPK safety
+        run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
+
+      - name: Upload Damson modules and manual-only IPKs
         uses: actions/upload-artifact@v7
         with:
           name: damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}

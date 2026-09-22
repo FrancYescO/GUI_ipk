@@ -6,6 +6,7 @@ source_dir="${SOURCE_DIR:-/app}"
 output_dir="${OUTPUT_DIR:-/out}"
 module_set="${MODULE_SET:-tun}"
 canary_dir="$source_dir/.vbntj-abi-canary"
+build_connmark=0
 
 case "$module_set" in
   tun)
@@ -16,6 +17,11 @@ case "$module_set" in
     ;;
   qos-probe)
     module_targets=(net/sched/act_connmark.ko)
+    build_connmark=1
+    ;;
+  router-tested)
+    module_targets=(drivers/net/tun.ko net/sched/act_connmark.ko)
+    build_connmark=1
     ;;
   *)
     echo "Unsupported MODULE_SET: $module_set" >&2
@@ -183,7 +189,7 @@ cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
   --module TUN \
   --module USB_USBNET \
   --module USB_NET_CDCETHER
-if [[ "$module_set" == qos-probe ]]; then
+if [[ "$build_connmark" -eq 1 ]]; then
   "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
     --module NET_ACT_CONNMARK
 fi
@@ -214,7 +220,7 @@ if grep -qx 'CONFIG_MODVERSIONS=y' "$kernel_dir/.config"; then
   echo "Damson runtime has CONFIG_MODVERSIONS disabled" >&2
   exit 1
 fi
-if [[ "$module_set" == qos-probe ]]; then
+if [[ "$build_connmark" -eq 1 ]]; then
   for symbol in IFB NET_SCH_INGRESS NET_CLS_U32 NET_ACT_POLICE; do
     if ! grep -qx "CONFIG_${symbol}=y" "$kernel_dir/.config"; then
       echo "Required built-in QoS option CONFIG_${symbol}=y was lost" >&2
@@ -235,6 +241,7 @@ cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
 mkdir -p "$output_dir"
 rm -f -- \
   "$output_dir"/*.ko \
+  "$output_dir"/*.ipk \
   "$output_dir"/*.undefined-symbols \
   "$output_dir/SHA256SUMS" \
   "$output_dir/BUILD-METADATA.txt"
@@ -267,9 +274,63 @@ if [[ -f "$output_dir/tun.ko" ]] && \
   exit 1
 fi
 
+build_manual_ipk() {
+  local module="$1"
+  local module_stem package_name package_version package_arch package_file
+  local package_root control_root data_root
+
+  module_stem="$(basename "$module" .ko)"
+  package_name="kmod-${module_stem//_/-}-damson-4.1.52-manual"
+  package_version="4.1.52-1"
+  package_arch="brcm963xx"
+  package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"
+  package_root="$output_dir/.ipk-build/$package_name"
+  control_root="$package_root/control"
+  data_root="$package_root/data"
+
+  rm -rf "$package_root"
+  mkdir -p "$control_root" "$data_root/lib/modules/4.1.52"
+  cp "$module" "$data_root/lib/modules/4.1.52/$module_stem.ko"
+  cat > "$control_root/control" <<EOF
+Package: $package_name
+Version: $package_version
+Architecture: $package_arch
+Section: kernel
+Priority: optional
+Maintainer: GUI_ipk reproducible build
+Description: Manual-only Damson 4.1.52 kernel module ($module_stem)
+X-Damson-Firmware: 19.4.0866-3401052
+X-Damson-Target: VBNTJ_502L07p1
+X-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7
+X-Manual-Install-Only: yes
+EOF
+
+  (
+    cd "$control_root"
+    tar --owner=0 --group=0 --numeric-owner -czf "$package_root/control.tar.gz" ./control
+  )
+  (
+    cd "$data_root"
+    tar --owner=0 --group=0 --numeric-owner -czf "$package_root/data.tar.gz" \
+      "./lib/modules/4.1.52/$module_stem.ko"
+  )
+  printf '2.0\n' > "$package_root/debian-binary"
+  (
+    cd "$package_root"
+    tar --owner=0 --group=0 --numeric-owner -czf "$package_file" \
+      ./debian-binary ./data.tar.gz ./control.tar.gz
+  )
+}
+
+rm -rf "$output_dir/.ipk-build"
+for target in "${module_targets[@]}"; do
+  build_manual_ipk "$output_dir/$(basename "$target")"
+done
+rm -rf "$output_dir/.ipk-build"
+
 (
   cd "$output_dir"
-  sha256sum ./*.ko > SHA256SUMS
+  sha256sum ./*.ko ./*.ipk > SHA256SUMS
 )
 cat > "$output_dir/BUILD-METADATA.txt" <<EOF
 source=https://github.com/avwarez/vmg8825_b50b.git
@@ -283,4 +344,4 @@ abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
 EOF
 
-echo "Built validated VBNTJ modules in $output_dir"
+echo "Built validated Damson modules and manual-only IPKs in $output_dir"

@@ -58,3 +58,20 @@ was untouched, and all temporary files were removed afterward.
 The action was instantiated but no production interface or live traffic was
 used. Treat installation as a separate step; test from `/tmp` first on every
 new firmware build.
+
+## Manual-only IPKs
+
+The Damson workflow also packages each requested runtime module as an IPK
+named `kmod-*-damson-4.1.52-manual`. These packages use the target-specific
+`brcm963xx` architecture and contain exactly one file under
+`/lib/modules/4.1.52/`.
+
+They intentionally contain no `postinst`, `preinst`, removal script,
+`/etc/modules.d` autoload entry, or OPKG feed index. They are available only
+inside the workflow artifact and are never copied into the public OPKG feed.
+Keep using the sibling raw `.ko` from `/tmp` for the first test on each
+firmware; installing an IPK writes to persistent overlay storage.
+
+Select the `router-tested` workflow profile to build `tun` and `act_connmark`
+together and receive both raw modules and both manual-only IPKs in one
+artifact.
