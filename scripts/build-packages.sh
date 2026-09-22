@@ -39,6 +39,27 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# The historical archive was created with every directory named "bin"
+# stripped recursively, including source payloads that are required by
+# base-files, qos-scripts and the OpenWrt host tools. Restore the audited
+# files kept in this repository before the build can use the snapshot.
+cp -a "$repo_root/build/source-overlay/." "$work_dir/"
+
+# The package and LuCI feeds retain their pinned Git object databases. Restore
+# the other stripped source payloads directly from those exact commits rather
+# than downloading moving branch heads.
+git -C "$work_dir/feeds/packages" checkout HEAD -- \
+  net/wifischedule/net/usr/bin \
+  utils/bmx7-dnsupdate/files/usr/bin \
+  utils/prometheus-node-exporter-lua/files/usr/bin \
+  utils/yunbridge/files/usr/bin
+git -C "$work_dir/feeds/luci" checkout HEAD -- \
+  applications/luci-app-statistics/root/usr/bin \
+  contrib/package/freifunk-common/files/usr/bin \
+  contrib/package/meshwizard/files/usr/bin \
+  libs/luci-lib-nixio/axTLS/www/bin \
+  libs/luci-lib-nixio/axTLS/www/test_dir/bin
+
 mkdir -p "$work_dir/staging_dir"
 tar --extract --file "$toolchain_archive" \
   --directory "$work_dir/staging_dir" --no-same-owner
