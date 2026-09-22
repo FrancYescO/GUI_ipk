@@ -28,7 +28,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Assemble userspace-only feed
         run: |
@@ -41,7 +41,7 @@ jobs:
         run: scripts/verify-feed.sh dist
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist/
 
@@ -55,4 +55,4 @@ jobs:
     steps:
       - name: Deploy userspace-only feed
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

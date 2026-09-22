@@ -51,7 +51,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Select build scope
         env:
@@ -67,7 +67,7 @@ jobs:
           fi
 
       - name: Restore source archive cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .cache/sources
@@ -112,7 +112,7 @@ jobs:
         run: scripts/verify-feed.sh dist --allow-kmods
 
       - name: Upload package feed
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gui-ipk-${{ github.sha }}
           path: dist/
@@ -121,7 +121,7 @@ jobs:
 
       - name: Upload GitHub Pages artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.build_profile == 'full' && inputs.publish_pages && inputs.package_targets == ''
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist/
 
@@ -138,4 +138,4 @@ jobs:
     steps:
       - name: Deploy package feed
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
