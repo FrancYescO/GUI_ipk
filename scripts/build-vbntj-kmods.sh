@@ -115,6 +115,18 @@ fetch_verified_source mpfr-3.1.4.tar.bz2 \
   d3103a80cdad2407ed581f3618c4bed04e0c92d1cf771a65ead662cc397f7775 \
   "$toolchain_source_base/mpfr-3.1.4.tar.bz2"
 
+# The legacy OpenWrt rules address several already-installed host utilities
+# through staging_dir/host/bin. Populate that prefix without rebuilding the
+# same Ubuntu 12.04 tools from obsolete private mirrors.
+host_bin="$source_dir/staging_dir/host/bin"
+mkdir -p "$host_bin"
+for host_tool in \
+  aclocal autoconf autoheader autom4te automake autopoint autoreconf \
+  find gettext libtool libtoolize m4 sed; do
+  host_tool_path="$(command -v "$host_tool")"
+  ln -sf "$host_tool_path" "$host_bin/$host_tool"
+done
+
 # The public GPL repository intentionally omits the prebuilt cross-toolchain.
 # Build the configured OpenWrt GCC 5.5.0 toolchain before the kernel prepare
 # target tries to invoke it.
