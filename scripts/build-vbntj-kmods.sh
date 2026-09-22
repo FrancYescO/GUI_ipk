@@ -114,6 +114,9 @@ fetch_verified_source mpc-1.0.3.tar.gz \
 fetch_verified_source mpfr-3.1.4.tar.bz2 \
   d3103a80cdad2407ed581f3618c4bed04e0c92d1cf771a65ead662cc397f7775 \
   "$toolchain_source_base/mpfr-3.1.4.tar.bz2"
+fetch_verified_source xz-5.0.4.tar.bz2 \
+  5cd9b060d3a1ad396b3be52c9b9311046a1c369e6062aea752658c435629ce92 \
+  "$toolchain_source_base/xz-5.0.4.tar.bz2"
 
 # The legacy OpenWrt rules address several already-installed host utilities
 # through staging_dir/host/bin. Populate that prefix without rebuilding the
