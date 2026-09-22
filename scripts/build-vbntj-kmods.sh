@@ -121,7 +121,7 @@ fetch_verified_source mpfr-3.1.4.tar.bz2 \
 host_bin="$source_dir/staging_dir/host/bin"
 mkdir -p "$host_bin"
 for host_tool in \
-  aclocal autoconf autoheader autom4te automake autopoint autoreconf \
+  aclocal autoconf autoheader autom4te automake autoreconf \
   find gettext libtool libtoolize m4 sed; do
   host_tool_path="$(command -v "$host_tool")"
   ln -sf "$host_tool_path" "$host_bin/$host_tool"
