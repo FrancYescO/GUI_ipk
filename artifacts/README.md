@@ -1,4 +1,6 @@
-# Tested VBNTJ TUN module
+# Tested Damson 4.1.52 modules
+
+## TUN
 
 `tun-vbntj-damson-4.1.52.ko` targets the Technicolor VBNT-K firmware
 Damson `19.4.0866-3401052` (`VBNTJ_502L07p1`) with Linux `4.1.52`.
@@ -33,3 +35,26 @@ the kernel version and vermagic appear compatible.
 For a non-persistent test, copy the module to `/tmp`, verify its SHA-256, and
 load it directly with `insmod`. Do not install an IPK or copy it to `/overlay`
 until the target firmware and board have been verified.
+
+## Conntrack mark action
+
+`act-connmark-damson-4.1.52.ko` was built by the allowlisted `qos-probe`
+profile from the same pinned GPL source, GCC 5.5.0 toolchain, reconstructed
+kernel configuration and network ABI patch. It has the same kernel vermagic.
+
+SHA-256:
+
+```text
+9bbd94d4e1ed2d02e1c990797b6540d3af3a4a13680099cb7014c4e211bc83ff
+```
+
+The exact artifact was tested non-persistently on the VBNT-K router from
+`/tmp`. The test covered `insmod`, dependency resolution against the running
+`nf_conntrack`, creation and inspection of a `tc` U32 filter with
+`action connmark`, automatic removal of the isolated IFB/qdisc/filter, and
+`rmmod`. Uptime was unchanged, the kernel log contained no Oops, `/overlay`
+was untouched, and all temporary files were removed afterward.
+
+The action was instantiated but no production interface or live traffic was
+used. Treat installation as a separate step; test from `/tmp` first on every
+new firmware build.
