@@ -1,4 +1,6 @@
-name: Build Damson 4.1.52 kernel modules
+name: Damson 4.1.52 kernel-module artifacts
+
+run-name: Damson 4.1.52 — ${{ inputs.module_set || 'network-smoke' }}
 
 on:
   workflow_dispatch:
@@ -39,6 +41,7 @@ permissions:
 
 jobs:
   build:
+    name: Compile and verify ${{ inputs.module_set || 'network-smoke' }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
