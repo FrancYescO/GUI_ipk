@@ -213,8 +213,12 @@ rm -rf "$canary_dir"
 cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
 "${kernel_make[@]}" M="$canary_dir" modules
 
-rm -rf "$output_dir"
 mkdir -p "$output_dir"
+rm -f -- \
+  "$output_dir"/*.ko \
+  "$output_dir/SHA256SUMS" \
+  "$output_dir/BUILD-METADATA.txt" \
+  "$output_dir/tun.undefined-symbols"
 for target in "${module_targets[@]}"; do
   module_name="$(basename "$target")"
   cp "$kernel_dir/$target" "$output_dir/$module_name"
