@@ -1,4 +1,4 @@
-name: Build OpenWrt packages
+name: Userspace OPKG feed (brcm63xx-tch)
 
 on:
   workflow_dispatch:
@@ -33,6 +33,7 @@ permissions:
 
 jobs:
   build:
+    name: ${{ github.event_name == 'workflow_dispatch' && inputs.package_targets == '' && 'Full userspace OPKG feed' || 'Userspace package smoke test' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
@@ -90,7 +91,7 @@ jobs:
       - name: Upload package feed
         uses: actions/upload-artifact@v7
         with:
-          name: gui-ipk-${{ github.sha }}
+          name: userspace-opkg-feed-${{ github.sha }}
           path: dist/
           if-no-files-found: error
           retention-days: 30
@@ -102,6 +103,7 @@ jobs:
           path: dist/
 
   deploy:
+    name: Publish verified userspace feed to Pages
     if: github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
     needs: build
     runs-on: ubuntu-24.04

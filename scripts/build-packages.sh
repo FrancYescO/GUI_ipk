@@ -85,6 +85,23 @@ mkdir -p "$work_dir/staging_dir"
 tar --extract --file "$toolchain_archive" \
   --directory "$work_dir/staging_dir" --no-same-owner
 
+# The snapshot's active board patch directory contains absolute symlinks from
+# the original maintainer machine. VBNTS and VANTW share the complete in-tree
+# 4.1 patch stack, so preserve the generated local patch and repoint the board
+# directory at that portable copy.
+kernel_patch_target="$work_dir/target/linux/brcm63xx-tch/VANTW/patches-4.1"
+if [[ ! -d "$kernel_patch_target" ]]; then
+  echo "Expected vendor kernel patch directory was not found: $kernel_patch_target" >&2
+  exit 1
+fi
+active_kernel_patches="$work_dir/target/linux/brcm63xx-tch/patches-4.1"
+autodetected_patch="$active_kernel_patches/900-410-autodetected-bcmdrivers-kconfig.patch"
+if [[ -f "$autodetected_patch" ]]; then
+  cp "$autodetected_patch" "$kernel_patch_target/"
+fi
+rm -rf "$active_kernel_patches"
+ln -s VANTW/patches-4.1 "$active_kernel_patches"
+
 cp "$repo_root/build/openwrt.config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)

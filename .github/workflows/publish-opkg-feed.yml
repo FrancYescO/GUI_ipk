@@ -1,4 +1,4 @@
-name: Publish safe OPKG feed
+name: Publish verified userspace OPKG feed
 
 on:
   workflow_dispatch:
@@ -25,6 +25,7 @@ permissions:
 
 jobs:
   verify:
+    name: Verify userspace-only feed
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -45,6 +46,7 @@ jobs:
           path: dist/
 
   deploy:
+    name: Publish verified feed to Pages
     needs: verify
     runs-on: ubuntu-24.04
     environment:
