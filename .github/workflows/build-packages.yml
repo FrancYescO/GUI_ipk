@@ -1,4 +1,6 @@
-name: Build OpenWrt packages
+name: Linux 4.1.38 kernel-module artifacts
+
+run-name: Linux 4.1.38 — ${{ inputs.build_profile || 'kmod-tun validation' }}
 
 on:
   workflow_dispatch:
@@ -43,6 +45,7 @@ permissions:
 
 jobs:
   build:
+    name: Compile and verify ${{ inputs.build_profile || 'kmod-tun' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
@@ -111,10 +114,10 @@ jobs:
         if: env.VERIFY_KMOD_TUN == '1'
         run: scripts/verify-feed.sh dist --allow-kmods
 
-      - name: Upload package feed
+      - name: Upload manual build artifact
         uses: actions/upload-artifact@v7
         with:
-          name: gui-ipk-${{ github.sha }}
+          name: linux-4.1.38-${{ inputs.build_profile || 'kmod-tun' }}-${{ github.sha }}
           path: dist/
           if-no-files-found: error
           retention-days: 30
@@ -126,6 +129,7 @@ jobs:
           path: dist/
 
   deploy:
+    name: Pages disabled for kernel-module branches
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.build_profile == 'full' && inputs.publish_pages && inputs.package_targets == ''
     needs: build
     runs-on: ubuntu-24.04
