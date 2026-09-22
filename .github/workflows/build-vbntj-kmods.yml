@@ -22,6 +22,8 @@ on:
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
       - "scripts/build-vbntj-kmods.sh"
+      - "scripts/verify-manual-kmod-ipks.sh"
+      - "artifacts/damson-4.1.52-manual/**"
   push:
     branches:
       - kmods-4.1.52
@@ -32,6 +34,8 @@ on:
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
       - "scripts/build-vbntj-kmods.sh"
+      - "scripts/verify-manual-kmod-ipks.sh"
+      - "artifacts/damson-4.1.52-manual/**"
 
 concurrency:
   group: vbntj-kmods-${{ github.ref }}
@@ -52,6 +56,11 @@ jobs:
       MODULE_SET: ${{ inputs.module_set || 'router-tested' }}
     steps:
       - uses: actions/checkout@v7
+
+      - name: Verify committed router-tested packages
+        run: |
+          (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
 
       - name: Clone pinned GPL buildsystem
         run: |
@@ -113,3 +122,50 @@ jobs:
           path: dist/vbntj-kmods/
           if-no-files-found: error
           retention-days: 30
+
+  publish:
+    name: Publish versioned IPK downloads
+    if: github.ref == 'refs/heads/kmods-4.1.52' && (github.event_name == 'push' || inputs.module_set == 'router-tested')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download this run's verified artifact
+        run: |
+          gh run download "$GITHUB_RUN_ID" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name "damson-4.1.52-router-tested-$GITHUB_SHA" \
+            --dir dist/vbntj-kmods
+
+      - name: Verify packages before release
+        run: |
+          (cd dist/vbntj-kmods && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
+          test "$(find dist/vbntj-kmods -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 2
+
+      - name: Publish immutable, commit-pinned Release
+        run: |
+          tag="damson-4.1.52-manual-${GITHUB_SHA:0:7}"
+          release_dir="dist/vbntj-kmods"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            mkdir -p dist/existing-release
+            gh release download "$tag" --repo "$GITHUB_REPOSITORY" \
+              --pattern 'kmod-*.ipk' --dir dist/existing-release
+            for ipk in "$release_dir"/kmod-*.ipk; do
+              cmp "$ipk" "dist/existing-release/$(basename "$ipk")"
+            done
+            echo "Verified existing Release $tag"
+          else
+            gh release create "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "Damson 4.1.52 manual kernel modules (${GITHUB_SHA:0:7})" \
+              --notes "Manual installation only. Built and verified by Actions run $GITHUB_RUN_ID for Damson 19.4.0866-3401052, kernel 4.1.52, brcm963xx. Test the raw modules from /tmp on each firmware before installing." \
+              "$release_dir"/kmod-*.ipk
+          fi

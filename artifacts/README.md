@@ -67,8 +67,10 @@ named `kmod-*-damson-4.1.52-manual`. These packages use the target-specific
 `/lib/modules/4.1.52/`.
 
 They intentionally contain no `postinst`, `preinst`, removal script,
-`/etc/modules.d` autoload entry, or OPKG feed index. They are available only
-inside the workflow artifact and are never copied into the public OPKG feed.
+`/etc/modules.d` autoload entry, or OPKG feed index. The two router-tested
+packages are committed under [`damson-4.1.52-manual/`](damson-4.1.52-manual/)
+and published as versioned GitHub Release assets. They are not in the public
+OPKG feed.
 Keep using the sibling raw `.ko` from `/tmp` for the first test on each
 firmware; installing an IPK writes to persistent overlay storage.
 
