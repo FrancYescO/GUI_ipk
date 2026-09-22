@@ -5,6 +5,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source_dir="${SOURCE_DIR:-$repo_root/.cache/sources}"
 work_dir="${WORK_DIR:-$repo_root/.work/openwrt}"
 output_dir="${OUTPUT_DIR:-$repo_root/dist}"
+download_dir="${DOWNLOAD_DIR:-$repo_root/.cache/downloads}"
 jobs="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 package_targets="${PACKAGE_TARGETS:-}"
 
@@ -59,6 +60,26 @@ git -C "$work_dir/feeds/luci" checkout HEAD -- \
   contrib/package/meshwizard/files/usr/bin \
   libs/luci-lib-nixio/axTLS/www/bin \
   libs/luci-lib-nixio/axTLS/www/test_dir/bin
+
+# OpenWrt's old kernel recipe has no usable checksum metadata for this
+# version, so download the exact upstream archive ourselves and verify the
+# pinned SHA-256 before exposing it through the buildroot's dl directory.
+mkdir -p "$download_dir"
+kernel_archive="$download_dir/linux-4.1.38.tar.xz"
+kernel_sha256="b8c23117cb08cb0bfc9660375130caaee2fabb39bc5d680557d4521e7e08bd56"
+if [[ ! -f "$kernel_archive" ]]; then
+  kernel_archive_tmp="$download_dir/.linux-4.1.38.tar.xz.tmp"
+  curl --fail --location --retry 3 \
+    --output "$kernel_archive_tmp" \
+    https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.1.38.tar.xz
+  mv "$kernel_archive_tmp" "$kernel_archive"
+fi
+echo "$kernel_sha256  $kernel_archive" | sha256sum --check --status || {
+  echo "Invalid Linux 4.1.38 source archive: $kernel_archive" >&2
+  exit 1
+}
+rm -rf "$work_dir/dl"
+ln -s "$download_dir" "$work_dir/dl"
 
 mkdir -p "$work_dir/staging_dir"
 tar --extract --file "$toolchain_archive" \

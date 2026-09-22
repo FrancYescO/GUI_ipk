@@ -53,7 +53,9 @@ jobs:
       - name: Restore source archive cache
         uses: actions/cache@v6
         with:
-          path: .cache/sources
+          path: |
+            .cache/sources
+            .cache/downloads
           key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
 
       - name: Install archive downloader
