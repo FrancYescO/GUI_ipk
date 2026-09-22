@@ -128,6 +128,13 @@ for host_tool in \
 done
 
 # The public GPL repository intentionally omits the prebuilt cross-toolchain.
+# GCC's configure step expects its host-side arithmetic dependencies in the
+# OpenWrt host staging prefix. Build them explicitly in dependency order;
+# toolchain/install does not pull them in early enough in this legacy tree.
+make -j1 V=s tools/gmp/install
+make -j1 V=s tools/mpfr/install
+make -j1 V=s tools/mpc/install
+
 # Build the configured OpenWrt GCC 5.5.0 toolchain before the kernel prepare
 # target tries to invoke it.
 make -j1 V=s toolchain/install
