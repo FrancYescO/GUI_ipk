@@ -65,7 +65,26 @@ the `dev_get_valid_name()` change, which could introduce an unavailable module
 symbol. The resulting package is tied to the VBNTS Linux 4.1.38 ABI; builds for
 4.1.52 or another BSP must use a separate branch and matching build inputs.
 
-To use this repo /etc/opkg.conf MUST be changed and include this 4 lines
+## Safe OPKG feed
+
+The published OPKG feed is userspace-only. Kernel packages are deliberately
+excluded because they depend on an exact vendor kernel ABI and can crash or
+boot-loop a different firmware even when `uname` and vermagic look compatible.
+Tested kernel modules remain manual artifacts and are never advertised to
+OPKG.
+
+Add the package feeds with:
+
+```text
+src/gz gui_base https://francyesco.github.io/GUI_ipk/base
+src/gz gui_luci https://francyesco.github.io/GUI_ipk/luci
+src/gz gui_packages https://francyesco.github.io/GUI_ipk/packages
+src/gz gui_routing https://francyesco.github.io/GUI_ipk/routing
+src/gz gui_telephony https://francyesco.github.io/GUI_ipk/telephony
+src/gz gui_target https://francyesco.github.io/GUI_ipk/target/packages
+```
+
+The following architecture priorities are also required:
 
 ```bash
 arch all 100
@@ -73,5 +92,10 @@ arch brcm63xx 200
 arch brcm63xx-tch 300
 arch arm_cortex-a9 400
 ```
+
+Adding the feed is safe from cross-kernel module installation, but a blanket
+`opkg upgrade` is still not recommended on vendor firmware. Install only the
+specific userspace packages needed and review replacements of core components
+such as BusyBox, `procd`, OpenSSL or the package manager itself.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/AnsuelS)
