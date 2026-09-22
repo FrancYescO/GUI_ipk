@@ -47,7 +47,7 @@ jobs:
       GPL_COMMIT: af23960e39003ba7788f5ced0c256b1bc676a712
       MODULE_SET: ${{ inputs.module_set || 'network-smoke' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Clone pinned GPL buildsystem
         run: |
@@ -55,7 +55,7 @@ jobs:
           test "$(git -C .work/vbntj-gpl rev-parse HEAD)" = "$GPL_COMMIT"
 
       - name: Cache pinned GPL source archives
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
@@ -71,7 +71,7 @@ jobs:
           key: vbntj-gpl-inputs-v2-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
 
       - name: Cache installed Damson toolchain
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .work/vbntj-gpl/staging_dir/host
@@ -100,7 +100,7 @@ jobs:
         run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
 
       - name: Upload Damson modules
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}
           path: dist/vbntj-kmods/
