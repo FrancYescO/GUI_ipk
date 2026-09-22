@@ -27,7 +27,7 @@ on:
       - "patches/**"
       - "scripts/**"
   push:
-    branches: [kernel-4.1]
+    branches: [kmods-4.1.38]
     paths:
       - ".github/workflows/build-packages.yml"
       - "build/**"
@@ -100,10 +100,16 @@ jobs:
             gui-ipk-builder
 
       - name: Prepare safe shared OPKG feed
+        if: env.VERIFY_KMOD_TUN != '1'
         run: scripts/sanitize-opkg-feed.sh dist
 
       - name: Verify package feed
+        if: env.VERIFY_KMOD_TUN != '1'
         run: scripts/verify-feed.sh dist
+
+      - name: Verify manual kernel-module artifact
+        if: env.VERIFY_KMOD_TUN == '1'
+        run: scripts/verify-feed.sh dist --allow-kmods
 
       - name: Upload package feed
         uses: actions/upload-artifact@v4
@@ -114,13 +120,13 @@ jobs:
           retention-days: 30
 
       - name: Upload GitHub Pages artifact
-        if: github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
+        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.build_profile == 'full' && inputs.publish_pages && inputs.package_targets == ''
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist/
 
   deploy:
-    if: github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.build_profile == 'full' && inputs.publish_pages && inputs.package_targets == ''
     needs: build
     runs-on: ubuntu-24.04
     permissions:
