@@ -36,7 +36,7 @@ function filter() {
     row.hidden = !row.textContent.toLocaleLowerCase().includes(query);
     if (!row.hidden) shown++;
   }
-  count.textContent = `${shown} pacchetti visibili su ${rows.length}`;
+  count.textContent = `${shown} of ${rows.length} packages shown`;
 }
 search.addEventListener('input', filter);
 filter();
@@ -62,7 +62,7 @@ def packages(index):
 
 
 def page(title, selected, groups, prefix):
-    nav = [f'<a href="{prefix}index.html">Tutti i pacchetti</a>']
+    nav = [f'<a href="{prefix}index.html">All packages</a>']
     nav.extend(
         f'<a href="{prefix}{feed}/index.html">{html.escape(feed)} ({len(groups[feed])})</a>'
         for feed in FEEDS
@@ -77,10 +77,10 @@ def page(title, selected, groups, prefix):
             url = prefix + feed + "/" + quote(item["Filename"], safe="")
             rows.append(
                 f'<tr><td>{name}</td><td>{version}</td><td>{arch}</td>'
-                f'<td>{description}</td><td><a href="{html.escape(url, quote=True)}">Scarica IPK</a></td></tr>'
+                f'<td>{description}</td><td><a href="{html.escape(url, quote=True)}">Download IPK</a></td></tr>'
             )
     return f"""<!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -89,13 +89,13 @@ def page(title, selected, groups, prefix):
 </head>
 <body>
 <header><h1>{html.escape(title)}</h1>
-<p>Feed OPKG userspace per brcm63xx-tch/VBNTS. Sfoglia i pacchetti o scarica un file IPK.</p></header>
-<nav aria-label="Sezioni del feed">{' '.join(nav)}</nav>
-<label for="search">Cerca per nome, versione, architettura o descrizione</label>
-<input id="search" type="search" autocomplete="off" placeholder="Cerca pacchetti…">
+<p>Userspace OPKG feed for brcm63xx-tch/VBNTS. Browse packages or download an IPK file.</p></header>
+<nav aria-label="Feed sections">{' '.join(nav)}</nav>
+<label for="search">Search by name, version, architecture, or description</label>
+<input id="search" type="search" autocomplete="off" placeholder="Search packages…">
 <p id="count" class="muted"></p>
 <div class="table-wrap"><table>
-<thead><tr><th>Pacchetto</th><th>Versione</th><th>Architettura</th><th>Descrizione</th><th>Download</th></tr></thead>
+<thead><tr><th>Package</th><th>Version</th><th>Architecture</th><th>Description</th><th>Download</th></tr></thead>
 <tbody>{''.join(rows)}</tbody>
 </table></div>
 <script>{SCRIPT}</script>
@@ -109,7 +109,7 @@ def main():
     root = parser.parse_args().feed_root
     groups = {feed: packages(root / feed / "Packages") for feed in FEEDS}
     (root / ".nojekyll").touch()
-    (root / "index.html").write_text(page("Tutti i pacchetti", None, groups, ""), encoding="utf-8")
+    (root / "index.html").write_text(page("All packages", None, groups, ""), encoding="utf-8")
     for feed in FEEDS:
         prefix = "../" * len(Path(feed).parts)
         (root / feed / "index.html").write_text(
