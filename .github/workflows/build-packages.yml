@@ -17,14 +17,20 @@ on:
       - ".github/workflows/build-packages.yml"
       - "build/**"
       - "patches/userspace-package-metadata.patch"
-      - "scripts/**"
+      - "scripts/build-packages.sh"
+      - "scripts/fetch-build-inputs.sh"
+      - "scripts/sanitize-opkg-feed.sh"
+      - "scripts/verify-feed.sh"
   push:
     branches: [main]
     paths:
       - ".github/workflows/build-packages.yml"
       - "build/**"
       - "patches/userspace-package-metadata.patch"
-      - "scripts/**"
+      - "scripts/build-packages.sh"
+      - "scripts/fetch-build-inputs.sh"
+      - "scripts/sanitize-opkg-feed.sh"
+      - "scripts/verify-feed.sh"
 
 concurrency:
   group: packages-${{ github.ref }}
