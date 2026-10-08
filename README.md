@@ -8,7 +8,7 @@ toolchain.
 ## Building packages
 
 Use **Actions → Build OpenWrt packages → Run workflow**. Leave
-`package_targets` empty to build the complete feed. For a quicker targeted
+`package_targets` empty to build every userspace package. For a quicker targeted
 build, enter one or more OpenWrt recipe paths such as `zlib` or
 `feeds/packages/curl`.
 
@@ -18,9 +18,8 @@ indexes, and uploads the feed as a workflow artifact. A manual full build also
 publishes the result to GitHub Pages by default; clear `publish_pages` to keep
 that run artifact-only.
 
-Pull requests and pushes that change the build infrastructure run a `zlib`
-smoke build; full builds are manual because this configuration selects more
-than 1,400 packages and can take several hours.
+Pull requests and pushes that change the build infrastructure run the full
+userspace build. It can take several hours.
 
 The two source archives are deliberately not committed, extracted, or kept on
 an orphan branch: together they are about 908 MB compressed, expand beyond
@@ -55,6 +54,10 @@ excluded because they depend on an exact vendor kernel ABI and can crash or
 boot-loop a different firmware even when `uname` and vermagic look compatible.
 Tested kernel modules remain manual artifacts and are never advertised to
 OPKG.
+
+Browse and search the published packages at
+[francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).
+Each feed section has its own package list and direct IPK download links.
 
 Add the package feeds with:
 

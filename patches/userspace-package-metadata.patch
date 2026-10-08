@@ -1,0 +1,19 @@
+--- a/scripts/package-metadata.pl
++++ b/scripts/package-metadata.pl
+@@ -304,11 +304,11 @@
+ 			print "\t\t".($pkg->{tristate} ? 'tristate' : 'bool')." $title\n";
+ 			print "\t\tdefault y if DEFAULT_".$pkg->{name}."\n";
+ 			unless ($pkg->{hidden}) {
+-				my @def = ("ALL");
+-				if (!exists($pkg->{repository})) {
+-					push @def, "ALL_NONSHARED";
+-				}
++				my @def;
+ 				if ($pkg->{name} =~ /^kmod-/) {
+ 					push @def, "ALL_KMODS";
++				} else {
++					push @def, "ALL";
++					push @def, "ALL_NONSHARED" if !exists($pkg->{repository});
+ 				}
+ 				$pkg->{default} ||= "m if " . join("||", @def);
+ 			}

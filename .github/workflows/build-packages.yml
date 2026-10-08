@@ -16,12 +16,14 @@ on:
     paths:
       - ".github/workflows/build-packages.yml"
       - "build/**"
+      - "patches/userspace-package-metadata.patch"
       - "scripts/**"
   push:
     branches: [main]
     paths:
       - ".github/workflows/build-packages.yml"
       - "build/**"
+      - "patches/userspace-package-metadata.patch"
       - "scripts/**"
 
 concurrency:
@@ -33,23 +35,17 @@ permissions:
 
 jobs:
   build:
-    name: ${{ github.event_name == 'workflow_dispatch' && inputs.package_targets == '' && 'Full userspace OPKG feed' || 'Userspace package smoke test' }}
+    name: ${{ inputs.package_targets == '' && 'Full userspace OPKG feed' || 'Targeted userspace build' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
       PACKAGE_TARGETS: ${{ inputs.package_targets }}
+      BUILD_CONFIG: /repo/build/userspace.config
+      USERSPACE_ONLY: "1"
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
     steps:
       - uses: actions/checkout@v7
-
-      - name: Select build scope
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          if [[ "$EVENT_NAME" != workflow_dispatch && -z "$PACKAGE_TARGETS" ]]; then
-            echo "PACKAGE_TARGETS=zlib" >> "$GITHUB_ENV"
-          fi
 
       - name: Restore source archive cache
         uses: actions/cache@v6
@@ -78,6 +74,8 @@ jobs:
             --env HOME=/tmp \
             --env JOBS="$(nproc)" \
             --env PACKAGE_TARGETS \
+            --env BUILD_CONFIG \
+            --env USERSPACE_ONLY \
             --env WORK_DIR=/tmp/openwrt \
             --volume "$PWD:/repo" \
             gui-ipk-builder
@@ -88,6 +86,9 @@ jobs:
       - name: Verify package feed
         run: scripts/verify-feed.sh dist
 
+      - name: Generate browsable package pages
+        run: python3 scripts/generate-feed-pages.py dist
+
       - name: Upload package feed
         uses: actions/upload-artifact@v7
         with:
@@ -97,14 +98,14 @@ jobs:
           retention-days: 30
 
       - name: Upload GitHub Pages artifact
-        if: github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
+        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist/
 
   deploy:
     name: Publish verified userspace feed to Pages
-    if: github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
     needs: build
     runs-on: ubuntu-24.04
     permissions:

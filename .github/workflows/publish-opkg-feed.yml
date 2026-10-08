@@ -13,6 +13,7 @@ on:
       - "telephony/**"
       - "target/packages/**"
       - "scripts/verify-feed.sh"
+      - "scripts/generate-feed-pages.py"
 
 concurrency:
   group: github-pages
@@ -39,6 +40,9 @@ jobs:
 
       - name: Reject kernel packages and invalid indexes
         run: scripts/verify-feed.sh dist
+
+      - name: Generate browsable package pages
+        run: python3 scripts/generate-feed-pages.py dist
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v5

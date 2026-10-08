@@ -8,6 +8,8 @@ output_dir="${OUTPUT_DIR:-$repo_root/dist}"
 download_dir="${DOWNLOAD_DIR:-$repo_root/.cache/downloads}"
 jobs="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 package_targets="${PACKAGE_TARGETS:-}"
+build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
+userspace_only="${USERSPACE_ONLY:-0}"
 
 buildroot_archive="$source_dir/openwrt_18.x_tch_buildroot_based_custom.tar.xz"
 toolchain_archive="$source_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar"
@@ -39,6 +41,13 @@ mkdir -p "$work_dir" "$output_dir"
 tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
+
+# CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
+# every userspace recipe while leaving bulk kernel modules unselected.
+if [[ "$userspace_only" == 1 ]]; then
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-package-metadata.patch"
+fi
 
 # The historical archive was created with every directory named "bin"
 # stripped recursively, including source payloads that are required by
@@ -102,7 +111,7 @@ fi
 rm -rf "$active_kernel_patches"
 ln -s VANTW/patches-4.1 "$active_kernel_patches"
 
-cp "$repo_root/build/openwrt.config" "$work_dir/.config"
+cp "$build_config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)
 make "${make_args[@]}" defconfig
