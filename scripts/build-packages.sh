@@ -47,6 +47,8 @@ tar --extract --xz --file "$buildroot_archive" \
 if [[ "$userspace_only" == 1 ]]; then
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-package-metadata.patch"
+  # The archive contains a generated package Kconfig that predates the patch.
+  rm -f "$work_dir/tmp/.config-package.in"
 fi
 
 # The historical archive was created with every directory named "bin"
