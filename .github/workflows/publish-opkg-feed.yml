@@ -1,4 +1,4 @@
-name: Publish verified userspace OPKG feed
+name: Publish verified OPKG feeds
 
 on:
   workflow_dispatch:
@@ -12,8 +12,11 @@ on:
       - "routing/**"
       - "telephony/**"
       - "target/packages/**"
+      - "artifacts/damson-4.1.52-manual/**"
       - "scripts/verify-feed.sh"
       - "scripts/generate-feed-pages.py"
+      - "scripts/assemble-kernel-feed.py"
+      - "scripts/verify-manual-kmod-ipks.sh"
 
 concurrency:
   group: github-pages
@@ -26,7 +29,7 @@ permissions:
 
 jobs:
   verify:
-    name: Verify userspace-only feed
+    name: Verify versioned OPKG feeds
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -40,6 +43,17 @@ jobs:
 
       - name: Reject kernel packages and invalid indexes
         run: scripts/verify-feed.sh dist
+
+      - name: Verify Damson kernel IPKs
+        run: |
+          (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
+
+      - name: Assemble 4.1.52 kernel feed
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist
+
+      - name: Verify combined feed
+        run: scripts/verify-feed.sh dist --allow-kmods
 
       - name: Generate browsable package pages
         run: python3 scripts/generate-feed-pages.py dist
@@ -57,6 +71,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy userspace-only feed
+      - name: Deploy package feed
         id: deployment
         uses: actions/deploy-pages@v5

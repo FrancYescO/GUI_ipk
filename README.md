@@ -47,13 +47,14 @@ docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" -e HOME=/tmp \
 scripts/verify-feed.sh dist
 ```
 
-## Safe OPKG feed
+## OPKG feeds
 
-The published OPKG feed is userspace-only. Kernel packages are deliberately
-excluded because they depend on an exact vendor kernel ABI and can crash or
-boot-loop a different firmware even when `uname` and vermagic look compatible.
-Tested kernel modules remain manual artifacts and are never advertised to
-OPKG.
+The six shared feeds contain userspace packages. Kernel IPKs have a separate
+versioned feed at [`kernel/4.1.52`](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/).
+These two manual packages target Damson `19.4.0866-3401052` on VBNT-K with
+kernel `4.1.52` and architecture `brcm963xx`. Check the exact firmware and
+module ABI before installing one. A matching Linux version alone is not
+sufficient. The kernel feed is not part of the userspace source list below.
 
 Browse and search the published packages at
 [francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).
@@ -70,6 +71,12 @@ src/gz gui_telephony https://francyesco.github.io/GUI_ipk/telephony
 src/gz gui_target https://francyesco.github.io/GUI_ipk/target/packages
 ```
 
+On the exact Damson firmware above, add the kernel feed separately if needed:
+
+```text
+src/gz gui_kernel_4_1_52 https://francyesco.github.io/GUI_ipk/kernel/4.1.52
+```
+
 The following architecture priorities are also required:
 
 ```bash
@@ -79,9 +86,8 @@ arch brcm63xx-tch 300
 arch arm_cortex-a9 400
 ```
 
-Adding the feed is safe from cross-kernel module installation, but a blanket
-`opkg upgrade` is still not recommended on vendor firmware. Install only the
-specific userspace packages needed and review replacements of core components
+Do not run a blanket `opkg upgrade` on vendor firmware. Install only the
+specific packages needed and review replacements of core components
 such as BusyBox, `procd`, OpenSSL or the package manager itself.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/AnsuelS)

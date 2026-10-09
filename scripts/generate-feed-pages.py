@@ -7,7 +7,9 @@ from pathlib import Path
 from urllib.parse import quote
 
 
-FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
+USERSPACE_FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
+KERNEL_FEEDS = ("kernel/4.1.52",)
+FEEDS = USERSPACE_FEEDS + KERNEL_FEEDS
 STYLE = """
 :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; }
 body { max-width: 78rem; margin: auto; padding: 2rem 1rem; color: #17212b; }
@@ -52,8 +54,9 @@ def packages(index):
                 key, value = line.split(": ", 1)
                 fields[key] = value.strip()
         if fields.get("Package") and fields.get("Filename"):
-            if fields["Package"].startswith("kmod-"):
-                continue
+            is_kernel_feed = "kernel" in index.parts
+            if fields["Package"].startswith("kmod-") != is_kernel_feed:
+                raise ValueError(f"Package in wrong feed: {fields['Package']} in {index}")
             filename = fields["Filename"]
             if Path(filename).name != filename or not (index.parent / filename).is_file():
                 raise ValueError(f"Invalid package filename in {index}: {filename}")
@@ -79,6 +82,15 @@ def page(title, selected, groups, prefix):
                 f'<tr><td>{name}</td><td>{version}</td><td>{arch}</td>'
                 f'<td>{description}</td><td><a href="{html.escape(url, quote=True)}">Download IPK</a></td></tr>'
             )
+    notice = (
+        "<p><strong>Kernel modules require the exact firmware and kernel ABI.</strong> "
+        "The 4.1.52 packages target Damson 19.4.0866-3401052 and are marked "
+        "for manual installation. Verify your router before using them.</p>"
+        if selected in KERNEL_FEEDS else
+        "<p>Kernel IPKs are grouped by kernel version. Check the firmware and ABI "
+        "before downloading or installing a module.</p>"
+        if selected is None else ""
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -89,7 +101,8 @@ def page(title, selected, groups, prefix):
 </head>
 <body>
 <header><h1>{html.escape(title)}</h1>
-<p>Userspace OPKG feed for brcm63xx-tch/VBNTS. Browse packages or download an IPK file.</p></header>
+<p>OPKG packages for brcm63xx-tch/VBNTS. Browse packages or download an IPK file.</p>
+{notice}</header>
 <nav aria-label="Feed sections">{' '.join(nav)}</nav>
 <label for="search">Search by name, version, architecture, or description</label>
 <input id="search" type="search" autocomplete="off" placeholder="Search packages…">
