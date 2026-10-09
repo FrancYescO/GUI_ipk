@@ -133,7 +133,14 @@ if [[ -n "$package_targets" ]]; then
   make --directory "$work_dir" package/index
 elif [[ "$userspace_only" == 1 ]]; then
   # `world` also compiles the vendor kernel, including modules unrelated to
-  # this userspace feed. Build the selected package graph directly instead.
+  # this userspace feed. Some kmods are selected indirectly as dependencies;
+  # override those selections for the package graph while retaining the
+  # userspace packages that depend on modules already installed on the router.
+  mapfile -t kmod_overrides < <(
+    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=y$/\1=n/p' "$work_dir/.config"
+  )
+  make_args+=("${kmod_overrides[@]}")
+  echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"
   make "${make_args[@]}" tools/install toolchain/install
   make "${make_args[@]}" package/compile
   make --directory "$work_dir" package/index
