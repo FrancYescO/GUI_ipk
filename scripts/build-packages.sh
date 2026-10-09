@@ -50,6 +50,10 @@ patch --directory "$work_dir" --strip 1 \
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.
 if [[ "$userspace_only" == 1 ]]; then
+  # In this fork CONFIG_ALL and CONFIG_ALL_NONSHARED both select ALL_KMODS.
+  # Remove those selects so the userspace profile can keep ALL_KMODS disabled.
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-no-all-kmods.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-package-metadata.patch"
   # The archive contains a generated package Kconfig that predates the patch.
@@ -125,6 +129,10 @@ cp "$build_config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)
 make "${make_args[@]}" defconfig
+if [[ "$userspace_only" == 1 ]] && grep -qx 'CONFIG_ALL_KMODS=y' "$work_dir/.config"; then
+  echo 'Userspace profile unexpectedly selected CONFIG_ALL_KMODS=y' >&2
+  exit 1
+fi
 
 if [[ -n "$package_targets" ]]; then
   # Intended for smoke tests and targeted rebuilds. Targets are recipe paths,
