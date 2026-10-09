@@ -131,9 +131,14 @@ if [[ -n "$package_targets" ]]; then
     make "${make_args[@]}" "package/$target/compile"
   done
   make --directory "$work_dir" package/index
+elif [[ "$userspace_only" == 1 ]]; then
+  # `world` also compiles the vendor kernel, including modules unrelated to
+  # this userspace feed. Build the selected package graph directly instead.
+  make "${make_args[@]}" tools/install toolchain/install
+  make "${make_args[@]}" package/compile
+  make --directory "$work_dir" package/index
 else
-  # `world` builds host tools, target/kernel prerequisites, every selected
-  # package, package indexes and checksums in dependency order.
+  # Full builds still include the target kernel and firmware images.
   make "${make_args[@]}" world
 fi
 

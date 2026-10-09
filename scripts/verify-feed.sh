@@ -40,13 +40,13 @@ if [[ "$ipk_count" -eq 0 || "$index_count" -eq 0 ]]; then
 fi
 
 if [[ "$allow_kmods" -eq 0 ]]; then
-  unsafe_package="$(find "$feed_root" -type f -name 'kmod-*.ipk' -print -quit)"
+  unsafe_package="$(find "$feed_root" -type f \( -name 'kmod-*.ipk' -o -name 'kernel_*.ipk' \) -print -quit)"
   if [[ -n "$unsafe_package" ]]; then
     echo "Shared feed contains a kernel package: $unsafe_package" >&2
     exit 1
   fi
 
-  if grep -R -l '^Package: kmod-' "$feed_root" \
+  if grep -R -l -E '^Package: (kmod-|kernel$)' "$feed_root" \
     --include=Packages --include=Packages.manifest | grep -q .; then
     echo "Shared feed index still advertises kernel packages" >&2
     exit 1

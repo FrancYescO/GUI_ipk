@@ -49,9 +49,14 @@ scripts/verify-feed.sh dist
 
 ## OPKG feeds
 
-The six shared feeds contain userspace packages. Kernel IPKs have a separate
-versioned feed at [`kernel/4.1.52`](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/).
-These two manual packages target Damson `19.4.0866-3401052` on VBNT-K with
+The six shared feeds contain userspace packages. Kernel IPKs are split into
+[`kernel/4.1.38`](https://francyesco.github.io/GUI_ipk/kernel/4.1.38/) and
+[`kernel/4.1.52`](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/).
+The 4.1.38 IPK is a virtual package from the archived buildroot. It contains
+no kernel image or module and must not be treated as a kernel upgrade. No
+verified 4.1.38 module IPKs are currently available.
+
+The two 4.1.52 manual modules target Damson `19.4.0866-3401052` on VBNT-K with
 kernel `4.1.52` and architecture `brcm963xx`. Check the exact firmware and
 module ABI before installing one. A matching Linux version alone is not
 sufficient. The kernel feed is not part of the userspace source list below.

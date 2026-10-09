@@ -14,6 +14,7 @@ on:
       - "target/packages/**"
       - "artifacts/damson-4.1.52-manual/**"
       - "scripts/verify-feed.sh"
+      - "scripts/sanitize-opkg-feed.sh"
       - "scripts/generate-feed-pages.py"
       - "scripts/assemble-kernel-feed.py"
       - "scripts/verify-manual-kmod-ipks.sh"
@@ -41,6 +42,9 @@ jobs:
           cp -a target/packages dist/target/
           touch dist/.nojekyll
 
+      - name: Remove kernel packages from shared feeds
+        run: scripts/sanitize-opkg-feed.sh dist
+
       - name: Reject kernel packages and invalid indexes
         run: scripts/verify-feed.sh dist
 
@@ -49,8 +53,8 @@ jobs:
           (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
 
-      - name: Assemble 4.1.52 kernel feed
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist
+      - name: Assemble versioned kernel feeds
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --legacy-kernel-dir target/packages
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods

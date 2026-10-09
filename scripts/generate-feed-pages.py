@@ -8,7 +8,7 @@ from urllib.parse import quote
 
 
 USERSPACE_FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
-KERNEL_FEEDS = ("kernel/4.1.52",)
+KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.52")
 FEEDS = USERSPACE_FEEDS + KERNEL_FEEDS
 STYLE = """
 :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; }
@@ -55,7 +55,8 @@ def packages(index):
                 fields[key] = value.strip()
         if fields.get("Package") and fields.get("Filename"):
             is_kernel_feed = "kernel" in index.parts
-            if fields["Package"].startswith("kmod-") != is_kernel_feed:
+            kernel_package = fields["Package"] == "kernel" or fields["Package"].startswith("kmod-")
+            if kernel_package != is_kernel_feed:
                 raise ValueError(f"Package in wrong feed: {fields['Package']} in {index}")
             filename = fields["Filename"]
             if Path(filename).name != filename or not (index.parent / filename).is_file():
@@ -83,6 +84,10 @@ def page(title, selected, groups, prefix):
                 f'<td>{description}</td><td><a href="{html.escape(url, quote=True)}">Download IPK</a></td></tr>'
             )
     notice = (
+        "<p><strong>This is a virtual 4.1.38 kernel package.</strong> "
+        "It contains no kernel image or module. It records the build ABI and "
+        "must not be used as a kernel upgrade.</p>"
+        if selected == "kernel/4.1.38" else
         "<p><strong>Kernel modules require the exact firmware and kernel ABI.</strong> "
         "The 4.1.52 packages target Damson 19.4.0866-3401052 and are marked "
         "for manual installation. Verify your router before using them.</p>"

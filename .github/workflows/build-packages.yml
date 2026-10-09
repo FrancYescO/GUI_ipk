@@ -92,11 +92,11 @@ jobs:
       - name: Verify package feed
         run: scripts/verify-feed.sh dist
 
-      - name: Add verified 4.1.52 kernel feed
+      - name: Add versioned kernel feeds
         run: |
           (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
-          python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist
+          python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --legacy-kernel-dir target/packages
           scripts/verify-feed.sh dist --allow-kmods
 
       - name: Generate browsable package pages
