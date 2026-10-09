@@ -58,7 +58,8 @@ six are empty dependency packages for modules built into this kernel. The
 kernel IPK contains no image and cannot upgrade a router. The compiled ABI
 hash differs from the older virtual kernel package in this repository, so
 verify the firmware's exact kernel ABI before installing any module. These
-packages have not been tested on a router.
+packages have not been tested on a router. They do not include the separate
+Damson 4.1.52 ABI adaptation and must not be used on VBNT-K Damson.
 
 The two 4.1.52 manual modules target Damson `19.4.0866-3401052` on VBNT-K with
 kernel `4.1.52` and architecture `brcm963xx`. Check the exact firmware and

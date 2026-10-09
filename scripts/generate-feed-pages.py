@@ -86,8 +86,9 @@ def page(title, selected, groups, prefix):
     notice = (
         "<p><strong>Linux 4.1.38 modules were built for the VBNTS buildroot.</strong> "
         "The kernel IPK records the build ABI but contains no kernel image. "
-        "Check the exact firmware ABI before installing any module; these "
-        "packages have not been tested on a router.</p>"
+        "These packages do not include the Damson 4.1.52 ABI adaptation and "
+        "must not be used on VBNT-K Damson. Check the exact VBNTS firmware "
+        "ABI before installation; they have not been tested on a router.</p>"
         if selected == "kernel/4.1.38" else
         "<p><strong>Kernel modules require the exact firmware and kernel ABI.</strong> "
         "The 4.1.52 packages target Damson 19.4.0866-3401052 and are marked "
