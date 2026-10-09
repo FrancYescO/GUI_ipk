@@ -27,8 +27,12 @@ def write_feed(version, ipks, feed_root):
     destination = feed_root / "kernel" / version
     destination.mkdir(parents=True, exist_ok=True)
     entries = []
+    package_names = set()
     for ipk in sorted(ipks):
         fields = control_fields(ipk)
+        if fields.get("Package") in package_names:
+            raise ValueError(f"Duplicate kernel package: {fields['Package']}")
+        package_names.add(fields.get("Package"))
         manual_module = (
             version == "4.1.52"
             and fields.get("Package", "").startswith("kmod-")
@@ -81,8 +85,15 @@ def main():
     parser.add_argument("feed_root", type=Path)
     parser.add_argument("--legacy-kernel-dir", type=Path, help="directory with the 4.1.38 virtual kernel IPK")
     parser.add_argument("--buildroot-kernel-dir", type=Path, help="directory with verified 4.1.38 kernel and kmod IPKs")
+    parser.add_argument("--damson-extra-dir", type=Path, help="directory with additional verified manual-only Damson IPKs")
     args = parser.parse_args()
-    write_feed("4.1.52", args.source.glob("*.ipk"), args.feed_root)
+    damson_ipks = list(args.source.glob("*.ipk"))
+    if args.damson_extra_dir:
+        extra_ipks = list(args.damson_extra_dir.glob("*.ipk"))
+        if not extra_ipks:
+            raise ValueError("No additional Damson IPKs found")
+        damson_ipks.extend(extra_ipks)
+    write_feed("4.1.52", damson_ipks, args.feed_root)
     if args.buildroot_kernel_dir:
         candidates = list(args.buildroot_kernel_dir.glob("*.ipk"))
         if len(list(args.buildroot_kernel_dir.glob("kernel_4.1.38-*.ipk"))) != 1:

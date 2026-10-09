@@ -90,9 +90,11 @@ def page(title, selected, groups, prefix):
         "must not be used on VBNT-K Damson. Check the exact VBNTS firmware "
         "ABI before installation; they have not been tested on a router.</p>"
         if selected == "kernel/4.1.38" else
-        "<p><strong>Kernel modules require the exact firmware and kernel ABI.</strong> "
-        "The 4.1.52 packages target Damson 19.4.0866-3401052 and are marked "
-        "for manual installation. Verify your router before using them.</p>"
+        "<p><strong>Damson 4.1.52 modules require the exact firmware ABI.</strong> "
+        "Only TUN and act_connmark were tested on VBNT-K Damson "
+        "19.4.0866-3401052. Additional modules passed build checks only. "
+        "All IPKs are manual-only: test a raw module from /tmp before "
+        "installing it on persistent storage.</p>"
         if selected in KERNEL_FEEDS else
         "<p>Kernel IPKs are grouped by kernel version. Check the firmware and ABI "
         "before downloading or installing a module.</p>"

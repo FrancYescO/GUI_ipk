@@ -13,6 +13,7 @@ on:
       - "telephony/**"
       - "target/packages/**"
       - "artifacts/damson-4.1.52-manual/**"
+      - "artifacts/damson-4.1.52-network/**"
       - "artifacts/buildroot-4.1.38/**"
       - "scripts/verify-feed.sh"
       - "scripts/sanitize-opkg-feed.sh"
@@ -55,6 +56,9 @@ jobs:
         run: |
           (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
+          (cd artifacts/damson-4.1.52-network && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-network
+          test "$(find artifacts/damson-4.1.52-network -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 44
 
       - name: Verify built Linux 4.1.38 IPKs
         run: |
@@ -63,7 +67,7 @@ jobs:
           scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
 
       - name: Assemble versioned kernel feeds
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --buildroot-kernel-dir artifacts/buildroot-4.1.38
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --buildroot-kernel-dir artifacts/buildroot-4.1.38
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods

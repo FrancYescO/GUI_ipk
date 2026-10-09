@@ -61,10 +61,12 @@ verify the firmware's exact kernel ABI before installing any module. These
 packages have not been tested on a router. They do not include the separate
 Damson 4.1.52 ABI adaptation and must not be used on VBNT-K Damson.
 
-The two 4.1.52 manual modules target Damson `19.4.0866-3401052` on VBNT-K with
+The two router-tested 4.1.52 manual modules target Damson `19.4.0866-3401052` on VBNT-K with
 kernel `4.1.52` and architecture `brcm963xx`. Check the exact firmware and
 module ABI before installing one. A matching Linux version alone is not
-sufficient. The kernel feed is not part of the userspace source list below.
+sufficient. Additional 4.1.52 modules are build-verified only and should be
+tested as raw `.ko` files from `/tmp` before any persistent installation.
+The kernel feed is not part of the userspace source list below.
 
 Browse and search the published packages at
 [francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).
