@@ -88,6 +88,15 @@ jobs:
             --volume "$PWD:/repo" \
             gui-ipk-builder
 
+      - name: Upload serial compile log after failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: userspace-compile-failure-${{ github.sha }}
+          path: dist/serial-package-compile.log
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Prepare safe shared OPKG feed
         run: scripts/sanitize-opkg-feed.sh dist
 

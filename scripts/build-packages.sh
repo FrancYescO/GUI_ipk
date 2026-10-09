@@ -164,7 +164,21 @@ elif [[ "$userspace_only" == 1 ]]; then
       done < <(sed -n 's/.*ERROR: \(package\/[^ ]*\) failed to build.*/\1/p' "$error_file" | sort -u)
     fi
     echo "Retrying unfinished packages serially to expose the first error" >&2
-    make --directory "$work_dir" --jobs 1 V=sc "${kmod_overrides[@]}" package/compile
+    serial_log="$output_dir/serial-package-compile.log"
+    if make --directory "$work_dir" --jobs 1 V=sc "${kmod_overrides[@]}" package/compile 2>&1 | tee "$serial_log"; then
+      rm -f "$serial_log"
+    else
+      mapfile -t failure_lines < <(
+        grep -E 'error:|fatal error:|undefined reference|No rule to make target|ERROR:|make(\[[0-9]+\])?: \*\*\*' "$serial_log" | tail -n 12 || true
+      )
+      if [[ ${#failure_lines[@]} -eq 0 ]]; then
+        mapfile -t failure_lines < <(tail -n 8 "$serial_log")
+      fi
+      for line in "${failure_lines[@]}"; do
+        printf '::error title=OpenWrt package compile::%s\n' "$line"
+      done
+      exit 1
+    fi
   fi
   make --directory "$work_dir" package/index
 else
