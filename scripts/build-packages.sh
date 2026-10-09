@@ -219,3 +219,6 @@ echo "Built $ipk_count packages in $output_dir"
 if [[ "${VERIFY_KMOD_TUN:-0}" == 1 ]]; then
   "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir"
 fi
+if [[ "${VERIFY_KMOD_CONNMARK:-0}" == 1 ]]; then
+  "$repo_root/scripts/verify-kmod-connmark.sh" "$output_dir"
+fi

@@ -10,6 +10,7 @@ on:
       - patches/kernel-4.1.38/**
       - scripts/build-packages.sh
       - scripts/verify-kmod-tun.sh
+      - scripts/verify-kmod-connmark.sh
 
 concurrency:
   group: kmods-4.1.38-${{ github.ref }}
@@ -45,7 +46,7 @@ jobs:
         run: scripts/fetch-build-inputs.sh
       - name: Build compatibility image
         run: docker build --platform linux/amd64 --tag gui-ipk-builder --file build/Dockerfile .
-      - name: Compile kernel and kmod-tun
+      - name: Compile kernel and selected modules
         run: |
           set -o pipefail
           docker run --rm \
@@ -57,6 +58,7 @@ jobs:
             --env BUILD_KMODS \
             --env PACKAGE_TARGETS \
             --env VERIFY_KMOD_TUN=1 \
+            --env VERIFY_KMOD_CONNMARK=1 \
             --env WORK_DIR=/tmp/openwrt \
             --volume "$PWD:/repo" \
             gui-ipk-builder 2>&1 | tee kernel-build.log
