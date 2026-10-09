@@ -1,0 +1,53 @@
+name: Export verified Damson 4.1.52 network modules
+
+on:
+  push:
+    branches: [codex/kmods-4.1.52-feed]
+    paths:
+      - .github/workflows/export-damson-4.1.52-network.yml
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: FrancYescO/GUI_ipk
+          run-id: 37940783813
+          github-token: ${{ github.token }}
+          name: damson-4.1.52-network-feed-f070be53a6f2bf5f639928720a65b890ba92fef8
+          path: downloaded
+      - name: Verify downloaded packages
+        run: |
+          (cd downloaded && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh downloaded
+          test "$(find downloaded -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 46
+      - name: Save additional modules on this branch
+        run: |
+          mkdir -p artifacts/damson-4.1.52-network
+          for module in downloaded/*.ko; do
+            case "$(basename "$module")" in
+              tun.ko|act_connmark.ko|vbntj_abi_canary.ko) continue ;;
+            esac
+            cp "$module" artifacts/damson-4.1.52-network/
+          done
+          for ipk in downloaded/kmod-*.ipk; do
+            case "$(basename "$ipk")" in
+              kmod-tun-damson-*|kmod-act-connmark-damson-*) continue ;;
+            esac
+            cp "$ipk" artifacts/damson-4.1.52-network/
+          done
+          test "$(find artifacts/damson-4.1.52-network -maxdepth 1 -name '*.ipk' -type f | wc -l)" -eq 44
+          (cd artifacts/damson-4.1.52-network && sha256sum *.ko *.ipk > SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-network
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f artifacts/damson-4.1.52-network
+          git commit -m 'Store build-verified Damson 4.1.52 network modules'
+          git push origin HEAD:codex/kmods-4.1.52-feed
