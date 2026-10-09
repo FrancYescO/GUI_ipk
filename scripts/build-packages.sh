@@ -142,7 +142,7 @@ elif [[ "$userspace_only" == 1 ]]; then
   # override those selections for the package graph while retaining the
   # userspace packages that depend on modules already installed on the router.
   mapfile -t kmod_overrides < <(
-    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=y$/\1=n/p' "$work_dir/.config"
+    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=n/p' "$work_dir/.config"
   )
   make_args+=("${kmod_overrides[@]}")
   echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"
