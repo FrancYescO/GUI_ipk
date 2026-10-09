@@ -1,0 +1,41 @@
+name: Export verified Linux 4.1.38 modules
+
+on:
+  push:
+    branches: [codex/kmods-4.1.38]
+    paths:
+      - .github/workflows/export-kmods-4.1.38.yml
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Download verified build artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: FrancYescO/GUI_ipk
+          run-id: 37938282306
+          github-token: ${{ github.token }}
+          name: kernel-4.1.38-kmods-2be3a4aeedf609495993a90be7d37c0e9a215a64
+          path: downloaded
+      - name: Verify downloaded packages
+        run: |
+          scripts/verify-feed.sh downloaded --allow-kmods
+          scripts/verify-kmod-tun.sh downloaded
+          scripts/verify-kmod-connmark.sh downloaded
+      - name: Save verified IPKs on this branch
+        run: |
+          mkdir -p artifacts/buildroot-4.1.38
+          find downloaded -type f -name '*.ipk' -exec cp -t artifacts/buildroot-4.1.38 {} +
+          find downloaded -type f -name '*.ipk' -print | sort
+          (cd artifacts/buildroot-4.1.38 && sha256sum *.ipk > SHA256SUMS)
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f artifacts/buildroot-4.1.38
+          git commit -m 'Store verified Linux 4.1.38 kernel module IPKs'
+          git push origin HEAD:codex/kmods-4.1.38
