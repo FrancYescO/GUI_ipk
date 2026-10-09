@@ -84,9 +84,10 @@ def page(title, selected, groups, prefix):
                 f'<td>{description}</td><td><a href="{html.escape(url, quote=True)}">Download IPK</a></td></tr>'
             )
     notice = (
-        "<p><strong>This is a virtual 4.1.38 kernel package.</strong> "
-        "It contains no kernel image or module. It records the build ABI and "
-        "must not be used as a kernel upgrade.</p>"
+        "<p><strong>Linux 4.1.38 modules were built for the VBNTS buildroot.</strong> "
+        "The kernel IPK records the build ABI but contains no kernel image. "
+        "Check the exact firmware ABI before installing any module; these "
+        "packages have not been tested on a router.</p>"
         if selected == "kernel/4.1.38" else
         "<p><strong>Kernel modules require the exact firmware and kernel ABI.</strong> "
         "The 4.1.52 packages target Damson 19.4.0866-3401052 and are marked "

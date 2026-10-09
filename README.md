@@ -52,9 +52,13 @@ scripts/verify-feed.sh dist
 The six shared feeds contain userspace packages. Kernel IPKs are split into
 [`kernel/4.1.38`](https://francyesco.github.io/GUI_ipk/kernel/4.1.38/) and
 [`kernel/4.1.52`](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/).
-The 4.1.38 IPK is a virtual package from the archived buildroot. It contains
-no kernel image or module and must not be treated as a kernel upgrade. No
-verified 4.1.38 module IPKs are currently available.
+The 4.1.38 feed contains a virtual kernel ABI package and 19 `kmod-*` IPKs
+built from the archived VBNTS buildroot. Thirteen IPKs contain `.ko` files;
+six are empty dependency packages for modules built into this kernel. The
+kernel IPK contains no image and cannot upgrade a router. The compiled ABI
+hash differs from the older virtual kernel package in this repository, so
+verify the firmware's exact kernel ABI before installing any module. These
+packages have not been tested on a router.
 
 The two 4.1.52 manual modules target Damson `19.4.0866-3401052` on VBNT-K with
 kernel `4.1.52` and architecture `brcm963xx`. Check the exact firmware and

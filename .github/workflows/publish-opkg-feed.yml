@@ -13,11 +13,14 @@ on:
       - "telephony/**"
       - "target/packages/**"
       - "artifacts/damson-4.1.52-manual/**"
+      - "artifacts/buildroot-4.1.38/**"
       - "scripts/verify-feed.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/generate-feed-pages.py"
       - "scripts/assemble-kernel-feed.py"
       - "scripts/verify-manual-kmod-ipks.sh"
+      - "scripts/verify-kmod-tun.sh"
+      - "scripts/verify-kmod-connmark.sh"
 
 concurrency:
   group: github-pages
@@ -53,8 +56,14 @@ jobs:
           (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
 
+      - name: Verify built Linux 4.1.38 IPKs
+        run: |
+          (cd artifacts/buildroot-4.1.38 && sha256sum --check SHA256SUMS)
+          scripts/verify-kmod-tun.sh artifacts/buildroot-4.1.38
+          scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
+
       - name: Assemble versioned kernel feeds
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --legacy-kernel-dir target/packages
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --buildroot-kernel-dir artifacts/buildroot-4.1.38
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods

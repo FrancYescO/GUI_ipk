@@ -2,15 +2,6 @@ name: Linux 4.1.38 kernel modules
 
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/kmods-4.1.38]
-    paths:
-      - .github/workflows/build-kmods-4.1.38.yml
-      - build/kmod-tun.config
-      - patches/kernel-4.1.38/**
-      - scripts/build-packages.sh
-      - scripts/verify-kmod-tun.sh
-      - scripts/verify-kmod-connmark.sh
 
 concurrency:
   group: kmods-4.1.38-${{ github.ref }}

@@ -36,7 +36,7 @@ on:
 
 concurrency:
   group: packages-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -107,7 +107,10 @@ jobs:
         run: |
           (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
-          python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --legacy-kernel-dir target/packages
+          (cd artifacts/buildroot-4.1.38 && sha256sum --check SHA256SUMS)
+          scripts/verify-kmod-tun.sh artifacts/buildroot-4.1.38
+          scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
+          python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --buildroot-kernel-dir artifacts/buildroot-4.1.38
           scripts/verify-feed.sh dist --allow-kmods
 
       - name: Generate browsable package pages

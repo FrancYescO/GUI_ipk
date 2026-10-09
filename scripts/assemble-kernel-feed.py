@@ -42,7 +42,12 @@ def write_feed(version, ipks, feed_root):
             and fields.get("Architecture") == "arm_cortex-a9_neon"
             and fields.get("Description", "").strip() == "Virtual kernel package"
         )
-        if not ((manual_module or virtual_kernel) and fields.get("Version", "").startswith(version + "-")):
+        buildroot_module = (
+            version == "4.1.38"
+            and fields.get("Package", "").startswith("kmod-")
+            and fields.get("Architecture") == "arm_cortex-a9_neon"
+        )
+        if not ((manual_module or virtual_kernel or buildroot_module) and fields.get("Version", "").startswith(version + "-")):
             raise ValueError(f"Unexpected kernel package metadata: {ipk}")
         if virtual_kernel:
             payload = subprocess.check_output(["tar", "-xOzf", str(ipk), "./data.tar.gz"])
@@ -75,9 +80,19 @@ def main():
     parser.add_argument("source", type=Path, help="directory with verified 4.1.52 modules")
     parser.add_argument("feed_root", type=Path)
     parser.add_argument("--legacy-kernel-dir", type=Path, help="directory with the 4.1.38 virtual kernel IPK")
+    parser.add_argument("--buildroot-kernel-dir", type=Path, help="directory with verified 4.1.38 kernel and kmod IPKs")
     args = parser.parse_args()
     write_feed("4.1.52", args.source.glob("*.ipk"), args.feed_root)
-    if args.legacy_kernel_dir:
+    if args.buildroot_kernel_dir:
+        candidates = list(args.buildroot_kernel_dir.glob("*.ipk"))
+        if len(list(args.buildroot_kernel_dir.glob("kernel_4.1.38-*.ipk"))) != 1:
+            raise ValueError("Expected exactly one built 4.1.38 kernel IPK")
+        if not any(ipk.name.startswith("kmod-tun_") for ipk in candidates):
+            raise ValueError("Missing built kmod-tun IPK")
+        if not any(ipk.name.startswith("kmod-sched-connmark_") for ipk in candidates):
+            raise ValueError("Missing built kmod-sched-connmark IPK")
+        write_feed("4.1.38", candidates, args.feed_root)
+    elif args.legacy_kernel_dir:
         candidates = list(args.legacy_kernel_dir.glob("kernel_4.1.38-*.ipk"))
         if len(candidates) != 1:
             raise ValueError(f"Expected one 4.1.38 kernel IPK, found {len(candidates)}")
