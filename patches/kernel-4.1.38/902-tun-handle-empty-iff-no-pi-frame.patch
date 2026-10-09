@@ -1,0 +1,32 @@
+From: GUI_ipk maintainers <noreply@example.invalid>
+Subject: [PATCH 1/2] tun: safely reject empty IFF_NO_PI frames
+
+Backport the TUN fix present in Linux 4.1.52.  The old code reads
+skb->data[0] unconditionally, including when userspace supplies an empty
+frame.  Decode the IP version only when the skb contains at least one byte.
+
+This patch intentionally changes drivers/net/tun.c only and does not alter
+the networking core ABI.
+---
+ drivers/net/tun.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1142,11 +1142,13 @@ static ssize_t tun_get_user(struct tun_s
+ 	switch (tun->flags & TUN_TYPE_MASK) {
+ 	case IFF_TUN:
+ 		if (tun->flags & IFF_NO_PI) {
+-			switch (skb->data[0] & 0xf0) {
+-			case 0x40:
++			u8 ip_version = skb->len ? (skb->data[0] >> 4) : 0;
++
++			switch (ip_version) {
++			case 4:
+ 				pi.proto = htons(ETH_P_IP);
+ 				break;
+-			case 0x60:
++			case 6:
+ 				pi.proto = htons(ETH_P_IPV6);
+ 				break;
+ 			default:

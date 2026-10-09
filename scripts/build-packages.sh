@@ -115,6 +115,9 @@ autodetected_patch="$active_kernel_patches/900-410-autodetected-bcmdrivers-kconf
 if [[ -f "$autodetected_patch" ]]; then
   cp "$autodetected_patch" "$kernel_patch_target/"
 fi
+if [[ "${BUILD_KMODS:-0}" == 1 ]]; then
+  cp "$repo_root"/patches/kernel-4.1.38/*.patch "$kernel_patch_target/"
+fi
 rm -rf "$active_kernel_patches"
 ln -s VANTW/patches-4.1 "$active_kernel_patches"
 
@@ -132,6 +135,9 @@ if [[ -n "$package_targets" ]]; then
   ln -sf "$(command -v cmake)" "$work_dir/staging_dir/host/bin/cmake"
   ln -sf "$(command -v flock)" "$work_dir/staging_dir/host/bin/flock"
   ln -sf "$(command -v patchelf)" "$work_dir/staging_dir/host/bin/patchelf"
+  if [[ "${BUILD_KMODS:-0}" == 1 ]]; then
+    make "${make_args[@]}" target/linux/compile
+  fi
   for target in $package_targets; do
     make "${make_args[@]}" "package/$target/compile"
   done
@@ -210,3 +216,6 @@ if [[ "$ipk_count" -eq 0 ]]; then
 fi
 
 echo "Built $ipk_count packages in $output_dir"
+if [[ "${VERIFY_KMOD_TUN:-0}" == 1 ]]; then
+  "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir"
+fi

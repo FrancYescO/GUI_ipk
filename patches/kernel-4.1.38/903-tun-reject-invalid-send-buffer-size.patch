@@ -1,0 +1,25 @@
+From: GUI_ipk maintainers <noreply@example.invalid>
+Subject: [PATCH 2/2] tun: reject non-positive TUNSETSNDBUF values
+
+Backport the input validation present in Linux 4.1.52.  A non-positive send
+buffer size is invalid and must not be propagated to the socket.
+
+This patch intentionally changes drivers/net/tun.c only and does not alter
+the networking core ABI.
+---
+ drivers/net/tun.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -2015,6 +2015,10 @@ static long __tun_chr_ioctl(struct file
+ 			ret = -EFAULT;
+ 			break;
+ 		}
++		if (sndbuf <= 0) {
++			ret = -EINVAL;
++			break;
++		}
+ 
+ 		tun->sndbuf = sndbuf;
+ 		tun_set_sndbuf(tun);

@@ -1,0 +1,79 @@
+name: Linux 4.1.38 kernel modules
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/kmods-4.1.38]
+    paths:
+      - .github/workflows/build-kmods-4.1.38.yml
+      - build/kmod-tun.config
+      - patches/kernel-4.1.38/**
+      - scripts/build-packages.sh
+      - scripts/verify-kmod-tun.sh
+
+concurrency:
+  group: kmods-4.1.38-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BUILD_INPUTS_TAG: build-inputs-v1
+      BUILD_CONFIG: /repo/build/kmod-tun.config
+      BUILD_KMODS: '1'
+      PACKAGE_TARGETS: kernel/linux
+    steps:
+      - uses: actions/checkout@v7
+      - name: Restore source archive cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            .cache/sources
+            .cache/downloads
+          key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
+      - name: Install archive downloader
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+      - name: Download and verify build inputs
+        run: scripts/fetch-build-inputs.sh
+      - name: Build compatibility image
+        run: docker build --platform linux/amd64 --tag gui-ipk-builder --file build/Dockerfile .
+      - name: Compile kernel and kmod-tun
+        run: |
+          set -o pipefail
+          docker run --rm \
+            --platform linux/amd64 \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --env JOBS="$(nproc)" \
+            --env BUILD_CONFIG \
+            --env BUILD_KMODS \
+            --env PACKAGE_TARGETS \
+            --env VERIFY_KMOD_TUN=1 \
+            --env WORK_DIR=/tmp/openwrt \
+            --volume "$PWD:/repo" \
+            gui-ipk-builder 2>&1 | tee kernel-build.log
+      - name: Verify kernel package feed
+        run: scripts/verify-feed.sh dist --allow-kmods
+      - name: Upload compile log after failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kernel-4.1.38-compile-failure-${{ github.sha }}
+          path: kernel-build.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Upload verified modules
+        uses: actions/upload-artifact@v7
+        with:
+          name: kernel-4.1.38-kmods-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
