@@ -1,0 +1,12 @@
+--- a/src/compat/compat.h	2022-06-27 12:54:37.000000000 +0200
++++ b/src/compat/compat.h	2026-10-09 13:44:43.072510022 +0200
+@@ -1200,3 +1200,9 @@
+ #endif
+ 
+ #endif /* _WG_COMPAT_H */
++
++/* Linux < 5.4 has no fallthrough pseudo-keyword and GCC 5 lacks the
++ * attribute; compat/siphash/siphash.c uses it unconditionally. */
++#ifndef fallthrough
++#define fallthrough do {} while (0)
++#endif

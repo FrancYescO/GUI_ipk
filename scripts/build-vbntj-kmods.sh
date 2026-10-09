@@ -7,6 +7,8 @@ output_dir="${OUTPUT_DIR:-/out}"
 module_set="${MODULE_SET:-tun}"
 canary_dir="$source_dir/.vbntj-abi-canary"
 build_connmark=0
+build_wireguard=0
+external_modules=()
 
 case "$module_set" in
   tun)
@@ -22,6 +24,11 @@ case "$module_set" in
   router-tested)
     module_targets=(drivers/net/tun.ko net/sched/act_connmark.ko)
     build_connmark=1
+    ;;
+  wireguard)
+    # Out-of-tree wireguard-linux-compat; no in-tree module targets.
+    module_targets=()
+    build_wireguard=1
     ;;
   *)
     echo "Unsupported MODULE_SET: $module_set" >&2
@@ -126,6 +133,12 @@ fetch_verified_source mpfr-3.1.4.tar.bz2 \
 fetch_verified_source xz-5.0.4.tar.bz2 \
   5cd9b060d3a1ad396b3be52c9b9311046a1c369e6062aea752658c435629ce92 \
   "$toolchain_source_base/xz-5.0.4.tar.bz2"
+
+if [[ "$build_wireguard" -eq 1 ]]; then
+  fetch_verified_source wireguard-linux-compat-1.0.20220627.tar.xz \
+    19b181e5c7d2260c23ecad4ad324425fd8e88200d97a885a2c7d4bd26cd61461 \
+    "https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-1.0.20220627.tar.xz"
+fi
 
 # The legacy OpenWrt rules address several already-installed host utilities
 # through staging_dir/host/bin. Populate that prefix without rebuilding the
@@ -233,7 +246,21 @@ if [[ "$build_connmark" -eq 1 ]]; then
   fi
 fi
 
-"${kernel_make[@]}" "${module_targets[@]}"
+if [[ ${#module_targets[@]} -gt 0 ]]; then
+  "${kernel_make[@]}" "${module_targets[@]}"
+fi
+
+if [[ "$build_wireguard" -eq 1 ]]; then
+  wg_dir="$source_dir/.wireguard-linux-compat"
+  rm -rf "$wg_dir"
+  mkdir -p "$wg_dir"
+  tar -C "$wg_dir" --strip-components=1 \
+    -xJf "$source_dir/dl/wireguard-linux-compat-1.0.20220627.tar.xz"
+  patch --batch --forward --directory "$wg_dir" -p1 \
+    < "$repo_root/patches/wireguard-linux-compat/001-define-fallthrough-for-old-kernels.patch"
+  "${kernel_make[@]}" M="$wg_dir/src" modules
+  external_modules+=("$wg_dir/src/wireguard.ko")
+fi
 rm -rf "$canary_dir"
 cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
 "${kernel_make[@]}" M="$canary_dir" modules
@@ -245,9 +272,12 @@ rm -f -- \
   "$output_dir"/*.undefined-symbols \
   "$output_dir/SHA256SUMS" \
   "$output_dir/BUILD-METADATA.txt"
-for target in "${module_targets[@]}"; do
+for target in ${module_targets[@]+"${module_targets[@]}"}; do
   module_name="$(basename "$target")"
   cp "$kernel_dir/$target" "$output_dir/$module_name"
+done
+for module in ${external_modules[@]+"${external_modules[@]}"}; do
+  cp "$module" "$output_dir/$(basename "$module")"
 done
 cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
 
@@ -323,7 +353,7 @@ EOF
 }
 
 rm -rf "$output_dir/.ipk-build"
-for target in "${module_targets[@]}"; do
+for target in ${module_targets[@]+"${module_targets[@]}"} ${external_modules[@]+"${external_modules[@]}"}; do
   build_manual_ipk "$output_dir/$(basename "$target")"
 done
 rm -rf "$output_dir/.ipk-build"
@@ -340,6 +370,7 @@ firmware=Damson 19.4.0866-3401052
 kernel=4.1.52
 compiler=OpenWrt GCC $compiler_version
 module_set=$module_set
+wireguard_compat=$([[ "$build_wireguard" -eq 1 ]] && echo 1.0.20220627 || echo none)
 abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
 EOF
