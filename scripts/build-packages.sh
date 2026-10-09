@@ -46,6 +46,8 @@ tar --extract --xz --file "$buildroot_archive" \
 # archived recipe otherwise compiles it in the toolchain's default GNU89 mode.
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/libpcap-c99.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/olsrd-release-flags.patch"
 
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.

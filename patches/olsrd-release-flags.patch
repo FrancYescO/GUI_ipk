@@ -1,0 +1,10 @@
+--- a/feeds/routing/olsrd/Makefile
++++ b/feeds/routing/olsrd/Makefile
+@@ -166,6 +166,7 @@
+ endef
+ 
+ MAKE_FLAGS+= \
++	DEBUG=0 \
+ 	NO_DEBUG_MESSAGES=1 \
+ 	OS="linux" \
+ 	DESTDIR="$(PKG_INSTALL_DIR)" \
