@@ -17,18 +17,6 @@
  				}
 				$pkg->{default} ||= "m if " . join("||", @def);
 			}
---- a/config/Config-build.in
-+++ b/config/Config-build.in
-@@ -10,4 +10,3 @@
- 	config ALL_NONSHARED
- 		bool "Select all target specific packages by default"
--		select ALL_KMODS
- 		default BUILDBOT
-@@ -18,4 +17,3 @@
- 	config ALL
- 		bool "Select all userspace packages by default"
--		select ALL_KMODS
- 		select ALL_NONSHARED
 --- a/include/kernel-defaults.mk
 +++ b/include/kernel-defaults.mk
 @@ -97,6 +97,8 @@
