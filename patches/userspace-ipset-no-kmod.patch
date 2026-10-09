@@ -1,0 +1,11 @@
+--- a/package/network/utils/ipset/Makefile
++++ b/package/network/utils/ipset/Makefile
+@@ -40,7 +40,7 @@
+ endef
+ 
+ CONFIGURE_ARGS += \
+-	--with-kbuild="$(LINUX_DIR)"
++	--without-kmod
+ 
+ MAKE_FLAGS += \
+ 	ARCH="$(LINUX_KARCH)" \

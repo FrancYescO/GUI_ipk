@@ -60,6 +60,8 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/userspace-package-metadata.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-skip-kernel-package.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-ipset-no-kmod.patch"
   # The archive contains a generated package Kconfig that predates the patch.
   rm -f "$work_dir/tmp/.config-package.in"
 fi
