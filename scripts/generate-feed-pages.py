@@ -68,10 +68,10 @@ def page(title, selected, groups, prefix):
     nav = [f'<a href="{prefix}index.html">All packages</a>']
     nav.extend(
         f'<a href="{prefix}{feed}/index.html">{html.escape(feed)} ({len(groups[feed])})</a>'
-        for feed in FEEDS
+        for feed in groups
     )
     rows = []
-    for feed in (FEEDS if selected is None else (selected,)):
+    for feed in (groups if selected is None else (selected,)):
         for item in groups[feed]:
             name = html.escape(item["Package"])
             version = html.escape(item.get("Version", ""))
@@ -120,10 +120,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("feed_root", type=Path)
     root = parser.parse_args().feed_root
-    groups = {feed: packages(root / feed / "Packages") for feed in FEEDS}
+    groups = {
+        feed: packages(root / feed / "Packages")
+        for feed in FEEDS
+        if (root / feed / "Packages").is_file()
+    }
+    missing_userspace = set(USERSPACE_FEEDS) - groups.keys()
+    if missing_userspace:
+        raise ValueError(f"Missing userspace feeds: {sorted(missing_userspace)}")
     (root / ".nojekyll").touch()
     (root / "index.html").write_text(page("All packages", None, groups, ""), encoding="utf-8")
-    for feed in FEEDS:
+    for feed in groups:
         prefix = "../" * len(Path(feed).parts)
         (root / feed / "index.html").write_text(
             page(feed, feed, groups, prefix), encoding="utf-8"
