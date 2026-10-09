@@ -92,6 +92,13 @@ jobs:
       - name: Verify package feed
         run: scripts/verify-feed.sh dist
 
+      - name: Add verified 4.1.52 kernel feed
+        run: |
+          (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
+          python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist
+          scripts/verify-feed.sh dist --allow-kmods
+
       - name: Generate browsable package pages
         run: python3 scripts/generate-feed-pages.py dist
 
@@ -110,7 +117,7 @@ jobs:
           path: dist/
 
   deploy:
-    name: Publish verified userspace feed to Pages
+    name: Publish verified package feed to Pages
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
     needs: build
     runs-on: ubuntu-24.04
