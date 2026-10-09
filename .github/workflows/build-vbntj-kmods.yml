@@ -1,0 +1,142 @@
+name: Damson 4.1.52 kernel-module artifacts
+
+run-name: Damson 4.1.52 — ${{ inputs.module_set || 'network-feed' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      module_set:
+        description: "Allowlisted kernel modules to build"
+        required: true
+        default: network-feed
+        type: choice
+        options:
+          - tun
+          - network-smoke
+          - qos-probe
+          - router-tested
+          - network-feed
+  pull_request:
+    paths:
+      - ".github/workflows/build-vbntj-kmods.yml"
+      - "build/vbntj/**"
+      - "build/vbntj-canary/**"
+      - "patches/vbntj-4.1.52/**"
+      - "scripts/build-vbntj-kmods.sh"
+      - "scripts/verify-manual-kmod-ipks.sh"
+      - "artifacts/damson-4.1.52-manual/**"
+  push:
+    branches:
+      - codex/kmods-4.1.52-feed
+    paths:
+      - ".github/workflows/build-vbntj-kmods.yml"
+      - "build/vbntj/**"
+      - "build/vbntj-canary/**"
+      - "patches/vbntj-4.1.52/**"
+      - "scripts/build-vbntj-kmods.sh"
+      - "scripts/verify-manual-kmod-ipks.sh"
+      - "artifacts/damson-4.1.52-manual/**"
+
+concurrency:
+  group: vbntj-kmods-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compile and verify ${{ inputs.module_set || 'network-feed' }} modules
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      GPL_REPOSITORY: https://github.com/avwarez/vmg8825_b50b.git
+      GPL_REF: V5.17(ABNY.6)C0
+      GPL_COMMIT: af23960e39003ba7788f5ced0c256b1bc676a712
+      MODULE_SET: ${{ inputs.module_set || 'network-feed' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Verify committed router-tested packages
+        run: |
+          (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
+
+      - name: Clone pinned GPL buildsystem
+        run: |
+          git clone --branch "$GPL_REF" --depth 1 "$GPL_REPOSITORY" .work/vbntj-gpl
+          test "$(git -C .work/vbntj-gpl rev-parse HEAD)" = "$GPL_COMMIT"
+
+      - name: Cache pinned GPL source archives
+        uses: actions/cache@v6
+        with:
+          path: |
+            .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
+            .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.xz
+            .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.bz2
+            .work/vbntj-gpl/dl/binutils-2.28.1.tar.bz2
+            .work/vbntj-gpl/dl/gcc-5.5.0.tar.bz2
+            .work/vbntj-gpl/dl/glibc-2.26.tar.bz2
+            .work/vbntj-gpl/dl/gmp-6.1.0.tar.xz
+            .work/vbntj-gpl/dl/mpc-1.0.3.tar.gz
+            .work/vbntj-gpl/dl/mpfr-3.1.4.tar.bz2
+            .work/vbntj-gpl/dl/xz-5.0.4.tar.bz2
+          key: vbntj-gpl-inputs-v2-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
+
+      - name: Cache installed Damson toolchain
+        uses: actions/cache@v6
+        with:
+          path: |
+            .work/vbntj-gpl/staging_dir/host
+            .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi
+          key: damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v1
+
+      - name: Build Ubuntu 12.04 compatibility image
+        run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
+
+      - name: Prepare kernel and compile modules
+        run: |
+          set -o pipefail
+          mkdir -p dist/vbntj-kmods
+          sudo chown -R 1000:1000 .work/vbntj-gpl dist/vbntj-kmods
+          if docker run --rm \
+            --platform linux/amd64 \
+            --env MODULE_SET \
+            --env OUTPUT_DIR=/out \
+            --env SOURCE_DIR=/app \
+            --volume "$PWD:/repo" \
+            --volume "$PWD/.work/vbntj-gpl:/app" \
+            --volume "$PWD/dist/vbntj-kmods:/out" \
+            vbntj-gpl-builder \
+            /repo/scripts/build-vbntj-kmods.sh 2>&1 | tee damson-build.log; then
+            :
+          else
+            grep -E 'error:|fatal error:|No rule to make target|Error [0-9]|Unexpected|Refusing' damson-build.log \
+              | tail -n 20 | while IFS= read -r line; do
+                echo "::error title=Damson module build::$line"
+              done || true
+            exit 1
+          fi
+
+      - name: Upload compile log after failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: damson-network-feed-failure-${{ github.sha }}
+          path: damson-build.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Verify checksums
+        run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
+
+      - name: Verify manual-only IPK safety
+        run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
+
+      - name: Upload Damson modules and manual-only IPKs
+        uses: actions/upload-artifact@v7
+        with:
+          name: damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}
+          path: dist/vbntj-kmods/
+          if-no-files-found: error
+          retention-days: 30
