@@ -42,6 +42,11 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# libpcap 1.9.1 uses the C99 `restrict` keyword in portability.h, while this
+# archived recipe otherwise compiles it in the toolchain's default GNU89 mode.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/libpcap-c99.patch"
+
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.
 if [[ "$userspace_only" == 1 ]]; then
@@ -144,7 +149,23 @@ elif [[ "$userspace_only" == 1 ]]; then
   # The matching cross-toolchain is restored from the pinned input archive.
   # Rebuilding it would fetch an obsolete glibc-2.19-r25243 source URL.
   make "${make_args[@]}" tools/install
-  make "${make_args[@]}" package/compile
+  if ! make "${make_args[@]}" package/compile; then
+    error_file="$work_dir/logs/package/error.txt"
+    if [[ -s "$error_file" ]]; then
+      echo "Failed package recipes:" >&2
+      cat "$error_file" >&2
+      while IFS= read -r recipe; do
+        log_dir="$work_dir/logs/$recipe"
+        [[ -d "$log_dir" ]] || continue
+        while IFS= read -r -d '' log_file; do
+          echo "Last 80 lines of $log_file:" >&2
+          tail -n 80 "$log_file" >&2
+        done < <(find "$log_dir" -type f -name '*compile.txt' -print0)
+      done < <(sed -n 's/.*ERROR: \(package\/[^ ]*\) failed to build.*/\1/p' "$error_file" | sort -u)
+    fi
+    echo "Retrying unfinished packages serially to expose the first error" >&2
+    make --directory "$work_dir" --jobs 1 V=sc "${kmod_overrides[@]}" package/compile
+  fi
   make --directory "$work_dir" package/index
 else
   # Full builds still include the target kernel and firmware images.
