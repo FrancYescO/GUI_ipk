@@ -141,7 +141,9 @@ elif [[ "$userspace_only" == 1 ]]; then
   )
   make_args+=("${kmod_overrides[@]}")
   echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"
-  make "${make_args[@]}" tools/install toolchain/install
+  # The matching cross-toolchain is restored from the pinned input archive.
+  # Rebuilding it would fetch an obsolete glibc-2.19-r25243 source URL.
+  make "${make_args[@]}" tools/install
   make "${make_args[@]}" package/compile
   make --directory "$work_dir" package/index
 else
