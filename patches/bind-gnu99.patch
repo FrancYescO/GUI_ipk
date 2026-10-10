@@ -1,0 +1,11 @@
+--- a/feeds/packages/net/bind/Makefile
++++ b/feeds/packages/net/bind/Makefile
+@@ -153,7 +153,7 @@ else
+ 		--with-libxml2=no
+ endif
+ 
+-EXTRA_CFLAGS:=-std=c99
++EXTRA_CFLAGS:=-std=gnu99
+ 
+ CONFIGURE_VARS += \
+ 	BUILD_CC="$(TARGET_CC)" \

@@ -52,6 +52,10 @@ cp "$repo_root/patches/libpcap-shared-libobjs.patch" \
   "$work_dir/package/libs/libpcap/patches/101-shared-libobjs.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/olsrd-release-flags.patch"
+# BIND uses GNU typeof in ISC_ALIGN; strict C99 makes it an undeclared
+# function with this historical GCC toolchain.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/bind-gnu99.patch"
 
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.
