@@ -25,6 +25,7 @@ on:
       - "patches/olsrd-release-flags.patch"
       - "patches/bind-gnu99.patch"
       - "scripts/build-packages.sh"
+      - "scripts/report-package-failures.py"
       - "scripts/fetch-build-inputs.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
@@ -42,6 +43,7 @@ on:
       - "patches/olsrd-release-flags.patch"
       - "patches/bind-gnu99.patch"
       - "scripts/build-packages.sh"
+      - "scripts/report-package-failures.py"
       - "scripts/fetch-build-inputs.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
@@ -100,12 +102,22 @@ jobs:
             --volume "$PWD:/repo" \
             gui-ipk-builder
 
-      - name: Upload serial compile log after failure
+      - name: Summarize failed packages
+        if: failure()
+        run: |
+          if [[ -f dist/failed-packages.md ]]; then
+            cat dist/failed-packages.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload package failure report and serial log
         if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: userspace-compile-failure-${{ github.sha }}
-          path: dist/serial-package-compile.log
+          path: |
+            dist/serial-package-compile.log
+            dist/failed-packages.txt
+            dist/failed-packages.md
           if-no-files-found: ignore
           retention-days: 7
 

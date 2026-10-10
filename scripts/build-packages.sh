@@ -191,19 +191,17 @@ elif [[ "$userspace_only" == 1 ]]; then
         done < <(find "$log_dir" -type f -name '*compile.txt' -print0)
       done < <(sed -n 's/.*ERROR: \(package\/[^ ]*\) failed to build.*/\1/p' "$error_file" | sort -u)
     fi
-    echo "Retrying unfinished packages serially to expose the first error" >&2
+    echo "Retrying unfinished packages serially and continuing past failures" >&2
     serial_log="$output_dir/serial-package-compile.log"
-    if make --directory "$work_dir" --jobs 1 V=sc "${kmod_overrides[@]}" package/compile 2>&1 | tee "$serial_log"; then
+    rm -f "$error_file"
+    if make --directory "$work_dir" --keep-going --jobs 1 V=sc "${kmod_overrides[@]}" package/compile 2>&1 | tee "$serial_log"; then
       rm -f "$serial_log"
     else
-      mapfile -t failure_lines < <(
-        grep -E 'error:|fatal error:|undefined reference|No rule to make target|ERROR:|make(\[[0-9]+\])?: \*\*\*' "$serial_log" | tail -n 12 || true
-      )
-      if [[ ${#failure_lines[@]} -eq 0 ]]; then
-        mapfile -t failure_lines < <(tail -n 8 "$serial_log")
-      fi
-      for line in "${failure_lines[@]}"; do
-        printf '::error title=OpenWrt package compile::%s\n' "$line"
+      python3 "$repo_root/scripts/report-package-failures.py" \
+        "$serial_log" "$error_file" "$output_dir"
+      mapfile -t failed_recipes < "$output_dir/failed-packages.txt"
+      for recipe in "${failed_recipes[@]}"; do
+        printf '::error title=OpenWrt package compile::%s failed\n' "$recipe"
       done
       exit 1
     fi
