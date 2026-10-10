@@ -177,7 +177,7 @@ elif [[ "$userspace_only" == 1 ]]; then
   # The matching cross-toolchain is restored from the pinned input archive.
   # Rebuilding it would fetch an obsolete glibc-2.19-r25243 source URL.
   make "${make_args[@]}" tools/install
-  if ! make "${make_args[@]}" package/compile; then
+  if ! make --keep-going "${make_args[@]}" package/compile; then
     error_file="$work_dir/logs/package/error.txt"
     if [[ -s "$error_file" ]]; then
       echo "Failed package recipes:" >&2
