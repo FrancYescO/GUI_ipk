@@ -13,13 +13,11 @@ PACKAGE_RECIPE = re.compile(r"^package-\$\(CONFIG_PACKAGE_([^)]+)\) \+= (\S+)$")
 
 
 def select(config_path, dependencies_path, index, count):
-    selected = {
-        match.group(1)
-        for line in config_path.read_text().splitlines()
-        if (match := PACKAGE_CONFIG.match(line))
-        and not match.group(1).startswith("kmod-")
-        and match.group(1) != "kernel"
-    }
+    selected = set()
+    for line in config_path.read_text().splitlines():
+        match = PACKAGE_CONFIG.match(line)
+        if match and not match.group(1).startswith("kmod-") and match.group(1) != "kernel":
+            selected.add(match.group(1))
     package_recipes = {}
     for line in dependencies_path.read_text().splitlines():
         match = PACKAGE_RECIPE.match(line)
