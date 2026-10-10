@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       package_targets:
-        description: "Optional recipe paths for a targeted build (empty builds everything)"
+        description: "Optional recipe paths for a targeted build (empty builds every shard)"
+        required: false
+        type: string
+      shard_index:
+        description: "Optional single shard to test (0-15)"
         required: false
         type: string
       publish_pages:
@@ -25,6 +29,8 @@ on:
       - "patches/olsrd-release-flags.patch"
       - "patches/bind-gnu99.patch"
       - "scripts/build-packages.sh"
+      - "scripts/select-userspace-shard.py"
+      - "scripts/merge-userspace-shards.py"
       - "scripts/report-package-failures.py"
       - "scripts/fetch-build-inputs.sh"
       - "scripts/sanitize-opkg-feed.sh"
@@ -43,6 +49,8 @@ on:
       - "patches/olsrd-release-flags.patch"
       - "patches/bind-gnu99.patch"
       - "scripts/build-packages.sh"
+      - "scripts/select-userspace-shard.py"
+      - "scripts/merge-userspace-shards.py"
       - "scripts/report-package-failures.py"
       - "scripts/fetch-build-inputs.sh"
       - "scripts/sanitize-opkg-feed.sh"
@@ -57,11 +65,17 @@ permissions:
 
 jobs:
   build:
-    name: ${{ inputs.package_targets == '' && 'Full userspace OPKG feed' || 'Targeted userspace build' }}
+    name: ${{ inputs.package_targets != '' && 'Targeted build' || format('Userspace shard {0}/16', matrix.shard) }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 360
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(inputs.shard_index != '' && format('[{0}]', inputs.shard_index) || inputs.package_targets != '' && '[0]' || '[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]') }}
     env:
       PACKAGE_TARGETS: ${{ inputs.package_targets }}
+      PACKAGE_SHARD_INDEX: ${{ matrix.shard }}
+      PACKAGE_SHARD_COUNT: "16"
       BUILD_CONFIG: /repo/build/userspace.config
       USERSPACE_ONLY: "1"
       GH_TOKEN: ${{ github.token }}
@@ -96,6 +110,8 @@ jobs:
             --env HOME=/tmp \
             --env JOBS="$(nproc)" \
             --env PACKAGE_TARGETS \
+            --env PACKAGE_SHARD_INDEX \
+            --env PACKAGE_SHARD_COUNT \
             --env BUILD_CONFIG \
             --env USERSPACE_ONLY \
             --env WORK_DIR=/tmp/openwrt \
@@ -109,17 +125,53 @@ jobs:
             cat dist/failed-packages.md >> "$GITHUB_STEP_SUMMARY"
           fi
 
-      - name: Upload package failure report and serial log
-        if: failure()
+      - name: Upload shard output and logs
+        if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: userspace-compile-failure-${{ github.sha }}
-          path: |
-            dist/serial-package-compile.log
-            dist/failed-packages.txt
-            dist/failed-packages.md
-          if-no-files-found: ignore
-          retention-days: 7
+          name: userspace-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: dist/
+          if-no-files-found: warn
+          retention-days: 30
+
+  aggregate:
+    name: Merge and verify userspace feed
+    if: ${{ always() && inputs.package_targets == '' && inputs.shard_index == '' }}
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download shard artifacts
+        uses: actions/download-artifact@v7
+        with:
+          pattern: userspace-shard-*-${{ github.run_id }}
+          path: shards
+          merge-multiple: false
+
+      - name: Merge packages and reports
+        run: python3 scripts/merge-userspace-shards.py shards dist 16
+
+      - name: Show combined shard report
+        if: always()
+        run: |
+          if [[ -f dist/shard-report.md ]]; then
+            cat dist/shard-report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload combined shard report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: userspace-shard-report-${{ github.run_id }}
+          path: dist/shard-report.md
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Require successful shard jobs
+        run: test "${{ needs.build.result }}" = success
 
       - name: Prepare safe shared OPKG feed
         run: scripts/sanitize-opkg-feed.sh dist
@@ -152,15 +204,15 @@ jobs:
           retention-days: 30
 
       - name: Upload GitHub Pages artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
+        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist/
 
   deploy:
     name: Publish verified package feed to Pages
-    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == ''
-    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == '' && inputs.shard_index == ''
+    needs: aggregate
     runs-on: ubuntu-24.04
     permissions:
       pages: write
