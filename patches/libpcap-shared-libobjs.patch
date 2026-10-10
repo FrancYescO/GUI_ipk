@@ -1,0 +1,23 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -113,7 +113,7 @@
+ # We would like to say "OBJ = $(SRC:.c=.o)" but Ultrix's make cannot
+ # hack the extra indirection
+ OBJ =	$(PSRC:.c=.o) $(FSRC:.c=.o) $(CSRC:.c=.o) $(SSRC:.c=.o) $(GENSRC:.c=.o) $(LIBOBJS)
+-OBJ_PIC = $(PSRC:.c=_pic.o) $(FSRC:.c=_pic.o) $(CSRC:.c=_pic.o) $(SSRC:.c=_pic.o) $(GENSRC:.c=_pic.o)
++OBJ_PIC = $(PSRC:.c=_pic.o) $(FSRC:.c=_pic.o) $(CSRC:.c=_pic.o) $(SSRC:.c=_pic.o) $(GENSRC:.c=_pic.o) $(LIBOBJS:.o=_pic.o)
+ PUBHDR = \
+ 	pcap.h \
+ 	pcap-bpf.h \
+@@ -481,6 +481,11 @@
+ #
+ libpcap.none:
+ 
++# Fallback functions live in missing/, not beside the regular sources.
++# Build PIC copies for the shared library as well as the static archive.
++%_pic.o: $(srcdir)/missing/%.c
++	$(CC) -fPIC $(FULL_CFLAGS) -o $@ -c $<
++
+ $(SHAREDLIB): $(OBJ_PIC)
+ 	-@rm -f $@
+ 	-@rm -f $(SOLIBRARY)

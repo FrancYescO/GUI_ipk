@@ -46,6 +46,10 @@ tar --extract --xz --file "$buildroot_archive" \
 # archived recipe otherwise compiles it in the toolchain's default GNU89 mode.
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/libpcap-c99.patch"
+# The snapshot's shared-library patch omits configure's fallback LIBOBJS.
+# Supply PIC copies so libpcap.so exports the same symbols as libpcap.a.
+cp "$repo_root/patches/libpcap-shared-libobjs.patch" \
+  "$work_dir/package/libs/libpcap/patches/101-shared-libobjs.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/olsrd-release-flags.patch"
 
