@@ -8,6 +8,8 @@ output_dir="${OUTPUT_DIR:-$repo_root/dist}"
 download_dir="${DOWNLOAD_DIR:-$repo_root/.cache/downloads}"
 jobs="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 package_targets="${PACKAGE_TARGETS:-}"
+shard_index="${PACKAGE_SHARD_INDEX:-}"
+shard_count="${PACKAGE_SHARD_COUNT:-16}"
 build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
 userspace_only="${USERSPACE_ONLY:-0}"
 
@@ -148,6 +150,40 @@ if [[ "$userspace_only" == 1 ]] && grep -qx 'CONFIG_ALL_KMODS=y' "$work_dir/.con
   exit 1
 fi
 
+configure_kmod_overrides() {
+  # Keep non-kernel packages selected while avoiding an unrelated kernel build.
+  mapfile -t kmod_overrides < <(
+    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=n/p' "$work_dir/.config"
+  )
+  make_args+=("${kmod_overrides[@]}")
+  echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"
+}
+
+compile_with_report() {
+  local error_file="$work_dir/logs/package/error.txt"
+  local serial_log="$output_dir/serial-package-compile.log"
+  if ! make --keep-going "${make_args[@]}" "$@"; then
+    if [[ -s "$error_file" ]]; then
+      echo "Failed package recipes in the parallel pass:" >&2
+      cat "$error_file" >&2
+    fi
+    echo "Retrying unfinished packages serially and continuing past failures" >&2
+    rm -f "$error_file"
+    if make --directory "$work_dir" --keep-going --jobs 1 V=sc \
+      "${kmod_overrides[@]}" "$@" 2>&1 | tee "$serial_log"; then
+      rm -f "$serial_log"
+    else
+      python3 "$repo_root/scripts/report-package-failures.py" \
+        "$serial_log" "$error_file" "$output_dir"
+      mapfile -t failed_recipes < "$output_dir/failed-packages.txt"
+      for recipe in "${failed_recipes[@]}"; do
+        printf '::error title=OpenWrt package compile::%s failed\n' "$recipe"
+      done
+      return 1
+    fi
+  fi
+}
+
 if [[ -n "$package_targets" ]]; then
   # Intended for smoke tests and targeted rebuilds. Targets are recipe paths,
   # for example: zlib or feeds/packages/curl.
@@ -164,48 +200,24 @@ if [[ -n "$package_targets" ]]; then
     make "${make_args[@]}" "package/$target/compile"
   done
   make --directory "$work_dir" package/index
+elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
+  python3 "$repo_root/scripts/select-userspace-shard.py" \
+    "$work_dir/.config" "$work_dir/tmp/.packagedeps" \
+    "$shard_index" "$shard_count" "$output_dir"
+  mapfile -t shard_targets < "$output_dir/shard-targets.txt"
+  configure_kmod_overrides
+  make "${make_args[@]}" tools/install
+  compile_with_report "${shard_targets[@]}"
 elif [[ "$userspace_only" == 1 ]]; then
   # `world` also compiles the vendor kernel, including modules unrelated to
   # this userspace feed. Some kmods are selected indirectly as dependencies;
   # override those selections for the package graph while retaining the
   # userspace packages that depend on modules already installed on the router.
-  mapfile -t kmod_overrides < <(
-    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=n/p' "$work_dir/.config"
-  )
-  make_args+=("${kmod_overrides[@]}")
-  echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"
+  configure_kmod_overrides
   # The matching cross-toolchain is restored from the pinned input archive.
   # Rebuilding it would fetch an obsolete glibc-2.19-r25243 source URL.
   make "${make_args[@]}" tools/install
-  if ! make --keep-going "${make_args[@]}" package/compile; then
-    error_file="$work_dir/logs/package/error.txt"
-    if [[ -s "$error_file" ]]; then
-      echo "Failed package recipes:" >&2
-      cat "$error_file" >&2
-      while IFS= read -r recipe; do
-        log_dir="$work_dir/logs/$recipe"
-        [[ -d "$log_dir" ]] || continue
-        while IFS= read -r -d '' log_file; do
-          echo "Last 80 lines of $log_file:" >&2
-          tail -n 80 "$log_file" >&2
-        done < <(find "$log_dir" -type f -name '*compile.txt' -print0)
-      done < <(sed -n 's/.*ERROR: \(package\/[^ ]*\) failed to build.*/\1/p' "$error_file" | sort -u)
-    fi
-    echo "Retrying unfinished packages serially and continuing past failures" >&2
-    serial_log="$output_dir/serial-package-compile.log"
-    rm -f "$error_file"
-    if make --directory "$work_dir" --keep-going --jobs 1 V=sc "${kmod_overrides[@]}" package/compile 2>&1 | tee "$serial_log"; then
-      rm -f "$serial_log"
-    else
-      python3 "$repo_root/scripts/report-package-failures.py" \
-        "$serial_log" "$error_file" "$output_dir"
-      mapfile -t failed_recipes < "$output_dir/failed-packages.txt"
-      for recipe in "${failed_recipes[@]}"; do
-        printf '::error title=OpenWrt package compile::%s failed\n' "$recipe"
-      done
-      exit 1
-    fi
-  fi
+  compile_with_report package/compile
   make --directory "$work_dir" package/index
 else
   # Full builds still include the target kernel and firmware images.
