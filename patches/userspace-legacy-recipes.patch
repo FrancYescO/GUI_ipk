@@ -1,65 +1,39 @@
 --- a/feeds/packages/lang/perl/files/base.config
 +++ b/feeds/packages/lang/perl/files/base.config
-@@ -1043,7 +1043,7 @@
- 
- # Tool flags
- cppflags="$owrt:cflags"
+@@ -1046 +1046 @@
 -ccflags="-fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $owrt:cflags"
 +ccflags="-fwrapv -fno-strict-aliasing -pipe -fstack-protector -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $owrt:cflags"
- ccflags_uselargefiles='-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
- ccdlflags="-fPIC -rdynamic -Wl,-rpath,$owrt:perllibpath/CORE"
- cccdlflags='-fPIC'
 --- a/feeds/packages/multimedia/ffmpeg/Makefile
 +++ b/feeds/packages/multimedia/ffmpeg/Makefile
-@@ -379,6 +379,7 @@
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	./configure \
- 	--enable-cross-compile \
+@@ -381,0 +382 @@
 +	--disable-lto \
- 	--cross-prefix="$(TARGET_CROSS)" \
- 	--arch="$(ARCH)" \
- 	$(if $(REAL_CPU_TYPE),--cpu=$(call qstrip,$(REAL_CPU_TYPE)),) \
 --- a/feeds/packages/libs/libv4l/Makefile
 +++ b/feeds/packages/libs/libv4l/Makefile
-@@ -76,7 +76,7 @@
-   This package contains the video4linux utilities.
- endef
- 
+@@ -79 +79 @@
 -TARGET_CFLAGS += $(FPIC)
 +TARGET_CFLAGS += -std=gnu99 $(FPIC)
- TARGET_LDFLAGS += -largp
- 
- CONFIGURE_ARGS+= \
 --- a/feeds/packages/libs/getdns/Makefile
 +++ b/feeds/packages/libs/getdns/Makefile
-@@ -25,6 +25,8 @@
- 	CONFIG_GETDNS_ENABLE_IDN_LIBIDN2
- 
- include $(INCLUDE_DIR)/package.mk
+@@ -27,0 +28,2 @@
 +
 +TARGET_CFLAGS += -std=gnu99
- 
- define Package/getdns/Default
- 	TITLE:=getdns
 --- a/feeds/packages/utils/dump1090/Makefile
 +++ b/feeds/packages/utils/dump1090/Makefile
-@@ -54,7 +54,7 @@
- endef
- 
- MAKE_FLAGS += \
+@@ -57 +57 @@
 -	CFLAGS="$(TARGET_CFLAGS)" \
 +	CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
- 	UNAME="Linux"
- 
- define Package/dump1090/install
 --- a/feeds/packages/utils/lcdproc/Makefile
 +++ b/feeds/packages/utils/lcdproc/Makefile
-@@ -121,7 +121,7 @@
- 	--enable-drivers='all,!g15,!g15driver,!glcdlib,!irman,!lirc,!mdm166a,!mx5000,!svga,!xosd'
- 
- # can't use -Wformat=2 because MUSL is somewhat broken
+@@ -124 +124 @@
 -TARGET_CFLAGS+=-Wall
 +TARGET_CFLAGS+=-Wall -std=gnu99
- 
- MAKE_FLAGS += \
-         CFLAGS="$(TARGET_CFLAGS)" \
+--- a/feeds/packages/sound/pulseaudio/Makefile
++++ b/feeds/packages/sound/pulseaudio/Makefile
+@@ -102 +102 @@
+-	$(if $(findstring neon,$(CONFIG_TARGET_OPTIMIZATION)),--enable-neon-opt,--disable-neon-opt) \
++	--disable-neon-opt \
+--- a/package/libs/elfutils/Makefile
++++ b/package/libs/elfutils/Makefile
+@@ -72 +72 @@
+-TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral
++TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=maybe-uninitialized
