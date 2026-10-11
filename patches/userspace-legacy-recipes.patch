@@ -55,3 +55,10 @@
 +-	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
 -+	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
 ++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+--- a/package/utils/lua/patches/050-honor-cflags.patch
++++ b/package/utils/lua/patches/050-honor-cflags.patch
+@@ -7,2 +7,2 @@
+--	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
++-	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+-+	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
+++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
