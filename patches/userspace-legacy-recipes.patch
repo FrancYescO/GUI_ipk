@@ -64,7 +64,7 @@
 ++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
 --- a/package/luadec/Makefile
 +++ b/package/luadec/Makefile
-@@ -39,13 +39,19 @@
+@@ -39,13 +39,20 @@
  
  MAKE_FLAGS += LUAVER=5.1
  
@@ -82,6 +82,7 @@
  	$(MAKE) -C $(PKG_BUILD_DIR)/luadec \
  		$(TARGET_CONFIGURE_OPTS) \
 +		LUASRC="$(BUILD_DIR)/lua-5.1.5/src" \
++		LUA="/usr/bin/lua5.1" LUAC="/usr/bin/luac5.1" \
  		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
  		LDFLAGS="$(TARGET_LDFLAGS)"
  endef
