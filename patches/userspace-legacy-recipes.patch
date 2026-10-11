@@ -124,3 +124,8 @@
 @@ -44 +44 @@
 -TARGET_CXXFLAGS += -fno-rtti -flto
 +TARGET_CXXFLAGS += -fno-rtti -flto -pthread
+--- a/feeds/packages/multimedia/grilo-plugins/Makefile
++++ b/feeds/packages/multimedia/grilo-plugins/Makefile
+@@ -44,0 +45,2 @@
++
++MAKE_FLAGS += GLIB_COMPILE_RESOURCES=/usr/bin/glib-compile-resources
