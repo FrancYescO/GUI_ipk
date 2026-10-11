@@ -62,3 +62,8 @@
 +-	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
 -+	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
 ++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+--- a/package/luadec/Makefile
++++ b/package/luadec/Makefile
+@@ -40 +40 @@
+-TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS)
++TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS) -I$(BUILD_DIR)/lua-5.1.5/src
