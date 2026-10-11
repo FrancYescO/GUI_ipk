@@ -94,12 +94,12 @@
 +TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS) -I$(BUILD_DIR)/lua-5.1.5/src
  
  TARGET_LDFLAGS += -llua
-+
+ 
 +define Build/Prepare
 +	$(call Build/Prepare/Default)
 +	printf '#define SRCVERSION "%s"\n' '$(PKG_SOURCE_VERSION)' > $(PKG_BUILD_DIR)/luadec/srcversion.h
 +endef
- 
++
  define Build/Compile
  	$(MAKE) -C $(PKG_BUILD_DIR)/luadec \
  		$(TARGET_CONFIGURE_OPTS) \
@@ -124,8 +124,25 @@
 -		$(1)/www/luadec
  endef
  
- $(eval $(call BuildPackage,luadec))--- a/feeds/packages/net/mii-tool/Makefile
+ $(eval $(call BuildPackage,luadec))
+\ No newline at end of file
+--- a/feeds/packages/net/mii-tool/Makefile
 +++ b/feeds/packages/net/mii-tool/Makefile
 @@ -27,0 +28,2 @@
 +# Old kernel headers need iphdr defined before if_tunnel.h.
 +TARGET_CFLAGS += -include linux/ip.h
+--- a/feeds/packages/utils/gawk/Makefile
++++ b/feeds/packages/utils/gawk/Makefile
+@@ -23,0 +24,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/net/stubby/Makefile
++++ b/feeds/packages/net/stubby/Makefile
+@@ -24,0 +25,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/admin/syslog-ng/Makefile
++++ b/feeds/packages/admin/syslog-ng/Makefile
+@@ -15,0 +16,2 @@
++
++TARGET_CFLAGS += -std=gnu99
