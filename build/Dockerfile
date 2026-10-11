@@ -9,5 +9,9 @@ RUN apt-get update \
       patch patchelf python python3 rsync subversion swig time unzip wget xsltproc zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
 
+# GitHub's checkout is owned by UID 1001. Several legacy CMake recipes run
+# whoami while configuring and require that UID to resolve in the container.
+RUN useradd --uid 1001 --no-create-home builder
+
 WORKDIR /repo
 ENTRYPOINT ["/repo/scripts/build-packages.sh"]

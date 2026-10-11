@@ -24,6 +24,7 @@ on:
       - "patches/userspace-no-all-kmods.patch"
       - "patches/userspace-skip-kernel-package.patch"
       - "patches/userspace-ipset-no-kmod.patch"
+      - "patches/userspace-legacy-recipes.patch"
       - "patches/libpcap-c99.patch"
       - "patches/libpcap-shared-libobjs.patch"
       - "patches/olsrd-release-flags.patch"
@@ -44,6 +45,7 @@ on:
       - "patches/userspace-no-all-kmods.patch"
       - "patches/userspace-skip-kernel-package.patch"
       - "patches/userspace-ipset-no-kmod.patch"
+      - "patches/userspace-legacy-recipes.patch"
       - "patches/libpcap-c99.patch"
       - "patches/libpcap-shared-libobjs.patch"
       - "patches/olsrd-release-flags.patch"
@@ -167,6 +169,15 @@ jobs:
         with:
           name: userspace-shard-report-${{ github.run_id }}
           path: dist/shard-report.md
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload partial feed for diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: userspace-partial-feed-${{ github.run_id }}
+          path: dist/
           if-no-files-found: warn
           retention-days: 30
 

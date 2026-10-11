@@ -1,0 +1,65 @@
+--- a/feeds/packages/lang/perl/files/base.config
++++ b/feeds/packages/lang/perl/files/base.config
+@@ -1043,7 +1043,7 @@
+ 
+ # Tool flags
+ cppflags="$owrt:cflags"
+-ccflags="-fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $owrt:cflags"
++ccflags="-fwrapv -fno-strict-aliasing -pipe -fstack-protector -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $owrt:cflags"
+ ccflags_uselargefiles='-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
+ ccdlflags="-fPIC -rdynamic -Wl,-rpath,$owrt:perllibpath/CORE"
+ cccdlflags='-fPIC'
+--- a/feeds/packages/multimedia/ffmpeg/Makefile
++++ b/feeds/packages/multimedia/ffmpeg/Makefile
+@@ -379,6 +379,7 @@
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	./configure \
+ 	--enable-cross-compile \
++	--disable-lto \
+ 	--cross-prefix="$(TARGET_CROSS)" \
+ 	--arch="$(ARCH)" \
+ 	$(if $(REAL_CPU_TYPE),--cpu=$(call qstrip,$(REAL_CPU_TYPE)),) \
+--- a/feeds/packages/libs/libv4l/Makefile
++++ b/feeds/packages/libs/libv4l/Makefile
+@@ -76,7 +76,7 @@
+   This package contains the video4linux utilities.
+ endef
+ 
+-TARGET_CFLAGS += $(FPIC)
++TARGET_CFLAGS += -std=gnu99 $(FPIC)
+ TARGET_LDFLAGS += -largp
+ 
+ CONFIGURE_ARGS+= \
+--- a/feeds/packages/libs/getdns/Makefile
++++ b/feeds/packages/libs/getdns/Makefile
+@@ -25,6 +25,8 @@
+ 	CONFIG_GETDNS_ENABLE_IDN_LIBIDN2
+ 
+ include $(INCLUDE_DIR)/package.mk
++
++TARGET_CFLAGS += -std=gnu99
+ 
+ define Package/getdns/Default
+ 	TITLE:=getdns
+--- a/feeds/packages/utils/dump1090/Makefile
++++ b/feeds/packages/utils/dump1090/Makefile
+@@ -54,7 +54,7 @@
+ endef
+ 
+ MAKE_FLAGS += \
+-	CFLAGS="$(TARGET_CFLAGS)" \
++	CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
+ 	UNAME="Linux"
+ 
+ define Package/dump1090/install
+--- a/feeds/packages/utils/lcdproc/Makefile
++++ b/feeds/packages/utils/lcdproc/Makefile
+@@ -121,7 +121,7 @@
+ 	--enable-drivers='all,!g15,!g15driver,!glcdlib,!irman,!lirc,!mdm166a,!mx5000,!svga,!xosd'
+ 
+ # can't use -Wformat=2 because MUSL is somewhat broken
+-TARGET_CFLAGS+=-Wall
++TARGET_CFLAGS+=-Wall -std=gnu99
+ 
+ MAKE_FLAGS += \
+         CFLAGS="$(TARGET_CFLAGS)" \

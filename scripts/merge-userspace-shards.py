@@ -96,7 +96,7 @@ def merge(artifacts, output, count):
     if not problems and not reports:
         summary.extend(["All shard jobs produced IPKs and covered the full recipe set.", ""])
     (output / "shard-report.md").write_text("\n".join(summary))
-    if problems or reports:
+    if problems:
         raise ValueError(f"{len(problems)} shard problems, {len(reports)} failure reports")
 
     owners = {}
@@ -136,6 +136,8 @@ def merge(artifacts, output, count):
         write_index(output / feed, entries)
     (output / ".nojekyll").touch()
     print(f"Merged {len(candidates)} userspace IPKs from {count} shards")
+    if reports:
+        raise ValueError(f"{len(reports)} shards have package failures; partial feed preserved")
 
 
 def main():

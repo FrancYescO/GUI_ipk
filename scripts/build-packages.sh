@@ -12,6 +12,7 @@ shard_index="${PACKAGE_SHARD_INDEX:-}"
 shard_count="${PACKAGE_SHARD_COUNT:-16}"
 build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
 userspace_only="${USERSPACE_ONLY:-0}"
+package_compile_failed=0
 
 buildroot_archive="$source_dir/openwrt_18.x_tch_buildroot_based_custom.tar.xz"
 toolchain_archive="$source_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar"
@@ -72,6 +73,8 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/userspace-skip-kernel-package.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-ipset-no-kmod.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-legacy-recipes.patch"
   # The archive contains a generated package Kconfig that predates the patch.
   rm -f "$work_dir/tmp/.config-package.in"
 fi
@@ -179,7 +182,7 @@ compile_with_report() {
       for recipe in "${failed_recipes[@]}"; do
         printf '::error title=OpenWrt package compile::%s failed\n' "$recipe"
       done
-      return 1
+      package_compile_failed=1
     fi
   fi
 }
@@ -207,6 +210,7 @@ elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
   mapfile -t shard_targets < "$output_dir/shard-targets.txt"
   configure_kmod_overrides
   make "${make_args[@]}" tools/install
+  make "${make_args[@]}" target/linux/prepare
   compile_with_report "${shard_targets[@]}"
 elif [[ "$userspace_only" == 1 ]]; then
   # `world` also compiles the vendor kernel, including modules unrelated to
@@ -248,6 +252,10 @@ if [[ "$ipk_count" -eq 0 ]]; then
 fi
 
 echo "Built $ipk_count packages in $output_dir"
+if [[ "$package_compile_failed" -ne 0 ]]; then
+  echo "Some package recipes failed; successful IPKs and diagnostics were preserved in $output_dir" >&2
+  exit 1
+fi
 if [[ "${VERIFY_KMOD_TUN:-0}" == 1 ]]; then
   "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir"
 fi
