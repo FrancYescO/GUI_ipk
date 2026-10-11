@@ -43,3 +43,8 @@
 @@ -185,0 +186,2 @@
 +
 +TARGET_CFLAGS += -std=gnu99
+--- a/package/utils/lua/patches/020-shared_liblua.patch
++++ b/package/utils/lua/patches/020-shared_liblua.patch
+@@ -118 +118 @@
+-+	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
+++	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
