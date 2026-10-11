@@ -15,7 +15,8 @@ BLOCKED_RECIPE = re.compile(
     r"Target ['`](package/[^'`\s]+/compile)['`] not remade because of errors"
 )
 DIAGNOSTIC = re.compile(
-    r"(?:\berror:|undefined reference|No rule to make target|collect2: error:)",
+    r"(?:\berror:|CMake Error|cp: cannot stat|undefined reference|"
+    r"No rule to make target|failed to compile)",
     re.IGNORECASE,
 )
 ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
