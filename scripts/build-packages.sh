@@ -39,6 +39,11 @@ esac
 rm -rf "$work_dir" "$output_dir"
 mkdir -p "$work_dir" "$output_dir"
 
+# Several pinned feed recipes still use the retired GitHub git:// transport.
+# Keep the rewrite in this disposable build directory.
+export GIT_CONFIG_GLOBAL="$work_dir/.gitconfig"
+git config --global url.https://github.com/.insteadOf git://github.com/
+
 # The snapshot intentionally has no build/staging products. J is an accidental
 # nested tar file and is not used by the OpenWrt build system.
 tar --extract --xz --file "$buildroot_archive" \
@@ -190,20 +195,30 @@ compile_with_report() {
 }
 
 if [[ -n "$package_targets" ]]; then
-  # Intended for smoke tests and targeted rebuilds. Targets are recipe paths,
-  # for example: zlib or feeds/packages/curl.
-  # Unlike `world`, a direct package target does not build all host utilities.
-  # Use the compatible tools supplied by the container for a fast smoke build.
-  mkdir -p "$work_dir/staging_dir/host/bin"
-  ln -sf "$(command -v cmake)" "$work_dir/staging_dir/host/bin/cmake"
-  ln -sf "$(command -v flock)" "$work_dir/staging_dir/host/bin/flock"
-  ln -sf "$(command -v patchelf)" "$work_dir/staging_dir/host/bin/patchelf"
-  if [[ "${BUILD_KMODS:-0}" == 1 ]]; then
-    make "${make_args[@]}" target/linux/compile
+  if [[ "$userspace_only" == 1 ]]; then
+    # Direct userspace targets still need pinned host tools and kernel headers.
+    configure_kmod_overrides
+    make "${make_args[@]}" tools/install
+    make "${make_args[@]}" target/linux/prepare
+    make "${make_args[@]}" target/linux/configure
+    target_list=()
+    for target in $package_targets; do
+      target_list+=("package/$target/compile")
+    done
+    compile_with_report "${target_list[@]}"
+  else
+    # Preserve the lightweight targeted kernel-module build path.
+    mkdir -p "$work_dir/staging_dir/host/bin"
+    ln -sf "$(command -v cmake)" "$work_dir/staging_dir/host/bin/cmake"
+    ln -sf "$(command -v flock)" "$work_dir/staging_dir/host/bin/flock"
+    ln -sf "$(command -v patchelf)" "$work_dir/staging_dir/host/bin/patchelf"
+    if [[ "${BUILD_KMODS:-0}" == 1 ]]; then
+      make "${make_args[@]}" target/linux/compile
+    fi
+    for target in $package_targets; do
+      make "${make_args[@]}" "package/$target/compile"
+    done
   fi
-  for target in $package_targets; do
-    make "${make_args[@]}" "package/$target/compile"
-  done
   make --directory "$work_dir" package/index
 elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
   python3 "$repo_root/scripts/select-userspace-shard.py" \
