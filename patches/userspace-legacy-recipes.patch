@@ -119,6 +119,11 @@
 @@ -54 +54 @@
 -  DEPENDS:=+libopendkim
 +  DEPENDS:=+libopendkim +libbsd
+--- a/feeds/packages/utils/auc/src/CMakeLists.txt
++++ b/feeds/packages/utils/auc/src/CMakeLists.txt
+@@ -11 +11 @@
+-TARGET_LINK_LIBRARIES(auc uci ubox ubus uclient blobmsg_json ${json})
++TARGET_LINK_LIBRARIES(auc uci ubox ubus uclient blobmsg_json ${json} dl)
 --- a/feeds/packages/net/stubby/Makefile
 +++ b/feeds/packages/net/stubby/Makefile
 @@ -24,0 +25,2 @@
