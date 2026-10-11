@@ -109,6 +109,16 @@
 @@ -23,0 +24,2 @@
 +
 +TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/net/lighttpd/Makefile
++++ b/feeds/packages/net/lighttpd/Makefile
+@@ -25,0 +26,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/mail/opendkim/Makefile
++++ b/feeds/packages/mail/opendkim/Makefile
+@@ -54 +54 @@
+-  DEPENDS:=+libopendkim
++  DEPENDS:=+libopendkim +libbsd
 --- a/feeds/packages/net/stubby/Makefile
 +++ b/feeds/packages/net/stubby/Makefile
 @@ -24,0 +25,2 @@
@@ -126,9 +136,13 @@
 +TARGET_CXXFLAGS += -fno-rtti -flto -pthread
 --- a/feeds/packages/multimedia/grilo-plugins/Makefile
 +++ b/feeds/packages/multimedia/grilo-plugins/Makefile
-@@ -44,0 +45,2 @@
+@@ -54,0 +55,6 @@
 +
-+MAKE_FLAGS += GLIB_COMPILE_RESOURCES=/usr/bin/glib-compile-resources
++define Build/Compile
++	find $(PKG_BUILD_DIR) -type f -name Makefile -exec sed -i 's@$(STAGING_DIR)/usr/bin/glib-compile-resources@/usr/bin/glib-compile-resources@g' {} +
++	$(call Build/Compile/Default)
++endef
++
 --- a/feeds/packages/libs/rxtx/Makefile
 +++ b/feeds/packages/libs/rxtx/Makefile
 @@ -35,0 +36,6 @@
