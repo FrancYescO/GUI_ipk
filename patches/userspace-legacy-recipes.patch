@@ -129,3 +129,11 @@
 @@ -44,0 +45,2 @@
 +
 +MAKE_FLAGS += GLIB_COMPILE_RESOURCES=/usr/bin/glib-compile-resources
+--- a/feeds/packages/libs/rxtx/Makefile
++++ b/feeds/packages/libs/rxtx/Makefile
+@@ -35,0 +36,5 @@
++define Build/Compile
++	sed -i 's/-source 1.3 -target 1.3/-source 1.6 -target 1.6/g' $(PKG_BUILD_DIR)/Makefile
++	$(call Build/Compile/Default)
++endef
++
