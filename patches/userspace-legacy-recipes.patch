@@ -64,56 +64,34 @@
 ++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
 --- a/package/luadec/Makefile
 +++ b/package/luadec/Makefile
-@@ -20,7 +20,6 @@
- PKG_LICENSE_FILES:=COPYING
- 
- # PKG_FIXUP:=autoreconf
+@@ -23 +22,0 @@
 -PKG_INSTALL:=1
- PKG_BUILD_PARALLEL:=1
- 
- include $(INCLUDE_DIR)/package.mk
-@@ -29,38 +28,38 @@
-   SECTION:=base
-   CATEGORY:=Base
-   DEPENDS:=+liblua
+@@ -32,2 +31,2 @@
 -  TITLE:=luadec is a web frontend making aria2 easier to use.
 -  URL:=https://github.com/mayswind/luadec
 +  TITLE:=Lua 5.1 bytecode decompiler
 +  URL:=https://github.com/viruscamp/luadec
- endef
- 
- define Package/luadec/description
+@@ -37 +36 @@
 -	luadec is a web frontend making aria2 easier to use. luadec is written in pure html & javascript, thus it does not need any compilers or runtime environment.
 +	luadec decompiles Lua 5.1 bytecode.
- endef
- 
- MAKE_FLAGS += LUAVER=5.1
- 
+@@ -42 +41 @@
 -TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS)
 +TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS) -I$(BUILD_DIR)/lua-5.1.5/src
- 
- TARGET_LDFLAGS += -llua
- 
+@@ -45,0 +45,5 @@
 +define Build/Prepare
 +	$(call Build/Prepare/Default)
 +	printf '#define SRCVERSION "%s"\n' '$(PKG_SOURCE_VERSION)' > $(PKG_BUILD_DIR)/luadec/srcversion.h
 +endef
 +
- define Build/Compile
- 	$(MAKE) -C $(PKG_BUILD_DIR)/luadec \
- 		$(TARGET_CONFIGURE_OPTS) \
+@@ -48,0 +53,2 @@
 +		LUASRC="$(BUILD_DIR)/lua-5.1.5/src" \
 +		LUA="/usr/bin/lua5.1" LUAC="/usr/bin/luac5.1" \
- 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
- 		LDFLAGS="$(TARGET_LDFLAGS)"
- endef
- 
- define Package/luadec/install
+@@ -54,2 +60,2 @@
 -	$(INSTALL_DIR) \
 -		$(1)/www/luadec
 +	$(INSTALL_DIR) $(1)/usr/bin
 +	$(INSTALL_BIN) $(PKG_BUILD_DIR)/luadec/luadec $(1)/usr/bin/
- 
+@@ -57,7 +62,0 @@
 -	$(CP) \
 -		$(PKG_BUILD_DIR)/{langs,css,js,fonts} \
 -		$(PKG_BUILD_DIR)/index.html \
@@ -121,10 +99,6 @@
 -		$(PKG_BUILD_DIR)/LICENSE \
 -		$(PKG_BUILD_DIR)/favicon.ico \
 -		$(1)/www/luadec
- endef
- 
- $(eval $(call BuildPackage,luadec))
-\ No newline at end of file
 --- a/feeds/packages/net/mii-tool/Makefile
 +++ b/feeds/packages/net/mii-tool/Makefile
 @@ -27,0 +28,2 @@
