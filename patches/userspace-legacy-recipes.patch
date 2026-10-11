@@ -64,16 +64,15 @@
 ++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
 --- a/package/luadec/Makefile
 +++ b/package/luadec/Makefile
-@@ -20,7 +20,7 @@
+@@ -20,7 +20,6 @@
  PKG_LICENSE_FILES:=COPYING
  
  # PKG_FIXUP:=autoreconf
 -PKG_INSTALL:=1
-+PKG_INSTALL:=0
  PKG_BUILD_PARALLEL:=1
  
  include $(INCLUDE_DIR)/package.mk
-@@ -29,38 +29,38 @@
+@@ -29,38 +28,38 @@
    SECTION:=base
    CATEGORY:=Base
    DEPENDS:=+liblua
