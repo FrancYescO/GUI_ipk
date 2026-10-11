@@ -201,6 +201,7 @@ if [[ -n "$package_targets" ]]; then
     make "${make_args[@]}" tools/install
     make "${make_args[@]}" target/linux/prepare
     make "${make_args[@]}" target/linux/configure
+    make "${make_args[@]}" target/linux/modules_prepare
     target_list=()
     for target in $package_targets; do
       target_list+=("package/$target/compile")
@@ -229,6 +230,7 @@ elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
   make "${make_args[@]}" tools/install
   make "${make_args[@]}" target/linux/prepare
   make "${make_args[@]}" target/linux/configure
+  make "${make_args[@]}" target/linux/modules_prepare
   compile_with_report "${shard_targets[@]}"
 elif [[ "$userspace_only" == 1 ]]; then
   # `world` also compiles the vendor kernel, including modules unrelated to
@@ -241,6 +243,7 @@ elif [[ "$userspace_only" == 1 ]]; then
   make "${make_args[@]}" tools/install
   make "${make_args[@]}" target/linux/prepare
   make "${make_args[@]}" target/linux/configure
+  make "${make_args[@]}" target/linux/modules_prepare
   compile_with_report package/compile
   make --directory "$work_dir" package/index
 else
