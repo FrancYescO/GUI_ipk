@@ -119,3 +119,8 @@
 @@ -15,0 +16,2 @@
 +
 +TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/utils/bonnie++/Makefile
++++ b/feeds/packages/utils/bonnie++/Makefile
+@@ -44 +44 @@
+-TARGET_CXXFLAGS += -fno-rtti -flto
++TARGET_CXXFLAGS += -fno-rtti -flto -pthread
