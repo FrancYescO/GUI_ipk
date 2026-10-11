@@ -5,8 +5,9 @@
 +ccflags="-fwrapv -fno-strict-aliasing -pipe -fstack-protector -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $owrt:cflags"
 --- a/feeds/packages/multimedia/ffmpeg/Makefile
 +++ b/feeds/packages/multimedia/ffmpeg/Makefile
-@@ -381,0 +382 @@
-+	--disable-lto \
+@@ -432 +432 @@
+-	FFMPEG_CONFIGURE+= --enable-lto
++	FFMPEG_CONFIGURE+= --disable-lto
 --- a/feeds/packages/libs/libv4l/Makefile
 +++ b/feeds/packages/libs/libv4l/Makefile
 @@ -79 +79 @@
@@ -37,3 +38,8 @@
 @@ -72 +72 @@
 -TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral
 +TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=maybe-uninitialized
+--- a/feeds/packages/utils/collectd/Makefile
++++ b/feeds/packages/utils/collectd/Makefile
+@@ -185,0 +186,2 @@
++
++TARGET_CFLAGS += -std=gnu99

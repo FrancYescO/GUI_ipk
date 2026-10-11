@@ -52,7 +52,8 @@ def summarize(serial_log: Path, error_log: Path):
                     recipe += "/compile"
                 failed.setdefault(recipe, [])
 
-    blocked.difference_update(failed)
+    for recipe in blocked:
+        failed.pop(recipe, None)
     return failed, blocked
 
 

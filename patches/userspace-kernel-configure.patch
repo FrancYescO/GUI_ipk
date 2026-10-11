@@ -1,0 +1,9 @@
+--- a/target/linux/Makefile
++++ b/target/linux/Makefile
+@@ -12 +12 @@
+-prereq clean download prepare compile install menuconfig nconfig oldconfig update refresh: FORCE
++prereq clean download prepare configure compile install menuconfig nconfig oldconfig update refresh: FORCE
+--- a/include/kernel-build.mk
++++ b/include/kernel-build.mk
+@@ -150,0 +151 @@
++  configure: $(STAMP_CONFIGURED)

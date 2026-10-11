@@ -75,6 +75,8 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/userspace-ipset-no-kmod.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-legacy-recipes.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-kernel-configure.patch"
   # The archive contains a generated package Kconfig that predates the patch.
   rm -f "$work_dir/tmp/.config-package.in"
 fi
@@ -211,6 +213,7 @@ elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
   configure_kmod_overrides
   make "${make_args[@]}" tools/install
   make "${make_args[@]}" target/linux/prepare
+  make "${make_args[@]}" target/linux/configure
   compile_with_report "${shard_targets[@]}"
 elif [[ "$userspace_only" == 1 ]]; then
   # `world` also compiles the vendor kernel, including modules unrelated to
@@ -221,6 +224,8 @@ elif [[ "$userspace_only" == 1 ]]; then
   # The matching cross-toolchain is restored from the pinned input archive.
   # Rebuilding it would fetch an obsolete glibc-2.19-r25243 source URL.
   make "${make_args[@]}" tools/install
+  make "${make_args[@]}" target/linux/prepare
+  make "${make_args[@]}" target/linux/configure
   compile_with_report package/compile
   make --directory "$work_dir" package/index
 else
