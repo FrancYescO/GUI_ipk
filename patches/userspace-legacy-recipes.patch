@@ -85,3 +85,8 @@
  		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
  		LDFLAGS="$(TARGET_LDFLAGS)"
  endef
+--- a/feeds/packages/net/mii-tool/Makefile
++++ b/feeds/packages/net/mii-tool/Makefile
+@@ -27,0 +28,2 @@
++# Old kernel headers need iphdr defined before if_tunnel.h.
++TARGET_CFLAGS += -include linux/ip.h
