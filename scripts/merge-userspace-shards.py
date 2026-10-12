@@ -101,6 +101,7 @@ def merge(artifacts, output, count):
 
     owners = {}
     candidates = defaultdict(list)
+    malformed = []
     for index, (shard_dir, manifest) in manifests.items():
         for package in manifest["packages"]:
             if package in owners:
@@ -110,7 +111,11 @@ def merge(artifacts, output, count):
             feed = ipk.relative_to(shard_dir).parent.as_posix()
             if feed not in FEEDS:
                 raise ValueError(f"Unexpected package directory: {ipk}")
-            text, fields = control(ipk)
+            try:
+                text, fields = control(ipk)
+            except (ValueError, subprocess.CalledProcessError, UnicodeDecodeError) as error:
+                malformed.append(f"{ipk.relative_to(artifacts)}: {error}")
+                continue
             name = fields["Package"]
             if name == "kernel" or name.startswith("kmod-"):
                 continue
@@ -135,6 +140,11 @@ def merge(artifacts, output, count):
     for feed, entries in feed_entries.items():
         write_index(output / feed, entries)
     (output / ".nojekyll").touch()
+    if malformed:
+        with (output / "shard-report.md").open("a") as report:
+            report.write("\n## Skipped malformed IPKs\n\n")
+            report.writelines(f"- `{item}`\n" for item in malformed)
+        print(f"Skipped {len(malformed)} malformed IPKs; see shard-report.md")
     print(f"Merged {len(candidates)} userspace IPKs from {count} shards")
     if reports:
         raise ValueError(f"{len(reports)} shards have package failures; partial feed preserved")
