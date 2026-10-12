@@ -61,7 +61,7 @@ on:
       - "scripts/verify-feed.sh"
 
 concurrency:
-  group: packages-${{ github.ref }}
+  group: packages-${{ github.ref }}-${{ inputs.package_targets || 'full' }}
   cancel-in-progress: false
 
 permissions:
