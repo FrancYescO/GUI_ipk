@@ -3,6 +3,10 @@ name: Userspace OPKG feed (brcm63xx-tch)
 on:
   workflow_dispatch:
     inputs:
+      reuse_run_id:
+        description: "Optional completed run whose shard artifacts should be republished without rebuilding"
+        required: false
+        type: string
       package_targets:
         description: "Optional recipe paths for a targeted build (empty builds every shard)"
         required: false
@@ -69,6 +73,7 @@ permissions:
 
 jobs:
   build:
+    if: inputs.reuse_run_id == ''
     name: ${{ inputs.package_targets != '' && 'Targeted build' || format('Userspace shard {0}/16', matrix.shard) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 350
@@ -145,13 +150,16 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
+      actions: read
     steps:
       - uses: actions/checkout@v7
 
       - name: Download shard artifacts
         uses: actions/download-artifact@v7
         with:
-          pattern: userspace-shard-*-${{ github.run_id }}
+          pattern: userspace-shard-*-${{ inputs.reuse_run_id || github.run_id }}
+          run-id: ${{ inputs.reuse_run_id || github.run_id }}
+          github-token: ${{ github.token }}
           path: shards
           merge-multiple: false
 

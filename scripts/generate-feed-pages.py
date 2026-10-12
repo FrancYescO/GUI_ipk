@@ -77,7 +77,7 @@ def page(title, selected, groups, prefix, partial=False):
             name = html.escape(item["Package"])
             version = html.escape(item.get("Version", ""))
             arch = html.escape(item.get("Architecture", ""))
-            description = html.escape(item.get("Description", "").splitlines()[0])
+            description = html.escape(next(iter(item.get("Description", "").splitlines()), ""))
             url = prefix + feed + "/" + quote(item["Filename"], safe="")
             rows.append(
                 f'<tr><td>{name}</td><td>{version}</td><td>{arch}</td>'
