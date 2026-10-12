@@ -180,3 +180,8 @@
 -  TARGET_CFLAGS += -D_DEFAULT_SOURCE
 -endif
 -
+--- a/feeds/packages/net/lftp/Makefile
++++ b/feeds/packages/net/lftp/Makefile
+@@ -61,0 +62,2 @@
++
++TARGET_CFLAGS += -std=gnu11
