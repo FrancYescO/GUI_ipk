@@ -3,6 +3,14 @@ name: Userspace OPKG feed (brcm63xx-tch)
 on:
   workflow_dispatch:
     inputs:
+      build_profile:
+        description: "Build profile (asterisk20 is an experimental SIP/PJSIP test)"
+        required: true
+        default: userspace
+        type: choice
+        options:
+          - userspace
+          - asterisk20
       reuse_run_id:
         description: "Optional completed run whose shard artifacts should be republished without rebuilding"
         required: false
@@ -74,18 +82,19 @@ permissions:
 jobs:
   build:
     if: inputs.reuse_run_id == ''
-    name: ${{ inputs.package_targets != '' && 'Targeted build' || format('Userspace shard {0}/16', matrix.shard) }}
+    name: ${{ (inputs.package_targets != '' || inputs.build_profile == 'asterisk20') && 'Targeted build' || format('Userspace shard {0}/16', matrix.shard) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 350
     strategy:
       fail-fast: false
       matrix:
-        shard: ${{ fromJSON(inputs.shard_index != '' && format('[{0}]', inputs.shard_index) || inputs.package_targets != '' && '[0]' || '[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]') }}
+        shard: ${{ fromJSON(inputs.shard_index != '' && format('[{0}]', inputs.shard_index) || (inputs.package_targets != '' || inputs.build_profile == 'asterisk20') && '[0]' || '[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]') }}
     env:
-      PACKAGE_TARGETS: ${{ inputs.package_targets }}
+      PACKAGE_TARGETS: ${{ inputs.package_targets || (inputs.build_profile == 'asterisk20' && 'feeds/telephony/asterisk' || '') }}
       PACKAGE_SHARD_INDEX: ${{ matrix.shard }}
       PACKAGE_SHARD_COUNT: "16"
-      BUILD_CONFIG: /repo/build/userspace.config
+      BUILD_CONFIG: ${{ inputs.build_profile == 'asterisk20' && '/repo/build/asterisk20.config' || '/repo/build/userspace.config' }}
+      ENABLE_ASTERISK20: ${{ inputs.build_profile == 'asterisk20' && '1' || '0' }}
       USERSPACE_ONLY: "1"
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
@@ -122,6 +131,7 @@ jobs:
             --env PACKAGE_SHARD_INDEX \
             --env PACKAGE_SHARD_COUNT \
             --env BUILD_CONFIG \
+            --env ENABLE_ASTERISK20 \
             --env USERSPACE_ONLY \
             --env WORK_DIR=/tmp/openwrt \
             --volume "$PWD:/repo" \
@@ -145,7 +155,7 @@ jobs:
 
   aggregate:
     name: Merge and verify userspace feed
-    if: ${{ always() && inputs.package_targets == '' && inputs.shard_index == '' }}
+    if: ${{ always() && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
     needs: build
     runs-on: ubuntu-24.04
     permissions:

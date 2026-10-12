@@ -92,6 +92,16 @@ fi
 # files kept in this repository before the build can use the snapshot.
 cp -a "$repo_root/build/source-overlay/." "$work_dir/"
 
+if [[ "${ENABLE_ASTERISK20:-0}" == 1 ]]; then
+  # Keep the new PJSIP ABI scoped to the experimental SIP profile.
+  rm -rf "$work_dir/feeds/telephony/libs/pjproject"
+  cp -a "$repo_root/build/asterisk20-overlay/." "$work_dir/"
+  mkdir -p "$work_dir/package/feeds/telephony"
+  ln -sfn ../../../feeds/telephony/net/asterisk \
+    "$work_dir/package/feeds/telephony/asterisk"
+  rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
+fi
+
 # The package and LuCI feeds retain their pinned Git object databases. Restore
 # the other stripped source payloads directly from those exact commits rather
 # than downloading moving branch heads.
