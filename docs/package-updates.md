@@ -12,6 +12,11 @@ the recipes are committed and again by the OpenWrt downloader during builds.
 | tree | 1.8.0 | 2.1.1 |
 | htop | 2.2.0 | 3.3.0 |
 
+All three candidates passed the ARM cross-build in GitHub Actions run
+[38290705489](https://github.com/FrancYescO/GUI_ipk/actions/runs/38290705489),
+producing `pv_1.6.6-1`, `tree_2.1.1-1` and `htop_3.3.0-1` IPKs for
+`arm_cortex-a9_neon`.
+
 Htop's optional sensors, capabilities, delay accounting and unwinding integrations
 are disabled to retain the existing dependency set. Unicode and hwloc remain
 disabled as in the original recipe.
