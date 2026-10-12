@@ -65,7 +65,7 @@ on:
       - "scripts/verify-feed.sh"
 
 concurrency:
-  group: packages-${{ github.ref }}-${{ inputs.package_targets || 'full' }}
+  group: packages-${{ github.ref }}-${{ inputs.reuse_run_id || inputs.package_targets || 'full' }}
   cancel-in-progress: false
 
 permissions:
@@ -157,7 +157,7 @@ jobs:
       - name: Download shard artifacts
         uses: actions/download-artifact@v7
         with:
-          pattern: userspace-shard-*-${{ inputs.reuse_run_id || github.run_id }}
+          pattern: userspace-shard-[0-9]*-${{ inputs.reuse_run_id || github.run_id }}
           run-id: ${{ inputs.reuse_run_id || github.run_id }}
           github-token: ${{ github.token }}
           path: shards
