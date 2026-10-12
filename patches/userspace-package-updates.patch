@@ -1,0 +1,69 @@
+--- a/feeds/packages/utils/pv/Makefile
++++ b/feeds/packages/utils/pv/Makefile
+@@ -9,12 +9,12 @@
+ include $(TOPDIR)/rules.mk
+ 
+ PKG_NAME:=pv
+-PKG_VERSION:=1.5.3
++PKG_VERSION:=1.6.6
+ PKG_RELEASE:=1
+ 
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+-PKG_SOURCE_URL:=http://www.ivarch.com/programs/sources/
+-PKG_HASH:=76f3999b1c3b3027163dce6ef667cdf8dafb75218ee25e54a03bfe590478f90e
++PKG_SOURCE_URL:=https://www.ivarch.com/programs/sources
++PKG_HASH:=608ef935f7a377e1439c181c4fc188d247da10d51a19ef79bcdee5043b0973f1
+ PKG_LICENSE:=Artistic-2.0
+ PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+ 
+--- a/feeds/packages/utils/tree/Makefile
++++ b/feeds/packages/utils/tree/Makefile
+@@ -9,11 +9,11 @@
+ 
+ PKG_NAME:=tree
+ PKG_RELEASE:=1
+-PKG_VERSION:=1.8.0
+-PKG_SOURCE_URL:=http://mama.indstate.edu/users/ice/tree/src
+-PKG_HASH:=715d5d4b434321ce74706d0dd067505bb60c5ea83b5f0b3655dae40aa6f9b7c2
++PKG_VERSION:=2.1.1
++PKG_SOURCE_URL:=https://codeload.github.com/Old-Man-Programmer/$(PKG_NAME)/tar.gz/$(PKG_VERSION)?
++PKG_HASH:=1b70253994dca48a59d6ed99390132f4d55c486bf0658468f8520e7e63666a06
+ 
+-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
++PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+ PKG_MAINTAINER:=Banglang Huang <banglang.huang@foxmail.com>
+ 
+ include $(INCLUDE_DIR)/package.mk
+--- a/feeds/packages/admin/htop/Makefile
++++ b/feeds/packages/admin/htop/Makefile
+@@ -8,14 +8,14 @@
+ include $(TOPDIR)/rules.mk
+ 
+ PKG_NAME:=htop
+-PKG_VERSION:=2.2.0
++PKG_VERSION:=3.3.0
+ PKG_RELEASE:=1
+ 
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+-PKG_SOURCE_URL:=http://hisham.hm/htop/releases/$(PKG_VERSION)/
+-PKG_HASH:=d9d6826f10ce3887950d709b53ee1d8c1849a70fa38e91d5896ad8cbc6ba3c57
++PKG_SOURCE_URL:=https://codeload.github.com/htop-dev/htop/tar.gz/$(PKG_VERSION)?
++PKG_HASH:=1e5cc328eee2bd1acff89f860e3179ea24b85df3ac483433f92a29977b14b045
+ 
+-PKG_LICENSE:=GPL-2.0
++PKG_LICENSE:=GPL-2.0-or-later
+ PKG_LICENSE_FILES:=COPYING
+ 
+ PKG_FIXUP:=autoreconf
+@@ -39,6 +39,11 @@
+ endef
+ 
+ CONFIGURE_ARGS += \
++	--disable-sensors \
++	--enable-affinity \
++	--disable-capabilities \
++	--disable-delayacct \
++	--disable-unwind \
+ 	--disable-unicode \
+ 	--disable-hwloc
+ 
