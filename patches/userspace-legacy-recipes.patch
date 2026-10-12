@@ -116,6 +116,9 @@
 +TARGET_CFLAGS += -std=gnu99
 --- a/feeds/packages/mail/opendkim/Makefile
 +++ b/feeds/packages/mail/opendkim/Makefile
+@@ -29 +29 @@
+-  DEPENDS:=+libopendkim
++  DEPENDS:=+libopendkim +libbsd
 @@ -54 +54 @@
 -  DEPENDS:=+libopendkim
 +  DEPENDS:=+libopendkim +libbsd
