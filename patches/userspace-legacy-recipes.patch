@@ -173,3 +173,10 @@
 +	$(call Build/Compile/Default)
 +endef
 +
+--- a/package/utils/ugps/Makefile
++++ b/package/utils/ugps/Makefile
+@@ -33,4 +33,0 @@
+-ifneq ($(CONFIG_USE_GLIBC),)
+-  TARGET_CFLAGS += -D_DEFAULT_SOURCE
+-endif
+-
