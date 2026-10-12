@@ -26,9 +26,16 @@ case "$module_set" in
     build_connmark=1
     ;;
   wireguard)
-    # Out-of-tree wireguard-linux-compat; no in-tree module targets.
     module_targets=()
     build_wireguard=1
+    ;;
+  network-feed)
+    module_targets=()
+    while IFS= read -r target; do
+      [[ -z "$target" || "$target" == \#* ]] && continue
+      module_targets+=("$target")
+    done < "$repo_root/build/vbntj/network-feed.modules"
+    build_connmark=1
     ;;
   *)
     echo "Unsupported MODULE_SET: $module_set" >&2
@@ -251,6 +258,12 @@ if [[ ${#module_targets[@]} -gt 0 ]]; then
 fi
 
 if [[ "$build_wireguard" -eq 1 ]]; then
+  for symbol in IPV6 NET_UDP_TUNNEL; do
+    grep -Eq "^CONFIG_${symbol}=[ym]$" "$kernel_dir/.config" || {
+      echo "WireGuard requires CONFIG_${symbol}" >&2
+      exit 1
+    }
+  done
   wg_dir="$source_dir/.wireguard-linux-compat"
   rm -rf "$wg_dir"
   mkdir -p "$wg_dir"
@@ -310,7 +323,7 @@ build_manual_ipk() {
   local package_root control_root data_root
 
   module_stem="$(basename "$module" .ko)"
-  package_name="kmod-${module_stem//_/-}-damson-4.1.52-manual"
+  package_name="kmod-$(printf '%s' "${module_stem//_/-}" | tr '[:upper:]' '[:lower:]')-damson-4.1.52-manual"
   package_version="4.1.52-1"
   package_arch="brcm963xx"
   package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"

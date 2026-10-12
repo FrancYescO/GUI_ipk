@@ -1,0 +1,9 @@
+--- a/package/libs/libpcap/Makefile
++++ b/package/libs/libpcap/Makefile
+@@ -46,6 +46,7 @@
+ endef
+ 
+ TARGET_CFLAGS += \
++	-std=gnu99 \
+ 	-ffunction-sections \
+ 	-fdata-sections

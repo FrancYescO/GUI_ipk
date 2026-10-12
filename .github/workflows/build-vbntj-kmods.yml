@@ -1,6 +1,6 @@
 name: Damson 4.1.52 kernel-module artifacts
 
-run-name: Damson 4.1.52 — ${{ inputs.module_set || 'router-tested' }}
+run-name: Damson 4.1.52 — ${{ inputs.module_set || 'network-feed' }}
 
 on:
   workflow_dispatch:
@@ -8,31 +8,34 @@ on:
       module_set:
         description: "Allowlisted kernel modules to build"
         required: true
-        default: router-tested
+        default: network-feed
         type: choice
         options:
           - tun
           - network-smoke
           - qos-probe
           - router-tested
+          - network-feed
+          - wireguard
   pull_request:
     paths:
       - ".github/workflows/build-vbntj-kmods.yml"
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
+      - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
   push:
     branches:
-      - kmods-4.1.52
-      - main
+      - codex/kmods-4.1.52-feed
     paths:
       - ".github/workflows/build-vbntj-kmods.yml"
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
+      - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
@@ -46,14 +49,14 @@ permissions:
 
 jobs:
   build:
-    name: Compile and verify ${{ inputs.module_set || 'router-tested' }} modules
+    name: Compile and verify ${{ inputs.module_set || 'network-feed' }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
       GPL_REPOSITORY: https://github.com/avwarez/vmg8825_b50b.git
       GPL_REF: V5.17(ABNY.6)C0
       GPL_COMMIT: af23960e39003ba7788f5ced0c256b1bc676a712
-      MODULE_SET: ${{ inputs.module_set || 'router-tested' }}
+      MODULE_SET: ${{ inputs.module_set || 'network-feed' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -71,6 +74,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: |
+            .work/vbntj-gpl/dl/wireguard-linux-compat-1.0.20220627.tar.xz
             .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
             .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.xz
             .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.bz2
@@ -81,7 +85,7 @@ jobs:
             .work/vbntj-gpl/dl/mpc-1.0.3.tar.gz
             .work/vbntj-gpl/dl/mpfr-3.1.4.tar.bz2
             .work/vbntj-gpl/dl/xz-5.0.4.tar.bz2
-          key: vbntj-gpl-inputs-v2-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
+          key: vbntj-gpl-inputs-v3-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
 
       - name: Cache installed Damson toolchain
         uses: actions/cache@v6
@@ -96,9 +100,10 @@ jobs:
 
       - name: Prepare kernel and compile modules
         run: |
+          set -o pipefail
           mkdir -p dist/vbntj-kmods
           sudo chown -R 1000:1000 .work/vbntj-gpl dist/vbntj-kmods
-          docker run --rm \
+          if docker run --rm \
             --platform linux/amd64 \
             --env MODULE_SET \
             --env OUTPUT_DIR=/out \
@@ -107,10 +112,31 @@ jobs:
             --volume "$PWD/.work/vbntj-gpl:/app" \
             --volume "$PWD/dist/vbntj-kmods:/out" \
             vbntj-gpl-builder \
-            /repo/scripts/build-vbntj-kmods.sh
+            /repo/scripts/build-vbntj-kmods.sh 2>&1 | tee damson-build.log; then
+            :
+          else
+            grep -E 'error:|fatal error:|No rule to make target|Error [0-9]|Unexpected|Refusing' damson-build.log \
+              | tail -n 20 | while IFS= read -r line; do
+                echo "::error title=Damson module build::$line"
+              done || true
+            exit 1
+          fi
+
+      - name: Upload compile log after failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: damson-network-feed-failure-${{ github.sha }}
+          path: damson-build.log
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Verify checksums
         run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
+
+      - name: Verify WireGuard module
+        if: inputs.module_set == 'wireguard'
+        run: scripts/verify-wireguard-kmod.sh dist/vbntj-kmods 4.1.52
 
       - name: Verify manual-only IPK safety
         run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
@@ -122,50 +148,3 @@ jobs:
           path: dist/vbntj-kmods/
           if-no-files-found: error
           retention-days: 30
-
-  publish:
-    name: Publish versioned IPK downloads
-    if: github.ref == 'refs/heads/kmods-4.1.52' && (github.event_name == 'push' || inputs.module_set == 'router-tested')
-    needs: build
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: write
-      actions: read
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Download this run's verified artifact
-        run: |
-          gh run download "$GITHUB_RUN_ID" \
-            --repo "$GITHUB_REPOSITORY" \
-            --name "damson-4.1.52-router-tested-$GITHUB_SHA" \
-            --dir dist/vbntj-kmods
-
-      - name: Verify packages before release
-        run: |
-          (cd dist/vbntj-kmods && sha256sum --check SHA256SUMS)
-          scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
-          test "$(find dist/vbntj-kmods -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 2
-
-      - name: Publish immutable, commit-pinned Release
-        run: |
-          tag="damson-4.1.52-manual-${GITHUB_SHA:0:7}"
-          release_dir="dist/vbntj-kmods"
-          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            mkdir -p dist/existing-release
-            gh release download "$tag" --repo "$GITHUB_REPOSITORY" \
-              --pattern 'kmod-*.ipk' --dir dist/existing-release
-            for ipk in "$release_dir"/kmod-*.ipk; do
-              cmp "$ipk" "dist/existing-release/$(basename "$ipk")"
-            done
-            echo "Verified existing Release $tag"
-          else
-            gh release create "$tag" \
-              --repo "$GITHUB_REPOSITORY" \
-              --target "$GITHUB_SHA" \
-              --title "Damson 4.1.52 manual kernel modules (${GITHUB_SHA:0:7})" \
-              --notes "Manual installation only. Built and verified by Actions run $GITHUB_RUN_ID for Damson 19.4.0866-3401052, kernel 4.1.52, brcm963xx. Test the raw modules from /tmp on each firmware before installing." \
-              "$release_dir"/kmod-*.ipk
-          fi

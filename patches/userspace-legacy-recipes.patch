@@ -1,0 +1,195 @@
+--- a/feeds/packages/lang/perl/files/base.config
++++ b/feeds/packages/lang/perl/files/base.config
+@@ -1046 +1046 @@
+-ccflags="-fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $owrt:cflags"
++ccflags="-fwrapv -fno-strict-aliasing -pipe -fstack-protector -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $owrt:cflags"
+--- a/feeds/packages/multimedia/ffmpeg/Makefile
++++ b/feeds/packages/multimedia/ffmpeg/Makefile
+@@ -432 +432 @@
+-	FFMPEG_CONFIGURE+= --enable-lto
++	FFMPEG_CONFIGURE+= --disable-lto
+--- a/feeds/packages/libs/libv4l/Makefile
++++ b/feeds/packages/libs/libv4l/Makefile
+@@ -79 +79 @@
+-TARGET_CFLAGS += $(FPIC)
++TARGET_CFLAGS += -std=gnu99 $(FPIC)
+--- a/feeds/packages/libs/getdns/Makefile
++++ b/feeds/packages/libs/getdns/Makefile
+@@ -27,0 +28,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/utils/dump1090/Makefile
++++ b/feeds/packages/utils/dump1090/Makefile
+@@ -57 +57 @@
+-	CFLAGS="$(TARGET_CFLAGS)" \
++	CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
+--- a/feeds/packages/utils/lcdproc/Makefile
++++ b/feeds/packages/utils/lcdproc/Makefile
+@@ -124 +124 @@
+-TARGET_CFLAGS+=-Wall
++TARGET_CFLAGS+=-Wall -std=gnu99
+--- a/feeds/packages/sound/pulseaudio/Makefile
++++ b/feeds/packages/sound/pulseaudio/Makefile
+@@ -102 +102 @@
+-	$(if $(findstring neon,$(CONFIG_TARGET_OPTIMIZATION)),--enable-neon-opt,--disable-neon-opt) \
++	--disable-neon-opt \
+--- a/package/libs/elfutils/Makefile
++++ b/package/libs/elfutils/Makefile
+@@ -72 +72 @@
+-TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral
++TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=maybe-uninitialized
+--- a/feeds/packages/utils/collectd/Makefile
++++ b/feeds/packages/utils/collectd/Makefile
+@@ -185,0 +186,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/package/utils/lua/patches/020-shared_liblua.patch
++++ b/package/utils/lua/patches/020-shared_liblua.patch
+@@ -118 +118 @@
+-+	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
+++	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+--- a/package/utils/lua/patches/040-use-symbolic-functions.patch
++++ b/package/utils/lua/patches/040-use-symbolic-functions.patch
+@@ -7,2 +7,2 @@
+--	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
++-	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+-+	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
+++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+--- a/package/utils/lua/patches/050-honor-cflags.patch
++++ b/package/utils/lua/patches/050-honor-cflags.patch
+@@ -7,2 +7,2 @@
+--	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
++-	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+-+	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
+++	$(CC) -o $@.$(PKG_VERSION) -Wl,-Bsymbolic-functions $(MYLDFLAGS) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -lm -ldl
+--- a/package/luadec/Makefile
++++ b/package/luadec/Makefile
+@@ -23 +22,0 @@
+-PKG_INSTALL:=1
+@@ -32,2 +31,2 @@
+-  TITLE:=luadec is a web frontend making aria2 easier to use.
+-  URL:=https://github.com/mayswind/luadec
++  TITLE:=Lua 5.1 bytecode decompiler
++  URL:=https://github.com/viruscamp/luadec
+@@ -37 +36 @@
+-	luadec is a web frontend making aria2 easier to use. luadec is written in pure html & javascript, thus it does not need any compilers or runtime environment.
++	luadec decompiles Lua 5.1 bytecode.
+@@ -42 +41 @@
+-TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS)
++TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS) -I$(BUILD_DIR)/lua-5.1.5/src
+@@ -45,0 +45,5 @@
++define Build/Prepare
++	$(call Build/Prepare/Default)
++	printf '#define SRCVERSION "%s"\n' '$(PKG_SOURCE_VERSION)' > $(PKG_BUILD_DIR)/luadec/srcversion.h
++endef
++
+@@ -48,0 +53,2 @@
++		LUASRC="$(BUILD_DIR)/lua-5.1.5/src" \
++		LUA="/usr/bin/lua5.1" LUAC="/usr/bin/luac5.1" \
+@@ -54,2 +60,2 @@
+-	$(INSTALL_DIR) \
+-		$(1)/www/luadec
++	$(INSTALL_DIR) $(1)/usr/bin
++	$(INSTALL_BIN) $(PKG_BUILD_DIR)/luadec/luadec $(1)/usr/bin/
+@@ -57,7 +62,0 @@
+-	$(CP) \
+-		$(PKG_BUILD_DIR)/{langs,css,js,fonts} \
+-		$(PKG_BUILD_DIR)/index.html \
+-		$(PKG_BUILD_DIR)/index.manifest \
+-		$(PKG_BUILD_DIR)/LICENSE \
+-		$(PKG_BUILD_DIR)/favicon.ico \
+-		$(1)/www/luadec
+--- a/feeds/packages/net/mii-tool/Makefile
++++ b/feeds/packages/net/mii-tool/Makefile
+@@ -27,0 +28,2 @@
++# Old kernel headers need iphdr defined before if_tunnel.h.
++TARGET_CFLAGS += -include linux/ip.h
+--- a/feeds/packages/utils/gawk/Makefile
++++ b/feeds/packages/utils/gawk/Makefile
+@@ -23,0 +24,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/net/lighttpd/Makefile
++++ b/feeds/packages/net/lighttpd/Makefile
+@@ -25,0 +26,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/mail/opendkim/Makefile
++++ b/feeds/packages/mail/opendkim/Makefile
+@@ -29 +29 @@
+-  DEPENDS:=+libopendkim
++  DEPENDS:=+libopendkim +libbsd
+@@ -42 +42 @@
+-  DEPENDS:=+libopenssl +libmilter-sendmail
++  DEPENDS:=+libopenssl +libmilter-sendmail +libbsd
+@@ -54 +54 @@
+-  DEPENDS:=+libopendkim
++  DEPENDS:=+libopendkim +libbsd
+--- a/feeds/packages/utils/auc/src/CMakeLists.txt
++++ b/feeds/packages/utils/auc/src/CMakeLists.txt
+@@ -11 +11 @@
+-TARGET_LINK_LIBRARIES(auc uci ubox ubus uclient blobmsg_json ${json})
++TARGET_LINK_LIBRARIES(auc uci ubox ubus uclient blobmsg_json ${json} dl)
+--- a/feeds/packages/libs/libzdb/Makefile
++++ b/feeds/packages/libs/libzdb/Makefile
+@@ -51 +51 @@
+-TARGET_CPPFLAGS += -std=c99
++TARGET_CPPFLAGS += -std=c99 -D_GNU_SOURCE
+--- a/feeds/packages/net/stubby/Makefile
++++ b/feeds/packages/net/stubby/Makefile
+@@ -24,0 +25,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/telephony/net/freeswitch-stable/Makefile
++++ b/feeds/telephony/net/freeswitch-stable/Makefile
+@@ -256,0 +257,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/admin/syslog-ng/Makefile
++++ b/feeds/packages/admin/syslog-ng/Makefile
+@@ -15,0 +16,2 @@
++
++TARGET_CFLAGS += -std=gnu99
+--- a/feeds/packages/utils/bonnie++/Makefile
++++ b/feeds/packages/utils/bonnie++/Makefile
+@@ -44 +44 @@
+-TARGET_CXXFLAGS += -fno-rtti -flto
++TARGET_CXXFLAGS += -fno-rtti -flto -pthread
+--- a/feeds/packages/multimedia/grilo-plugins/Makefile
++++ b/feeds/packages/multimedia/grilo-plugins/Makefile
+@@ -54,0 +55,6 @@
++
++define Build/Compile
++	find $(PKG_BUILD_DIR) -type f -name Makefile -exec sed -i 's@$(STAGING_DIR)/usr/bin/glib-compile-resources@$(STAGING_DIR_HOSTPKG)/bin/glib-compile-resources@g' {} +
++	$(call Build/Compile/Default)
++endef
++
+--- a/feeds/packages/libs/rxtx/Makefile
++++ b/feeds/packages/libs/rxtx/Makefile
+@@ -35,0 +36,6 @@
++define Build/Compile
++	sed -i 's/-source 1.3 -target 1.3/-source 1.6 -target 1.6/g' $(PKG_BUILD_DIR)/Makefile
++	sed -i -E 's@[^[:space:]]*/bin/javah@/repo/scripts/javah-compat.sh@g' $(PKG_BUILD_DIR)/Makefile
++	$(call Build/Compile/Default)
++endef
++
+--- a/package/utils/ugps/Makefile
++++ b/package/utils/ugps/Makefile
+@@ -33,4 +33,0 @@
+-ifneq ($(CONFIG_USE_GLIBC),)
+-  TARGET_CFLAGS += -D_DEFAULT_SOURCE
+-endif
+-
+--- a/feeds/packages/net/lftp/Makefile
++++ b/feeds/packages/net/lftp/Makefile
+@@ -61,0 +62,2 @@
++
++TARGET_CFLAGS += -std=gnu11
+--- a/feeds/packages/devel/lpc21isp/Makefile
++++ b/feeds/packages/devel/lpc21isp/Makefile
+@@ -36,0 +37,5 @@
++define Build/Compile
++	sed -i 's/-static//g' $(PKG_BUILD_DIR)/Makefile
++	$(call Build/Compile/Default)
++endef
++

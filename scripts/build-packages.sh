@@ -8,16 +8,11 @@ output_dir="${OUTPUT_DIR:-$repo_root/dist}"
 download_dir="${DOWNLOAD_DIR:-$repo_root/.cache/downloads}"
 jobs="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 package_targets="${PACKAGE_TARGETS:-}"
+shard_index="${PACKAGE_SHARD_INDEX:-}"
+shard_count="${PACKAGE_SHARD_COUNT:-16}"
 build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
-kernel_version="${KERNEL_VERSION:-4.1.38}"
-
-case "$kernel_version" in
-  4.1.38|4.1.52) ;;
-  *)
-    echo "Unsupported KERNEL_VERSION: $kernel_version" >&2
-    exit 1
-    ;;
-esac
+userspace_only="${USERSPACE_ONLY:-0}"
+package_compile_failed=0
 
 buildroot_archive="$source_dir/openwrt_18.x_tch_buildroot_based_custom.tar.xz"
 toolchain_archive="$source_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar"
@@ -28,11 +23,6 @@ for archive in "$buildroot_archive" "$toolchain_archive"; do
     exit 1
   fi
 done
-
-if [[ ! -f "$build_config" ]]; then
-  echo "Build configuration does not exist: $build_config" >&2
-  exit 1
-fi
 
 (
   cd "$source_dir"
@@ -49,87 +39,120 @@ esac
 rm -rf "$work_dir" "$output_dir"
 mkdir -p "$work_dir" "$output_dir"
 
+# Several pinned feed recipes still use the retired GitHub git:// transport.
+# Keep the rewrite in this disposable build directory.
+export GIT_CONFIG_GLOBAL="$work_dir/.gitconfig"
+git config --global url.https://github.com/.insteadOf git://github.com/
+
 # The snapshot intentionally has no build/staging products. J is an accidental
 # nested tar file and is not used by the OpenWrt build system.
 tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
-# This archived target defaults to 4.1.38. Keep the override explicit so each
-# generated package and kernel tree carries the requested ABI version.
-kernel_patchlevel="${kernel_version#4.1.}"
-sed -i -E \
-  "s/^LINUX_VERSION-4\\.1 = \\..*/LINUX_VERSION-4.1 = .$kernel_patchlevel/" \
-  "$work_dir/target/linux/brcm63xx-tch/Makefile"
+# libpcap 1.9.1 uses the C99 `restrict` keyword in portability.h, while this
+# archived recipe otherwise compiles it in the toolchain's default GNU89 mode.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/libpcap-c99.patch"
+# The snapshot's shared-library patch omits configure's fallback LIBOBJS.
+# Supply PIC copies so libpcap.so exports the same symbols as libpcap.a.
+cp "$repo_root/patches/libpcap-shared-libobjs.patch" \
+  "$work_dir/package/libs/libpcap/patches/101-shared-libobjs.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/olsrd-release-flags.patch"
+# BIND uses GNU typeof in ISC_ALIGN; strict C99 makes it an undeclared
+# function with this historical GCC toolchain.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/bind-gnu99.patch"
 
-mkdir -p "$download_dir"
-rm -rf "$work_dir/dl"
-if [[ "$kernel_version" == 4.1.52 ]]; then
-  # The vendor patch stack is based on 4.1.38 and cannot be applied directly
-  # to a pristine 4.1.52 tree. Present a renamed 4.1.38 base to OpenWrt, then
-  # apply the official 4.1.38 -> 4.1.52 stable delta after the vendor patches.
-  kernel_base_archive="$download_dir/linux-4.1.38.tar.xz"
-  kernel_base_sha256="b8c23117cb08cb0bfc9660375130caaee2fabb39bc5d680557d4521e7e08bd56"
-  if [[ ! -f "$kernel_base_archive" ]]; then
-    kernel_base_tmp="$download_dir/.linux-4.1.38.tar.xz.tmp"
-    curl --fail --location --retry 3 \
-      --output "$kernel_base_tmp" \
-      https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.1.38.tar.xz
-    mv "$kernel_base_tmp" "$kernel_base_archive"
-  fi
-  echo "$kernel_base_sha256  $kernel_base_archive" | sha256sum --check --status || {
-    echo "Invalid Linux 4.1.38 base archive: $kernel_base_archive" >&2
-    exit 1
-  }
-  mkdir -p "$work_dir/dl"
-  find "$download_dir" -mindepth 1 -maxdepth 1 -type f \
-    -exec ln -s {} "$work_dir/dl/" \;
-  rm -f "$work_dir/dl/linux-4.1.52.tar.xz"
-  kernel_base_dir="$work_dir/.kernel-base"
-  rm -rf "$kernel_base_dir"
-  mkdir -p "$kernel_base_dir"
-  tar --extract --xz --file "$kernel_base_archive" \
-    --directory "$kernel_base_dir"
-  mv "$kernel_base_dir/linux-4.1.38" "$kernel_base_dir/linux-4.1.52"
-  XZ_OPT="-T0 -1" tar --create --xz --file "$work_dir/dl/linux-4.1.52.tar.xz" \
-    --directory "$kernel_base_dir" linux-4.1.52
-  rm -rf "$kernel_base_dir"
-else
-  ln -s "$download_dir" "$work_dir/dl"
+# CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
+# every userspace recipe while leaving bulk kernel modules unselected.
+if [[ "$userspace_only" == 1 ]]; then
+  # In this fork CONFIG_ALL and CONFIG_ALL_NONSHARED both select ALL_KMODS.
+  # Remove those selects so the userspace profile can keep ALL_KMODS disabled.
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-no-all-kmods.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-package-metadata.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-skip-kernel-package.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-ipset-no-kmod.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-legacy-recipes.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-kernel-configure.patch"
+  # The archive contains a generated package Kconfig that predates the patch.
+  rm -f "$work_dir/tmp/.config-package.in"
 fi
+
+# The historical archive was created with every directory named "bin"
+# stripped recursively, including source payloads that are required by
+# base-files, qos-scripts and the OpenWrt host tools. Restore the audited
+# files kept in this repository before the build can use the snapshot.
+cp -a "$repo_root/build/source-overlay/." "$work_dir/"
+
+# Replace the archived combined WireGuard recipe with independent wg tools
+# and the legacy module backport. Keep kernel compilation in kernel jobs.
+rm -rf "$work_dir/package/network/services/wireguard"
+cp -a "$repo_root/build/wireguard-overlay/." "$work_dir/"
+rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
+
+# The package and LuCI feeds retain their pinned Git object databases. Restore
+# the other stripped source payloads directly from those exact commits rather
+# than downloading moving branch heads.
+git -C "$work_dir/feeds/packages" checkout HEAD -- \
+  net/wifischedule/net/usr/bin \
+  utils/bmx7-dnsupdate/files/usr/bin \
+  utils/prometheus-node-exporter-lua/files/usr/bin \
+  utils/yunbridge/files/usr/bin
+git -C "$work_dir/feeds/luci" checkout HEAD -- \
+  applications/luci-app-statistics/root/usr/bin \
+  contrib/package/freifunk-common/files/usr/bin \
+  contrib/package/meshwizard/files/usr/bin \
+  libs/luci-lib-nixio/axTLS/www/bin \
+  libs/luci-lib-nixio/axTLS/www/test_dir/bin
+
+# OpenWrt's old kernel recipe has no usable checksum metadata for this
+# version, so download the exact upstream archive ourselves and verify the
+# pinned SHA-256 before exposing it through the buildroot's dl directory.
+mkdir -p "$download_dir"
+kernel_archive="$download_dir/linux-4.1.38.tar.xz"
+kernel_sha256="b8c23117cb08cb0bfc9660375130caaee2fabb39bc5d680557d4521e7e08bd56"
+if [[ ! -f "$kernel_archive" ]]; then
+  kernel_archive_tmp="$download_dir/.linux-4.1.38.tar.xz.tmp"
+  curl --fail --location --retry 3 \
+    --output "$kernel_archive_tmp" \
+    https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.1.38.tar.xz
+  mv "$kernel_archive_tmp" "$kernel_archive"
+fi
+echo "$kernel_sha256  $kernel_archive" | sha256sum --check --status || {
+  echo "Invalid Linux 4.1.38 source archive: $kernel_archive" >&2
+  exit 1
+}
+rm -rf "$work_dir/dl"
+ln -s "$download_dir" "$work_dir/dl"
 
 mkdir -p "$work_dir/staging_dir"
 tar --extract --file "$toolchain_archive" \
   --directory "$work_dir/staging_dir" --no-same-owner
 
-# Add repository-maintained kernel fixes after the archived vendor patch set.
-# VBNTS shares the VANTW 4.1 patch directory in this buildroot snapshot.
-kernel_patch_source="$repo_root/patches/kernel-4.1"
+# The snapshot's active board patch directory contains absolute symlinks from
+# the original maintainer machine. VBNTS and VANTW share the complete in-tree
+# 4.1 patch stack, so preserve the generated local patch and repoint the board
+# directory at that portable copy.
 kernel_patch_target="$work_dir/target/linux/brcm63xx-tch/VANTW/patches-4.1"
-if [[ "$kernel_version" == 4.1.38 && -d "$kernel_patch_source" ]]; then
-  if [[ ! -d "$kernel_patch_target" ]]; then
-    echo "Expected kernel patch directory was not found: $kernel_patch_target" >&2
-    exit 1
-  fi
-  cp "$kernel_patch_source"/*.patch "$kernel_patch_target/"
+if [[ ! -d "$kernel_patch_target" ]]; then
+  echo "Expected vendor kernel patch directory was not found: $kernel_patch_target" >&2
+  exit 1
 fi
-if [[ "$kernel_version" == 4.1.52 ]]; then
-  stable_delta="$repo_root/patches/kernel-4.1.52/vendor-linux-stable-4.1.38-to-4.1.52.patch.gz"
-  if [[ ! -f "$stable_delta" ]]; then
-    echo "Missing Linux stable delta: $stable_delta" >&2
-    exit 1
-  fi
-  gzip -cd "$stable_delta" > \
-    "$kernel_patch_target/899-linux-stable-4.1.38-to-4.1.52.patch"
-fi
-
-# The archived buildroot contains generated absolute symlinks in the board
-# patch directory that only worked on the original maintainer's machine.
-# Point it back to the complete in-archive patch set shared by VANTW/VBNTS.
 active_kernel_patches="$work_dir/target/linux/brcm63xx-tch/patches-4.1"
 autodetected_patch="$active_kernel_patches/900-410-autodetected-bcmdrivers-kconfig.patch"
 if [[ -f "$autodetected_patch" ]]; then
   cp "$autodetected_patch" "$kernel_patch_target/"
+fi
+if [[ "${BUILD_KMODS:-0}" == 1 ]]; then
+  cp "$repo_root"/patches/kernel-4.1.38/*.patch "$kernel_patch_target/"
 fi
 rm -rf "$active_kernel_patches"
 ln -s VANTW/patches-4.1 "$active_kernel_patches"
@@ -138,28 +161,113 @@ cp "$build_config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)
 make "${make_args[@]}" defconfig
+if [[ "$userspace_only" == 1 ]] && grep -qx 'CONFIG_ALL_KMODS=y' "$work_dir/.config"; then
+  echo 'Userspace profile unexpectedly selected CONFIG_ALL_KMODS=y' >&2
+  exit 1
+fi
+
+configure_kmod_overrides() {
+  # Keep non-kernel packages selected while avoiding an unrelated kernel build.
+  mapfile -t kmod_overrides < <(
+    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=n/p' "$work_dir/.config"
+  )
+  make_args+=("${kmod_overrides[@]}")
+  echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"
+}
+
+prepare_kernel_modules() {
+  # The top-level OpenWrt dispatcher does not expose custom target/linux
+  # targets. Its normal recursive invocation also adds host tools and the
+  # cross-compiler to PATH; preserve that environment for this direct call.
+  local toolchain_bin="$work_dir/staging_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi/bin"
+  PATH="$work_dir/staging_dir/host/bin:$toolchain_bin:$PATH" \
+    make --directory "$work_dir/target/linux" --jobs "$jobs" V=sc \
+    TOPDIR="$work_dir" modules_prepare
+}
+
+compile_with_report() {
+  local error_file="$work_dir/logs/package/error.txt"
+  local serial_log="$output_dir/serial-package-compile.log"
+  if ! make --keep-going "${make_args[@]}" "$@"; then
+    if [[ -s "$error_file" ]]; then
+      echo "Failed package recipes in the parallel pass:" >&2
+      cat "$error_file" >&2
+    fi
+    echo "Retrying unfinished packages serially and continuing past failures" >&2
+    rm -f "$error_file"
+    if make --directory "$work_dir" --keep-going --jobs 1 V=sc \
+      "${kmod_overrides[@]}" "$@" 2>&1 | tee "$serial_log"; then
+      rm -f "$serial_log"
+    else
+      python3 "$repo_root/scripts/report-package-failures.py" \
+        "$serial_log" "$error_file" "$output_dir"
+      mapfile -t failed_recipes < "$output_dir/failed-packages.txt"
+      for recipe in "${failed_recipes[@]}"; do
+        printf '::error title=OpenWrt package compile::%s failed\n' "$recipe"
+      done
+      package_compile_failed=1
+    fi
+  fi
+}
 
 if [[ -n "$package_targets" ]]; then
-  # Intended for smoke tests and targeted rebuilds. Targets are recipe paths,
-  # for example: zlib or feeds/packages/curl.
-  # Unlike `world`, a direct package target does not build all host utilities.
-  # Use the compatible tools supplied by the container for a fast smoke build.
-  mkdir -p "$work_dir/staging_dir/host/bin"
-  ln -sf "$(command -v cmake)" "$work_dir/staging_dir/host/bin/cmake"
-  ln -sf "$(command -v flock)" "$work_dir/staging_dir/host/bin/flock"
-  ln -sf "$(command -v patchelf)" "$work_dir/staging_dir/host/bin/patchelf"
-  if [[ " $package_targets " == *" kernel/linux "* ]]; then
-    # Kernel module packages require the configured kernel tree, generated
-    # headers, Module.symvers and modules.builtin before packaging can start.
-    make "${make_args[@]}" target/linux/compile
+  if [[ "$userspace_only" == 1 ]]; then
+    # Direct userspace targets still need pinned host tools and kernel headers.
+    configure_kmod_overrides
+    make "${make_args[@]}" tools/install
+    make "${make_args[@]}" target/linux/prepare
+    make "${make_args[@]}" target/linux/configure
+    prepare_kernel_modules
+    target_list=()
+    for target in $package_targets; do
+      target="${target#package/}"
+      target="${target%/compile}"
+      target_list+=("package/$target/compile")
+    done
+    compile_with_report "${target_list[@]}"
+  else
+    # Preserve the lightweight targeted kernel-module build path.
+    mkdir -p "$work_dir/staging_dir/host/bin"
+    ln -sf "$(command -v cmake)" "$work_dir/staging_dir/host/bin/cmake"
+    ln -sf "$(command -v flock)" "$work_dir/staging_dir/host/bin/flock"
+    ln -sf "$(command -v patchelf)" "$work_dir/staging_dir/host/bin/patchelf"
+    if [[ "${BUILD_KMODS:-0}" == 1 ]]; then
+      make "${make_args[@]}" target/linux/compile
+    fi
+    for target in $package_targets; do
+      target="${target#package/}"
+      target="${target%/compile}"
+      make "${make_args[@]}" "package/$target/compile"
+    done
   fi
-  for target in $package_targets; do
-    make "${make_args[@]}" "package/$target/compile"
-  done
+  make --directory "$work_dir" package/index
+elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
+  python3 "$repo_root/scripts/select-userspace-shard.py" \
+    "$work_dir/.config" "$work_dir/tmp/.packagedeps" \
+    "$shard_index" "$shard_count" "$output_dir"
+  mapfile -t shard_targets < "$output_dir/shard-targets.txt"
+  configure_kmod_overrides
+  make "${make_args[@]}" tools/install
+  make "${make_args[@]}" target/linux/prepare
+  make "${make_args[@]}" target/linux/configure
+  prepare_kernel_modules
+  compile_with_report "${shard_targets[@]}"
+elif [[ "$userspace_only" == 1 ]]; then
+  # `world` also compiles the vendor kernel, including modules unrelated to
+  # this userspace feed. Some kmods are selected indirectly as dependencies;
+  # override those selections for the package graph while retaining the
+  # userspace packages that depend on modules already installed on the router.
+  configure_kmod_overrides
+  # The matching cross-toolchain is restored from the pinned input archive.
+  # Rebuilding it would fetch an obsolete glibc-2.19-r25243 source URL.
+  make "${make_args[@]}" tools/install
+  make "${make_args[@]}" target/linux/prepare
+  make "${make_args[@]}" target/linux/configure
+  prepare_kernel_modules
+  compile_with_report package/compile
   make --directory "$work_dir" package/index
 else
-  # `world` builds host tools, target/kernel prerequisites, every selected
-  # package, package indexes and checksums in dependency order.
+  # Full builds still include the target kernel and firmware images.
   make "${make_args[@]}" world
 fi
 
@@ -180,10 +288,6 @@ if [[ -n "$target_packages" ]]; then
     -exec cp -a {} "$output_dir/target/packages/" \;
 fi
 
-if [[ "${VERIFY_KMOD_TUN:-0}" == 1 ]]; then
-  "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir" "$kernel_version"
-fi
-
 ipk_count="$(find "$output_dir" -type f -name '*.ipk' | wc -l | tr -d ' ')"
 if [[ "$ipk_count" -eq 0 ]]; then
   echo "The build completed without producing any .ipk files" >&2
@@ -191,3 +295,13 @@ if [[ "$ipk_count" -eq 0 ]]; then
 fi
 
 echo "Built $ipk_count packages in $output_dir"
+if [[ "$package_compile_failed" -ne 0 ]]; then
+  echo "Some package recipes failed; successful IPKs and diagnostics were preserved in $output_dir" >&2
+  exit 1
+fi
+if [[ "${VERIFY_KMOD_TUN:-0}" == 1 ]]; then
+  "$repo_root/scripts/verify-kmod-tun.sh" "$output_dir" "$work_dir"
+fi
+if [[ "${VERIFY_KMOD_CONNMARK:-0}" == 1 ]]; then
+  "$repo_root/scripts/verify-kmod-connmark.sh" "$output_dir"
+fi

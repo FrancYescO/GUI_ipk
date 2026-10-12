@@ -1,0 +1,76 @@
+#!/usr/bin/env perl
+
+use strict;
+use Getopt::Long;
+
+my ($output, $version, $docbook, $html, $xml, $plaintext, $no_split, $no_headers);
+
+Getopt::Long::Configure('pass_through');
+Getopt::Long::GetOptions(
+	'output=s'   => \$output,
+	'version'    => \$version,
+	'no-split'   => \$no_split,
+	'no-headers' => \$no_headers,
+	'docbook'    => \$docbook,
+	'html'       => \$html,
+	'xml'        => \$xml,
+	'plaintext'  => \$plaintext
+);
+
+if ($version) {
+	print "makeinfo (OpenWrt stub) 4.13\n";
+	exit 0;
+}
+
+sub output_filename {
+	my $input = shift || return;
+	my $name = $input;
+	my $setfile;
+
+	if (open my $input_file, '<', $input) {
+		while (defined(my $line = readline $input_file)) {
+			if ($line =~ /\@setfilename\s+(\S+)/) {
+				$setfile = $1;
+				$setfile =~ s!^.+/!!;
+				last;
+			}
+		}
+		close $input_file;
+	}
+
+	$name =~ s!^.+/!!;
+	$name =~ s!\.[^.]+$!!;
+
+	if ($html) {
+		$setfile =~ s!\.[^.]+$!! if $setfile;
+		return ($output || ($setfile ? "$setfile.html" : "$name.html")) if $no_split;
+		return $output ? "$output/index.html" : ($setfile ? "$setfile/index.html" : "$name/index.html");
+	} elsif ($xml || $docbook) {
+		$setfile =~ s!\.[^.]+$!! if $setfile;
+		return ($output || ($setfile ? "$setfile.xml" : "$name.info"));
+	} elsif ($plaintext) {
+		return ($output || '-');
+	}
+
+	return ($output || $setfile || "$name.info");
+}
+
+foreach my $input (@ARGV) {
+	next unless -f $input;
+	my $out = output_filename($input);
+	if ($out =~ m!^(.+/)[^/]+$!) {
+		system('mkdir', '-p', $1);
+	}
+
+	my $output_file = \*STDOUT;
+	if ($out ne '-' && !$no_headers) {
+		open $output_file, '>', $out or die "Can't open $out: $!\n";
+	}
+
+	if ($html || $xml || $docbook) {
+		print $output_file "<!-- Dummy output for $input -->\n";
+	} else {
+		print $output_file "Dummy output for $input\n";
+	}
+	close $output_file if $out ne '-';
+}

@@ -1,0 +1,15 @@
+--- a/package/Makefile
++++ b/package/Makefile
+@@ -15,4 +15,12 @@
+ $(curdir)/builddirs:=$(sort $(package-) $(package-y) $(package-m))
+ $(curdir)/builddirs-default:=. $(sort $(package-y) $(package-m))
+ $(curdir)/builddirs-prereq:=. $(sort $(prereq-y) $(prereq-m))
++ifeq ($(USERSPACE_ONLY),1)
++  # Userspace packages may depend on the kernel package, but this job uses
++  # the separately built versioned kernel feed instead of packaging modules.
++  $(curdir)/builddirs:=$(filter-out kernel/linux,$($(curdir)/builddirs))
++  $(curdir)/builddirs-default:=$(filter-out kernel/linux,$($(curdir)/builddirs-default))
++  $(curdir)/kernel/linux/compile:
++	@echo "Skipping kernel package compilation in userspace-only build"
++endif
+ ifdef CHECK_ALL

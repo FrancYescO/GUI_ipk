@@ -8,20 +8,18 @@ toolchain.
 ## Building packages
 
 Use **Actions → Build OpenWrt packages → Run workflow**. Leave
-the `full` profile and `package_targets` empty to build the complete feed. For
-a quicker targeted build, enter one or more OpenWrt recipe paths such as
-`zlib` or `feeds/packages/curl`. Select `kmod-tun-4.1.38` or
-`kmod-tun-vbnts-4.1.52` to build and inspect only the TUN kernel module for
-that VBNTS kernel ABI.
+`package_targets` empty to build every userspace package. For a quicker targeted
+build, enter one or more OpenWrt recipe paths such as `zlib` or
+`feeds/packages/curl`.
 
 Every run verifies the input archives by SHA-256, builds in Ubuntu 18.04 for
 compatibility with the legacy toolchain, validates the generated package
-indexes, and uploads the feed as a workflow artifact. A manual full build can
-also publish the result to GitHub Pages.
+indexes, and uploads the feed as a workflow artifact. A manual full build also
+publishes the result to GitHub Pages by default; clear `publish_pages` to keep
+that run artifact-only.
 
-Pull requests and pushes that change the build infrastructure or kernel patch
-set run the `kmod-tun-4.1.38` profile. Full builds are manual because the full
-configuration selects more than 1,400 packages and can take several hours.
+Pull requests and pushes that change the build infrastructure run the full
+userspace build. It can take several hours.
 
 The two source archives are deliberately not committed, extracted, or kept on
 an orphan branch: together they are about 908 MB compressed, expand beyond
@@ -49,63 +47,30 @@ docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" -e HOME=/tmp \
 scripts/verify-feed.sh dist
 ```
 
-To reproduce the conservative 4.1.38 TUN backport locally, use the same image
-with the dedicated configuration:
+## OPKG feeds
 
-```bash
-docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" -e HOME=/tmp \
-  -e WORK_DIR=/tmp/openwrt -e BUILD_CONFIG=/repo/build/kmod-tun.config \
-  -e PACKAGE_TARGETS=kernel/linux -e KERNEL_VERSION=4.1.38 \
-  -e VERIFY_KMOD_TUN=1 \
-  -v "$PWD:/repo" gui-ipk-builder
-scripts/verify-feed.sh dist
-```
+The six shared feeds contain userspace packages. Kernel IPKs are split into
+[`kernel/4.1.38`](https://francyesco.github.io/GUI_ipk/kernel/4.1.38/) and
+[`kernel/4.1.52`](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/).
+The 4.1.38 feed contains a virtual kernel ABI package and 19 `kmod-*` IPKs
+built from the archived VBNTS buildroot. Thirteen IPKs contain `.ko` files;
+six are empty dependency packages for modules built into this kernel. The
+kernel IPK contains no image and cannot upgrade a router. The compiled ABI
+hash differs from the older virtual kernel package in this repository, so
+verify the firmware's exact kernel ABI before installing any module. These
+packages have not been tested on a router. They do not include the separate
+Damson 4.1.52 ABI adaptation and must not be used on VBNT-K Damson.
 
-This profile backports only the empty `IFF_NO_PI` frame guard and the invalid
-`TUNSETSNDBUF` rejection from Linux 4.1.52. It deliberately does not backport
-the `dev_get_valid_name()` change because that symbol is not exported by the
-4.1.38 tree. The resulting package is tied to the VBNTS Linux 4.1.38 ABI.
+The two router-tested 4.1.52 manual modules target Damson `19.4.0866-3401052` on VBNT-K with
+kernel `4.1.52` and architecture `brcm963xx`. Check the exact firmware and
+module ABI before installing one. A matching Linux version alone is not
+sufficient. Additional 4.1.52 modules are build-verified only and should be
+tested as raw `.ko` files from `/tmp` before any persistent installation.
+The kernel feed is not part of the userspace source list below.
 
-For 4.1.52, use the same command with `KERNEL_VERSION=4.1.52`. That kernel
-already contains the two TUN fixes and exports `dev_get_valid_name`, so the
-4.1.38-only backport patches are not applied. The verifier checks the selected
-vermagic and source before accepting the package. Keep 4.1.52 artifacts on a
-separate branch because their module ABI differs from the stock 4.1.38 build.
-The build applies the official 4.1.38-to-4.1.52 stable changes, rebased onto
-the Technicolor patch stack, after the vendor patches. Applying the Broadcom
-base patch directly to a pristine 4.1.52 tree is not supported.
-
-That workflow profile targets VBNTS and must not be used for VBNTJ merely
-because both kernels report Linux 4.1.x.
-
-## Building Damson 4.1.52 kernel modules
-
-Use **Actions → Build Damson 4.1.52 kernel modules → Run workflow** for the
-Damson Linux 4.1.52 ABI reconstructed from the pinned `VBNTJ_502L07p1` GPL
-source. The default `tun` module set builds
-TUN plus a compile-time ABI canary. The `network-smoke` set additionally
-builds `usbnet.ko` and `cdc_ether.ko` to exercise the shared networking ABI.
-The `qos-probe` set preserves the firmware's built-in IFB, ingress, U32 and
-police support and builds only the missing `act_connmark.ko` module.
-
-This separate workflow pins the GPL buildsystem and OpenWrt GCC 5.5.0,
-prepares the kernel on a case-sensitive Linux filesystem, then applies the
-Damson compatibility patch and the router-matched kernel configuration before
-any module is compiled. It rejects wrong structure offsets, WEXT
-configuration, compiler version, vermagic, or TUN undefined-symbol set. The
-module selector is an allowlisted choice rather than an arbitrary shell
-target.
-
-The exact router-tested artifact and non-persistent test guidance are in
-[`artifacts/README.md`](artifacts/README.md).
-
-## Safe OPKG feed
-
-The published OPKG feed is userspace-only. Kernel packages are deliberately
-excluded because they depend on an exact vendor kernel ABI and can crash or
-boot-loop a different firmware even when `uname` and vermagic look compatible.
-Tested kernel modules remain manual artifacts and are never advertised to
-OPKG.
+Browse and search the published packages at
+[francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).
+Each feed section has its own package list and direct IPK download links.
 
 Add the package feeds with:
 
@@ -118,6 +83,12 @@ src/gz gui_telephony https://francyesco.github.io/GUI_ipk/telephony
 src/gz gui_target https://francyesco.github.io/GUI_ipk/target/packages
 ```
 
+On the exact Damson firmware above, add the kernel feed separately if needed:
+
+```text
+src/gz gui_kernel_4_1_52 https://francyesco.github.io/GUI_ipk/kernel/4.1.52
+```
+
 The following architecture priorities are also required:
 
 ```bash
@@ -127,9 +98,8 @@ arch brcm63xx-tch 300
 arch arm_cortex-a9 400
 ```
 
-Adding the feed is safe from cross-kernel module installation, but a blanket
-`opkg upgrade` is still not recommended on vendor firmware. Install only the
-specific userspace packages needed and review replacements of core components
+Do not run a blanket `opkg upgrade` on vendor firmware. Install only the
+specific packages needed and review replacements of core components
 such as BusyBox, `procd`, OpenSSL or the package manager itself.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/AnsuelS)
