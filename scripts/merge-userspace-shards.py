@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify shard coverage and assemble one OPKG feed from successful jobs."""
+"""Verify shard coverage and assemble an OPKG feed from valid shard IPKs."""
 
 import argparse
 import gzip
@@ -147,7 +147,7 @@ def merge(artifacts, output, count):
         print(f"Skipped {len(malformed)} malformed IPKs; see shard-report.md")
     print(f"Merged {len(candidates)} userspace IPKs from {count} shards")
     if reports:
-        raise ValueError(f"{len(reports)} shards have package failures; partial feed preserved")
+        print(f"{len(reports)} shards have package failures; see shard-report.md")
 
 
 def main():

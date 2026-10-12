@@ -183,9 +183,6 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
-      - name: Require successful shard jobs
-        run: test "${{ needs.build.result }}" = success
-
       - name: Prepare safe shared OPKG feed
         run: scripts/sanitize-opkg-feed.sh dist
 
@@ -224,7 +221,7 @@ jobs:
 
   deploy:
     name: Publish verified package feed to Pages
-    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == '' && inputs.shard_index == ''
+    if: always() && needs.aggregate.result == 'success' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == '' && inputs.shard_index == ''
     needs: aggregate
     runs-on: ubuntu-24.04
     permissions:

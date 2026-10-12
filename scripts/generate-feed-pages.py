@@ -65,7 +65,7 @@ def packages(index):
     return sorted(entries, key=lambda item: (item["Package"].lower(), item.get("Version", "")))
 
 
-def page(title, selected, groups, prefix):
+def page(title, selected, groups, prefix, partial=False):
     nav = [f'<a href="{prefix}index.html">All packages</a>']
     nav.extend(
         f'<a href="{prefix}{feed}/index.html">{html.escape(feed)} ({len(groups[feed])})</a>'
@@ -100,6 +100,12 @@ def page(title, selected, groups, prefix):
         "before downloading or installing a module.</p>"
         if selected is None else ""
     )
+    if partial:
+        notice += (
+            '<p><strong>Some packages did not build.</strong> This feed contains the '
+            'packages that succeeded. <a href="'
+            f'{prefix}shard-report.md">View the build failure report</a>.</p>'
+        )
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -138,11 +144,16 @@ def main():
     if missing_userspace:
         raise ValueError(f"Missing userspace feeds: {sorted(missing_userspace)}")
     (root / ".nojekyll").touch()
-    (root / "index.html").write_text(page("All packages", None, groups, ""), encoding="utf-8")
+    report = root / "shard-report.md"
+    report_text = report.read_text() if report.is_file() else ""
+    partial = "## Shard " in report_text or "## Skipped malformed IPKs" in report_text
+    (root / "index.html").write_text(
+        page("All packages", None, groups, "", partial), encoding="utf-8"
+    )
     for feed in groups:
         prefix = "../" * len(Path(feed).parts)
         (root / feed / "index.html").write_text(
-            page(feed, feed, groups, prefix), encoding="utf-8"
+            page(feed, feed, groups, prefix, partial), encoding="utf-8"
         )
     print(f"Generated browsable pages for {sum(map(len, groups.values()))} packages")
 
