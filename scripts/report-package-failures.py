@@ -16,7 +16,9 @@ BLOCKED_RECIPE = re.compile(
 )
 DIAGNOSTIC = re.compile(
     r"(?:\berror:|CMake Error|cp: cannot stat|undefined reference|"
-    r"No rule to make target|failed to compile)",
+    r"No rule to make target|failed to compile|"
+    r"Package .+ is missing dependencies for the following libraries:|"
+    r"DSO missing from command line|Exec format error)",
     re.IGNORECASE,
 )
 ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
@@ -26,12 +28,19 @@ def summarize(serial_log: Path, error_log: Path):
     failed = {}
     blocked = set()
     recent_errors = deque(maxlen=5)
+    missing_libraries = False
 
     with serial_log.open(errors="replace") as stream:
         for raw in stream:
             line = ANSI_ESCAPE.sub("", raw).strip()
+            if missing_libraries:
+                if re.fullmatch(r"lib\S+\.so(?:\.\d+)*", line):
+                    recent_errors.append(line)
+                else:
+                    missing_libraries = False
             if DIAGNOSTIC.search(line) and "requested URL returned error" not in line:
                 recent_errors.append(line)
+                missing_libraries = "is missing dependencies for the following libraries:" in line
 
             match = RECIPE_FAILURE.search(line)
             if match:
