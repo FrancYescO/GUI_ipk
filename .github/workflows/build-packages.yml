@@ -214,14 +214,14 @@ jobs:
           retention-days: 30
 
       - name: Upload GitHub Pages artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish_pages))
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist/
 
   deploy:
     name: Publish verified package feed to Pages
-    if: always() && needs.aggregate.result == 'success' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == '' && inputs.shard_index == ''
+    if: always() && needs.aggregate.result == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish_pages && inputs.package_targets == '' && inputs.shard_index == ''))
     needs: aggregate
     runs-on: ubuntu-24.04
     permissions:
