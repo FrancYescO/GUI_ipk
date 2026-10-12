@@ -185,3 +185,11 @@
 @@ -61,0 +62,2 @@
 +
 +TARGET_CFLAGS += -std=gnu11
+--- a/feeds/packages/devel/lpc21isp/Makefile
++++ b/feeds/packages/devel/lpc21isp/Makefile
+@@ -36,0 +37,5 @@
++define Build/Compile
++	sed -i 's/-static//g' $(PKG_BUILD_DIR)/Makefile
++	$(call Build/Compile/Default)
++endef
++
