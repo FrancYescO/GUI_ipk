@@ -171,8 +171,11 @@ configure_kmod_overrides() {
 
 prepare_kernel_modules() {
   # The top-level OpenWrt dispatcher does not expose custom target/linux
-  # targets. Invoke the target Makefile directly after its configure phase.
-  make --directory "$work_dir/target/linux" --jobs "$jobs" V=sc \
+  # targets. Its normal recursive invocation also adds host tools and the
+  # cross-compiler to PATH; preserve that environment for this direct call.
+  local toolchain_bin="$work_dir/staging_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi/bin"
+  PATH="$work_dir/staging_dir/host/bin:$toolchain_bin:$PATH" \
+    make --directory "$work_dir/target/linux" --jobs "$jobs" V=sc \
     TOPDIR="$work_dir" modules_prepare
 }
 
