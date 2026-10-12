@@ -214,6 +214,8 @@ if [[ -n "$package_targets" ]]; then
     prepare_kernel_modules
     target_list=()
     for target in $package_targets; do
+      target="${target#package/}"
+      target="${target%/compile}"
       target_list+=("package/$target/compile")
     done
     compile_with_report "${target_list[@]}"
@@ -227,6 +229,8 @@ if [[ -n "$package_targets" ]]; then
       make "${make_args[@]}" target/linux/compile
     fi
     for target in $package_targets; do
+      target="${target#package/}"
+      target="${target%/compile}"
       make "${make_args[@]}" "package/$target/compile"
     done
   fi
