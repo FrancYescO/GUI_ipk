@@ -95,6 +95,7 @@ cp -a "$repo_root/build/source-overlay/." "$work_dir/"
 if [[ "${ENABLE_ASTERISK20:-0}" == 1 ]]; then
   # Keep the new PJSIP ABI scoped to the experimental SIP profile.
   rm -rf "$work_dir/feeds/telephony/libs/pjproject"
+  rm -rf "$work_dir/feeds/packages/libs/jansson"
   cp -a "$repo_root/build/asterisk20-overlay/." "$work_dir/"
   mkdir -p "$work_dir/package/feeds/telephony"
   ln -sfn ../../../feeds/telephony/net/asterisk \
