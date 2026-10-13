@@ -16,14 +16,21 @@ on:
           - qos-probe
           - router-tested
           - network-feed
+          - wireguard
+      wireguard_artifact_run_id:
+        description: "Reverify existing WireGuard artifacts from this run without rebuilding"
+        required: false
+        type: string
   pull_request:
     paths:
       - ".github/workflows/build-vbntj-kmods.yml"
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
+      - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
+      - "scripts/verify-wireguard-kmod.sh"
       - "artifacts/damson-4.1.52-manual/**"
   push:
     branches:
@@ -33,8 +40,10 @@ on:
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
+      - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
+      - "scripts/verify-wireguard-kmod.sh"
       - "artifacts/damson-4.1.52-manual/**"
 
 concurrency:
@@ -43,9 +52,11 @@ concurrency:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   build:
+    if: inputs.wireguard_artifact_run_id == ''
     name: Compile and verify ${{ inputs.module_set || 'network-feed' }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 360
@@ -71,6 +82,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: |
+            .work/vbntj-gpl/dl/wireguard-linux-compat-1.0.20220627.tar.xz
             .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
             .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.xz
             .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.bz2
@@ -81,7 +93,7 @@ jobs:
             .work/vbntj-gpl/dl/mpc-1.0.3.tar.gz
             .work/vbntj-gpl/dl/mpfr-3.1.4.tar.bz2
             .work/vbntj-gpl/dl/xz-5.0.4.tar.bz2
-          key: vbntj-gpl-inputs-v2-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
+          key: vbntj-gpl-inputs-v3-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
 
       - name: Cache installed Damson toolchain
         uses: actions/cache@v6
@@ -130,13 +142,38 @@ jobs:
       - name: Verify checksums
         run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
 
+      - name: Verify WireGuard module
+        if: inputs.module_set == 'wireguard'
+        run: scripts/verify-wireguard-kmod.sh dist/vbntj-kmods 4.1.52
+
       - name: Verify manual-only IPK safety
         run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
 
       - name: Upload Damson modules and manual-only IPKs
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}
           path: dist/vbntj-kmods/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
+
+  verify_wireguard_artifact:
+    if: inputs.wireguard_artifact_run_id != ''
+    name: Verify existing WireGuard 4.1.52 artifact
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Download existing WireGuard artifacts
+        uses: actions/download-artifact@v7
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.wireguard_artifact_run_id }}
+          pattern: damson-4.1.52-wireguard-*
+          merge-multiple: true
+          path: dist/vbntj-kmods
+      - name: Verify checksums
+        run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
+      - name: Verify manual-only IPK safety and WireGuard module
+        run: scripts/verify-wireguard-kmod.sh dist/vbntj-kmods 4.1.52
