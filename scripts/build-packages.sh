@@ -80,6 +80,9 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/userspace-ipset-no-kmod.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-legacy-recipes.patch"
+  # Import selected source updates while keeping the legacy build framework.
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-package-updates.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-kernel-configure.patch"
   # The archive contains a generated package Kconfig that predates the patch.
@@ -91,6 +94,12 @@ fi
 # base-files, qos-scripts and the OpenWrt host tools. Restore the audited
 # files kept in this repository before the build can use the snapshot.
 cp -a "$repo_root/build/source-overlay/." "$work_dir/"
+
+# Replace the archived combined WireGuard recipe with independent wg tools
+# and the legacy module backport. Keep kernel compilation in kernel jobs.
+rm -rf "$work_dir/package/network/services/wireguard"
+cp -a "$repo_root/build/wireguard-overlay/." "$work_dir/"
+rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
 
 if [[ "$userspace_only" == 1 ]]; then
   # Import complete pinned network recipes, including provider data and patches.
