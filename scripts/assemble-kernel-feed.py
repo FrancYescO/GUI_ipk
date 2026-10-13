@@ -51,7 +51,14 @@ def write_feed(version, ipks, feed_root):
             and fields.get("Package", "").startswith("kmod-")
             and fields.get("Architecture") == "arm_cortex-a9_neon"
         )
-        if not ((manual_module or virtual_kernel or buildroot_module) and fields.get("Version", "").startswith(version + "-")):
+        wireguard_backport_version = (
+            buildroot_module
+            and fields.get("Package") == "kmod-wireguard"
+            and fields.get("Version") == "4.1.38+1.0.20220627-1"
+        )
+        if not ((manual_module or virtual_kernel or buildroot_module)
+                and (fields.get("Version", "").startswith(version + "-")
+                     or wireguard_backport_version)):
             raise ValueError(f"Unexpected kernel package metadata: {ipk}")
         if virtual_kernel:
             payload = subprocess.check_output(["tar", "-xOzf", str(ipk), "./data.tar.gz"])
@@ -93,6 +100,10 @@ def main():
         if not extra_ipks:
             raise ValueError("No additional Damson IPKs found")
         damson_ipks.extend(extra_ipks)
+    verifier = Path(__file__).resolve().with_name("verify-wireguard-kmod.sh")
+    for directory in (args.source, args.damson_extra_dir):
+        if directory and list(directory.glob("kmod-wireguard*.ipk")):
+            subprocess.run([str(verifier), str(directory), "4.1.52"], check=True)
     write_feed("4.1.52", damson_ipks, args.feed_root)
     if args.buildroot_kernel_dir:
         candidates = list(args.buildroot_kernel_dir.glob("*.ipk"))
@@ -102,6 +113,8 @@ def main():
             raise ValueError("Missing built kmod-tun IPK")
         if not any(ipk.name.startswith("kmod-sched-connmark_") for ipk in candidates):
             raise ValueError("Missing built kmod-sched-connmark IPK")
+        if any(ipk.name.startswith("kmod-wireguard_") for ipk in candidates):
+            subprocess.run([str(verifier), str(args.buildroot_kernel_dir), "4.1.38"], check=True)
         write_feed("4.1.38", candidates, args.feed_root)
     elif args.legacy_kernel_dir:
         candidates = list(args.legacy_kernel_dir.glob("kernel_4.1.38-*.ipk"))
