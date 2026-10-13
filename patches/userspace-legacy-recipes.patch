@@ -194,3 +194,33 @@
 +	$(call Build/Compile/Default)
 +endef
 +
+--- a/feeds/packages/libs/opencv/Makefile
++++ b/feeds/packages/libs/opencv/Makefile
+@@ -40 +40 @@
+-  DEPENDS:=+libpthread +librt +libstdcpp +zlib +libjpeg
++  DEPENDS:=+libpthread +librt +libstdcpp +zlib +libjpeg +glib2
+--- a/feeds/packages/multimedia/v4l2rtspserver/Makefile
++++ b/feeds/packages/multimedia/v4l2rtspserver/Makefile
+@@ -32 +32 @@
+-	DEPENDS:=+libstdcpp
++	DEPENDS:=+libstdcpp +alsa-lib
+--- a/feeds/packages/net/squid/Makefile
++++ b/feeds/packages/net/squid/Makefile
+@@ -38 +38 @@
+-  DEPENDS:=+libopenssl +libpthread +librt +libltdl +libstdcpp
++  DEPENDS:=+libopenssl +libpthread +librt +libltdl +libstdcpp +libbsd
+--- a/feeds/packages/net/gnunet/Makefile
++++ b/feeds/packages/net/gnunet/Makefile
+@@ -20,0 +21,3 @@
++
++TARGET_CFLAGS += -std=gnu99
++TARGET_CXXFLAGS := $(filter-out -std=gnu99,$(TARGET_CXXFLAGS))
+--- a/feeds/packages/utils/openobex/Makefile
++++ b/feeds/packages/utils/openobex/Makefile
+@@ -24,0 +25,2 @@
++
++TARGET_CFLAGS += -D_GNU_SOURCE
+--- a/feeds/telephony/net/restund/Makefile
++++ b/feeds/telephony/net/restund/Makefile
+@@ -50,0 +51 @@
++	EXTRA_CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
