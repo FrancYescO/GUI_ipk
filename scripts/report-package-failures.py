@@ -18,7 +18,9 @@ DIAGNOSTIC = re.compile(
     r"(?:\berror:|CMake Error|cp: cannot stat|undefined reference|"
     r"No rule to make target|failed to compile|configure: \*\*\*|"
     r"Package .+ is missing dependencies for the following libraries:|"
-    r"DSO missing from command line|Exec format error)",
+    r"DSO missing from command line|Exec format error|"
+    r"DistutilsError:|DistributionNotFound:|help2man:|svn: E\d+|"
+    r"No more mirrors to try)",
     re.IGNORECASE,
 )
 ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
