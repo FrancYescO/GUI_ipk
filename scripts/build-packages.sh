@@ -101,6 +101,15 @@ rm -rf "$work_dir/package/network/services/wireguard"
 cp -a "$repo_root/build/wireguard-overlay/." "$work_dir/"
 rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
 
+if [[ "$userspace_only" == 1 ]]; then
+  # Import complete pinned network recipes, including provider data and patches.
+  rm -rf "$work_dir/package/network/utils/iperf3" \
+    "$work_dir/package/network/utils/tcpdump" \
+    "$work_dir/feeds/packages/net/ddns-scripts"
+  cp -a "$repo_root/build/network-updates-overlay/." "$work_dir/"
+  rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
+fi
+
 # The package and LuCI feeds retain their pinned Git object databases. Restore
 # the other stripped source payloads directly from those exact commits rather
 # than downloading moving branch heads.
