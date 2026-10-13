@@ -36,7 +36,11 @@ output is uploaded as an artifact; this profile does not deploy to Pages.
 
 The first run, [38298772454](https://github.com/FrancYescO/GUI_ipk/actions/runs/38298772454),
 produced all nine PJPROJECT library IPKs. Asterisk stopped during configuration
-because the original Jansson 2.10 was too old. The Jansson 2.14 correction awaits
-a new build; Asterisk IPKs and router runtime verification are pending. The restored firmware
+because the original Jansson 2.10 was too old. Run
+[38449790492](https://github.com/FrancYescO/GUI_ipk/actions/runs/38449790492)
+produced the Jansson 2.14 IPK and passed Asterisk configuration, then stopped at
+a C99 loop declaration in `main/stasis_channels.c`. The recipe now selects GNU99
+for C sources and removes that flag from the inherited C++ flags. This correction
+awaits a new build; Asterisk IPKs and router runtime verification are pending. The restored firmware
 toolchain and current OpenSSL library remain the starting compatibility base;
 SIP registration, calls, audio and TLS have not yet been verified on the router.

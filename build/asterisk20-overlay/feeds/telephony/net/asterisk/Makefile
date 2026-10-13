@@ -569,7 +569,10 @@ endif
 
 # Pass CPPFLAGS in the CFLAGS as otherwise the build system will
 # ignore them.
-TARGET_CFLAGS+=$(TARGET_CPPFLAGS)
+TARGET_CFLAGS+=$(TARGET_CPPFLAGS) -std=gnu99
+# The legacy rules.mk derives C++ flags from C flags; keep this C dialect
+# switch out of configure's C++ compiler checks and C++ module builds.
+TARGET_CXXFLAGS:=$(filter-out -std=gnu99,$(TARGET_CXXFLAGS))
 
 CONFIGURE_ARGS+= \
 	--disable-xmldoc \
