@@ -36,6 +36,23 @@ vermagic="$(strings "$module" | sed -n 's/^vermagic=//p' | head -n 1 | sed 's/[[
   echo "Unexpected WireGuard vermagic: ${vermagic:-missing}" >&2; exit 1
 }
 dependencies="$(strings "$module" | sed -n 's/^depends=//p' | head -n 1)"
+if [[ -z "$dependencies" && "$kernel_version" == 4.1.52 &&
+      "$(basename "$package_path")" == kmod-wireguard-damson-4.1.52-manual_* ]]; then
+  # The standalone Damson build does not have a full kernel Module.symvers.
+  # Its manual-only package requires the stock UDP modules to be loaded first.
+  # Accept this case only after validating the package guards and actual
+  # undefined UDP symbols; normal packages still require depends metadata.
+  "$(dirname "$0")/verify-manual-kmod-ipks.sh" "$feed_root"
+  undefined_symbols="$(readelf --wide --symbols "$module" | awk 'NF >= 8 && $(NF-1) == "UND" {print $NF}')"
+  for symbol in udp_sock_create4 udp_sock_create6 setup_udp_tunnel_sock \
+    udp_tunnel_sock_release udp_tunnel_xmit_skb udp_tunnel6_xmit_skb; do
+    grep -Fxq "$symbol" <<< "$undefined_symbols" || {
+      echo "Missing required WireGuard UDP symbol: $symbol" >&2; exit 1
+    }
+  done
+  printf 'Verified WireGuard ARM manual package: %s; requires stock udp_tunnel and ip6_udp_tunnel already loaded (depends metadata unavailable)\n' "$vermagic"
+  exit 0
+fi
 for dependency in udp_tunnel ip6_udp_tunnel; do
   case ",$dependencies," in
     *",$dependency,"*) ;;

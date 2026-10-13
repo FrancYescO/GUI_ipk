@@ -17,6 +17,10 @@ on:
           - router-tested
           - network-feed
           - wireguard
+      wireguard_artifact_run_id:
+        description: "Reverify existing WireGuard artifacts from this run without rebuilding"
+        required: false
+        type: string
   pull_request:
     paths:
       - ".github/workflows/build-vbntj-kmods.yml"
@@ -26,6 +30,7 @@ on:
       - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
+      - "scripts/verify-wireguard-kmod.sh"
       - "artifacts/damson-4.1.52-manual/**"
   push:
     branches:
@@ -38,6 +43,7 @@ on:
       - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
+      - "scripts/verify-wireguard-kmod.sh"
       - "artifacts/damson-4.1.52-manual/**"
 
 concurrency:
@@ -46,9 +52,11 @@ concurrency:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   build:
+    if: inputs.wireguard_artifact_run_id == ''
     name: Compile and verify ${{ inputs.module_set || 'network-feed' }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 360
@@ -149,3 +157,23 @@ jobs:
           path: dist/vbntj-kmods/
           if-no-files-found: warn
           retention-days: 30
+
+  verify_wireguard_artifact:
+    if: inputs.wireguard_artifact_run_id != ''
+    name: Verify existing WireGuard 4.1.52 artifact
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Download existing WireGuard artifacts
+        uses: actions/download-artifact@v7
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.wireguard_artifact_run_id }}
+          pattern: damson-4.1.52-wireguard-*
+          merge-multiple: true
+          path: dist/vbntj-kmods
+      - name: Verify checksums
+        run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
+      - name: Verify manual-only IPK safety and WireGuard module
+        run: scripts/verify-wireguard-kmod.sh dist/vbntj-kmods 4.1.52

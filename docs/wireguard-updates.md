@@ -78,3 +78,18 @@ Run 38358722087 still fails the CI metadata check: its module has an empty
 symbol dependency dump. Both stock UDP tunnel modules were already loaded
 for the runtime test. Dependency metadata/verification remains to be
 resolved before describing the CI run as successful or publishing a feed.
+
+## Standalone Damson dependency verification
+
+The verifier accepts empty `depends` only for the exact manual-only Damson
+WireGuard package naming scheme. It runs the existing manual-IPK safety
+checks (guards, payload, no maintainer scripts, identical raw module) and
+verifies all six required UDP tunnel function references in the ELF symbol
+table. Regular packages, including 4.1.38, still require both dependencies
+in `depends`. The accepted manual module requires stock `udp_tunnel` and
+`ip6_udp_tunnel` already loaded; it is not suitable for automatic dependency
+installation or autoload.
+
+To reverify an existing artifact without recompilation, dispatch the Damson
+workflow with `wireguard_artifact_run_id=38358722087`. Checksums and the new
+verifier run against that exact, router-tested artifact.
