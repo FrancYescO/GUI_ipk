@@ -49,3 +49,32 @@ restricted to the established build target.
 Before publishing/promoting the modules, verify loading, key generation,
 peer handshake, IPv4/IPv6 traffic and recovery on each matching router.
 No router has been contacted or modified by this update.
+
+## Router smoke test: 2026-10-13
+
+Tested module SHA256:
+`98e392edb92a574444c0555c9576f6ded0041421c938d0a4921789836c46e6e5`
+from run 38358722087, commit `e1b63eb`.
+
+Router: VBNT-K, firmware `19.4.1051-3401200`, AGTEF 2.4.5,
+kernel `4.1.52 SMP preempt mod_unload ARMv7`, OpenWrt GCC 5.5.0.
+
+- Copied the raw module and wg 1.0.20260223 into `/tmp` and verified SHA256.
+- Loaded it with `insmod`; no IPK installation or autoload configuration.
+- Created two temporary WireGuard interfaces, with fresh ephemeral keys
+  and UDP endpoints on `127.0.0.1` only. No addresses/routes/firewall changes.
+- Both peers completed a handshake and exchanged encrypted keepalive packets.
+  Recorded counters: wgtsta RX 276 / TX 368 bytes; wgtstb RX 220 / TX 276 bytes.
+- Deleted both interfaces and private keys, then unloaded the module.
+- Boot ID unchanged, no new kernel Oops/panic/BUG messages, kernel taint
+  unchanged at its existing value 4097.
+
+This validates loading, interface setup, key exchange, encrypted keepalive
+and unloading on this firmware. It does not validate routed VPN data,
+throughput, prolonged operation, or other router/firmware versions.
+
+Run 38358722087 still fails the CI metadata check: its module has an empty
+`depends` field, since this standalone kernel build lacks the complete
+symbol dependency dump. Both stock UDP tunnel modules were already loaded
+for the runtime test. Dependency metadata/verification remains to be
+resolved before describing the CI run as successful or publishing a feed.
