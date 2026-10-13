@@ -48,6 +48,40 @@ dependencies of those packages are present in the artifact. The core executable,
 PJSIP channel and RTP modules are present. The 87 ELF files in the Asterisk/PJPROJECT
 packages are ELF32 ARM without the hard-float ABI flag.
 
-Router runtime verification remains pending. The restored firmware
-toolchain and current OpenSSL library remain the starting compatibility base;
-SIP registration, calls, audio and TLS have not yet been verified on the router.
+## Router smoke test, 2026-10-13
+
+The artifacts from run 38453060032 were tested on a VBNTJ BCM963138 router with
+Linux 4.1.52, glibc 2.27 and OpenSSL 1.0.2u. Asterisk, PJPROJECT, Jansson 2.14,
+libedit and ncurses were extracted into a private directory under `/tmp`.
+Firmware libraries, opkg packages and permanent configuration were not replaced.
+
+Asterisk 20.21.0 started, with 46 PJSIP modules reporting Running. A temporary
+authenticated endpoint and an `Answer()` / `Echo()` dialplan were exercised from
+a separate client. Unauthenticated and incorrect-password REGISTER requests
+returned 401; authenticated REGISTER and INVITE returned 200. BYE and unregister
+both returned 200, with no active calls or channels left after each test.
+
+| SIP transport | Codec | RTP packets sent / received | Returned audio payloads matching the input |
+| --- | --- | --- | --- |
+| UDP | PCMU / G.711 mu-law | 80 / 80 | 80 |
+| UDP | PCMA / G.711 A-law | 80 / 80 | 80 |
+| TCP | PCMU / G.711 mu-law | 80 / 80 | 80 |
+| TLS 1.2 | PCMU / G.711 mu-law | 80 / 78 | 78 |
+
+The audio tests used synthetic 440 Hz audio at 8 kHz and 20 ms per packet.
+Counts were collected during the short send window before call teardown; the
+TLS run did not observe two of the 80 packets, so it does not establish zero
+packet loss. Every received audio payload matched the transmitted payload.
+TLS negotiated `ECDHE-RSA-AES256-GCM-SHA384`, with the temporary self-signed
+certificate and server hostname explicitly verified by the client.
+TLS protected SIP signaling; media used RTP/AVP, not SRTP.
+
+After testing, Asterisk was stopped and both temporary firewall rules were
+removed. No test listeners or processes remained. The only remaining startup
+warning in the final test was the upstream deprecation of `app_macro`.
+
+This verifies basic PBX execution, SIP authentication/registration, call setup,
+G.711 echo media and TCP/TLS signaling on that firmware. Persistent package
+installation, external provider trunks, physical phones, G.722 media, SRTP,
+load and long-running stability have not been tested. The extracted test files
+remain under `/tmp` and disappear on reboot.
