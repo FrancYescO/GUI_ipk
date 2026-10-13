@@ -142,9 +142,10 @@
 +TARGET_CFLAGS += -std=gnu99
 --- a/feeds/telephony/net/freeswitch-stable/Makefile
 +++ b/feeds/telephony/net/freeswitch-stable/Makefile
-@@ -256,0 +257,2 @@
+@@ -257,0 +258,3 @@
 +
 +TARGET_CFLAGS += -std=gnu99
++TARGET_CXXFLAGS := $(filter-out -std=gnu99,$(TARGET_CXXFLAGS))
 --- a/feeds/packages/admin/syslog-ng/Makefile
 +++ b/feeds/packages/admin/syslog-ng/Makefile
 @@ -15,0 +16,2 @@
