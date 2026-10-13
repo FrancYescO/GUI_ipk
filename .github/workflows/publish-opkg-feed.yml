@@ -2,6 +2,15 @@ name: Publish verified OPKG feeds
 
 on:
   workflow_dispatch:
+    inputs:
+      reuse_userspace_run_id:
+        description: "Optional userspace run whose assembled feed should be preserved"
+        required: false
+        type: string
+  workflow_run:
+    workflows: ["Userspace OPKG feed (brcm63xx-tch)"]
+    types: [completed]
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -30,6 +39,7 @@ concurrency:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -40,7 +50,18 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Download completed userspace feed
+        if: github.event_name == 'workflow_run' || inputs.reuse_userspace_run_id != ''
+        uses: actions/download-artifact@v7
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ github.event.workflow_run.id || inputs.reuse_userspace_run_id }}
+          pattern: userspace-opkg-feed-*
+          merge-multiple: true
+          path: dist/
+
       - name: Assemble userspace-only feed
+        if: github.event_name != 'workflow_run' && inputs.reuse_userspace_run_id == ''
         run: |
           mkdir -p dist/target
           cp -a base luci packages routing telephony dist/
