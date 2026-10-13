@@ -142,9 +142,10 @@ jobs:
         run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
 
       - name: Upload Damson modules and manual-only IPKs
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}
           path: dist/vbntj-kmods/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30

@@ -75,10 +75,11 @@ jobs:
           path: kernel-build.log
           if-no-files-found: ignore
           retention-days: 7
-      - name: Upload verified modules
+      - name: Upload built modules and diagnostics
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: kernel-4.1.38-kmods-${{ github.sha }}
           path: dist/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30

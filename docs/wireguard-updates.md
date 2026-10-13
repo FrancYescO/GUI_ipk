@@ -34,7 +34,12 @@ firmware/kernel. On Damson use existing stock dependencies when present.
 ## Verification status
 
 Source hashes, patch application and shell syntax checked locally.
-Three cross-builds are pending. Workflow verification checks the ARM ELF,
+The wg 1.0.20260223 cross-build succeeded in run 38301065585.
+Both kernel builds produced modules and reached verification; the initial
+verifier rejected the conventional trailing space in vermagic. This is
+fixed by trimming trailing whitespace before comparing all version/options.
+Kernel cross-build verification is being repeated. Failed verifications
+now also retain the generated artifacts for inspection. Workflow verification checks the ARM ELF,
 full vermagic and UDP tunnel module dependencies. The Damson canary checks
 selected kernel structure layouts; it does not prove all runtime ABI use.
 The PR #1 author's 19.4.1051 results are reported evidence, not a router

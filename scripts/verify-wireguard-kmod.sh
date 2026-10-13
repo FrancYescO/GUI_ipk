@@ -30,7 +30,8 @@ module="$inspection_dir/lib/modules/$kernel_version/wireguard.ko"
 [[ -f "$module" ]] || { echo "Missing $kernel_version/wireguard.ko" >&2; exit 1; }
 readelf -h "$module" | grep -Eq 'Class:[[:space:]]+ELF32'
 readelf -h "$module" | grep -Eq 'Machine:[[:space:]]+ARM'
-vermagic="$(strings "$module" | sed -n 's/^vermagic=//p' | head -n 1)"
+# Kernel modinfo conventionally terminates vermagic with a space.
+vermagic="$(strings "$module" | sed -n 's/^vermagic=//p' | head -n 1 | sed 's/[[:space:]]*$//')"
 [[ "$vermagic" == "$kernel_version SMP preempt mod_unload ARMv7" ]] || {
   echo "Unexpected WireGuard vermagic: ${vermagic:-missing}" >&2; exit 1
 }
