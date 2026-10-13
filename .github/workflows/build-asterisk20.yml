@@ -1,0 +1,119 @@
+name: Asterisk 20 verified OPKG feed
+
+on:
+  workflow_call:
+    inputs:
+      reuse_run_id:
+        description: "Successful targeted Asterisk run to reuse instead of rebuilding"
+        type: string
+        required: false
+        default: ""
+  workflow_dispatch:
+    inputs:
+      reuse_run_id:
+        description: "Successful targeted Asterisk run to reuse instead of rebuilding"
+        type: string
+        required: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  asterisk:
+    name: Build and verify Asterisk 20 feed
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      PACKAGE_TARGETS: feeds/telephony/asterisk
+      BUILD_CONFIG: /repo/build/asterisk20.config
+      ENABLE_ASTERISK20: "1"
+      USERSPACE_ONLY: "1"
+      GH_TOKEN: ${{ github.token }}
+      BUILD_INPUTS_TAG: build-inputs-v1
+      SOURCE_RUN_ID: ${{ inputs.reuse_run_id || github.run_id }}
+      SOURCE_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Restore source archive cache
+        if: inputs.reuse_run_id == ''
+        uses: actions/cache@v6
+        with:
+          path: |
+            .cache/sources
+            .cache/downloads
+          key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
+
+      - name: Install archive downloader
+        if: inputs.reuse_run_id == ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+
+      - name: Download and verify build inputs
+        if: inputs.reuse_run_id == ''
+        run: scripts/fetch-build-inputs.sh
+
+      - name: Build compatibility image
+        if: inputs.reuse_run_id == ''
+        run: docker build --platform linux/amd64 --tag gui-ipk-builder --file build/Dockerfile .
+
+      - name: Compile SIP/PJSIP profile
+        if: inputs.reuse_run_id == ''
+        run: |
+          docker run --rm --platform linux/amd64 \
+            --user "$(id -u):$(id -g)" --env HOME=/tmp --env JOBS="$(nproc)" \
+            --env PACKAGE_TARGETS --env BUILD_CONFIG --env ENABLE_ASTERISK20 \
+            --env USERSPACE_ONLY --env WORK_DIR=/tmp/openwrt \
+            --volume "$PWD:/repo" gui-ipk-builder
+
+      - name: Verify reused artifact provenance
+        if: inputs.reuse_run_id != ''
+        run: |
+          [[ "$SOURCE_RUN_ID" =~ ^[0-9]+$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN_ID" > source-run.json
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          run = json.loads(Path("source-run.json").read_text())
+          assert run["status"] == "completed" and run["conclusion"] == "success", "Source run did not succeed"
+          assert run["head_repository"]["full_name"] == os.environ["GITHUB_REPOSITORY"], "Source run belongs to another repository"
+          assert re.fullmatch(r"[0-9a-f]{40}", run["head_sha"])
+          with open(os.environ["GITHUB_ENV"], "a") as env:
+              env.write("SOURCE_COMMIT=" + run["head_sha"] + "\n")
+          PY
+
+      - name: Download verified targeted build output
+        if: inputs.reuse_run_id != ''
+        uses: actions/download-artifact@v7
+        with:
+          name: userspace-shard-0-${{ inputs.reuse_run_id }}
+          run-id: ${{ inputs.reuse_run_id }}
+          github-token: ${{ github.token }}
+          path: dist
+
+      - name: Assemble dedicated feed
+        run: |
+          python3 scripts/assemble-asterisk-feed.py dist asterisk20-feed \
+            --source-run-id "$SOURCE_RUN_ID" --source-commit "$SOURCE_COMMIT"
+          scripts/verify-feed.sh asterisk20-feed
+
+      - name: Upload verified Asterisk feed
+        uses: actions/upload-artifact@v7
+        with:
+          name: asterisk20-opkg-feed-${{ github.run_id }}
+          path: asterisk20-feed/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: asterisk20-diagnostics-${{ github.run_id }}
+          path: |
+            dist/failed-packages.md
+            dist/serial-package-compile.log
+          if-no-files-found: warn
+          retention-days: 30

@@ -9,7 +9,8 @@ from urllib.parse import quote
 
 USERSPACE_FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
 KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.52")
-FEEDS = USERSPACE_FEEDS + KERNEL_FEEDS
+ASTERISK_FEED = "telephony/asterisk-20"
+FEEDS = USERSPACE_FEEDS + KERNEL_FEEDS + (ASTERISK_FEED,)
 STYLE = """
 :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; }
 body { max-width: 78rem; margin: auto; padding: 2rem 1rem; color: #17212b; }
@@ -108,6 +109,16 @@ def page(title, selected, groups, prefix, partial=False):
             '<p><strong>Some packages did not build.</strong> This feed contains the '
             'packages that succeeded. <a href="'
             f'{prefix}shard-report.md">View the build failure report</a>.</p>'
+        )
+    if selected == ASTERISK_FEED or (selected is None and ASTERISK_FEED in groups):
+        notice += (
+            "<p><strong>Asterisk 20 has a dedicated feed.</strong> It includes matching "
+            "PJPROJECT and Jansson libraries. Do not combine these libraries with "
+            "legacy Asterisk 13/15 installations. Basic SIP and G.711 echo calls were "
+            "tested on VBNTJ 4.1.52; persistent installation and provider trunks "
+            "remain untested. "
+            f'<a href="{prefix}{ASTERISK_FEED}/Packages.gz">OPKG index</a> · '
+            f'<a href="{prefix}{ASTERISK_FEED}/build-info.json">Build information</a>.</p>'
         )
     return f"""<!doctype html>
 <html lang="en">

@@ -16,7 +16,7 @@ BLOCKED_RECIPE = re.compile(
 )
 DIAGNOSTIC = re.compile(
     r"(?:\berror:|CMake Error|cp: cannot stat|undefined reference|"
-    r"No rule to make target|failed to compile|"
+    r"No rule to make target|failed to compile|configure: \*\*\*|"
     r"Package .+ is missing dependencies for the following libraries:|"
     r"DSO missing from command line|Exec format error)",
     re.IGNORECASE,
