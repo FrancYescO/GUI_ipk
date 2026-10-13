@@ -47,85 +47,33 @@ export TOPDIR="$source_dir"
 ./configs/preCfg.sh "$P"
 make -j1 defconfig
 
-kernel_archive="$source_dir/dl/linux-4.1.52.tar.xz"
-kernel_archive_sha256="6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c"
-mkdir -p "$source_dir/dl"
-if [[ ! -f "$kernel_archive" ]]; then
-  kernel_archive_tmp="$kernel_archive.tmp"
-  wget --tries=3 --timeout=30 \
-    --output-document="$kernel_archive_tmp" \
-    https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.1.52.tar.xz
-  mv "$kernel_archive_tmp" "$kernel_archive"
-fi
-echo "$kernel_archive_sha256  $kernel_archive" | sha256sum --check --status || {
-  echo "Invalid Linux 4.1.52 source archive: $kernel_archive" >&2
-  exit 1
-}
+# Inputs are verified against the repository manifest even when supplied by
+# the host workflow/cache. Container builds do not contact upstream mirrors.
+DAMSON_INCLUDE_GPL=0 DAMSON_INPUTS_MODE=verify \
+  "$repo_root/scripts/fetch-damson-build-inputs.sh" "$source_dir/dl"
 
-sdk_archive_xz="$source_dir/dl/broadcom_sdk_502L07_pkg.tar.xz"
-sdk_archive_xz_sha256="73b1888527dfb3792df82ff6f48c44a0423165e128f4d1ea9e7f07561618a9ac"
+# The public GPL Kconfig does not define the seed's SDK patch/suffix options.
+# defconfig removes them, selecting the base SDK while retaining P1 kernel
+# patches. Reject future changes instead of silently renaming a different SDK.
+if grep -Eq '^CONFIG_BRCM_SDK_(PATCH_VERSION|PACKAGE_SUFFIX)=".+"' .config; then
+  echo "GPL configuration requests an SDK variant absent from the pinned inputs" >&2
+  exit 1
+fi
+if ! grep -qx 'CONFIG_BRCM_SDK_VERSION="502L07"' .config; then
+  echo "GPL configuration does not select the pinned 502L07 SDK" >&2
+  exit 1
+fi
 sdk_archive="$source_dir/dl/broadcom_sdk_502L07_pkg.tar.bz2"
-sdk_archive_sha256="87b0bd62c8988e01aae24a1c37bfe19805217900ef0b5b44348c5f3fd4b2927f"
-if [[ ! -f "$sdk_archive_xz" ]]; then
-  sdk_archive_xz_tmp="$sdk_archive_xz.tmp"
-  wget --tries=3 --timeout=30 \
-    --output-document="$sdk_archive_xz_tmp" \
-    https://raw.githubusercontent.com/threader/DX5401-B0-V517ABYO6C0_GPL/5df85c8c423ee935eed37b81f0d76dc569e2deb0/dl/broadcom_sdk_502L07_pkg.tar.xz
-  mv "$sdk_archive_xz_tmp" "$sdk_archive_xz"
-fi
-echo "$sdk_archive_xz_sha256  $sdk_archive_xz" | sha256sum --check --status || {
-  echo "Invalid Broadcom 502L07 GPL SDK source archive: $sdk_archive_xz" >&2
-  exit 1
-}
+sdk_archive_sha256=87b0bd62c8988e01aae24a1c37bfe19805217900ef0b5b44348c5f3fd4b2927f
 if [[ ! -f "$sdk_archive" ]]; then
-  sdk_archive_tmp="$sdk_archive.tmp"
-  xz --decompress --stdout "$sdk_archive_xz" | bzip2 -9 > "$sdk_archive_tmp"
-  mv "$sdk_archive_tmp" "$sdk_archive"
+  xz --decompress --stdout "$source_dir/dl/broadcom_sdk_502L07_pkg.tar.xz" \
+    | bzip2 -9 > "$sdk_archive.tmp"
+  mv "$sdk_archive.tmp" "$sdk_archive"
 fi
-echo "$sdk_archive_sha256  $sdk_archive" | sha256sum --check --status || {
-  echo "Invalid Broadcom 502L07 GPL SDK build archive: $sdk_archive" >&2
+printf '%s  %s\n' "$sdk_archive_sha256" "$sdk_archive" | sha256sum --check --status || {
+  echo "Invalid recompressed Broadcom SDK: $sdk_archive" >&2
   exit 1
 }
-
-fetch_verified_source() {
-  local filename="$1"
-  local expected_sha256="$2"
-  local url="$3"
-  local destination="$source_dir/dl/$filename"
-
-  if [[ ! -f "$destination" ]]; then
-    wget --tries=3 --timeout=30 \
-      --output-document="$destination.tmp" "$url"
-    mv "$destination.tmp" "$destination"
-  fi
-  echo "$expected_sha256  $destination" | sha256sum --check --status || {
-    echo "Invalid pinned toolchain source archive: $destination" >&2
-    exit 1
-  }
-}
-
-toolchain_source_base="https://raw.githubusercontent.com/threader/DX5401-B0-V517ABYO6C0_GPL/5df85c8c423ee935eed37b81f0d76dc569e2deb0/dl"
-fetch_verified_source binutils-2.28.1.tar.bz2 \
-  d06a446d5bad9828bf1f1ad35b312ccc45e272def70faac6f4517197053e5afb \
-  "$toolchain_source_base/binutils-2.28.1.tar.bz2"
-fetch_verified_source gcc-5.5.0.tar.bz2 \
-  af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50 \
-  "https://media.githubusercontent.com/media/threader/DX5401-B0-V517ABYO6C0_GPL/5df85c8c423ee935eed37b81f0d76dc569e2deb0/dl/gcc-5.5.0.tar.bz2"
-fetch_verified_source glibc-2.26.tar.bz2 \
-  5690dbde0a12973102289eb67c09173ab757657f26f405747b3d19c363956391 \
-  "$toolchain_source_base/glibc-2.26.tar.bz2"
-fetch_verified_source gmp-6.1.0.tar.xz \
-  68dadacce515b0f8a54f510edf07c1b636492bcdb8e8d54c56eb216225d16989 \
-  "$toolchain_source_base/gmp-6.1.0.tar.xz"
-fetch_verified_source mpc-1.0.3.tar.gz \
-  617decc6ea09889fb08ede330917a00b16809b8db88c29c31bfbb49cbf88ecc3 \
-  "$toolchain_source_base/mpc-1.0.3.tar.gz"
-fetch_verified_source mpfr-3.1.4.tar.bz2 \
-  d3103a80cdad2407ed581f3618c4bed04e0c92d1cf771a65ead662cc397f7775 \
-  "$toolchain_source_base/mpfr-3.1.4.tar.bz2"
-fetch_verified_source xz-5.0.4.tar.bz2 \
-  5cd9b060d3a1ad396b3be52c9b9311046a1c369e6062aea752658c435629ce92 \
-  "$toolchain_source_base/xz-5.0.4.tar.bz2"
 
 # The legacy OpenWrt rules address several already-installed host utilities
 # through staging_dir/host/bin. Populate that prefix without rebuilding the
@@ -335,6 +283,8 @@ rm -rf "$output_dir/.ipk-build"
 cat > "$output_dir/BUILD-METADATA.txt" <<EOF
 source=https://github.com/avwarez/vmg8825_b50b.git
 source_commit=af23960e39003ba7788f5ced0c256b1bc676a712
+inputs_release=damson-build-inputs-v1
+inputs_manifest=build/vbntj/inputs.tsv
 target=VBNTJ_502L07p1
 firmware=Damson 19.4.0866-3401052
 kernel=4.1.52

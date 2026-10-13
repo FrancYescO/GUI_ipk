@@ -9,6 +9,7 @@ download_dir="${DOWNLOAD_DIR:-$repo_root/.cache/downloads}"
 jobs="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 package_targets="${PACKAGE_TARGETS:-}"
 build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
+userspace_only="${USERSPACE_ONLY:-0}"
 kernel_version="${KERNEL_VERSION:-4.1.38}"
 
 case "$kernel_version" in
@@ -54,6 +55,15 @@ mkdir -p "$work_dir" "$output_dir"
 tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
+
+# In this archived buildroot CONFIG_ALL also selects kmod-* recipes. Keep the
+# userspace profile exhaustive without selecting every kernel module.
+if [[ "$userspace_only" == 1 ]]; then
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-package-metadata.patch"
+  # The archive contains a generated package Kconfig that predates the patch.
+  rm -f "$work_dir/tmp/.config-package.in"
+fi
 
 # This archived target defaults to 4.1.38. Keep the override explicit so each
 # generated package and kernel tree carries the requested ABI version.

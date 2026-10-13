@@ -22,6 +22,7 @@ on:
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
       - "scripts/build-vbntj-kmods.sh"
+      - "scripts/fetch-damson-build-inputs.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
   push:
@@ -34,6 +35,7 @@ on:
       - "build/vbntj-canary/**"
       - "patches/vbntj-4.1.52/**"
       - "scripts/build-vbntj-kmods.sh"
+      - "scripts/fetch-damson-build-inputs.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
 
@@ -50,9 +52,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
-      GPL_REPOSITORY: https://github.com/avwarez/vmg8825_b50b.git
-      GPL_REF: V5.17(ABNY.6)C0
-      GPL_COMMIT: af23960e39003ba7788f5ced0c256b1bc676a712
+      GH_TOKEN: ${{ github.token }}
+      DAMSON_INPUTS_TAG: damson-build-inputs-v1
       MODULE_SET: ${{ inputs.module_set || 'router-tested' }}
     steps:
       - uses: actions/checkout@v7
@@ -62,26 +63,24 @@ jobs:
           (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
 
-      - name: Clone pinned GPL buildsystem
-        run: |
-          git clone --branch "$GPL_REF" --depth 1 "$GPL_REPOSITORY" .work/vbntj-gpl
-          test "$(git -C .work/vbntj-gpl rev-parse HEAD)" = "$GPL_COMMIT"
-
-      - name: Cache pinned GPL source archives
+      - name: Cache pinned Damson release inputs
         uses: actions/cache@v6
         with:
-          path: |
-            .work/vbntj-gpl/dl/linux-4.1.52.tar.xz
-            .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.xz
-            .work/vbntj-gpl/dl/broadcom_sdk_502L07_pkg.tar.bz2
-            .work/vbntj-gpl/dl/binutils-2.28.1.tar.bz2
-            .work/vbntj-gpl/dl/gcc-5.5.0.tar.bz2
-            .work/vbntj-gpl/dl/glibc-2.26.tar.bz2
-            .work/vbntj-gpl/dl/gmp-6.1.0.tar.xz
-            .work/vbntj-gpl/dl/mpc-1.0.3.tar.gz
-            .work/vbntj-gpl/dl/mpfr-3.1.4.tar.bz2
-            .work/vbntj-gpl/dl/xz-5.0.4.tar.bz2
-          key: vbntj-gpl-inputs-v2-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
+          path: .cache/sources/damson
+          key: damson-build-inputs-v1-${{ hashFiles('build/vbntj/inputs.tsv') }}
+
+      - name: Download and verify inputs from this repository
+        run: scripts/fetch-damson-build-inputs.sh
+
+      - name: Extract pinned GPL buildsystem and stage archives
+        run: |
+          mkdir -p .work/vbntj-gpl
+          tar -xzf .cache/sources/damson/vmg8825_b50b-af23960e39003ba7788f5ced0c256b1bc676a712.tar.gz -C .work/vbntj-gpl
+          mkdir -p .work/vbntj-gpl/dl
+          while IFS=$'\t' read -r filename _checksum _rest; do
+            [[ -z "$filename" || "$filename" == \#* || "$filename" == vmg8825_b50b-* ]] && continue
+            cp ".cache/sources/damson/$filename" .work/vbntj-gpl/dl/
+          done < build/vbntj/inputs.tsv
 
       - name: Cache installed Damson toolchain
         uses: actions/cache@v6
@@ -89,7 +88,7 @@ jobs:
           path: |
             .work/vbntj-gpl/staging_dir/host
             .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi
-          key: damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v1
+          key: damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v2-${{ hashFiles('build/vbntj/inputs.tsv', 'scripts/build-vbntj-kmods.sh') }}
 
       - name: Build Ubuntu 12.04 compatibility image
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
