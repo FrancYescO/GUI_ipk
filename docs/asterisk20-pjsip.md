@@ -32,7 +32,38 @@ In the package workflow select `build_profile=asterisk20`, with an optional
 `package_targets=feeds/telephony/asterisk`. The profile imports the new recipes
 into a disposable buildroot and replaces its PJPROJECT recipe. The ordinary
 userspace profile retains its current recipes and PJPROJECT ABI. Targeted
-output is uploaded as an artifact; this profile does not deploy to Pages.
+tests upload raw artifacts and skip Pages. Full feed builds also call the
+dedicated Asterisk workflow and publish its verified packages separately.
+
+## Dedicated published feed
+
+After merging to main, full builds automatically compile the Asterisk profile,
+select its 25 Asterisk/PJPROJECT/Jansson IPKs, and add them under
+`telephony/asterisk-20/` before generating and deploying Pages. The feed has
+`Packages`, `Packages.gz`, SHA256 checksums and `build-info.json` recording the
+source run, source commit and expected versions. A missing required package,
+wrong version/architecture, unexpected ELF ABI, invalid checksum or unresolved
+dependency prevents publishing the combined feed.
+
+The resulting OPKG source URL is:
+
+```text
+src/gz gui_asterisk20 https://francyesco.github.io/GUI_ipk/telephony/asterisk-20
+```
+
+This separate distribution directory does not make the libraries coinstallable
+with old versions. Do not enable it alongside an active Asterisk 13/15 setup:
+PJPROJECT/Jansson package names and Asterisk installation paths overlap. Verify
+firmware package dependencies before installation; do not force replacement of
+firmware libc or toolchain libraries. The router tests used temporary extraction,
+not persistent opkg installation.
+
+To recover a publication without rebuilding, dispatch `build-packages.yml` with
+`reuse_run_id` naming a completed full shard run and `asterisk_reuse_run_id`
+naming a successful targeted Asterisk run. Reused Asterisk output must come
+from this repository, a successful run, and match the current recipe versions.
+The dedicated workflow can also run alone to produce a verified feed artifact;
+the main workflow adds it to the complete site before deployment.
 
 The first run, [38298772454](https://github.com/FrancYescO/GUI_ipk/actions/runs/38298772454),
 produced all nine PJPROJECT library IPKs. Asterisk stopped during configuration
