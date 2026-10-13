@@ -95,6 +95,12 @@ fi
 # files kept in this repository before the build can use the snapshot.
 cp -a "$repo_root/build/source-overlay/." "$work_dir/"
 
+# Replace the archived combined WireGuard recipe with independent wg tools
+# and the legacy module backport. Keep kernel compilation in kernel jobs.
+rm -rf "$work_dir/package/network/services/wireguard"
+cp -a "$repo_root/build/wireguard-overlay/." "$work_dir/"
+rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
+
 # The package and LuCI feeds retain their pinned Git object databases. Restore
 # the other stripped source payloads directly from those exact commits rather
 # than downloading moving branch heads.

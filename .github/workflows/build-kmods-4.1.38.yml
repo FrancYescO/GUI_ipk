@@ -2,6 +2,14 @@ name: Linux 4.1.38 kernel modules
 
 on:
   workflow_dispatch:
+    inputs:
+      module_set:
+        description: "Kernel modules to build"
+        type: choice
+        default: router-tested
+        options:
+          - router-tested
+          - wireguard
 
 concurrency:
   group: kmods-4.1.38-${{ github.ref }}
@@ -17,9 +25,9 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
-      BUILD_CONFIG: /repo/build/kmod-tun.config
+      BUILD_CONFIG: ${{ inputs.module_set == 'wireguard' && '/repo/build/kmod-wireguard.config' || '/repo/build/kmod-tun.config' }}
       BUILD_KMODS: '1'
-      PACKAGE_TARGETS: kernel/linux
+      PACKAGE_TARGETS: ${{ inputs.module_set == 'wireguard' && 'kernel/linux kernel/wireguard-compat' || 'kernel/linux' }}
     steps:
       - uses: actions/checkout@v7
       - name: Restore source archive cache
@@ -53,6 +61,10 @@ jobs:
             --env WORK_DIR=/tmp/openwrt \
             --volume "$PWD:/repo" \
             gui-ipk-builder 2>&1 | tee kernel-build.log
+      - name: Verify WireGuard module
+        if: inputs.module_set == 'wireguard'
+        run: scripts/verify-wireguard-kmod.sh dist 4.1.38
+
       - name: Verify kernel package feed
         run: scripts/verify-feed.sh dist --allow-kmods
       - name: Upload compile log after failure
@@ -63,10 +75,11 @@ jobs:
           path: kernel-build.log
           if-no-files-found: ignore
           retention-days: 7
-      - name: Upload verified modules
+      - name: Upload built modules and diagnostics
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: kernel-4.1.38-kmods-${{ github.sha }}
           path: dist/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30

@@ -1,0 +1,12 @@
+--- a/src/compat/compat.h
++++ b/src/compat/compat.h
+@@ -1200,3 +1200,9 @@
+ #endif
+ 
++/* Older vendor kernels and GCC lack the fallthrough pseudo-keyword.
++ * compat/siphash/siphash.c uses it unconditionally. */
++#ifndef fallthrough
++#define fallthrough do {} while (0)
++#endif
++
+ #endif /* _WG_COMPAT_H */
