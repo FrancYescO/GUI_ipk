@@ -76,8 +76,9 @@ throughput, prolonged operation, or other router/firmware versions.
 Run 38358722087 still fails the CI metadata check: its module has an empty
 `depends` field, since this standalone kernel build lacks the complete
 symbol dependency dump. Both stock UDP tunnel modules were already loaded
-for the runtime test. Dependency metadata/verification remains to be
-resolved before describing the CI run as successful or publishing a feed.
+for the runtime test. The original build run remains failed, but verification is now resolved
+for the guarded manual-only artifact by run 38444441090 (successful).
+Automatic dependency installation/autoload is still unsupported.
 
 ## Standalone Damson dependency verification
 
@@ -93,3 +94,9 @@ installation or autoload.
 To reverify an existing artifact without recompilation, dispatch the Damson
 workflow with `wireguard_artifact_run_id=38358722087`. Checksums and the new
 verifier run against that exact, router-tested artifact.
+
+Verification run **38444441090 passed** using the exact artifact from
+38358722087. It checked source artifact checksums, the manual-only IPK
+payload guards, ARM ELF and full vermagic, and all six UDP symbol references.
+The historical build's failure is retained; the corrected verifier succeeds
+without recompiling or altering the router-tested module.
