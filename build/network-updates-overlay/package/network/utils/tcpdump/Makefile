@@ -28,7 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tcpdump/default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap
+  DEPENDS:=+libpcap +librpc
   TITLE:=Network monitoring and data acquisition tool
   URL:=http://www.tcpdump.org/
 endef

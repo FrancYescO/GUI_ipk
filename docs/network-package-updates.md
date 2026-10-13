@@ -15,7 +15,8 @@ DDNS scripts and provider data are vendored directly from the pinned feed.
 The complete recipes replace the archived directories only for userspace
 builds. Iperf3 also produces libiperf3; libpthread dependencies are explicit.
 Tcpdump retains the archived variant directory layout, uses GNU C99 for loop
-declarations and keeps linker section cleanup flags. The iperf3 SSL binary
+declarations, keeps linker section cleanup flags, and declares the archived
+librpc dependency found in the full-feed build. The iperf3 SSL binary
 explicitly depends on libiperf3. DDNS explicitly depends on jshn for JSON
 provider definitions.
 
