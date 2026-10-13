@@ -20,6 +20,7 @@ on:
       - "scripts/generate-feed-pages.py"
       - "scripts/assemble-kernel-feed.py"
       - "scripts/verify-manual-kmod-ipks.sh"
+      - "scripts/verify-wireguard-kmod.sh"
       - "scripts/verify-kmod-tun.sh"
       - "scripts/verify-kmod-connmark.sh"
 
