@@ -233,6 +233,8 @@
 +PKG_HASH:=ded5c38f5ecd9de2b624e0db8013a375c169d3fbbd49575967b868847df8f533
 --- a/package/utils/busybox_telnet/Makefile
 +++ b/package/utils/busybox_telnet/Makefile
-@@ -15 +15 @@
+@@ -15 +15,3 @@
 -PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 +PKG_SOURCE:=busybox-$(PKG_VERSION).tar.bz2
++
++PKG_UNPACK = mkdir -p $(PKG_BUILD_DIR) && $(HOST_TAR) -xjf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR) --strip-components=1
