@@ -60,6 +60,8 @@ cp "$repo_root/patches/libpcap-shared-libobjs.patch" \
   "$work_dir/package/libs/libpcap/patches/101-shared-libobjs.patch"
 cp "$repo_root/patches/coova-chilli-sysinfo.patch" \
   "$work_dir/feeds/packages/net/coova-chilli/patches/402-chilli-sysinfo.patch"
+cp "$repo_root/patches/crtmpserver-libdl.patch" \
+  "$work_dir/feeds/packages/multimedia/crtmpserver/patches/100-link-libdl.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/olsrd-release-flags.patch"
 # BIND uses GNU typeof in ISC_ALIGN; strict C99 makes it an undeclared

@@ -244,3 +244,18 @@
 +
 +TARGET_CFLAGS += -std=gnu99
 +TARGET_CXXFLAGS := $(filter-out -std=gnu99,$(TARGET_CXXFLAGS))
+--- a/feeds/packages/utils/hamlib/Makefile
++++ b/feeds/packages/utils/hamlib/Makefile
+@@ -60 +60 @@
+-  DEPENDS:=+libusb-1.0
++  DEPENDS:=+libusb-1.0 +libusb-compat
+@@ -87 +87 @@
+-	LIBUSB_LIBS="-lusb-1.0" \
++	LIBUSB_LIBS="-lusb -lusb-1.0" \
+--- a/feeds/packages/lang/python/python-cryptography/Makefile
++++ b/feeds/packages/lang/python/python-cryptography/Makefile
+@@ -22,0 +23,4 @@
++
++PKG_BUILD_DEPENDS:=libffi/host
++HOST_PYTHON_PACKAGE_BUILD_DEPENDS:="pycparser==2.18" "cffi==1.11.4"
++HOST_PYTHON3_PACKAGE_BUILD_DEPENDS:="pycparser==2.18" "cffi==1.11.4"
