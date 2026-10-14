@@ -1,0 +1,28 @@
+--- a/src/system.h
++++ b/src/system.h
+@@ -121,4 +121,6 @@
+ #ifdef HAVE_SYS_SYSINFO_H
++#ifndef __GLIBC__
+ #define _LINUX_SYSINFO_H
++#endif
+ #include <sys/sysinfo.h>
+ #endif
+--- a/src/radius.c
++++ b/src/radius.c
+@@ -1881,7 +1881,7 @@
+ int radius_decaps(struct radius_t *this, int idx) {
+   ssize_t status;
+   struct radius_packet_t pack;
+   struct radius_packet_t pack_req;
+-  void *cbp;
++  void *cbp = NULL;
+   struct sockaddr_in addr;
+   socklen_t fromlen = sizeof(addr);
+--- a/src/redir.c
++++ b/src/redir.c
+@@ -356 +356 @@
+-  char in64[4];
++  char in64[4] = {0};
+@@ -369 +369 @@
+-  while (eapstr [len_in-1] == '='){
++  while (len_in > 0 && eapstr [len_in-1] == '='){
