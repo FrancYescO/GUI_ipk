@@ -1,0 +1,17 @@
+--- a/builders/make/compile.mk
++++ b/builders/make/compile.mk
+@@ -123 +123 @@
+-	$(CXXCOMPILER) -shared $(THELIB_LIBS) -o $(call dynamic_lib_name,thelib,) $(call dynamic_lib_flags,thelib) $(THELIB_OBJS)
++	$(CXXCOMPILER) -shared $(THELIB_LIBS) -o $(call dynamic_lib_name,thelib,) $(call dynamic_lib_flags,thelib) $(THELIB_OBJS) -ldl
+@@ -129 +129 @@
+-	$(CXXCOMPILER)  $(TESTS_LIBS) -o $(call dynamic_exec_name,tests,) $(call dynamic_exec_flags,tests) $(TESTS_OBJS)
++	$(CXXCOMPILER)  $(TESTS_LIBS) -o $(call dynamic_exec_name,tests,) $(call dynamic_exec_flags,tests) $(TESTS_OBJS) -ldl
+@@ -135 +135 @@
+-		$(THELIB_OBJS)
++		$(THELIB_OBJS) -ldl
+@@ -141 +141 @@
+-	$(CXXCOMPILER) $(CRTMPSERVER_LIBS) -o $(call dynamic_exec_name,crtmpserver,) $(call dynamic_exec_flags,crtmpserver) $(CRTMPSERVER_OBJS_DYNAMIC)
++	$(CXXCOMPILER) $(CRTMPSERVER_LIBS) -o $(call dynamic_exec_name,crtmpserver,) $(call dynamic_exec_flags,crtmpserver) $(CRTMPSERVER_OBJS_DYNAMIC) -ldl
+@@ -148 +148 @@
+-		$(ALL_APPS_OBJS)
++		$(ALL_APPS_OBJS) -ldl
