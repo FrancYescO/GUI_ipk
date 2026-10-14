@@ -252,14 +252,6 @@
 @@ -87 +87 @@
 -	LIBUSB_LIBS="-lusb-1.0" \
 +	LIBUSB_LIBS="-lusb -lusb-1.0" \
---- a/feeds/packages/lang/python/twisted/Makefile
-+++ b/feeds/packages/lang/python/twisted/Makefile
-@@ -24,0 +25,2 @@
-+HOST_PYTHON_PACKAGE_BUILD_DEPENDS:="incremental==17.5.0"
-+
-@@ -26,0 +29,2 @@
-+
-+PYTHON_PKG_SETUP_VARS += PYTHONPATH="$(PYTHONPATH):$(HOST_PYTHON_PKG_DIR)"
 --- a/feeds/packages/lang/python/python-cryptography/Makefile
 +++ b/feeds/packages/lang/python/python-cryptography/Makefile
 @@ -22,0 +23,4 @@
@@ -267,3 +259,13 @@
 +PKG_BUILD_DEPENDS:=libffi/host
 +HOST_PYTHON_PACKAGE_BUILD_DEPENDS:="pycparser==2.18" "cffi==1.11.4"
 +HOST_PYTHON3_PACKAGE_BUILD_DEPENDS:="pycparser==2.18" "cffi==1.11.4"
+--- a/feeds/packages/libs/zmq/Makefile
++++ b/feeds/packages/libs/zmq/Makefile
+@@ -73,0 +74,7 @@
++ifeq ($(CONFIG_USE_LIBSTDCXX),y)
++define Build/Prepare
++	$(call Build/Prepare/Default)
++	$(SED) '/^#include <basic_definitions>/d' $(PKG_BUILD_DIR)/src/raw_encoder.cpp $(PKG_BUILD_DIR)/src/v1_encoder.cpp $(PKG_BUILD_DIR)/src/v2_encoder.cpp
++endef
++endif
++

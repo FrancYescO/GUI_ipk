@@ -1,0 +1,5 @@
+--- a/src/twisted/python/_setup.py
++++ b/src/twisted/python/_setup.py
+@@ -246 +246 @@
+-        setup_requires=["incremental >= 16.10.1"],
++        setup_requires=["incremental == 17.5.0"],
