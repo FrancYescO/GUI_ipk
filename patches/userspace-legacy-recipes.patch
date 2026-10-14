@@ -254,9 +254,12 @@
 +	LIBUSB_LIBS="-lusb -lusb-1.0" \
 --- a/feeds/packages/lang/python/twisted/Makefile
 +++ b/feeds/packages/lang/python/twisted/Makefile
-@@ -23,0 +24,2 @@
-+
+@@ -24,0 +25,2 @@
 +HOST_PYTHON_PACKAGE_BUILD_DEPENDS:="incremental==17.5.0"
++
+@@ -26,0 +29,2 @@
++
++PYTHON_PKG_SETUP_VARS += PYTHONPATH="$(PYTHONPATH):$(HOST_PYTHON_PKG_DIR)"
 --- a/feeds/packages/lang/python/python-cryptography/Makefile
 +++ b/feeds/packages/lang/python/python-cryptography/Makefile
 @@ -22,0 +23,4 @@
