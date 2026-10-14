@@ -238,3 +238,9 @@
 +PKG_SOURCE:=busybox-$(PKG_VERSION).tar.bz2
 +
 +PKG_UNPACK = mkdir -p $(PKG_BUILD_DIR) && $(HOST_TAR) -xjf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR) --strip-components=1
+--- a/feeds/packages/net/gnunet-secushare/Makefile
++++ b/feeds/packages/net/gnunet-secushare/Makefile
+@@ -20,0 +21,3 @@
++
++TARGET_CFLAGS += -std=gnu99
++TARGET_CXXFLAGS := $(filter-out -std=gnu99,$(TARGET_CXXFLAGS))
