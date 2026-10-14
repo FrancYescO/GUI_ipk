@@ -1,0 +1,10 @@
+--- a/Makefile
++++ b/Makefile
+@@ -506 +506 @@
+-ifeq ($(CONFIG_LIBHDHOMERUN_STATIC),yes)
++ifeq ($(CONFIG_HDHOMERUN_STATIC),yes)
+--- a/Makefile.hdhomerun
++++ b/Makefile.hdhomerun
+@@ -54 +54 @@
+-LIBHDHR_URL     = http://download.silicondust.com/hdhomerun/$(LIBHDHR_TB)
++LIBHDHR_URL     = https://snapshot.debian.org/file/24ce6003b1e815ec4c642d180b621c1d524ca1cf

@@ -1,0 +1,22 @@
+--- a/lib/config_scan.l
++++ b/lib/config_scan.l
+@@ -459 +459 @@
+-#if HAVE_SCHED_SETAFFINITY
++#if HAVE_SCHED_SETSCHEDULER
+@@ -467 +467 @@
+-#else /* !HAVE_SCHED_SETAFFINITY */
++#else /* !HAVE_SCHED_SETSCHEDULER */
+@@ -469 +469 @@
+-#endif /* !HAVE_SCHED_SETAFFINITY */
++#endif /* !HAVE_SCHED_SETSCHEDULER */
+--- a/lib/config_scan.c
++++ b/lib/config_scan.c
+@@ -3894 +3894 @@
+-#if HAVE_SCHED_SETAFFINITY
++#if HAVE_SCHED_SETSCHEDULER
+@@ -3902 +3902 @@
+-#else /* !HAVE_SCHED_SETAFFINITY */
++#else /* !HAVE_SCHED_SETSCHEDULER */
+@@ -3904 +3904 @@
+-#endif /* !HAVE_SCHED_SETAFFINITY */
++#endif /* !HAVE_SCHED_SETSCHEDULER */

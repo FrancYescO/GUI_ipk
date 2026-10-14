@@ -1,0 +1,8 @@
+--- a/src/mrib.c
++++ b/src/mrib.c
+@@ -57 +57 @@
+-static uint32_t ipv4_rtr_alert = cpu_to_be32(0x94040000);
++static uint32_t ipv4_rtr_alert;
+@@ -568,0 +569,2 @@
++	ipv4_rtr_alert = cpu_to_be32(0x94040000);
++

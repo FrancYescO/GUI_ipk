@@ -64,6 +64,15 @@ cp "$repo_root/patches/crtmpserver-libdl.patch" \
   "$work_dir/feeds/packages/multimedia/crtmpserver/patches/100-link-libdl.patch"
 cp "$repo_root/patches/twisted-incremental-pin.patch" \
   "$work_dir/feeds/packages/lang/python/twisted/patches/003-pin-build-incremental.patch"
+cp "$repo_root/patches/dante-scheduler-guard.patch" \
+  "$work_dir/package/network/utils/dante/patches/250-scheduler-guard.patch"
+mkdir -p "$work_dir/feeds/routing/pimbd/patches"
+cp "$repo_root/patches/pimbd-router-alert-init.patch" \
+  "$work_dir/feeds/routing/pimbd/patches/001-router-alert-init.patch"
+cp "$repo_root/patches/freeradius3-strerror-feature-test.patch" \
+  "$work_dir/feeds/packages/net/freeradius3/patches/999-strerror-feature-test.patch"
+cp "$repo_root/patches/tvheadend-hdhomerun-build.patch" \
+  "$work_dir/feeds/packages/multimedia/tvheadend/patches/030-hdhomerun-build.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/olsrd-release-flags.patch"
 # BIND uses GNU typeof in ISC_ALIGN; strict C99 makes it an undeclared
