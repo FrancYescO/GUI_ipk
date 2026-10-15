@@ -1,0 +1,16 @@
+--- a/src/MacAddress.h
++++ b/src/MacAddress.h
+@@ -25,4 +25,5 @@
+ #include <sstream>
+ #include <iomanip>
++#include <stdexcept>
+ 
+ #include <stdio.h>
+--- a/src/DnsCache.h
++++ b/src/DnsCache.h
+@@ -28,4 +28,5 @@
+ #include <unordered_set>
+ #include <set>
++#include <stdexcept>
+ #include "syslog.h"
+ 

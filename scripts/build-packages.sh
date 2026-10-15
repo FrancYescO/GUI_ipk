@@ -75,12 +75,21 @@ cp "$repo_root/patches/tvheadend-hdhomerun-build.patch" \
   "$work_dir/feeds/packages/multimedia/tvheadend/patches/030-hdhomerun-build.patch"
 cp "$repo_root/patches/postfix-target-platform.patch" \
   "$work_dir/feeds/packages/mail/postfix/patches/999-target-platform.patch"
+mkdir -p "$work_dir/feeds/packages/net/noddos/patches"
+cp "$repo_root/patches/noddos-reference-init.patch" \
+  "$work_dir/feeds/packages/net/noddos/patches/001-reference-init.patch"
+cp "$repo_root/patches/noddos-shared-ptr-log.patch" \
+  "$work_dir/feeds/packages/net/noddos/patches/002-shared-ptr-log.patch"
+cp "$repo_root/patches/noddos-stdexcept.patch" \
+  "$work_dir/feeds/packages/net/noddos/patches/003-stdexcept.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/olsrd-release-flags.patch"
 # BIND uses GNU typeof in ISC_ALIGN; strict C99 makes it an undeclared
 # function with this historical GCC toolchain.
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/bind-gnu99.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/fftw3-soft-float-neon.patch"
 
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.

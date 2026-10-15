@@ -1,0 +1,14 @@
+--- a/feeds/packages/libs/fftw3/Makefile
++++ b/feeds/packages/libs/fftw3/Makefile
+@@ -77,8 +77,10 @@
+ 	--disable-doc
+ 
+ ifeq ($(BUILD_VARIANT), single)
++# ARM NEON intrinsics require softfp or hard float, even when -mfpu=neon
++# appears in the CPU tuning flags. Keep the firmware's soft-float ABI.
+ CONFIGURE_ARGS += \
+-	$(if $(findstring neon,$(CONFIG_TARGET_OPTIMIZATION)),--enable-neon) \
++	$(if $(filter -mfloat-abi=soft,$(TARGET_CFLAGS)),--disable-neon,$(if $(findstring neon,$(CONFIG_TARGET_OPTIMIZATION)),--enable-neon)) \
+ 	--enable-single
+ endif
+ 
