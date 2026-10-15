@@ -20,7 +20,7 @@ DIAGNOSTIC = re.compile(
     r"Package .+ is missing dependencies for the following libraries:|"
     r"DSO missing from command line|Exec format error|"
     r"DistutilsError:|DistributionNotFound:|help2man:|svn: E\d+|"
-    r"No more mirrors to try)",
+    r"No more mirrors to try|Hunk #\d+ FAILED|Patch .+ does not apply)",
     re.IGNORECASE,
 )
 ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
