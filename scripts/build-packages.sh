@@ -76,6 +76,8 @@ cp "$repo_root/patches/tvheadend-hdhomerun-build.patch" \
 mkdir -p "$work_dir/feeds/packages/net/noddos/patches"
 cp "$repo_root/patches/noddos-reference-init.patch" \
   "$work_dir/feeds/packages/net/noddos/patches/001-reference-init.patch"
+cp "$repo_root/patches/noddos-shared-ptr-log.patch" \
+  "$work_dir/feeds/packages/net/noddos/patches/002-shared-ptr-log.patch"
 cp "$repo_root/patches/postfix-target-platform.patch" \
   "$work_dir/feeds/packages/mail/postfix/patches/999-target-platform.patch"
 patch --directory "$work_dir" --strip 1 \
