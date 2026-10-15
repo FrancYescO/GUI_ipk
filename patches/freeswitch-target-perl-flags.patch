@@ -1,9 +1,10 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1571,4 +1571,6 @@
+@@ -1571,4 +1571,7 @@
     PERL_CFLAGS="-w -DMULTIPLICITY -D_REENTRANT -D_GNU_SOURCE -DPERL_USE_SAFE_PUTENV `$PERL -MExtUtils::Embed -e ccopts | sed -e \"s|$PERL_SITEDIR_LOCAL|$PERL_SITEDIR|g;s| -I/usr/local/include||g\"` -DEMBED_PERL"
     PERL_LDFLAGS="`$PERL -MExtUtils::Embed -e ldopts| sed -e \"s| $PERL_SITEDIR_LOCAL/auto/NDBM_File/NDBM_File.a||g;s| $PERL_SITEDIR_LOCAL/auto/ODBM_File/ODBM_File.a||g;s|$PERL_SITEDIR_LOCAL|$PERL_SITEDIR|g;s|.a |.so |g;s|-lnsl ||g;s|-lgdbm_compat ||g;s|/usr/local|${STAGING_DIR}/usr|g\"`"
 +   # The host Perl helper can emit flags newer than the target GCC 4.8.
 +   PERL_CFLAGS=`printf '%s\n' "$PERL_CFLAGS" | sed 's/-fstack-protector-strong/-fstack-protector/g'`
++   PERL_LDFLAGS=`printf '%s\n' "$PERL_LDFLAGS" | sed 's/-fstack-protector-strong/-fstack-protector/g'`
     PERL_INC="-I$PERL_SITEDIR/CORE"
  
