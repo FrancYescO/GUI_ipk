@@ -1,0 +1,5 @@
+--- a/src/SsdpServer.h
++++ b/src/SsdpServer.h
+@@ -50 +50 @@
+-	        hCache{inhCache}, Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {
++	        hCache(inhCache), Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {

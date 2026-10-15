@@ -1,0 +1,7 @@
+--- a/makedefs
++++ b/makedefs
+@@ -232 +232,3 @@
+-   OpenWRT*)    SYSTYPE=LINUX$RELEASE_MAJOR
++   OpenWRT*)    # This feed targets Linux 4.1; uname describes the build host.
++                # Select the target platform even when the runner uses Linux 6+.
++                SYSTYPE=LINUX4
