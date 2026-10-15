@@ -78,6 +78,8 @@ cp "$repo_root/patches/noddos-reference-init.patch" \
   "$work_dir/feeds/packages/net/noddos/patches/001-reference-init.patch"
 cp "$repo_root/patches/noddos-shared-ptr-log.patch" \
   "$work_dir/feeds/packages/net/noddos/patches/002-shared-ptr-log.patch"
+cp "$repo_root/patches/noddos-stdexcept.patch" \
+  "$work_dir/feeds/packages/net/noddos/patches/003-stdexcept.patch"
 cp "$repo_root/patches/postfix-target-platform.patch" \
   "$work_dir/feeds/packages/mail/postfix/patches/999-target-platform.patch"
 patch --directory "$work_dir" --strip 1 \
@@ -90,6 +92,8 @@ patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-swig-patch-context.patch"
+cp "$repo_root/patches/freeswitch-target-perl-flags.patch" \
+  "$work_dir/feeds/telephony/net/freeswitch/patches/glibc/zz-target-perl-flags.patch"
 
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.
