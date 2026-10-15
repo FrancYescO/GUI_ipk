@@ -3,3 +3,18 @@
 @@ -50 +50 @@
 -	        hCache{inhCache}, Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {
 +	        hCache(inhCache), Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {
+--- a/src/WsDiscovery.h
++++ b/src/WsDiscovery.h
+@@ -49 +49 @@
+-            hCache{inhCache}, Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {
++            hCache(inhCache), Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {
+--- a/src/Mdns.h
++++ b/src/Mdns.h
+@@ -49 +49 @@
+-            hCache{inhCache}, Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {
++            hCache(inhCache), Expiration{inExpiration}, IpAddress{inIpAddress}, Debug{inDebug} {
+--- a/src/FlowTrack.h
++++ b/src/FlowTrack.h
+@@ -71 +71 @@
+-	        hC{inhC}, config{inConfig}, Debug{inConfig.Debug && inConfig.DebugFlowTrack}, localIpAddresses{inlocalIpAddresses} {
++	        hC(inhC), config(inConfig), Debug{inConfig.Debug && inConfig.DebugFlowTrack}, localIpAddresses{inlocalIpAddresses} {
