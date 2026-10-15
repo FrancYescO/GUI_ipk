@@ -89,6 +89,8 @@ patch --directory "$work_dir" --strip 1 \
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/bind-gnu99.patch"
 patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/fftw3-soft-float-neon.patch"
+patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-swig-patch-context.patch"
