@@ -1,0 +1,5 @@
+--- a/feeds/telephony/net/freeswitch/Makefile
++++ b/feeds/telephony/net/freeswitch/Makefile
+@@ -21 +21 @@
+-PKG_SOURCE_URL:=https://$(PKG_NAME).org/stash/scm/fs/$(PKG_NAME).git
++PKG_SOURCE_URL:=https://github.com/signalwire/freeswitch.git

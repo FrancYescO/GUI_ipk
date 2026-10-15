@@ -84,6 +84,8 @@ patch --directory "$work_dir" --strip 1 \
 # function with this historical GCC toolchain.
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/bind-gnu99.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/freeswitch-source-mirror.patch"
 
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.

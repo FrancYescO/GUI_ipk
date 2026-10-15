@@ -30,6 +30,7 @@ def summarize(serial_log: Path, error_log: Path):
     failed = {}
     blocked = set()
     recent_errors = deque(maxlen=5)
+    download_errors = deque(maxlen=3)
     missing_libraries = False
 
     with serial_log.open(errors="replace") as stream:
@@ -40,15 +41,18 @@ def summarize(serial_log: Path, error_log: Path):
                     recent_errors.append(line)
                 else:
                     missing_libraries = False
-            if DIAGNOSTIC.search(line) and "requested URL returned error" not in line:
+            if "requested URL returned error" in line or "fatal: unable to access" in line:
+                download_errors.append(line)
+            elif DIAGNOSTIC.search(line):
                 recent_errors.append(line)
                 missing_libraries = "is missing dependencies for the following libraries:" in line
 
             match = RECIPE_FAILURE.search(line)
             if match:
                 recipe = match.group(1)
-                failed.setdefault(recipe, list(recent_errors))
+                failed.setdefault(recipe, list(recent_errors or download_errors))
                 recent_errors.clear()
+                download_errors.clear()
 
             match = BLOCKED_RECIPE.search(line)
             if match:
