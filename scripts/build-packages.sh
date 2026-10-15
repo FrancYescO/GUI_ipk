@@ -82,6 +82,9 @@ cp "$repo_root/patches/noddos-stdexcept.patch" \
   "$work_dir/feeds/packages/net/noddos/patches/003-stdexcept.patch"
 cp "$repo_root/patches/postfix-target-platform.patch" \
   "$work_dir/feeds/packages/mail/postfix/patches/999-target-platform.patch"
+mkdir -p "$work_dir/feeds/packages/devel/automake/patches"
+cp "$repo_root/patches/automake-perl-regex.patch" \
+  "$work_dir/feeds/packages/devel/automake/patches/001-perl-regex.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/olsrd-release-flags.patch"
 # BIND uses GNU typeof in ISC_ALIGN; strict C99 makes it an undeclared
