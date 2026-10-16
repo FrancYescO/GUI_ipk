@@ -57,6 +57,7 @@ on:
       - "scripts/fetch-build-inputs.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
+      - "scripts/check-userspace-payloads.py"
   push:
     branches: [main]
     paths:
@@ -83,6 +84,7 @@ on:
       - "scripts/fetch-build-inputs.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
+      - "scripts/check-userspace-payloads.py"
 
 concurrency:
   group: packages-${{ github.ref }}-${{ inputs.reuse_run_id || inputs.package_targets || 'full' }}
