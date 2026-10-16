@@ -1,0 +1,33 @@
+--- a/node_build/dependencies/cnacl/node_build/make.js
++++ b/node_build/dependencies/cnacl/node_build/make.js
+@@ -19,7 +19,7 @@
+   if (noArg) { throw new Error(); }
+   cflags = process.env['CFLAGS'];
+   if (cflags) {
+-    flags = cflags.split(' ');
++    flags = cflags.split(/\s+/).filter(Boolean);
+     flags.forEach(function(flag) {
+       args.push(flag);
+     });
+--- a/node_build/dependencies/cnacl/node_build/PlanRunner.js
++++ b/node_build/dependencies/cnacl/node_build/PlanRunner.js
+@@ -173,7 +173,7 @@
+     args.push('-o', compileCall.outFile, '-c', compileCall.inFile);
+     cflags = process.env['CFLAGS'];
+     if (cflags) {
+-      flags = cflags.split(' ');
++      flags = cflags.split(/\s+/).filter(Boolean);
+       flags.forEach(function(flag) {
+         args.push(flag);
+       });
+--- a/node_build/dependencies/cnacl/node_build/TestRunner.js
++++ b/node_build/dependencies/cnacl/node_build/TestRunner.js
+@@ -18,7 +18,7 @@
+     args.push(BUILD_DIR + '/libnacl.a');
+     cflags = process.env['CFLAGS'];
+     if (cflags) {
+-      flags = cflags.split(' ');
++      flags = cflags.split(/\s+/).filter(Boolean);
+       flags.forEach(function(flag) {
+         args.push(flag);
+       });
