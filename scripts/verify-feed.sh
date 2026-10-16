@@ -52,14 +52,7 @@ if [[ "$allow_kmods" -eq 0 ]]; then
     exit 1
   fi
 
-  while IFS= read -r -d '' package; do
-    if tar -xOzf "$package" ./data.tar.gz 2>/dev/null \
-      | tar -tzf - 2>/dev/null \
-      | awk '/(^|\/)lib\/modules\// || /\.ko$/ { found = 1 } END { exit !found }'; then
-      echo "Shared feed package contains a kernel module payload: $package" >&2
-      exit 1
-    fi
-  done < <(find "$feed_root" -type f -name '*.ipk' -print0)
+  python3 "$(dirname "${BASH_SOURCE[0]}")/check-userspace-payloads.py" "$feed_root"
 fi
 
 echo "Verified $ipk_count packages across $index_count feed indexes"
