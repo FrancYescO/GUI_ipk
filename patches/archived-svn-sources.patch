@@ -1,0 +1,30 @@
+--- a/feeds/packages/net/vpnc/Makefile
++++ b/feeds/packages/net/vpnc/Makefile
+@@ -13,10 +13,8 @@
+ PKG_RELEASE:=7
+ 
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+-PKG_SOURCE_URL:=http://svn.unix-ag.uni-kl.de/vpnc/trunk/
+-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+-PKG_SOURCE_VERSION:=$(PKG_REV)
+-PKG_SOURCE_PROTO:=svn
++PKG_SOURCE_URL:=https://sources.openwrt.org
++PKG_HASH:=5bc3df4861dc030dacfe70a5f5b2250249691126a13664f01bdf1c30674ed707
+ 
+ PKG_MAINTAINER:=Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>
+ PKG_LICENSE:=VARIOUS
+--- a/feeds/packages/utils/lcd4linux/Makefile
++++ b/feeds/packages/utils/lcd4linux/Makefile
+@@ -13,10 +13,8 @@
+ PKG_RELEASE:=1
+ 
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+-PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
+-PKG_SOURCE_SUBDIR:=lcd4linux-$(PKG_VERSION)
+-PKG_SOURCE_VERSION:=$(PKG_REV)
+-PKG_SOURCE_PROTO:=svn
++PKG_SOURCE_URL:=https://sources.openwrt.org
++PKG_HASH:=09c302d083c3d9ad311a6a506361e89aa5a78d724275adf919d77d33d7ee3dfb
+ 
+ LCD4LINUX_DRIVERS:= \
+ 	ASTUSB \

@@ -101,6 +101,8 @@ patch --directory "$work_dir" --strip 1 \
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/nfs-gcc48-warning.patch"
 patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/archived-svn-sources.patch"
+patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-swig-patch-context.patch"
