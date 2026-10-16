@@ -1,0 +1,47 @@
+--- a/node_build/make.js
++++ b/node_build/make.js
+@@ -150,7 +150,7 @@
+     // with NEON on the BBB, or want to set -Os (OpenWrt)
+     // Allow -O0 so while debugging all variables are present.
+     if (CFLAGS) {
+-        var cflags = CFLAGS.split(' ');
++        var cflags = CFLAGS.split(/\s+/).filter(Boolean);
+         cflags.forEach(function(flag) {
+              if (/^\-O[^02s]$/.test(flag)) {
+                 console.log("Skipping " + flag + ", assuming " +
+@@ -158,7 +158,7 @@
+             } else if (/^\-O[02s]$/.test(flag)) {
+                 builder.config.optimizeLevel = flag;
+             } else {
+-                [].push.apply(builder.config.cflags, cflags);
++                builder.config.cflags.push(flag);
+             }
+         });
+     }
+@@ -170,7 +170,7 @@
+     // We also need to pass various architecture/floating point flags to GCC when invoked as
+     // a linker.
+     if (LDFLAGS) {
+-        [].push.apply(builder.config.ldflags, LDFLAGS.split(' '));
++        [].push.apply(builder.config.ldflags, LDFLAGS.split(/\s+/).filter(Boolean));
+     }
+ 
+     if (android) {
+@@ -282,7 +282,7 @@
+                 }
+ 
+                 if (CFLAGS) {
+-                    [].push.apply(args, CFLAGS.split(' '));
++                    [].push.apply(args, CFLAGS.split(/\s+/).filter(Boolean));
+                 }
+ 
+                 if (!builder.config.crossCompiling) {
+@@ -371,7 +371,7 @@
+             }
+ 
+             if (env.GYP_ADDITIONAL_ARGS) {
+-                args.push.apply(args, env.GYP_ADDITIONAL_ARGS.split(' '));
++                args.push.apply(args, env.GYP_ADDITIONAL_ARGS.split(/\s+/).filter(Boolean));
+             }
+ 
+             if (['freebsd', 'openbsd', 'netbsd'].indexOf(builder.config.systemName) !== -1) {
