@@ -1,0 +1,46 @@
+--- a/feeds/telephony/net/freeswitch/Makefile
++++ b/feeds/telephony/net/freeswitch/Makefile
+@@ -35,7 +35,7 @@
+ TAR_OPTIONS+= --strip-components=1 -C $(PKG_BUILD_DIR)
+ 
+ 
+-PKG_BUILD_DEPENDS:=swig/host
++PKG_BUILD_DEPENDS:=swig/host $(if $(CONFIG_FS_WITH_PYTHON),python/host)
+ PKG_FIXUP:=autoreconf
+ PKG_BUILD_PARALLEL:=0
+ PKG_USE_MIPS16:=0
+@@ -244,8 +244,7 @@
+ 
+ 
+ ifneq ($(CONFIG_FS_WITH_PYTHON),)
+-include $(TOPDIR)/feeds/packages/lang/python/python3-package.mk
+-#$(call include_mk, python3-package.mk)
++include $(TOPDIR)/feeds/packages/lang/python/python-package.mk
+ endif
+ 
+ 
+@@ -1007,7 +1006,7 @@
+ $(eval $(call BuildPlugin,portaudio-stream,Portaudio Streaming Interface,vanilla,,,alsa,+FS_WITH_ALSA:alsa-lib @FS_WITH_ALSA @BROKEN)) # needs portaudio
+ $(eval $(call BuildPlugin,posix-timer,POSIX Compliant Soft Timer,vanilla,,,,))
+ $(eval $(call BuildPlugin,prefix,longest-prefix match in store,mod,,,,))
+-$(eval $(call BuildPlugin,python,Python Language Interface,vanilla,,lib/python$(PYTHON3_VERSION)/site-packages/freeswitch.py,,+FS_WITH_PYTHON:python3 @FS_WITH_PYTHON))
++$(eval $(call BuildPlugin,python,Python Language Interface,vanilla,,lib/python$(PYTHON_VERSION)/site-packages/freeswitch.py,,+FS_WITH_PYTHON:python @FS_WITH_PYTHON))
+ #$(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,vanilla,,,,+freeradius3 @BROKEN)) # fails in freeradius-client
+ $(eval $(call BuildPlugin,rayo,Rayo server & node implementation,vanilla,,,,))
+ $(eval $(call BuildPlugin,redis,Redis limit backend,vanilla,,,,))
+--- a/feeds/telephony/net/freeswitch/Config.in
++++ b/feeds/telephony/net/freeswitch/Config.in
+@@ -256,9 +256,9 @@
+   config FS_WITH_PYTHON_PATH
+     depends on FS_WITH_PYTHON
+     string
+-    prompt "full path to binary python$(PYTHON3_VERSION)"
+-    default "$$(STAGING_DIR_HOSTPKG)/bin/python$(PYTHON3_VERSION)"
+-    help
+-        Specify the full path to binary python$(PYTHON3-VERSION).
++    prompt "full path to binary python$(PYTHON_VERSION)"
++    default "$$(STAGING_DIR_HOSTPKG)/bin/python$(PYTHON_VERSION)"
++    help
++        Specify the full path to binary python$(PYTHON_VERSION).
+ 
+ endmenu

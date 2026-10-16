@@ -99,8 +99,12 @@ patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-swig-patch-context.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/freeswitch-python2-recipe.patch"
 cp "$repo_root/patches/freeswitch-target-perl-flags.patch" \
   "$work_dir/feeds/telephony/net/freeswitch/patches/glibc/zz-target-perl-flags.patch"
+cp "$repo_root/patches/freeswitch-target-python.patch" \
+  "$work_dir/feeds/telephony/net/freeswitch/patches/glibc/zz-target-python.patch"
 
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.
