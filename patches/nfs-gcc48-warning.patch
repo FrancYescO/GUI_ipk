@@ -1,0 +1,10 @@
+--- a/feeds/packages/net/nfs-kernel-server/Makefile
++++ b/feeds/packages/net/nfs-kernel-server/Makefile
+@@ -72,7 +72,6 @@
+ 
+ TARGET_CFLAGS += -Wno-error=implicit-function-declaration \
+ 		 -Wno-error=strict-prototypes \
+-		 -Wno-error=incompatible-pointer-types \
+ 		 -Wno-error=format-security \
+ 		 -Wno-error=undef \
+ 		 -Wno-error=missing-include-dirs

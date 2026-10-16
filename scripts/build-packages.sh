@@ -75,6 +75,9 @@ cp "$repo_root/patches/tvheadend-hdhomerun-build.patch" \
   "$work_dir/feeds/packages/multimedia/tvheadend/patches/030-hdhomerun-build.patch"
 cp "$repo_root/patches/postfix-target-platform.patch" \
   "$work_dir/feeds/packages/mail/postfix/patches/999-target-platform.patch"
+mkdir -p "$work_dir/feeds/packages/devel/automake/patches"
+cp "$repo_root/patches/automake-perl-regex.patch" \
+  "$work_dir/feeds/packages/devel/automake/patches/001-perl-regex.patch"
 mkdir -p "$work_dir/feeds/packages/net/noddos/patches"
 cp "$repo_root/patches/noddos-reference-init.patch" \
   "$work_dir/feeds/packages/net/noddos/patches/001-reference-init.patch"
@@ -90,6 +93,8 @@ patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/bind-gnu99.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/fftw3-soft-float-neon.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/nfs-gcc48-warning.patch"
 
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.

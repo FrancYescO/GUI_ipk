@@ -1,0 +1,9 @@
+--- a/bin/automake.in
++++ b/bin/automake.in
+@@ -3879,5 +3879,5 @@
+ {
+   my ($text) = @_;
+-  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
++  $text =~ s/\$\{([^ \t=:+{}]+)\}/substitute_ac_subst_variables_worker ($1)/ge;
+   return $text;
+ }
