@@ -1,0 +1,54 @@
+--- a/feeds/telephony/net/freeswitch/patches/glibc/src-mod-languages-mod_perl-Makefile_am.patch
++++ b/feeds/telephony/net/freeswitch/patches/glibc/src-mod-languages-mod_perl-Makefile_am.patch
+@@ -34,5 +34,5 @@
+  
+  mod_perl_wrap.cpp:
+--	swig2.0 -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
++-	swig3.0 -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
+ +	${STAGING_DIR_HOSTPKG}/bin/swig -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
+  	echo "#include \"mod_perl_extra.c\"" >> mod_perl_wrap.cpp
+--- a/feeds/telephony/net/freeswitch/patches/glibc/src-mod-languages-mod_python-Makefile_am.patch
++++ b/feeds/telephony/net/freeswitch/patches/glibc/src-mod-languages-mod_python-Makefile_am.patch
+@@ -14,5 +14,5 @@
+  
+  mod_python_wrap.cpp: mod_python_extra.c hack.diff 
+--	swig2.0 -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
++-	swig3.0 -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
+ +	${STAGING_DIR_HOSTPKG}/bin/swig -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
+  	echo "#include \"mod_python_extra.c\"" >> mod_python_wrap.cpp
+--- a/feeds/telephony/net/freeswitch/patches/musl/src-mod-languages-mod_perl-Makefile_am.patch
++++ b/feeds/telephony/net/freeswitch/patches/musl/src-mod-languages-mod_perl-Makefile_am.patch
+@@ -34,5 +34,5 @@
+  
+  mod_perl_wrap.cpp:
+--	swig2.0 -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
++-	swig3.0 -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
+ +	${STAGING_DIR_HOSTPKG}/bin/swig -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
+  	echo "#include \"mod_perl_extra.c\"" >> mod_perl_wrap.cpp
+--- a/feeds/telephony/net/freeswitch/patches/musl/src-mod-languages-mod_python-Makefile_am.patch
++++ b/feeds/telephony/net/freeswitch/patches/musl/src-mod-languages-mod_python-Makefile_am.patch
+@@ -14,5 +14,5 @@
+  
+  mod_python_wrap.cpp: mod_python_extra.c hack.diff 
+--	swig2.0 -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
++-	swig3.0 -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
+ +	${STAGING_DIR_HOSTPKG}/bin/swig -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
+  	echo "#include \"mod_python_extra.c\"" >> mod_python_wrap.cpp
+--- a/feeds/telephony/net/freeswitch/patches/uClibc/src-mod-languages-mod_perl-Makefile_am.patch
++++ b/feeds/telephony/net/freeswitch/patches/uClibc/src-mod-languages-mod_perl-Makefile_am.patch
+@@ -34,5 +34,5 @@
+  
+  mod_perl_wrap.cpp:
+--	swig2.0 -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
++-	swig3.0 -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
+ +	${STAGING_DIR_HOSTPKG}/bin/swig -static -shadow -perl5 -c++ -DMULTIPLICITY -I../../../../src/include -o mod_perl_wrap.cpp freeswitch.i
+  	echo "#include \"mod_perl_extra.c\"" >> mod_perl_wrap.cpp
+--- a/feeds/telephony/net/freeswitch/patches/uClibc/src-mod-languages-mod_python-Makefile_am.patch
++++ b/feeds/telephony/net/freeswitch/patches/uClibc/src-mod-languages-mod_python-Makefile_am.patch
+@@ -14,5 +14,5 @@
+  
+  mod_python_wrap.cpp: mod_python_extra.c hack.diff 
+--	swig2.0 -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
++-	swig3.0 -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
+ +	${STAGING_DIR_HOSTPKG}/bin/swig -python -c++ -I../../../../src/include -oh mod_python_wrap.h -o mod_python_wrap.cpp mod_python.i
+  	echo "#include \"mod_python_extra.c\"" >> mod_python_wrap.cpp

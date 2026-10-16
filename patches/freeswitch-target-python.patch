@@ -1,0 +1,34 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -1627,7 +1627,7 @@
+ # Python checks for mod_python
+ #
+ AC_ARG_WITH(
+-	[python3],
++	[python],
+ 	[AS_HELP_STRING([--with-python], [Use system provided version of python (default: try)])],
+ 	[with_python="$withval"],
+ 	[with_python="try"]
+@@ -1646,7 +1646,7 @@
+ 		AC_MSG_RESULT([$with_python])
+ 		AC_SUBST([PYTHON], ["$with_python"])
+ 	else
+-		AC_PATH_PROG([PYTHON], ["python3"], ["no"], ["${STAGING_DIR_HOSTPKG}/bin"])
++		AC_PATH_PROG([PYTHON], ["python2.7"], ["no"], ["${STAGING_DIR_HOSTPKG}/bin"])
+ 	fi
+ 
+ 	if test "$PYTHON" != "no" ; then
+@@ -1684,10 +1684,11 @@
+ 			#
+ 			# python distutils found, get settings from python directly
+ 			#
+-			PYTHON_CFLAGS="`$PYTHON -c 'from distutils import sysconfig; flags = [[\"-I\" + sysconfig.get_python_inc(0), \"-I\" + sysconfig.get_python_inc(1), \" \".join(sysconfig.get_config_var(\"CFLAGS\").split())]]; print(\" \".join(flags));'`"
++			# Query version with host Python; compile against target headers and ABI.
++			PYTHON_CFLAGS="-I${STAGING_DIR}/usr/include/python${PYTHON_VER} $save_CFLAGS"
+ 			PYTHON_LDFLAGS="`$PYTHON -c 'from distutils import sysconfig; libs = sysconfig.get_config_var(\"LIBS\").split() + sysconfig.get_config_var(\"SYSLIBS\").split(); libs.append(\"-lpython\"+sysconfig.get_config_var(\"VERSION\")); print(\" \".join(libs));'`"
+ 			PYTHON_LIB="`$PYTHON -c 'from distutils import sysconfig; print(\"python\" + sysconfig.get_config_var(\"VERSION\"));'`"
+-			PYTHON_LIBDIR="`$PYTHON -c 'from distutils import sysconfig; print(sysconfig.get_config_var(\"LIBDIR\"));' | sed -e 's|\(^.*\)/staging_dir/hostpkg|/${STAGING_DIR}/usr|g'`"
++			PYTHON_LIBDIR="${STAGING_DIR}/usr/lib"
+ 
+ 			# handle python being installed into /usr/local
+ 			AC_MSG_CHECKING([python libdir])
