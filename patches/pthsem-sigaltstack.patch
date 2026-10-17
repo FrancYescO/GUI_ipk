@@ -1,0 +1,15 @@
+--- a/feeds/packages/libs/pthsem/Makefile
++++ b/feeds/packages/libs/pthsem/Makefile
+@@ -38,9 +38,9 @@
+   pthsem is an extend version, with support for semaphores added. It can be installed parallel to a normal pth.
+ endef
+ 
+-# The musl libc provides a proper implementation of sigaltstack() so
+-# prevent configure from wrongly assuming a broken Linux platform
+-ifeq ($(CONFIG_USE_MUSL),y)
++# glibc and musl provide sigaltstack(). Select the POSIX signal-stack
++# backend when cross-compiling from runners with modern Linux kernels.
++ifneq ($(filter y,$(CONFIG_USE_MUSL) $(CONFIG_USE_GLIBC) $(CONFIG_LIBC_USE_GLIBC)),)
+   CONFIGURE_VARS += \
+ 	ac_cv_check_sjlj=ssjlj
+ endif

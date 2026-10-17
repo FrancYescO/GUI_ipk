@@ -7,6 +7,7 @@ RUN apt-get update \
       bison build-essential bzip2 ca-certificates ccache cmake curl default-jdk-headless \
       file flex gawk gcc-multilib gettext git intltool libelf-dev libglib2.0-bin libncurses5-dev \
       libncursesw5-dev libssl-dev libxml-parser-perl lua5.1 openssh-client \
+      openjdk-8-jdk-headless \
       patch patchelf python python3 rsync subversion swig time unzip wget xsltproc zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
 

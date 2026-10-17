@@ -1,0 +1,18 @@
+--- a/feeds/packages/libs/classpath/Makefile
++++ b/feeds/packages/libs/classpath/Makefile
+@@ -50,7 +50,15 @@
+ endef
+ $(eval $(call Download,antlr))
+ 
++# Classpath 0.99 bootstraps its classes with Java 1.5 source/target flags.
++CLASSPATH_JAVA_HOME:=/usr/lib/jvm/java-8-openjdk-amd64
++CONFIGURE_VARS += \
++	JAVAC="$(CLASSPATH_JAVA_HOME)/bin/javac" \
++	JAVA="$(CLASSPATH_JAVA_HOME)/bin/java"
++
+ CONFIGURE_ARGS += \
++	--with-javah="$(CLASSPATH_JAVA_HOME)/bin/javah" \
++	--with-jar="$(CLASSPATH_JAVA_HOME)/bin/jar" \
+ 	--with-gmp="$(STAGING_DIR)/usr" \
+ 	--without-x \
+ 	--disable-gtk-peer \

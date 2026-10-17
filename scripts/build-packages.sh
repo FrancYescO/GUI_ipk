@@ -103,6 +103,10 @@ patch --directory "$work_dir" --strip 1 \
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/archived-svn-sources.patch"
 patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/pthsem-sigaltstack.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/classpath-java8.patch"
+patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-swig-patch-context.patch"
