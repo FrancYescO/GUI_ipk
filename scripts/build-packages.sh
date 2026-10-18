@@ -88,6 +88,11 @@ cp "$repo_root/patches/automake-perl-regex.patch" \
 mkdir -p "$work_dir/feeds/packages/net/ola/patches"
 cp "$repo_root/patches/ola-widget-observer-templates.patch" \
   "$work_dir/feeds/packages/net/ola/patches/999-widget-observer-templates.patch"
+mkdir -p "$work_dir/package/network/amule/patches"
+cp "$repo_root/patches/amule-bootstrap.patch" \
+  "$work_dir/package/network/amule/patches/999-bootstrap.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/amule-bootstrap-recipe.patch"
 mkdir -p "$work_dir/feeds/routing/cjdns/patches"
 cp "$repo_root/patches/cjdns-build-flags.patch" \
   "$work_dir/feeds/routing/cjdns/patches/999-build-flags.patch"
