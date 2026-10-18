@@ -1,0 +1,9 @@
+--- a/feeds/packages/libs/libmraa/Makefile
++++ b/feeds/packages/libs/libmraa/Makefile
+@@ -21 +21 @@
+-PKG_BUILD_DEPENDS:=node python/host swig/host node/host
++PKG_BUILD_DEPENDS:=node python/host swig4/host node/host
+@@ -33 +33,2 @@
+-	-DSWIG_DIR=$(STAGING_DIR_HOSTPKG)/bin
++	-DSWIG_EXECUTABLE=$(STAGING_DIR_HOSTPKG)/swig4/bin/swig \
++	-DSWIG_DIR=$(STAGING_DIR_HOSTPKG)/swig4/share/swig/4.0.2

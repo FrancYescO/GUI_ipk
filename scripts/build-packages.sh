@@ -50,6 +50,10 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# Provide the dedicated SWIG generator used by the legacy Node bindings.
+mkdir -p "$work_dir/package/custom/swig4"
+cp "$repo_root/build/host-swig4/Makefile" \
+  "$work_dir/package/custom/swig4/Makefile"
 # libpcap 1.9.1 uses the C99 `restrict` keyword in portability.h, while this
 # archived recipe otherwise compiles it in the toolchain's default GNU89 mode.
 patch --directory "$work_dir" --strip 1 \
@@ -88,11 +92,15 @@ cp "$repo_root/patches/automake-perl-regex.patch" \
 mkdir -p "$work_dir/feeds/packages/net/ola/patches"
 cp "$repo_root/patches/ola-widget-observer-templates.patch" \
   "$work_dir/feeds/packages/net/ola/patches/999-widget-observer-templates.patch"
+cp "$repo_root/patches/libmraa-node-buffer-api.patch" \
+  "$work_dir/feeds/packages/libs/libmraa/patches/999-node-buffer-api.patch"
 mkdir -p "$work_dir/package/network/amule/patches"
 cp "$repo_root/patches/amule-bootstrap.patch" \
   "$work_dir/package/network/amule/patches/999-bootstrap.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/amule-bootstrap-recipe.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/wxbase-sdk.patch"
 mkdir -p "$work_dir/feeds/routing/cjdns/patches"
 cp "$repo_root/patches/cjdns-build-flags.patch" \
   "$work_dir/feeds/routing/cjdns/patches/999-build-flags.patch"
@@ -116,6 +124,8 @@ patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/classpath-java8.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/libmraa-cxx11.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/libmraa-swig4-recipe.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \

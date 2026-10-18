@@ -1,30 +1,18 @@
 --- a/package/network/amule/Makefile
 +++ b/package/network/amule/Makefile
-@@ -27,7 +27,7 @@
-   CATEGORY:=Network
-   TITLE:=A multi-platform eMule-like ed2k client
-   URL:=http://www.amule.org/
+@@ -30 +30 @@
 -  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase
 +  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase $(ICONV_DEPENDS) $(INTL_DEPENDS)
- endef
- 
- CONFIGURE_ARGS+= \
-@@ -64,11 +64,17 @@
- TARGET_LDFLAGS += \
- 	-liconv
- 
+@@ -59,0 +60,2 @@
++	--with-wx-exec-prefix="$(STAGING_DIR)/usr" \
++	--with-wx-config="$(STAGING_DIR)/usr/bin/wx-config" \
+@@ -66,0 +69,6 @@
 +define Build/Prepare
 +	$(call Build/Prepare/Default)
 +	(cd $(PKG_BUILD_DIR) && autopoint --force)
 +	(cd $(PKG_BUILD_DIR)/src/pixmaps/flags_xpm && ./makeflags.sh)
 +endef
 +
- define Build/Compile
- 	$(MAKE) -C $(PKG_BUILD_DIR) \
- 		HOSTCC="$(HOSTCC)" \
- 		DESTDIR="$(PKG_INSTALL_DIR)" \
+@@ -71 +79 @@
 -		amule install
 +		all install
- endef
- 
- define Package/amule/install
