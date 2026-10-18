@@ -85,6 +85,9 @@ cp "$repo_root/patches/postfix-target-platform.patch" \
 mkdir -p "$work_dir/feeds/packages/devel/automake/patches"
 cp "$repo_root/patches/automake-perl-regex.patch" \
   "$work_dir/feeds/packages/devel/automake/patches/001-perl-regex.patch"
+mkdir -p "$work_dir/feeds/packages/net/ola/patches"
+cp "$repo_root/patches/ola-widget-observer-templates.patch" \
+  "$work_dir/feeds/packages/net/ola/patches/999-widget-observer-templates.patch"
 mkdir -p "$work_dir/feeds/routing/cjdns/patches"
 cp "$repo_root/patches/cjdns-build-flags.patch" \
   "$work_dir/feeds/routing/cjdns/patches/999-build-flags.patch"

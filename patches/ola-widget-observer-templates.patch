@@ -1,0 +1,72 @@
+--- a/plugins/usbdmx/SyncronizedWidgetObserver.cpp
++++ b/plugins/usbdmx/SyncronizedWidgetObserver.cpp
+@@ -20,7 +20,6 @@
+ 
+ #include "plugins/usbdmx/SyncronizedWidgetObserver.h"
+ 
+-#include "ola/Callback.h"
+ 
+ namespace ola {
+ namespace plugin {
+@@ -36,25 +35,6 @@
+       m_main_thread_id(Thread::Self()) {
+ }
+ 
+-template<typename WidgetClass>
+-bool SyncronizedWidgetObserver::DispatchNewWidget(WidgetClass *widget) {
+-  if (pthread_equal(Thread::Self(), m_main_thread_id)) {
+-    return m_observer->NewWidget(widget);
+-  } else {
+-    AddFuture f;
+-    m_ss->Execute(
+-        NewSingleCallback(
+-            this, &SyncronizedWidgetObserver::HandleNewWidget<WidgetClass>,
+-            widget, &f));
+-    return f.Get();
+-  }
+-}
+-
+-template<typename WidgetClass>
+-void SyncronizedWidgetObserver::HandleNewWidget(WidgetClass*widget,
+-                                                AddFuture *f) {
+-  f->Set(m_observer->NewWidget(widget));
+-}
+ }  // namespace usbdmx
+ }  // namespace plugin
+ }  // namespace ola
+--- a/plugins/usbdmx/SyncronizedWidgetObserver.h
++++ b/plugins/usbdmx/SyncronizedWidgetObserver.h
+@@ -23,6 +23,7 @@
+ 
+ #include "plugins/usbdmx/WidgetFactory.h"
+ 
++#include "ola/Callback.h"
+ #include "ola/io/SelectServerInterface.h"
+ #include "ola/thread/Future.h"
+ #include "ola/thread/Thread.h"
+@@ -90,6 +91,25 @@
+ 
+   DISALLOW_COPY_AND_ASSIGN(SyncronizedWidgetObserver);
+ };
++template<typename WidgetClass>
++bool SyncronizedWidgetObserver::DispatchNewWidget(WidgetClass *widget) {
++  if (pthread_equal(ola::thread::Thread::Self(), m_main_thread_id)) {
++    return m_observer->NewWidget(widget);
++  } else {
++    AddFuture f;
++    m_ss->Execute(
++        NewSingleCallback(
++            this, &SyncronizedWidgetObserver::HandleNewWidget<WidgetClass>,
++            widget, &f));
++    return f.Get();
++  }
++}
++
++template<typename WidgetClass>
++void SyncronizedWidgetObserver::HandleNewWidget(WidgetClass*widget,
++                                                AddFuture *f) {
++  f->Set(m_observer->NewWidget(widget));
++}
+ }  // namespace usbdmx
+ }  // namespace plugin
+ }  // namespace ola
