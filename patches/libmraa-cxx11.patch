@@ -1,0 +1,10 @@
+--- a/feeds/packages/libs/libmraa/Makefile
++++ b/feeds/packages/libs/libmraa/Makefile
+@@ -33,6 +33,7 @@
+ 	-DSWIG_DIR=$(STAGING_DIR_HOSTPKG)/bin
+ 
+ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/node
++TARGET_CXXFLAGS+=-std=gnu++11
+ 
+ define Package/libmraa
+   SECTION:=libs
