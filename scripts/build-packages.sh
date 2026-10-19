@@ -94,6 +94,9 @@ cp "$repo_root/patches/ola-widget-observer-templates.patch" \
   "$work_dir/feeds/packages/net/ola/patches/999-widget-observer-templates.patch"
 cp "$repo_root/patches/libmraa-node-buffer-api.patch" \
   "$work_dir/feeds/packages/libs/libmraa/patches/999-node-buffer-api.patch"
+mkdir -p "$work_dir/package/libs/wxwidgets/patches"
+cp "$repo_root/patches/wxbase-optional-bakefile-presets.patch" \
+  "$work_dir/package/libs/wxwidgets/patches/999-optional-bakefile-presets.patch"
 mkdir -p "$work_dir/package/network/amule/patches"
 cp "$repo_root/patches/amule-bootstrap.patch" \
   "$work_dir/package/network/amule/patches/999-bootstrap.patch"
