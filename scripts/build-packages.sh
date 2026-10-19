@@ -120,6 +120,8 @@ patch --directory "$work_dir" --strip 1 \
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/libmraa-swig4-recipe.patch"
 patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/libupm-node8-recipe.patch"
+patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-swig-patch-context.patch"

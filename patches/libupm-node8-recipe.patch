@@ -1,0 +1,10 @@
+--- a/feeds/packages/libs/libupm/Makefile
++++ b/feeds/packages/libs/libupm/Makefile
+@@ -21,0 +22 @@
++PKG_BUILD_DEPENDS:=node python/host swig4/host node/host
+@@ -41 +42,4 @@
+-	-DSWIG_DIR=$(STAGING_DIR_HOSTPKG)/bin
++	-DSWIG_EXECUTABLE=$(STAGING_DIR_HOSTPKG)/swig4/bin/swig \
++	-DSWIG_DIR=$(STAGING_DIR_HOSTPKG)/swig4/share/swig/4.0.2
++
++TARGET_CXXFLAGS+=-std=gnu++11
