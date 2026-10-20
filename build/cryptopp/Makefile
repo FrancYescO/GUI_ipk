@@ -13,6 +13,12 @@ PKG_LICENSE_FILES:=License.txt
 
 include $(INCLUDE_DIR)/package.mk
 
+# GCC 4.8 cannot use ARM NEON intrinsics with the firmware's soft-float ABI.
+# Keep all algorithms through Crypto++'s portable implementations.
+ifneq ($(filter -mfloat-abi=soft,$(TARGET_CXXFLAGS)),)
+  TARGET_CXXFLAGS += -DCRYPTOPP_DISABLE_ARM_NEON
+endif
+
 define Package/libcryptopp
   SECTION:=libs
   CATEGORY:=Libraries

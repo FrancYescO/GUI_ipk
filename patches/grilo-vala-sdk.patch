@@ -3,6 +3,8 @@
 @@ -59 +59 @@
 -	$(INSTALL_DIR) $(STAGING_DIR_HOSTPKG)/share/vala-0.30/vapi/
 +	$(INSTALL_DIR) $(STAGING_DIR_HOSTPKG)/share/vala-0.34/vapi/
-@@ -65 +65 @@
+@@ -64,2 +64,2 @@
+-		./files/*.vapi \
 -		$(STAGING_DIR_HOSTPKG)/share/vala-0.30/vapi
++		./files/*.vapi ./files/*.deps \
 +		$(STAGING_DIR_HOSTPKG)/share/vala-0.34/vapi
