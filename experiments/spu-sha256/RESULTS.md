@@ -200,3 +200,19 @@ SSH returned with boot ID `5f336319-19e8-4890-b38d-1a456ae27fbc`, replacing
 No experimental module was loaded again after recovery. The local temporary
 Docker lab container was removed; source, build artifacts and test reports
 were retained. Published kernel feeds remain unchanged by this experiment.
+
+
+## Consolidation on kmods-4.1.52
+
+The six laboratory commits were selectively applied to `kmods-4.1.52`, keeping
+that branch's pinned build-input pipeline and stable module/package behavior.
+No stable SPU patches or committed feed artifacts changed. Consolidated source
+revision `d345307` passed [Actions run 39481039995](https://github.com/FrancYescO/GUI_ipk/actions/runs/39481039995):
+all six laboratory modules built, checksums passed, no IPKs were emitted, and
+the non-in-place compile guard was verified. The publication job was skipped.
+No further modem tests were run during this branch consolidation.
+
+The original laboratory history is retained at tag
+`archive/spu-sha256-experiments-20261020`. The integrated local and remote
+`codex/spu-sha256-experiments` and `codex/spu-damson-4.1.52` branches were
+removed. Other branches with changes absent from `kmods-4.1.52` were retained.
