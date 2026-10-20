@@ -96,13 +96,16 @@ done
 # GCC's configure step expects its host-side arithmetic dependencies in the
 # OpenWrt host staging prefix. Build them explicitly in dependency order;
 # toolchain/install does not pull them in early enough in this legacy tree.
-make -j1 V=s tools/gmp/install
-make -j1 V=s tools/mpfr/install
-make -j1 V=s tools/mpc/install
-
-# Build the configured OpenWrt GCC 5.5.0 toolchain before the kernel prepare
-# target tries to invoke it.
-make -j1 V=s toolchain/install
+cached_gcc="$source_dir/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc"
+if [[ -x "$cached_gcc" ]] && \
+   [[ "$("$cached_gcc" -dumpfullversion -dumpversion)" == 5.5.0 ]]; then
+  echo 'Reusing verified cached OpenWrt GCC 5.5.0 toolchain'
+else
+  make -j1 V=s tools/gmp/install
+  make -j1 V=s tools/mpfr/install
+  make -j1 V=s tools/mpc/install
+  make -j1 V=s toolchain/install
+fi
 make -j1 V=s target/linux/prepare
 
 kernel_base="$source_dir/build_dir/target-arm_v7-a_glibc-2.26_eabi/linux-brcm963xx_vmg8825_b50b"

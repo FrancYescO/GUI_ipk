@@ -95,6 +95,7 @@ jobs:
           key: damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v2-${{ hashFiles('build/vbntj/inputs.tsv', 'scripts/build-vbntj-kmods.sh') }}
           restore-keys: |
             damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v2-
+            damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v1
 
       - name: Build Ubuntu 12.04 compatibility image
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
