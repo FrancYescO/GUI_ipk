@@ -48,6 +48,9 @@ does not change the router's firewall or VPN configuration.
 
 ## Temporary tests
 
+The [20 October validation report](VALIDATION.md) records tests of the actual
+Actions IPK, including limitations and cleanup checks.
+
 First verify the router's kernel, configuration, module symbols and archive
 checksums. Extract the payload to `/tmp`; do not install it with OPKG or
 copy anything to `/lib/modules` or `/etc/modules.d`. Never force module load.

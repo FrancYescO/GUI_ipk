@@ -4,6 +4,38 @@ Runtime: BCM63138, `brcm6xxx-tch/VBNTJ_502L07p1`, OpenWrt revision
 `r14144-e2ae576c18`, Linux `4.1.52 #0 SMP PREEMPT Fri Oct 28 16:57:49 2022`.
 OPKG accepts `arm_cortex-a9`; it does not list `brcm963xx`.
 
+## Final Actions artifact
+
+[Actions run 39433551005](https://github.com/FrancYescO/GUI_ipk/actions/runs/39433551005)
+succeeded at source commit `c3a4dae3fb8498b59b27772e379d523cf9b0e6ff`.
+It rebuilt SPU, the test module and ABI canary remotely using the preserved
+kernel compiler seed, verified the module vermagic, checked all checksums
+and validated the manual-only IPK contents.
+
+Package: `kmod-bcmspu-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk`
+
+SHA-256: `a082030e1d2f93cb17bb9f61eb7b550895d38bdc2087560d6ae677a7b7796cda`
+
+The package was transferred to `/tmp`, verified again on the router, accepted
+by `opkg --noaction`, and unpacked there. Its payload matched the sibling
+raw module exactly. The module loaded for the final tests was extracted
+directly from this IPK, not reused from the preliminary local build.
+
+All four cryptographic tests passed again: SHA256-128 software fallback,
+SHA1-96 hardware decrypt, and altered-tag rejection for both. `blog_offload`
+remained `N`. Both isolated ESP tunnel suites returned all 20 ping replies.
+Three-second same-router TCP receiver rates were 86.3 Mbit/s for SHA1-96
+and 37.6 Mbit/s for SHA256-128. These are functional test observations only.
+The driver recorded 12 encryption drops and 45 additional decryption drops
+under the hardware traffic exercise; the software exercise added no further
+drops. The deliberate bad-tag tests account separately for one hardware
+authentication error and one software drop.
+
+Finally `spuctl stop` and module unload succeeded. The boot ID and persistent
+`hardwarecrypto` checksum still matched the initial readings; no test modules,
+test namespaces, XFRM states, installed SPU package, or persistent SPU module
+file remained. The checked kernel log contained no oops or panic.
+
 ## Preliminary local build
 
 The existing GCC 5.5.0 Linux build environment compiled the SPU driver and
