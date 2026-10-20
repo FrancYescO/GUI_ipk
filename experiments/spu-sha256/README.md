@@ -79,6 +79,14 @@ before completion. The KAT uses heap-backed scatterlists/IVs, tail guards and
 optional `esp_offset=20` synthetic IPv4 framing.
 
 
+## Current runtime status
+
+The final Actions bundle passes full-tag KATs and bounded UDP exercises but
+has reproduced TCP stalls. One interrupted run retained pending kernel requests
+and prevented normal unload, requiring orderly-reboot recovery. Do not treat
+its 48–51 Mbit/s successful samples as stable throughput. See RESULTS.md for
+both successful and failed runs. These modules must remain laboratory-only.
+
 ## Host transfer pool experiment
 
 Lab-only patch 002 adds `transfer_requests=64|128|256` (default 64), bounded by
