@@ -67,7 +67,8 @@
  
  #if defined(CONFIG_BLOG)
 +        if (blog_offload)
-         spu_blog_unregister();
+-        spu_blog_unregister();
++            spu_blog_unregister();
  #endif
  
 @@ -1379,7 +1390,7 @@

@@ -45,6 +45,8 @@ static int check(const char *hash, unsigned int authsize, bool corrupt)
     struct rtattr *rta = (void *)key;
     struct crypto_authenc_key_param *param;
     unsigned int i;
+    unsigned int keylen = RTA_SPACE(sizeof(struct crypto_authenc_key_param)) +
+                          (!strcmp(hash, "sha1") ? 20 : 32) + 16;
     int err;
 
     snprintf(name, sizeof(name), "authenc(hmac(%s),cbc(aes))", hash);
@@ -62,11 +64,11 @@ static int check(const char *hash, unsigned int authsize, bool corrupt)
     rta->rta_len = RTA_LENGTH(sizeof(*param));
     param = RTA_DATA(rta);
     param->enckeylen = cpu_to_be32(16);
-    for (i = RTA_SPACE(sizeof(*param)); i < sizeof(key); i++)
+    for (i = RTA_SPACE(sizeof(*param)); i < keylen; i++)
         key[i] = (unsigned char)i;
-    err = crypto_aead_setkey(sw, key, sizeof(key));
+    err = crypto_aead_setkey(sw, key, keylen);
     if (!err)
-        err = crypto_aead_setkey(hw, key, sizeof(key));
+        err = crypto_aead_setkey(hw, key, keylen);
     if (!err)
         err = crypto_aead_setauthsize(sw, authsize);
     if (!err)
