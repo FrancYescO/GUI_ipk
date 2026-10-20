@@ -17,4 +17,4 @@ KBUILD
 make -C "$kernel" ARCH=arm CROSS_COMPILE="$cross" M="$work/armcrypto" modules
 mkdir -p "$work/hybrid"
 cp "$repo_root/experiments/spu-sha256/Makefile" "$repo_root/experiments/spu-sha256/spu_sha256_hybrid.c" "$work/hybrid/"
-make -C "$kernel" ARCH=arm CROSS_COMPILE="$cross" M="$work/hybrid" modules
+make -C "$kernel" ARCH=arm CROSS_COMPILE="$cross" M="$work/hybrid" SPU_INPLACE_LAB="${SPU_INPLACE_LAB:-0}" modules

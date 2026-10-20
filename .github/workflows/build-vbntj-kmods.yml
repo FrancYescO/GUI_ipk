@@ -17,6 +17,7 @@ on:
           - spu-probe
           - router-tested
           - spu-sha256-lab
+          - spu-sha256-inplace-lab
   pull_request:
     paths:
       - ".github/workflows/build-vbntj-kmods.yml"
@@ -109,7 +110,7 @@ jobs:
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
 
       - name: Stage preserved kernel compiler for SPU
-        if: inputs.module_set == 'spu-probe' || inputs.module_set == 'spu-sha256-lab'
+        if: inputs.module_set == 'spu-probe' || inputs.module_set == 'spu-sha256-lab' || inputs.module_set == 'spu-sha256-inplace-lab'
         run: |
           if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
             scripts/fetch-damson-kernel-toolchain.sh
@@ -136,17 +137,24 @@ jobs:
         run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
 
       - name: Verify manual-only IPK safety
-        if: inputs.module_set != 'spu-sha256-lab'
+        if: inputs.module_set != 'spu-sha256-lab' && inputs.module_set != 'spu-sha256-inplace-lab'
         run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
 
       - name: Verify laboratory profile contains no installable packages
-        if: inputs.module_set == 'spu-sha256-lab'
+        if: inputs.module_set == 'spu-sha256-lab' || inputs.module_set == 'spu-sha256-inplace-lab'
         run: |
           test "$(find dist/vbntj-kmods -name '*.ipk' -type f | wc -l)" -eq 0
           for module in bcmspu damson_spu_test vbntj_abi_canary aes-arm sha256-arm spu_sha256_hybrid; do
             test -s "dist/vbntj-kmods/$module.ko"
           done
-          strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'
+          if [[ "$MODULE_SET" == spu-sha256-inplace-lab ]]; then
+            if strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'; then
+              echo 'In-place profile was not compiled with its explicit opt-in'
+              exit 1
+            fi
+          else
+            strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'
+          fi
 
       - name: Upload Damson modules and manual-only IPKs
         uses: actions/upload-artifact@v7

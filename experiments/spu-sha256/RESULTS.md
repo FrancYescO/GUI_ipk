@@ -24,6 +24,8 @@ every AES case and succeeded; XFRM failure/replay counters remained zero.
 | Ibrido AES Runner / framing SHA1 / SHA256 ARM | 40.4 / 39.4 | 40.5 / 40.2 | 39.0 / 40.7 |
 | Ibrido AES Runner / framing SHA256 / SHA256 C | 40.7 / 42.3 | 40.3 / 42.6 | 41.5 / 42.4 |
 | Ibrido AES Runner / framing SHA256 / SHA256 ARM | 41.8 / 44.7 | 46.0 / 44.2 | 44.1 / 45.9 |
+| Ibrido senza copie / SHA256 C | 44.1 / 45.7 | 40.9 / 45.6 | 45.7 / 45.8 |
+| Ibrido senza copie / SHA256 ARM | 49.3 / 48.7 | 49.1 / 49.5 | 41.4 / 50.2 |
 
 `results.csv` preserves the individual rates without rounding to one decimal.
 The software-only ARM path is simpler than the hybrid and improves all three
@@ -54,14 +56,14 @@ These short tests are insufficient to rank small differences reliably.
   hardware authentication errors or unexpected outer-tag failures. The
   shared RDPA IPv4 host-address table still reports resource exhaustion when
   synthetic namespace addresses are added. Neither issue is claimed fixed.
-* The optional `in_place=1` branch exists for review but has **not** been run
-  on the modem. It shortens/restores live linear skb buffers and skips copies
-  only after layout, exclusivity and length checks. Automatic approval review
-  rejected its live test because real ESP buffer safety was not yet proven;
-  a specific user approval has been requested. Standard builds reject activation
-  before algorithm registration unless explicitly rebuilt with
-  `SPU_INPLACE_LAB=1`. All measured runs explicitly
-  used `in_place=0` (private copies).
+* The user explicitly authorized the `in_place=1` test after the initial
+  automatic approval rejection. Before real tunnel traffic, 96 synthetic
+  KAT/guard checks passed at ESP offsets 0 and 20, with 36 successful
+  borrowed-buffer operations for each offset. Both full tunnel comparisons
+  then passed. The fast path is optional and does not establish safety for
+  every production skb layout. Normal lab builds continue to reject activation;
+  the separate in-place lab requires explicit build and load opt-ins.
+
 
 ## Source and remote builds
 

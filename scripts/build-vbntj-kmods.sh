@@ -9,6 +9,7 @@ canary_dir="$source_dir/.vbntj-abi-canary"
 build_connmark=0
 build_spu=0
 build_spu_lab=0
+build_spu_inplace_lab=0
 lab_modules=()
 external_modules=()
 
@@ -22,6 +23,12 @@ case "$module_set" in
   qos-probe)
     module_targets=(net/sched/act_connmark.ko)
     build_connmark=1
+    ;;
+  spu-sha256-inplace-lab)
+    module_targets=()
+    build_spu=1
+    build_spu_lab=1
+    build_spu_inplace_lab=1
     ;;
   spu-sha256-lab)
     module_targets=()
@@ -209,7 +216,7 @@ fi
 if [[ "$build_spu_lab" -eq 1 ]]; then
   lab_dir="$source_dir/.spu-sha256-lab"
   rm -rf "$lab_dir"
-  bash "$repo_root/experiments/spu-sha256/build-extras.sh"     "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.damson-spu"     "$source_dir/.damson-spu-test" "$lab_dir"
+  SPU_INPLACE_LAB="$build_spu_inplace_lab" bash "$repo_root/experiments/spu-sha256/build-extras.sh"     "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.damson-spu"     "$source_dir/.damson-spu-test" "$lab_dir"
   lab_modules=("$lab_dir/armcrypto/aes-arm.ko" "$lab_dir/armcrypto/sha256-arm.ko" "$lab_dir/hybrid/spu_sha256_hybrid.ko")
 fi
 rm -rf "$canary_dir"
@@ -339,6 +346,7 @@ firmware=Damson 19.4.0866-3401052
 kernel=4.1.52
 compiler=OpenWrt GCC $compiler_version
 module_set=$module_set
+spu_inplace_lab=$build_spu_inplace_lab
 abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
 spu_patches=patches/vbntj-spu/*.patch (spu-probe only)

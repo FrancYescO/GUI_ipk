@@ -60,14 +60,20 @@ private tmpfs kernel tree. `build-extras.sh` is the portable Actions entry;
 module checker validates architecture, exact vermagic and checksums. The
 actual modem's ABI canary must pass before any experimental load.
 
-## Unexecuted in-place prototype
+## Explicit in-place laboratory profile
 
-The optional `in_place` implementation is present for review, but normal lab
-builds reject `in_place=1` before registering any algorithm. Enabling it needs
-an explicit `SPU_INPLACE_LAB=1` rebuild as well as the load parameter. The
-standard local/Actions profiles never set that build option. Its live test
-was rejected by automatic approval review pending specific user consent;
-none of the reported measurements uses it. Existing templates default to
-`in_place=0`. The KAT now has heap-backed scatterlists/IV storage, tail guards
-and optional `esp_offset=20` synthetic IPv4 framing to support careful future
-validation without relying only on real tunnel traffic.
+The user specifically authorized the in-place test after reviewing its kernel
+buffer risk. It passed 96 guard/header checks at ESP offsets 0 and 20, with
+36 successful borrowed-buffer operations per offset, then real isolated
+ESP tunnels for AES128/192/256. This remains experimental, not a guarantee
+for every skb layout or long-running production use.
+
+Normal `spu-sha256-lab` builds reject `in_place=1` before registering any
+algorithm. `spu-sha256-inplace-lab` is the separate explicit Actions build
+profile: it sets `SPU_INPLACE_LAB=1`, and loading still requires `in_place=1`.
+Neither profile emits IPKs or modifies the published feeds. The fast path
+requires a linear, exclusive, uncloned skb and an exact ESP layout/length;
+other requests use private copies. Full incoming SHA256-128 is checked before
+trimming the private hardware framing, and the original length is restored
+before completion. The KAT uses heap-backed scatterlists/IVs, tail guards and
+optional `esp_offset=20` synthetic IPv4 framing.
