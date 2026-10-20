@@ -21,3 +21,4 @@ b3e9a864ddada1002fd37c997b2aa62f04d30171b71d14de28cd4bbc77630111  kmod-pppoe_4.1
 466d7dcd713d283e2f4fdfe4b49a5cae3282f4caddb2fe61d20c4ee7024779fa  kmod-udptunnel4_4.1.38-1_arm_cortex-a9_neon.ipk
 ee2bf8b4f9ada9605a17d38587a89db3cb033a794f98c2043baf72ce6bb58d18  kmod-udptunnel6_4.1.38-1_arm_cortex-a9_neon.ipk
 0cf22dbb6bf988f0738f33e7bef1432f7a805748e37a01508132d313205f0ef0  kmod-wireguard_4.1.38+1.0.20220627-1_arm_cortex-a9_neon.ipk
+7b16558dc1707a96858071a6f2c2a59c45d17daa6ba1f4015c5650476ba579e6  kmod-bcm63xx-tch-spu_4.1.38-1_arm_cortex-a9_neon.ipk

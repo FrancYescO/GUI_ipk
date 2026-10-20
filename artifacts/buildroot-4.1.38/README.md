@@ -10,3 +10,17 @@ WireGuard 1.0.20220627 and its udptunnel4/udptunnel6 dependencies were added
 from successful run 38358718660. The virtual kernel ABI hash matches the
 existing feed kernel package. WireGuard has no autoload entry and has not
 been tested on a 4.1.38 router. The directory now contains 23 IPKs.
+
+SPU `kmod-bcm63xx-tch-spu_4.1.38-1_arm_cortex-a9_neon.ipk` was added from
+[Actions run 39448927817](https://github.com/FrancYescO/GUI_ipk/actions/runs/39448927817),
+source commit `eeafe19`, using the dedicated `module_set=spu` profile on main.
+It applies authsize software fallback, default-disabled BLOG ESP flow offload
+and idempotent RDPA object destruction to the archived VBNTS impl3 source.
+The build produced the same virtual-kernel ABI version
+`4.1.38-1-e5d0b8e85af0ba3d06a2ba17859e868a`; the existing kernel and other
+feed packages are retained. The directory now contains 24 IPKs.
+
+SPU verification checks ELF32 little-endian ARM, exact Linux 4.1.38 vermagic,
+package architecture and module payload, and rejects boot autoload files.
+No 4.1.38 runtime test was performed: the available modem runs 4.1.52.
+Confirm exact firmware compatibility before testing this package from `/tmp`.

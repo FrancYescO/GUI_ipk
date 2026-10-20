@@ -33,6 +33,7 @@ on:
       - "scripts/verify-wireguard-kmod.sh"
       - "scripts/verify-kmod-tun.sh"
       - "scripts/verify-kmod-connmark.sh"
+      - "scripts/verify-kmod-spu.py"
 
 concurrency:
   group: github-pages
@@ -88,6 +89,7 @@ jobs:
           (cd artifacts/buildroot-4.1.38 && sha256sum --check SHA256SUMS)
           scripts/verify-kmod-tun.sh artifacts/buildroot-4.1.38
           scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
+          python3 scripts/verify-kmod-spu.py artifacts/buildroot-4.1.38 4.1.38
 
       - name: Verify tested SPU artifact
         run: |
