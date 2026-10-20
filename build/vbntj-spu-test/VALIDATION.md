@@ -82,3 +82,41 @@ SHA256-128 compatibility is provided by software fallback, not a new Runner
 hardware capability. BLOG ESP flow offload stays off by default. The forum's
 Windows/DHCP crash scenario has not been reproduced with real clients, and
 no long-duration or WAN interoperability certification is claimed.
+
+## Extended matrix and lifecycle
+
+Ten consecutive load/start/KAT/stop/unload cycles passed all 40 known-answer
+and altered-tag checks. A six-case matrix combined AES128/192/256 with
+SHA1-96 hardware and SHA256-128 software fallback, with a 32-packet replay
+window. All 36 fragmented 4,000-byte ping requests succeeded in both directions;
+all twelve TCP forward/reverse transfers completed. Receiver throughput was
+70.3–84.7 Mbit/s for SHA1 and 31.7–37.0 Mbit/s for SHA256, measured between
+namespaces on the same router, not across a WAN. XFRM reported zero failed
+authentication and replay errors. Hardware counters reached 105 encryption
+drops and 366 decryption drops under load; software cases did not increase them.
+
+An immediate stop after namespace removal reported a crypto reference still
+held. Namespace destruction releases XFRM/crypto objects asynchronously.
+A subsequent ordinary stop and unload both returned success after teardown
+completed, with no forced unload or router reboot. Test runners must wait for
+that cleanup, check return codes, and never label a best-effort unload as a pass.
+
+## Live SA key update and UDP
+
+The six AES/SHA combinations were repeated with replacement encryption keys
+on both live SAs in both namespaces. All 72 fragmented ping requests before
+and after key changes succeeded. Six 3-second UDP transfers at 10 Mbit/s
+completed: SHA256 software had zero reported datagram loss; hardware SHA1
+reported 3.1%, 0%, and 5.4% loss for AES128/192/256 respectively. This confirms
+that hardware packet loss is not limited to maximum-throughput TCP testing.
+The precise vendor Runner resource/drop cause remains unresolved; do not
+interpret successful transfer completion as loss-free hardware operation.
+The source recycle callback can report drops as `-ENOBUFS`, but these tests
+do not instrument the firmware and cannot establish every drop's cause.
+
+Waiting three seconds for asynchronous namespace cleanup allowed ordinary
+stop and unload to finish successfully. Final SSH checks found no SPU, KAT or
+canary module, no test namespace and no XFRM state/policy in the root namespace.
+Boot ID and persistent hardwarecrypto checksum remained unchanged. No new
+kernel oops/panic was observed. This is temporary `/tmp` validation, not a
+long-duration WAN or real Windows-client test.

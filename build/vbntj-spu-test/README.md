@@ -83,3 +83,17 @@ not a WAN speed claim or a Windows/Android interoperability test.
 
 Afterward confirm the original boot ID, unchanged persistent hardwarecrypto
 configuration, no test namespaces or XFRM state, and no new oops/panic.
+
+The extended `ipsec-matrix.sh` exercises all three AES key lengths, SHA1/SHA256,
+fragmented packets and TCP in both directions. `ipsec-rekey.sh` additionally
+updates live SAs with new keys and sends UDP at 10 Mbit/s. Both create only their
+dedicated namespaces, and require a module already loaded from `/tmp`. Wait
+for asynchronous namespace teardown before `spuctl stop`; verify successful
+stop and normal unload rather than forcing removal.
+
+The dedicated `build-kmods-4.1.38.yml` dispatch profile `spu` appends
+`build/spu-module.mk` to the archived VBNTS buildroot and applies
+`patches/vbnts-spu/002-opt-in-esp-flow-offload.patch` between the common patches
+001 and 003. It produces `kmod-bcm63xx-tch-spu` without boot autoload. The older
+SDK has different BLOG call sites, so its patch must remain version specific.
+A 4.1.38 build is not runtime validation on the 4.1.52 modem.
