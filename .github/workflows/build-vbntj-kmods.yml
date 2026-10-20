@@ -17,6 +17,7 @@ on:
           - router-tested
           - network-feed
           - wireguard
+          - spu-probe
       wireguard_artifact_run_id:
         description: "Reverify existing WireGuard artifacts from this run without rebuilding"
         required: false
@@ -26,6 +27,11 @@ on:
       - ".github/workflows/build-vbntj-kmods.yml"
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
+      - "build/vbntj-spu-test/**"
+      - "patches/vbntj-spu/**"
+      - "scripts/build-damson-spu.sh"
+      - "scripts/fetch-damson-kernel-toolchain.sh"
+      - "scripts/verify-kmod-spu.py"
       - "patches/vbntj-4.1.52/**"
       - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
@@ -39,6 +45,11 @@ on:
       - ".github/workflows/build-vbntj-kmods.yml"
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
+      - "build/vbntj-spu-test/**"
+      - "patches/vbntj-spu/**"
+      - "scripts/build-damson-spu.sh"
+      - "scripts/fetch-damson-kernel-toolchain.sh"
+      - "scripts/verify-kmod-spu.py"
       - "patches/vbntj-4.1.52/**"
       - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
@@ -61,6 +72,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
+      GH_TOKEN: ${{ github.token }}
       GPL_REPOSITORY: https://github.com/avwarez/vmg8825_b50b.git
       GPL_REF: V5.17(ABNY.6)C0
       GPL_COMMIT: af23960e39003ba7788f5ced0c256b1bc676a712
@@ -106,6 +118,15 @@ jobs:
       - name: Build Ubuntu 12.04 compatibility image
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
 
+      - name: Stage preserved kernel compiler for SPU
+        if: inputs.module_set == 'spu-probe'
+        run: |
+          if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
+            scripts/fetch-damson-kernel-toolchain.sh
+            tar -xzf .cache/sources/damson-kernel-toolchain/damson-kernel-gcc-5.5.0-linux-amd64.tgz \
+              --no-same-owner -C .work/vbntj-gpl
+          fi
+
       - name: Prepare kernel and compile modules
         run: |
           set -o pipefail
@@ -145,6 +166,10 @@ jobs:
       - name: Verify WireGuard module
         if: inputs.module_set == 'wireguard'
         run: scripts/verify-wireguard-kmod.sh dist/vbntj-kmods 4.1.52
+
+      - name: Verify SPU module and no boot autoload
+        if: inputs.module_set == 'spu-probe'
+        run: python3 scripts/verify-kmod-spu.py dist/vbntj-kmods 4.1.52
 
       - name: Verify manual-only IPK safety
         run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods

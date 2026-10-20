@@ -36,7 +36,11 @@ def write_feed(version, ipks, feed_root):
         manual_module = (
             version == "4.1.52"
             and fields.get("Package", "").startswith("kmod-")
-            and fields.get("Architecture") == "brcm963xx"
+            and (fields.get("Architecture") == "brcm963xx" or (
+                fields.get("Package") == "kmod-bcmspu-damson-4.1.52-manual"
+                and fields.get("Architecture") == "arm_cortex-a9"
+                and fields.get("X-Damson-Target") == "VBNTJ_502L07p1"
+            ))
             and fields.get("X-Kernel-Vermagic", "").startswith(version + " ")
             and fields.get("X-Manual-Install-Only") == "yes"
         )
@@ -93,6 +97,7 @@ def main():
     parser.add_argument("--legacy-kernel-dir", type=Path, help="directory with the 4.1.38 virtual kernel IPK")
     parser.add_argument("--buildroot-kernel-dir", type=Path, help="directory with verified 4.1.38 kernel and kmod IPKs")
     parser.add_argument("--damson-extra-dir", type=Path, help="directory with additional verified manual-only Damson IPKs")
+    parser.add_argument("--damson-spu-dir", type=Path, help="directory with the verified manual-only SPU IPK")
     args = parser.parse_args()
     damson_ipks = list(args.source.glob("*.ipk"))
     if args.damson_extra_dir:
@@ -100,6 +105,13 @@ def main():
         if not extra_ipks:
             raise ValueError("No additional Damson IPKs found")
         damson_ipks.extend(extra_ipks)
+    if args.damson_spu_dir:
+        subprocess.run([str(Path(__file__).resolve().with_name("verify-manual-kmod-ipks.sh")),
+                        str(args.damson_spu_dir)], check=True)
+        spu_ipks = list(args.damson_spu_dir.glob("*.ipk"))
+        if len(spu_ipks) != 1 or not spu_ipks[0].name.startswith("kmod-bcmspu-"):
+            raise ValueError("Expected exactly the verified SPU package")
+        damson_ipks.extend(spu_ipks)
     verifier = Path(__file__).resolve().with_name("verify-wireguard-kmod.sh")
     for directory in (args.source, args.damson_extra_dir):
         if directory and list(directory.glob("kmod-wireguard*.ipk")):

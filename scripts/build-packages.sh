@@ -166,6 +166,17 @@ cp -a "$repo_root/build/source-overlay/." "$work_dir/"
 # and the legacy module backport. Keep kernel compilation in kernel jobs.
 rm -rf "$work_dir/package/network/services/wireguard"
 cp -a "$repo_root/build/wireguard-overlay/." "$work_dir/"
+if [[ "${BUILD_SPU:-0}" == 1 ]]; then
+  cat "$repo_root/build/spu-module.mk" >> "$work_dir/target/linux/brcm63xx-tch/modules.mk"
+  spu_source="$work_dir/extern/bcmopen-iopsys-DG400/bcmdrivers/opensource/char/spudd/impl3"
+  test -f "$spu_source/spu.c"
+  for spu_patch in \
+    "$repo_root/patches/vbntj-spu/001-authsize-software-fallback.patch" \
+    "$repo_root/patches/vbnts-spu/002-opt-in-esp-flow-offload.patch" \
+    "$repo_root/patches/vbntj-spu/003-idempotent-ipsec-object-destroy.patch"; do
+    patch --batch --forward -d "$spu_source" -p1 < "$spu_patch"
+  done
+fi
 rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
 
 if [[ "$userspace_only" == 1 ]]; then

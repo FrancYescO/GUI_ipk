@@ -1,0 +1,26 @@
+--- a/spu.c
++++ b/spu.c
+@@ -212,6 +212,9 @@
+     char               *ptr2;
+     struct crypto_aead *aead = crypto_aead_reqtfm(areq);
+ 
++    if (crypto_aead_authsize(aead) != SPU_MAX_ICV_LENGTH)
++        return SPU_FALLBACK_METHOD_CIPHER;
++
+     do 
+     {
+         /* make sure that source and destination are the same */
+@@ -586,10 +589,10 @@
+ {
+     struct spu_ctx *ctx = crypto_aead_ctx(aead);
+ 
+-    if (authsize != SPU_MAX_ICV_LENGTH)
+-    {
++    /* Runner supports only 96-bit ICVs. Other valid sizes must use
++     * the synchronous software implementation, including SHA256-128. */
++    if (!ctx->fallback_cipher && authsize != SPU_MAX_ICV_LENGTH)
+         return -EINVAL;
+-    }
+ 
+     /* setkey the fallback just in case we need to use it */
+     if (ctx->fallback_cipher) {

@@ -1,0 +1,16 @@
+--- a/spu_runner.c
++++ b/spu_runner.c
+@@ -508,8 +508,12 @@
+ {
+    int rc = 0;
+    
+-   /* destroy the ipsec object */
++   /* Deinit also calls this after unregister; do not destroy twice. */
++   if (ipsec_obj == NULL)
++      return 0;
+    rc = bdmf_destroy(ipsec_obj);
++   if (!rc)
++      ipsec_obj = NULL;
+    if (rc)
+    {
+       printk("spu_runner_sa_desc_table_address_set: Failed to destroy ipsec object, rc %d\n", rc);
