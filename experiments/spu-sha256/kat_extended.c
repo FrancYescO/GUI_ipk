@@ -170,6 +170,7 @@ static int check(const char *hash, unsigned int authsize, bool corrupt, bool enc
         case 1: buf[0] ^= 0x80; break;
         case 2: buf[8] ^= 0x80; break;
         case 3: buf[24] ^= 0x80; break;
+        case 4: buf[24 + 32 + authsize - 1] ^= 0x80; break;
         default: err = -EINVAL; goto free_requests;
         }
     }

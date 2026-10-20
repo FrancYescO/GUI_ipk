@@ -1,0 +1,110 @@
+--- a/spu.h
++++ b/spu.h
+@@ -59,7 +59,10 @@
+ #define SPU_MAX_PAYLOAD          ((1 << 14) - 1)
+ 
+ #define SPU_NUM_DESCR            64
+-#define SPU_NUM_TRANS_REQ        64 /*128*/
++extern int spu_lab_transfers;
++void spu_lab_count_tx_error(void);
++void spu_lab_count_recycle(void);
++#define SPU_NUM_TRANS_REQ       spu_lab_transfers
+ #define SPU_TRANS_REQ_BASE_IDX   0x1000
+ 
+ #define SPU_RX_BUDGET            32
+--- a/spu.c
++++ b/spu.c
+@@ -49,6 +49,24 @@
+ MODULE_PARM_DESC(experimental_sha256_hw128, "Lab-only SHA256-128 Runner capability probe");
+ 
+ struct spu_info *spuinfo = NULL;
++/* Host request storage only; the Runner SA descriptor limit is unchanged. */
++int spu_lab_transfers = 64;
++module_param_named(transfer_requests, spu_lab_transfers, int, 0444);
++static atomic_t lab_no_slot = ATOMIC_INIT(0);
++static atomic_t lab_tx_error = ATOMIC_INIT(0);
++static atomic_t lab_recycle = ATOMIC_INIT(0);
++static atomic_t lab_double_free = ATOMIC_INIT(0);
++static int spu_lab_counter_get(char *buf, const struct kernel_param *kp)
++{
++    return scnprintf(buf, 32, "%d", atomic_read((atomic_t *)kp->arg));
++}
++static const struct kernel_param_ops spu_lab_counter_ops = { .get = spu_lab_counter_get };
++module_param_cb(lab_no_slot, &spu_lab_counter_ops, &lab_no_slot, 0444);
++module_param_cb(lab_tx_error, &spu_lab_counter_ops, &lab_tx_error, 0444);
++module_param_cb(lab_recycle, &spu_lab_counter_ops, &lab_recycle, 0444);
++module_param_cb(lab_double_free, &spu_lab_counter_ops, &lab_double_free, 0444);
++void spu_lab_count_tx_error(void) { atomic_inc(&lab_tx_error); }
++void spu_lab_count_recycle(void) { atomic_inc(&lab_recycle); }
+ 
+ /* Keep cipher acceleration; require opt-in for full ESP flow acceleration.
+  * The legacy flow path was reported to crash with Windows/DHCP clients. */
+@@ -176,13 +194,14 @@
+     spin_lock_irqsave(&spuinfo->spuListLock, flags);
+ 
+     if ( list_empty(&spuinfo->transReqList) ) {
++       atomic_inc(&lab_no_slot);
+        SPU_TRACE(("exhausted transfer requests\n"));
+        spin_unlock_irqrestore(&spuinfo->spuListLock, flags);
+        return ERR_PTR(-EBUSY);
+     }
+ 
+     pTransReq = list_first_entry(&spuinfo->transReqList, struct spu_trans_req, entry);
+-    list_del(&pTransReq->entry);
++    list_del_init(&pTransReq->entry);
+ 
+     spin_unlock_irqrestore(&spuinfo->spuListLock, flags);
+     /* do not initialize index or list */
+@@ -193,19 +212,15 @@
+ void spu_free_trans_req(struct spu_trans_req *pTransReq)
+ {
+    unsigned long         flags;
+-   struct spu_trans_req *pReqFree;
++
+ 
+    secpath_put(pTransReq->sp);
+    spin_lock_irqsave(&spuinfo->spuListLock, flags);
+-   list_for_each_entry(pReqFree, &spuinfo->transReqList, entry)
+-   {
+-      if ( pReqFree->index == pTransReq->index )
+-      {
+-         /* buffer was freed twice */
+-         SPU_TRACE(("Transfer request already in free list\n"));
+-         spin_unlock_irqrestore(&spuinfo->spuListLock, flags);
+-         return;
+-      }
++   /* Allocated nodes point to themselves; free nodes are on transReqList. */
++   if (!list_empty(&pTransReq->entry)) {
++      atomic_inc(&lab_double_free);
++      spin_unlock_irqrestore(&spuinfo->spuListLock, flags);
++      return;
+    }
+    list_add_tail(&pTransReq->entry, &spuinfo->transReqList);
+    spin_unlock_irqrestore(&spuinfo->spuListLock, flags);
+@@ -1566,6 +1581,8 @@
+     dev_t dev = 0;
+     dev_t devno;
+ 
++    if (spu_lab_transfers != 64 && spu_lab_transfers != 128 && spu_lab_transfers != 256)
++        return -EINVAL;
+     spuinfo = kzalloc(sizeof(struct spu_info), GFP_KERNEL);
+     if (NULL == spuinfo) {
+         printk("bcm_spu_init: Insufficient memory for context data\n");
+--- a/spu_runner.c
++++ b/spu_runner.c
+@@ -70,6 +70,7 @@
+ 
+    pTransReq = spuinfo->transReqBase;
+    pTransReq += index;
++   spu_lab_count_recycle();
+    if (SPU_DIRECTION_US == pTransReq->pSpuCtx->direction)
+    {
+        spuinfo->stats.encDrops++;
+@@ -304,6 +305,7 @@
+                                     CPU_RX_IPSEC_LOOPBACK_QUEUE_ID);
+     if ( ret != 0 )
+     {
++        spu_lab_count_tx_error();
+         spu_runner_recycle_restore(pNBuf);
+     }
+ 

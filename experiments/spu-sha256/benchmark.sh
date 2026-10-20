@@ -69,7 +69,13 @@ for hash in sha256; do
     cat /proc/crypto | grep -E '^name|^driver|^priority|^refcnt' | grep -A3 -B1 -E 'authenc|sha256|aes' || true
   ip -n "$a" -s xfrm state | grep -E "lifetime current|stats:|replay-window [0-9]+ replay"
   ip -n "$b" -s xfrm state | grep -E "lifetime current|stats:|replay-window [0-9]+ replay"
-  if grep -q '^bcmspu ' /proc/modules; then spuctl showstats; fi
+  if grep -q '^bcmspu ' /proc/modules; then
+ spuctl showstats
+ for stat in transfer_requests lab_no_slot lab_tx_error lab_recycle lab_double_free; do
+  echo "$stat=$(cat /sys/module/bcmspu/parameters/$stat)"
+ done
+ test "$(cat /sys/module/bcmspu/parameters/lab_double_free)" -eq 0
+fi
   if [ -d /sys/module/spu_sha256_hybrid ]; then
     for stat in enc_packets dec_packets bad_tags borrowed_packets; do
       echo "$stat=$(cat /sys/module/spu_sha256_hybrid/parameters/$stat)"

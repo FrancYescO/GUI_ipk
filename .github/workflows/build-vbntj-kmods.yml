@@ -186,6 +186,7 @@ jobs:
           for module in bcmspu damson_spu_test vbntj_abi_canary aes-arm sha256-arm spu_sha256_hybrid; do
             test -s "dist/vbntj-kmods/$module.ko"
           done
+          strings dist/vbntj-kmods/bcmspu.ko | grep -F 'parmtype=transfer_requests:int'
           if [[ "$MODULE_SET" == spu-sha256-inplace-lab ]]; then
             if strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'; then
               echo 'In-place profile was not compiled with its explicit opt-in'

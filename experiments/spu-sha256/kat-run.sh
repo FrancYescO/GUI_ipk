@@ -33,11 +33,11 @@ trap 'exit 129' HUP
 trap 'exit 130' INT
 trap 'exit 143' TERM
 sha256sum -c SHA256SUMS
-insmod ./bcmspu.ko
+insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"
 spuctl start
 insmod ./spu_sha256_hybrid.ko "in_place=${IN_PLACE:-0}" "private_sha1=${PRIVATE_SHA1:-0}"
 for bits in 128 192 256; do
- for part in 0 1 2 3; do
+ for part in 0 1 2 3 4; do
   echo "KAT_GROUP AES$bits corrupt_part=$part"
   insmod ./damson_spu_test.ko only_sha256=1 aesbits="$bits" corrupt_part="$part" "esp_offset=${ESP_OFFSET:-0}" target_driver=authenc-hybrid-sha256-spu
   rmmod damson_spu_test
@@ -46,6 +46,7 @@ done
 if [ "${IN_PLACE:-0}" -eq 1 ]; then
  borrowed=$(cat /sys/module/spu_sha256_hybrid/parameters/borrowed_packets)
  echo "BORROWED_KAT_PACKETS=$borrowed"
- test "$borrowed" -eq 36
+ test "$borrowed" -eq 45
 fi
+test "$(cat /sys/module/bcmspu/parameters/lab_double_free)" -eq 0
 echo KAT_GROUPS_PASS
