@@ -8,3 +8,9 @@
 -		$(STAGING_DIR_HOSTPKG)/share/vala-0.30/vapi
 +		./files/*.vapi ./files/*.deps \
 +		$(STAGING_DIR_HOSTPKG)/share/vala-0.34/vapi
+--- a/feeds/packages/multimedia/grilo/files/grilo-0.3.vapi
++++ b/feeds/packages/multimedia/grilo/files/grilo-0.3.vapi
+@@ -124,0 +125 @@
++		public int get_album_disc_number ();
+@@ -204,0 +206 @@
++		public void set_album_disc_number (int disc_number);
