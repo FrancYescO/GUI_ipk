@@ -23,6 +23,7 @@ on:
       - "target/packages/**"
       - "artifacts/damson-4.1.52-manual/**"
       - "artifacts/damson-4.1.52-network/**"
+      - "artifacts/damson-4.1.52-spu/**"
       - "artifacts/buildroot-4.1.38/**"
       - "scripts/verify-feed.sh"
       - "scripts/sanitize-opkg-feed.sh"
@@ -32,6 +33,7 @@ on:
       - "scripts/verify-wireguard-kmod.sh"
       - "scripts/verify-kmod-tun.sh"
       - "scripts/verify-kmod-connmark.sh"
+      - "scripts/verify-kmod-spu.py"
 
 concurrency:
   group: github-pages
@@ -87,9 +89,16 @@ jobs:
           (cd artifacts/buildroot-4.1.38 && sha256sum --check SHA256SUMS)
           scripts/verify-kmod-tun.sh artifacts/buildroot-4.1.38
           scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
+          python3 scripts/verify-kmod-spu.py artifacts/buildroot-4.1.38 4.1.38
+
+      - name: Verify tested SPU artifact
+        run: |
+          (cd artifacts/damson-4.1.52-spu && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-spu
+          python3 scripts/verify-kmod-spu.py artifacts/damson-4.1.52-spu 4.1.52
 
       - name: Assemble versioned kernel feeds
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --buildroot-kernel-dir artifacts/buildroot-4.1.38
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --buildroot-kernel-dir artifacts/buildroot-4.1.38
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods

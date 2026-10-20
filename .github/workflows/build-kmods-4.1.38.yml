@@ -10,6 +10,7 @@ on:
         options:
           - router-tested
           - wireguard
+          - spu
 
 concurrency:
   group: kmods-4.1.38-${{ github.ref }}
@@ -25,7 +26,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
-      BUILD_CONFIG: ${{ inputs.module_set == 'wireguard' && '/repo/build/kmod-wireguard.config' || '/repo/build/kmod-tun.config' }}
+      BUILD_CONFIG: ${{ inputs.module_set == 'spu' && '/repo/build/kmod-spu.config' || inputs.module_set == 'wireguard' && '/repo/build/kmod-wireguard.config' || '/repo/build/kmod-tun.config' }}
+      BUILD_SPU: ${{ inputs.module_set == 'spu' && '1' || '0' }}
       BUILD_KMODS: '1'
       PACKAGE_TARGETS: ${{ inputs.module_set == 'wireguard' && 'kernel/linux kernel/wireguard-compat' || 'kernel/linux' }}
     steps:
@@ -55,6 +57,7 @@ jobs:
             --env JOBS="$(nproc)" \
             --env BUILD_CONFIG \
             --env BUILD_KMODS \
+            --env BUILD_SPU \
             --env PACKAGE_TARGETS \
             --env VERIFY_KMOD_TUN=1 \
             --env VERIFY_KMOD_CONNMARK=1 \
@@ -64,6 +67,10 @@ jobs:
       - name: Verify WireGuard module
         if: inputs.module_set == 'wireguard'
         run: scripts/verify-wireguard-kmod.sh dist 4.1.38
+
+      - name: Verify SPU module and no boot autoload
+        if: inputs.module_set == 'spu'
+        run: python3 scripts/verify-kmod-spu.py dist 4.1.38
 
       - name: Verify kernel package feed
         run: scripts/verify-feed.sh dist --allow-kmods

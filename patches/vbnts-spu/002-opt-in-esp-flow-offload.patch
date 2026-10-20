@@ -1,0 +1,84 @@
+--- a/spu.c
++++ b/spu.c
+@@ -45,6 +45,11 @@
+ 
+ struct spu_info *spuinfo = NULL;
+ 
++/* Full ESP flow offload is experimental; retain cipher acceleration. */
++static bool blog_offload;
++module_param(blog_offload, bool, 0444);
++MODULE_PARM_DESC(blog_offload, "Enable experimental ESP BLOG flow offload (default off)");
++
+ typedef void (*IPSec_SPU_FN_IOCTL) (unsigned long arg);
+ static int  spu_open (struct inode *inode, struct file *filp);
+ static long spu_ioctl_unlocked(struct file *filep, unsigned int cmd, unsigned long arg);
+@@ -791,7 +796,8 @@
+     pTransReq->ivsize = crypto_aead_ivsize(aead);
+ 
+ #if defined(CONFIG_BLOG)
+-    spu_blog_emit(pTransReq);
++    if (blog_offload)
++        spu_blog_emit(pTransReq);
+ #endif
+ 
+     /* flush all data */
+@@ -912,7 +918,8 @@
+     pTransReq->ivsize = crypto_aead_ivsize(aead);
+ 
+ #if defined(CONFIG_BLOG)
+-    spu_blog_emit(pTransReq);
++    if (blog_offload)
++        spu_blog_emit(pTransReq);
+ #endif
+ 
+     /* flush all data */
+@@ -950,7 +957,8 @@
+ 
+     spu_runner_descr_put(ctx->pDescr);
+ #if defined(CONFIG_BLOG)
+-    spu_blog_ctx_del(ctx);
++    if (blog_offload)
++        spu_blog_ctx_del(ctx);
+ #endif
+ } /* spu_cra_exit */
+ 
+@@ -970,7 +978,8 @@
+         return -ENOBUFS;
+     }
+ #if defined(CONFIG_BLOG)
+-    spu_blog_ctx_add(ctx);
++    if (blog_offload)
++        spu_blog_ctx_add(ctx);
+ #endif
+ 
+     if (alg->cra_flags & CRYPTO_ALG_NEED_FALLBACK)
+@@ -1011,7 +1020,9 @@
+     alg->cra_alignmask = 0;
+     alg->cra_ctxsize = sizeof (struct spu_ctx);
+     alg->cra_flags = CRYPTO_ALG_TYPE_AEAD | CRYPTO_ALG_ASYNC | 
+-                     CRYPTO_ALG_BLOG | CRYPTO_ALG_NEED_FALLBACK;
++                     CRYPTO_ALG_NEED_FALLBACK;
++    if (blog_offload)
++        alg->cra_flags |= CRYPTO_ALG_BLOG;
+     alg->cra_type = &crypto_aead_type;
+ 
+     return spuAlg;
+@@ -1265,7 +1276,8 @@
+         }
+ 
+ #if defined(CONFIG_BLOG)
+-        spu_blog_unregister();
++        if (blog_offload)
++            spu_blog_unregister();
+ #endif
+ 
+         if (spuinfo->transReqBase) kfree(spuinfo->transReqBase);
+@@ -1321,7 +1333,7 @@
+         }
+ 
+ #if defined(CONFIG_BLOG)
+-        err = spu_blog_register();
++        err = blog_offload ? spu_blog_register() : 0;
+         if ( err != 0 )
+         {
+             printk("spu_blog_register failed with error %d\n", err);

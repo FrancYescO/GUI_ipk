@@ -1,0 +1,13 @@
+source=https://github.com/avwarez/vmg8825_b50b.git
+source_commit=af23960e39003ba7788f5ced0c256b1bc676a712
+inputs_release=damson-build-inputs-v1
+inputs_manifest=build/vbntj/inputs.tsv
+target=VBNTJ_502L07p1
+firmware=Damson 19.4.0866-3401052
+kernel=4.1.52
+compiler=OpenWrt GCC 5.5.0
+module_set=spu-probe
+abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
+kernel_config=build/vbntj/kernel-4.1.52-damson.config
+spu_patches=patches/vbntj-spu/*.patch (spu-probe only)
+kernel_compiler_seed_manifest=build/vbntj/kernel-toolchain-seed.sha256 (SPU workflow fallback)

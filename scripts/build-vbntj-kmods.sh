@@ -8,6 +8,7 @@ module_set="${MODULE_SET:-tun}"
 canary_dir="$source_dir/.vbntj-abi-canary"
 build_connmark=0
 build_wireguard=0
+build_spu=0
 external_modules=()
 
 case "$module_set" in
@@ -28,6 +29,10 @@ case "$module_set" in
   wireguard)
     module_targets=()
     build_wireguard=1
+    ;;
+  spu-probe)
+    module_targets=()
+    build_spu=1
     ;;
   network-feed)
     module_targets=()
@@ -154,7 +159,7 @@ host_bin="$source_dir/staging_dir/host/bin"
 mkdir -p "$host_bin"
 for host_tool in \
   aclocal autoconf autoheader autom4te automake autoreconf \
-  find gettext libtool libtoolize m4 sed; do
+  find gettext libtool libtoolize m4 quilt sed; do
   host_tool_path="$(command -v "$host_tool")"
   ln -sf "$host_tool_path" "$host_bin/$host_tool"
 done
@@ -163,13 +168,16 @@ done
 # GCC's configure step expects its host-side arithmetic dependencies in the
 # OpenWrt host staging prefix. Build them explicitly in dependency order;
 # toolchain/install does not pull them in early enough in this legacy tree.
-make -j1 V=s tools/gmp/install
-make -j1 V=s tools/mpfr/install
-make -j1 V=s tools/mpc/install
+cached_gcc="$source_dir/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc"
+if [[ ! -x "$cached_gcc" ]] || [[ "$("$cached_gcc" -dumpfullversion -dumpversion)" != 5.5.0 ]]; then
+  make -j1 V=s tools/gmp/install
+  make -j1 V=s tools/mpfr/install
+  make -j1 V=s tools/mpc/install
 
 # Build the configured OpenWrt GCC 5.5.0 toolchain before the kernel prepare
 # target tries to invoke it.
 make -j1 V=s toolchain/install
+fi
 make -j1 V=s target/linux/prepare
 
 kernel_base="$source_dir/build_dir/target-arm_v7-a_glibc-2.26_eabi/linux-brcm963xx_vmg8825_b50b"
@@ -220,6 +228,7 @@ export KERNEL_BUILD_DIR="$kernel_base"
 export LINUX_DIR="$kernel_dir"
 export TOOLCHAIN_DIR="$toolchain_dir"
 export TARGET_DIR="$source_dir/staging_dir/target-arm_v7-a_glibc-2.26_eabi"
+export STAGING_DIR="$TARGET_DIR"
 export BCM_PROFILE=VMG8825_B50B
 export TARGET_CROSS="$cross"
 export BCM_HOSTTOOLS_DIR="$source_dir/staging_dir/host/bin/502L07"
@@ -274,6 +283,12 @@ if [[ "$build_wireguard" -eq 1 ]]; then
   "${kernel_make[@]}" M="$wg_dir/src" modules
   external_modules+=("$wg_dir/src/wireguard.ko")
 fi
+if [[ "$build_spu" -eq 1 ]]; then
+  "$repo_root/scripts/build-damson-spu.sh" "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.damson-spu"
+  external_modules+=("$source_dir/.damson-spu/bcmspu.ko")
+  cp -R "$repo_root/build/vbntj-spu-test" "$source_dir/.damson-spu-test"
+  "${kernel_make[@]}" M="$source_dir/.damson-spu-test" modules
+fi
 rm -rf "$canary_dir"
 cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
 "${kernel_make[@]}" M="$canary_dir" modules
@@ -293,6 +308,9 @@ for module in ${external_modules[@]+"${external_modules[@]}"}; do
   cp "$module" "$output_dir/$(basename "$module")"
 done
 cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
+if [[ "$build_spu" -eq 1 ]]; then
+  cp "$source_dir/.damson-spu-test/damson_spu_test.ko" "$output_dir/"
+fi
 
 for module in "$output_dir"/*.ko; do
   "$cross_strip" --strip-debug "$module"
@@ -326,6 +344,9 @@ build_manual_ipk() {
   package_name="kmod-$(printf '%s' "${module_stem//_/-}" | tr '[:upper:]' '[:lower:]')-damson-4.1.52-manual"
   package_version="4.1.52-1"
   package_arch="brcm963xx"
+  if [[ "$module_stem" == bcmspu ]]; then
+    package_arch="arm_cortex-a9"
+  fi
   package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"
   package_root="$output_dir/.ipk-build/$package_name"
   control_root="$package_root/control"

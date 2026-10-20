@@ -1,0 +1,82 @@
+--- a/spu.c
++++ b/spu.c
+@@ -46,6 +46,12 @@
+ 
+ struct spu_info *spuinfo = NULL;
+ 
++/* Keep cipher acceleration; require opt-in for full ESP flow acceleration.
++ * The legacy flow path was reported to crash with Windows/DHCP clients. */
++static bool blog_offload;
++module_param(blog_offload, bool, 0444);
++MODULE_PARM_DESC(blog_offload, "Enable experimental ESP BLOG flow offload (default off)");
++
+ typedef void (*IPSec_SPU_FN_IOCTL) (unsigned long arg);
+ static int  spu_open (struct inode *inode, struct file *filp);
+ static long spu_ioctl_unlocked(struct file *filep, unsigned int cmd, unsigned long arg);
+@@ -793,7 +799,7 @@
+     pTransReq->ivsize = crypto_aead_ivsize(aead);
+ 
+ #if defined(CONFIG_BLOG)
+-    if ( crypto_aead_get_flags(aead) & CRYPTO_TFM_REQ_MAY_BLOG )
++    if ( blog_offload && (crypto_aead_get_flags(aead) & CRYPTO_TFM_REQ_MAY_BLOG) )
+       spu_blog_emit(pTransReq);
+ #endif
+ 
+@@ -915,7 +921,7 @@
+     pTransReq->ivsize = crypto_aead_ivsize(aead);
+ 
+ #if defined(CONFIG_BLOG)
+-    if ( crypto_aead_get_flags(aead) & CRYPTO_TFM_REQ_MAY_BLOG )
++    if ( blog_offload && (crypto_aead_get_flags(aead) & CRYPTO_TFM_REQ_MAY_BLOG) )
+       spu_blog_emit(pTransReq);
+ #endif
+ 
+@@ -954,7 +960,8 @@
+ 
+     spu_runner_descr_put(ctx->pDescr);
+ #if defined(CONFIG_BLOG)
+-    spu_blog_ctx_del(ctx);
++    if (blog_offload)
++        spu_blog_ctx_del(ctx);
+ #endif
+ } /* spu_cra_exit */
+ 
+@@ -974,7 +981,8 @@
+         return -ENOBUFS;
+     }
+ #if defined(CONFIG_BLOG)
+-    spu_blog_ctx_add(ctx);
++    if (blog_offload)
++        spu_blog_ctx_add(ctx);
+ #endif
+ 
+     if (alg->cra_flags & CRYPTO_ALG_NEED_FALLBACK)
+@@ -1015,7 +1023,9 @@
+     alg->cra_alignmask = 0;
+     alg->cra_ctxsize = sizeof (struct spu_ctx);
+     alg->cra_flags = CRYPTO_ALG_TYPE_AEAD | CRYPTO_ALG_ASYNC | 
+-                     CRYPTO_ALG_BLOG | CRYPTO_ALG_NEED_FALLBACK;
++                     CRYPTO_ALG_NEED_FALLBACK;
++    if (blog_offload)
++        alg->cra_flags |= CRYPTO_ALG_BLOG;
+     alg->cra_type = &crypto_aead_type;
+ 
+     return spuAlg;
+@@ -1323,6 +1333,7 @@
+         }
+ 
+ #if defined(CONFIG_BLOG)
++        if (blog_offload)
+-        spu_blog_unregister();
++            spu_blog_unregister();
+ #endif
+ 
+@@ -1379,7 +1390,7 @@
+         }
+ 
+ #if defined(CONFIG_BLOG)
+-        err = spu_blog_register();
++        err = blog_offload ? spu_blog_register() : 0;
+         if ( err != 0 )
+         {
+             printk("spu_blog_register failed with error %d\n", err);
