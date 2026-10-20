@@ -248,6 +248,7 @@ disabled for this reconstruction.
 | `tun` | `drivers/net/tun.ko` | TUN/TAP virtual network interfaces |
 | `network-smoke` | `drivers/net/tun.ko`, `drivers/net/usb/usbnet.ko`, `drivers/net/usb/cdc_ether.ko` | Additional USB networking compilation checks |
 | `qos-probe` | `net/sched/act_connmark.ko` | Traffic-control conntrack mark action; IFB, ingress, U32 and police stay built into the kernel configuration |
+| `spu-probe` | `bcmspu.ko`, raw `damson_spu_test.ko` | Hardware SHA1-96, software fallback for SHA256-128, and opt-in ESP flow offload; see [temporary validation](build/vbntj-spu-test/README.md) |
 | `router-tested` (workflow default) | `drivers/net/tun.ko`, `net/sched/act_connmark.ko` | Builds both module types with documented router tests |
 
 Every set also compiles the repository's

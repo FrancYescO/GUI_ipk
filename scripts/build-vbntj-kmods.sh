@@ -250,6 +250,10 @@ build_manual_ipk() {
   package_name="kmod-${module_stem//_/-}-damson-4.1.52-manual"
   package_version="4.1.52-1"
   package_arch="brcm963xx"
+  if [[ "$module_stem" == bcmspu ]]; then
+    # This is the architecture accepted by OPKG on the validated VBNTJ.
+    package_arch="arm_cortex-a9"
+  fi
   package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"
   package_root="$output_dir/.ipk-build/$package_name"
   control_root="$package_root/control"
