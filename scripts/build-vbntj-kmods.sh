@@ -7,6 +7,7 @@ output_dir="${OUTPUT_DIR:-/out}"
 module_set="${MODULE_SET:-tun}"
 canary_dir="$source_dir/.vbntj-abi-canary"
 build_connmark=0
+build_spu=0
 
 case "$module_set" in
   tun)
@@ -18,6 +19,10 @@ case "$module_set" in
   qos-probe)
     module_targets=(net/sched/act_connmark.ko)
     build_connmark=1
+    ;;
+  spu-probe)
+    module_targets=()
+    build_spu=1
     ;;
   router-tested)
     module_targets=(drivers/net/tun.ko net/sched/act_connmark.ko)
@@ -181,7 +186,12 @@ if [[ "$build_connmark" -eq 1 ]]; then
   fi
 fi
 
-"${kernel_make[@]}" "${module_targets[@]}"
+if [[ "${#module_targets[@]}" -gt 0 ]]; then
+  "${kernel_make[@]}" "${module_targets[@]}"
+fi
+if [[ "$build_spu" -eq 1 ]]; then
+  "$repo_root/scripts/build-damson-spu.sh" "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.damson-spu"
+fi
 rm -rf "$canary_dir"
 cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
 "${kernel_make[@]}" M="$canary_dir" modules
@@ -197,6 +207,9 @@ for target in "${module_targets[@]}"; do
   module_name="$(basename "$target")"
   cp "$kernel_dir/$target" "$output_dir/$module_name"
 done
+if [[ "$build_spu" -eq 1 ]]; then
+  cp "$source_dir/.damson-spu/bcmspu.ko" "$output_dir/"
+fi
 cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
 
 for module in "$output_dir"/*.ko; do
