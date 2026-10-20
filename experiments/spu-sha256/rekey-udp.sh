@@ -65,12 +65,20 @@ for hash in sha256; do
   echo "REKEY AES$keybits/$hash"
   ip netns exec "$a" ping -c 3 -W 3 -s 4000 10.253.69.2
   ip netns exec "$b" ping -c 3 -W 3 -s 4000 10.253.69.1
-  ip netns exec "$b" iperf3 -s -1 -B 10.253.69.2 > /tmp/spu-iperf-server.log 2>&1 &
-  server=$!
-  sleep 1
-  ip netns exec "$a" iperf3 -c 10.253.69.2 -B 10.253.69.1 -u -b 10M -l 1000 -t 3
-  wait "$server"
-  server=
+  for direction in ${UDP_DIRECTIONS:-forward}; do
+   case "$direction" in
+    forward) reverse= ;;
+    reverse) reverse=-R ;;
+    *) echo "Invalid UDP direction: $direction" >&2; exit 1 ;;
+   esac
+   echo "UDP AES$keybits $direction seconds=${UDP_SECONDS:-3}"
+   ip netns exec "$b" iperf3 -s -1 -B 10.253.69.2 > /tmp/spu-iperf-server.log 2>&1 &
+   server=$!
+   sleep 1
+   ip netns exec "$a" iperf3 -c 10.253.69.2 -B 10.253.69.1 -u -b 10M -l 1000 -t "${UDP_SECONDS:-3}" $reverse
+   wait "$server"
+   server=
+  done
   key="$oldkey"
   ip -n "$a" -s xfrm state | grep -E "lifetime current|stats:|replay-window [0-9]+ replay"
   ip -n "$b" -s xfrm state | grep -E "lifetime current|stats:|replay-window [0-9]+ replay"

@@ -74,8 +74,8 @@ The experiment branch is `codex/spu-sha256-experiments`.
 The raw-only Actions laboratory profile compiled successfully in
 [run 39472713533](https://github.com/FrancYescO/GUI_ipk/actions/runs/39472713533).
 That first run predates the XFRM metadata correction and final buffer guards;
-its artifacts are not the final runtime-tested revision. A final source build
-will be recorded below after validation. Stable feeds retain their previous
+its artifacts are not the final runtime-tested revision. The later source build
+and its runtime outcome are recorded below. Stable feeds retain their previous
 SPU packages. No new firmware or undocumented hardware register was written.
 
 ## Final copy-path checks
@@ -85,7 +85,7 @@ heap-backed request scatterlists/IVs, tail guard bytes and IPv4-header
 preservation checks, with `in_place=0`. A final AES256/ASM hybrid repeat gave
 45.86 / 45.61 Mbit/s. No guard/header corruption was detected.
 
-Final SSH checks found no SPU, hybrid, AES/SHA256 ARM, KAT or canary modules,
+After the initial copy-path phase, SSH checks found no SPU, hybrid, AES/SHA256 ARM, KAT or canary modules,
 no test namespaces, and no root XFRM state/policy. The boot ID and persistent
 hardwarecrypto checksum remained identical to the initial values. No new
 kernel oops or panic was observed; no persistent SPU module was installed.
@@ -116,3 +116,69 @@ loss-free delivery is not claimed. Fragmented pings before and after key
 updates succeeded. Patch 002 bounds the host pool to 64/128/256 and removes
 an O(N) free-list scan; SA descriptors, firmware and registers are unchanged.
 The default remains 64, with 256 selected explicitly for these tests.
+
+
+## Stress-repeat caveat
+
+A later 10-second-per-direction sequence with pool 256 was **not a clean
+performance pass**. AES128 measured 9.08/51.71, AES192 44.24/5.98, AES256
+forward 51.36 Mbit/s; the last reverse case stopped making progress and was
+interrupted after about 101 seconds. Test processes were stopped with SIGINT;
+normal module and namespace cleanup succeeded, with no reboot, authentication
+failures, transmit errors, recycling or duplicate frees. Cumulative host-pool
+exhaustions reached 751. No cause for the TCP stall is established.
+
+An isolated fresh-load AES256 repeat then passed at 48.87/51.32 Mbit/s
+(207 host-pool exhaustions, all other diagnostic errors zero). This does not
+invalidate the failed sequence or establish sustained throughput. The modem's
+vendor iperf3 3.1.4 also emits `tcpspdtest_protocol` stream-index warnings on
+UDP completion even without requesting its `-H` hardware-test option; these
+warnings alone do not identify the cause of the TCP stall. The experimental
+hybrid therefore remains unsuitable for replacing the stable feed.
+
+## Actions artifact provenance
+
+The final code revision f503bc0 compiled successfully in
+[Actions run 39478521997](https://github.com/FrancYescO/GUI_ipk/actions/runs/39478521997).
+All six downloaded raw modules passed checksum, ARM ELF and exact 4.1.52
+vermagic verification. The bundle contains no IPKs. The actual downloaded
+ABI canary loaded/unloaded successfully on the modem, followed by 60 full-tag
+and buffer-guard checks with in-place operation at ESP offset 20 and pool 256.
+The normal non-in-place profile also built successfully in
+[run 39475046727](https://github.com/FrancYescO/GUI_ipk/actions/runs/39475046727);
+that earlier bundle predates host-pool patch 002.
+
+
+The Actions bundle then passed the longer UDP exercise: 10 Mbit/s,
+1000-byte datagrams, 10 seconds per direction, updated SAs and fragmented
+pings, all AES key sizes. Receiver losses were:
+
+| AES-CBC key | Forward lost / sent | Reverse lost / sent |
+| --- | ---: | ---: |
+| 128 | 0 / 12388 | 0 / 12513 |
+| 192 | 2 / 12400 | 5 / 12520 |
+| 256 | 2 / 12388 | 4 / 12513 |
+
+All driver diagnostic counters and outer-tag error counters remained zero.
+Both peers were on the modem; this is not a WAN or external-client validation.
+
+
+## Final TCP failure and recovery state
+
+The actual Actions modules also reproduced the TCP stall, this time during
+AES128 forward in the short 5-second-per-direction sequence. The iperf client
+and server were stopped normally with SIGINT. Unlike the earlier local-build
+interruption, this run retained pending kernel requests after the test
+namespaces were deleted: `spu_sha256_hybrid` (4 references), `bcmspu` (8),
+and `sha256_arm` (12) remained loaded. A later ordinary unload attempt did not
+remove them; **no forced removal** was attempted. A planned copy-path/software
+control could not start because the phase script correctly refused existing
+SPU modules. The stall's root cause is therefore unresolved; successful KATs
+and UDP do not establish TCP stability or in-place memory safety under load.
+
+The modem stayed reachable over SSH. Root XFRM state and policy were empty,
+and no test namespaces remained. The hardwarecrypto configuration checksum
+was unchanged (`9db4b90177169cbad1fcc4acc6a0dedcda50cb74dd07d27ebe211525abaa9058`),
+with no experimental boot autoload. No kernel oops/panic was found by filtered
+checks. An orderly reboot was requested for recovery, pending user consent;
+temporary modules were not installed into a feed or persistent filesystem.

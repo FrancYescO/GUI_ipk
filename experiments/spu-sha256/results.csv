@@ -71,3 +71,11 @@ hybrid_inplace_asm,192,forward,49.09
 hybrid_inplace_asm,192,reverse,49.53
 hybrid_inplace_asm,256,forward,41.45
 hybrid_inplace_asm,256,reverse,50.2
+hybrid_inplace_asm_10s_pool64,128,forward,48.56
+hybrid_inplace_asm_10s_pool64,128,reverse,48.94
+hybrid_inplace_asm_10s_pool64,192,forward,48.02
+hybrid_inplace_asm_10s_pool64,192,reverse,48.80
+hybrid_inplace_asm_10s_pool64,256,forward,48.66
+hybrid_inplace_asm_10s_pool64,256,reverse,49.45
+hybrid_inplace_asm_10s_pool256_repeat,256,forward,48.87
+hybrid_inplace_asm_10s_pool256_repeat,256,reverse,51.32
