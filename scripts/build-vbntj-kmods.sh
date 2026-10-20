@@ -191,6 +191,8 @@ if [[ "${#module_targets[@]}" -gt 0 ]]; then
 fi
 if [[ "$build_spu" -eq 1 ]]; then
   "$repo_root/scripts/build-damson-spu.sh" "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.damson-spu"
+  cp -R "$repo_root/build/vbntj-spu-test" "$source_dir/.damson-spu-test"
+  "${kernel_make[@]}" M="$source_dir/.damson-spu-test" modules
 fi
 rm -rf "$canary_dir"
 cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
@@ -209,6 +211,7 @@ for target in "${module_targets[@]}"; do
 done
 if [[ "$build_spu" -eq 1 ]]; then
   cp "$source_dir/.damson-spu/bcmspu.ko" "$output_dir/"
+  cp "$source_dir/.damson-spu-test/damson_spu_test.ko" "$output_dir/"
 fi
 cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
 
@@ -287,6 +290,9 @@ rm -rf "$output_dir/.ipk-build"
 for target in "${module_targets[@]}"; do
   build_manual_ipk "$output_dir/$(basename "$target")"
 done
+if [[ "$build_spu" -eq 1 ]]; then
+  build_manual_ipk "$output_dir/bcmspu.ko"
+fi
 rm -rf "$output_dir/.ipk-build"
 
 (
@@ -305,6 +311,7 @@ compiler=OpenWrt GCC $compiler_version
 module_set=$module_set
 abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
+spu_patch=patches/vbntj-spu/001-authsize-software-fallback.patch (spu-probe only)
 EOF
 
 echo "Built validated Damson modules and manual-only IPKs in $output_dir"

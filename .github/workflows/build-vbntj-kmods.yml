@@ -21,6 +21,7 @@ on:
       - ".github/workflows/build-vbntj-kmods.yml"
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
+      - "build/vbntj-spu-test/**"
       - "patches/vbntj-4.1.52/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/build-damson-spu.sh"
