@@ -180,5 +180,21 @@ The modem stayed reachable over SSH. Root XFRM state and policy were empty,
 and no test namespaces remained. The hardwarecrypto configuration checksum
 was unchanged (`9db4b90177169cbad1fcc4acc6a0dedcda50cb74dd07d27ebe211525abaa9058`),
 with no experimental boot autoload. No kernel oops/panic was found by filtered
-checks. An orderly reboot was requested for recovery, pending user consent;
-temporary modules were not installed into a feed or persistent filesystem.
+checks. The user subsequently authorized an orderly reboot for recovery; temporary
+modules were not installed into a feed or persistent filesystem.
+
+
+## Authorized reboot recovery — verified
+
+The modem accepted an orderly `sync; reboot` after explicit user approval.
+SSH returned with boot ID `5f336319-19e8-4890-b38d-1a456ae27fbc`, replacing
+`2ad6a90e-2eec-4b54-b483-e865a24a31b8`. Post-boot checks confirmed:
+
+* Linux 4.1.52 and the identical hardwarecrypto configuration checksum.
+* No SPU, hybrid, AES/SHA256 ARM, KAT or ABI-canary test modules loaded.
+* No test namespaces and no root-namespace XFRM state or policy.
+* No filtered kernel oops or panic.
+
+No experimental module was loaded again after recovery. The local temporary
+Docker lab container was removed; source, build artifacts and test reports
+were retained. Published kernel feeds remain unchanged by this experiment.
