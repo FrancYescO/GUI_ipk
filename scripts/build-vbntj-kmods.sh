@@ -9,6 +9,8 @@ canary_dir="$source_dir/.vbntj-abi-canary"
 build_connmark=0
 build_wireguard=0
 build_spu=0
+build_spu_lab=0
+lab_modules=()
 external_modules=()
 
 case "$module_set" in
@@ -29,6 +31,11 @@ case "$module_set" in
   wireguard)
     module_targets=()
     build_wireguard=1
+    ;;
+  spu-sha256-lab)
+    module_targets=()
+    build_spu=1
+    build_spu_lab=1
     ;;
   spu-probe)
     module_targets=()
@@ -289,6 +296,12 @@ if [[ "$build_spu" -eq 1 ]]; then
   cp -R "$repo_root/build/vbntj-spu-test" "$source_dir/.damson-spu-test"
   "${kernel_make[@]}" M="$source_dir/.damson-spu-test" modules
 fi
+if [[ "$build_spu_lab" -eq 1 ]]; then
+  lab_dir="$source_dir/.spu-sha256-lab"
+  rm -rf "$lab_dir"
+  bash "$repo_root/experiments/spu-sha256/build-extras.sh"     "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.damson-spu"     "$source_dir/.damson-spu-test" "$lab_dir"
+  lab_modules=("$lab_dir/armcrypto/aes-arm.ko" "$lab_dir/armcrypto/sha256-arm.ko" "$lab_dir/hybrid/spu_sha256_hybrid.ko")
+fi
 rm -rf "$canary_dir"
 cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
 "${kernel_make[@]}" M="$canary_dir" modules
@@ -304,7 +317,7 @@ for target in ${module_targets[@]+"${module_targets[@]}"}; do
   module_name="$(basename "$target")"
   cp "$kernel_dir/$target" "$output_dir/$module_name"
 done
-for module in ${external_modules[@]+"${external_modules[@]}"}; do
+for module in ${external_modules[@]+"${external_modules[@]}"} ${lab_modules[@]+"${lab_modules[@]}"}; do
   cp "$module" "$output_dir/$(basename "$module")"
 done
 cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
@@ -387,14 +400,20 @@ EOF
 }
 
 rm -rf "$output_dir/.ipk-build"
+if [[ "$build_spu_lab" -eq 0 ]]; then
 for target in ${module_targets[@]+"${module_targets[@]}"} ${external_modules[@]+"${external_modules[@]}"}; do
   build_manual_ipk "$output_dir/$(basename "$target")"
 done
+fi
 rm -rf "$output_dir/.ipk-build"
 
 (
   cd "$output_dir"
-  sha256sum ./*.ko ./*.ipk > SHA256SUMS
+  if [[ "$build_spu_lab" -eq 1 ]]; then
+    sha256sum ./*.ko > SHA256SUMS
+  else
+    sha256sum ./*.ko ./*.ipk > SHA256SUMS
+  fi
 )
 cat > "$output_dir/BUILD-METADATA.txt" <<EOF
 source=https://github.com/avwarez/vmg8825_b50b.git
@@ -409,4 +428,9 @@ abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
 EOF
 
-echo "Built validated Damson modules and manual-only IPKs in $output_dir"
+if [[ "$build_spu_lab" -eq 1 ]]; then
+  cp "$repo_root/experiments/spu-sha256/README.md" "$output_dir/LAB-README.md"
+  echo "Built experimental raw modules only (no IPKs) in $output_dir"
+else
+  echo "Built validated Damson modules and manual-only IPKs in $output_dir"
+fi

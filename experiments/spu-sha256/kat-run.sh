@@ -1,0 +1,42 @@
+#!/bin/sh
+set -eu
+cd /tmp/spu-sha256
+for mod in bcmspu spu_sha256_hybrid aes_arm sha256_arm damson_spu_test; do
+ if grep -q "^$mod " /proc/modules; then echo "Refusing: $mod already loaded"; exit 1; fi
+done
+cleanup() {
+ if grep -q '^damson_spu_test ' /proc/modules; then
+  rmmod damson_spu_test || { echo 'KAT remains referenced; no forced unload'; return 1; }
+ fi
+ sleep 3
+ if grep -q '^spu_sha256_hybrid ' /proc/modules; then rmmod spu_sha256_hybrid || return 1; fi
+ if grep -q '^bcmspu ' /proc/modules; then
+  if ! spuctl stop; then sleep 3; spuctl stop || return 1; fi
+  rmmod bcmspu || return 1
+ fi
+ if grep -q '^aes_arm ' /proc/modules; then rmmod aes_arm || return 1; fi
+ if grep -q '^sha256_arm ' /proc/modules; then rmmod sha256_arm || return 1; fi
+ echo CLEANUP_OK
+}
+on_exit() {
+ result=$1
+ trap - EXIT HUP INT TERM
+ cleanup || result=1
+ exit "$result"
+}
+trap 'on_exit $?' EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+sha256sum -c SHA256SUMS
+insmod ./bcmspu.ko
+spuctl start
+insmod ./spu_sha256_hybrid.ko
+for bits in 128 192 256; do
+ for part in 0 1 2 3; do
+  echo "KAT_GROUP AES$bits corrupt_part=$part"
+  insmod ./damson_spu_test.ko only_sha256=1 aesbits="$bits" corrupt_part="$part" target_driver=authenc-hybrid-sha256-spu
+  rmmod damson_spu_test
+ done
+done
+echo KAT_GROUPS_PASS

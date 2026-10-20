@@ -18,6 +18,7 @@ on:
           - network-feed
           - wireguard
           - spu-probe
+          - spu-sha256-lab
       wireguard_artifact_run_id:
         description: "Reverify existing WireGuard artifacts from this run without rebuilding"
         required: false
@@ -28,6 +29,7 @@ on:
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
       - "build/vbntj-spu-test/**"
+      - "experiments/spu-sha256/**"
       - "patches/vbntj-spu/**"
       - "scripts/build-damson-spu.sh"
       - "scripts/fetch-damson-kernel-toolchain.sh"
@@ -46,6 +48,7 @@ on:
       - "build/vbntj/**"
       - "build/vbntj-canary/**"
       - "build/vbntj-spu-test/**"
+      - "experiments/spu-sha256/**"
       - "patches/vbntj-spu/**"
       - "scripts/build-damson-spu.sh"
       - "scripts/fetch-damson-kernel-toolchain.sh"
@@ -119,7 +122,7 @@ jobs:
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
 
       - name: Stage preserved kernel compiler for SPU
-        if: inputs.module_set == 'spu-probe'
+        if: inputs.module_set == 'spu-probe' || inputs.module_set == 'spu-sha256-lab'
         run: |
           if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
             scripts/fetch-damson-kernel-toolchain.sh
@@ -172,7 +175,16 @@ jobs:
         run: python3 scripts/verify-kmod-spu.py dist/vbntj-kmods 4.1.52
 
       - name: Verify manual-only IPK safety
+        if: inputs.module_set != 'spu-sha256-lab'
         run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
+
+      - name: Verify laboratory profile contains no installable packages
+        if: inputs.module_set == 'spu-sha256-lab'
+        run: |
+          test "$(find dist/vbntj-kmods -name '*.ipk' -type f | wc -l)" -eq 0
+          for module in bcmspu damson_spu_test vbntj_abi_canary aes-arm sha256-arm spu_sha256_hybrid; do
+            test -s "dist/vbntj-kmods/$module.ko"
+          done
 
       - name: Upload Damson modules and manual-only IPKs
         if: always()
