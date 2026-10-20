@@ -100,3 +100,23 @@ held. Namespace destruction releases XFRM/crypto objects asynchronously.
 A subsequent ordinary stop and unload both returned success after teardown
 completed, with no forced unload or router reboot. Test runners must wait for
 that cleanup, check return codes, and never label a best-effort unload as a pass.
+
+## Live SA key update and UDP
+
+The six AES/SHA combinations were repeated with replacement encryption keys
+on both live SAs in both namespaces. All 72 fragmented ping requests before
+and after key changes succeeded. Six 3-second UDP transfers at 10 Mbit/s
+completed: SHA256 software had zero reported datagram loss; hardware SHA1
+reported 3.1%, 0%, and 5.4% loss for AES128/192/256 respectively. This confirms
+that hardware packet loss is not limited to maximum-throughput TCP testing.
+The precise vendor Runner resource/drop cause remains unresolved; do not
+interpret successful transfer completion as loss-free hardware operation.
+The source recycle callback can report drops as `-ENOBUFS`, but these tests
+do not instrument the firmware and cannot establish every drop's cause.
+
+Waiting three seconds for asynchronous namespace cleanup allowed ordinary
+stop and unload to finish successfully. Final SSH checks found no SPU, KAT or
+canary module, no test namespace and no XFRM state/policy in the root namespace.
+Boot ID and persistent hardwarecrypto checksum remained unchanged. No new
+kernel oops/panic was observed. This is temporary `/tmp` validation, not a
+long-duration WAN or real Windows-client test.
