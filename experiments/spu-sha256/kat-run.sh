@@ -35,7 +35,7 @@ trap 'exit 143' TERM
 sha256sum -c SHA256SUMS
 insmod ./bcmspu.ko
 spuctl start
-insmod ./spu_sha256_hybrid.ko in_place=0 "private_sha1=${PRIVATE_SHA1:-0}"
+insmod ./spu_sha256_hybrid.ko "in_place=${IN_PLACE:-0}" "private_sha1=${PRIVATE_SHA1:-0}"
 for bits in 128 192 256; do
  for part in 0 1 2 3; do
   echo "KAT_GROUP AES$bits corrupt_part=$part"
@@ -43,4 +43,9 @@ for bits in 128 192 256; do
   rmmod damson_spu_test
  done
 done
+if [ "${IN_PLACE:-0}" -eq 1 ]; then
+ borrowed=$(cat /sys/module/spu_sha256_hybrid/parameters/borrowed_packets)
+ echo "BORROWED_KAT_PACKETS=$borrowed"
+ test "$borrowed" -eq 36
+fi
 echo KAT_GROUPS_PASS

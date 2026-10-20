@@ -71,7 +71,7 @@ for hash in sha256; do
   ip -n "$b" -s xfrm state | grep -E "lifetime current|stats:|replay-window [0-9]+ replay"
   if grep -q '^bcmspu ' /proc/modules; then spuctl showstats; fi
   if [ -d /sys/module/spu_sha256_hybrid ]; then
-    for stat in enc_packets dec_packets bad_tags; do
+    for stat in enc_packets dec_packets bad_tags borrowed_packets; do
       echo "$stat=$(cat /sys/module/spu_sha256_hybrid/parameters/$stat)"
     done
   fi
