@@ -2,7 +2,7 @@
 +++ b/package/network/amule/Makefile
 @@ -30 +30 @@
 -  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase
-+  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase $(ICONV_DEPENDS) $(INTL_DEPENDS)
++  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase +libcryptopp $(ICONV_DEPENDS) $(INTL_DEPENDS)
 @@ -59,0 +60,2 @@
 +	--with-wx-exec-prefix="$(STAGING_DIR)/usr" \
 +	--with-wx-config="$(STAGING_DIR)/usr/bin/wx-config" \
