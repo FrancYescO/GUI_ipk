@@ -36,14 +36,14 @@ The hybrid is a prototype, not a production VPN driver. It supports ESP's
 8-byte associated data, AES-CBC, a 16-byte outer tag, bounded payloads, and
 AES128/192/256. The default SHA256 Runner mode currently accepts authentication
 keys up to 32 bytes. Hardware encryption and decryption have distinct contexts.
-It makes private packet copies, checks tags in constant time, and does not
+It uses private copies unless the explicit in-place profile is activated, checks tags in constant time, and does not
 return decrypted bytes on authentication failure. All requests must complete
 before unloading; a timed-out KAT deliberately retains its outstanding request
 and callback rather than freeing memory still owned by hardware.
 
 `kat_extended.c` uses explicitly selected generic software algorithms as its
 independent reference, checks encryption as well as decryption, and can corrupt
-the tag, ESP header, IV or ciphertext. `kat-run.sh` checks initial module state
+the first or last tag byte, ESP header, IV or ciphertext. `kat-run.sh` checks initial module state
 and checksums, fails on the first unsuccessful test, and uses signal/exit traps
 for normal cleanup. No forced module removal or reboot is used.
 
@@ -63,8 +63,8 @@ actual modem's ABI canary must pass before any experimental load.
 ## Explicit in-place laboratory profile
 
 The user specifically authorized the in-place test after reviewing its kernel
-buffer risk. It passed 96 guard/header checks at ESP offsets 0 and 20, with
-36 successful borrowed-buffer operations per offset, then real isolated
+buffer risk. The final test passed 120 guard/header checks at ESP offsets 0 and 20, with
+45 successful borrowed-buffer operations per offset, then real isolated
 ESP tunnels for AES128/192/256. This remains experimental, not a guarantee
 for every skb layout or long-running production use.
 
@@ -77,3 +77,18 @@ other requests use private copies. Full incoming SHA256-128 is checked before
 trimming the private hardware framing, and the original length is restored
 before completion. The KAT uses heap-backed scatterlists/IVs, tail guards and
 optional `esp_offset=20` synthetic IPv4 framing.
+
+
+## Host transfer pool experiment
+
+Lab-only patch 002 adds `transfer_requests=64|128|256` (default 64), bounded by
+256 host request slots; it does not alter the 64 Runner SA descriptors or the
+firmware CPU ring. Allocation removes list nodes with `list_del_init`; completion
+checks list membership in constant time instead of scanning every free node.
+Read-only counters expose pool exhaustion, transmit errors, recycling and
+duplicate frees. The option applies only to raw laboratory builds.
+
+With a pool of 64, three AES cases at UDP 10 Mbit/s lost 35–36% of datagrams:
+the loss count matched `lab_no_slot` exactly. At 256, loss was 3/3644, 0/3638,
+and 0/3639, with all four driver error counters zero. These short same-device
+runs include key updates and fragmented pings; see RESULTS.md for scope.

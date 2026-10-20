@@ -30,19 +30,19 @@ trap 'exit 129' HUP
 trap 'exit 130' INT
 trap 'exit 143' TERM
 case "${PHASE:?}" in
- stable_fallback) insmod ./bcmspu.ko; spuctl start ;;
+ stable_fallback) insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start ;;
  plain_generic) : ;;
  sha256_asm) insmod ./sha256-arm.ko ;;
  aes_asm) insmod ./aes-arm.ko ;;
  both_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko ;;
- fallback_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start ;;
- hybrid_generic) insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 ;;
- hybrid_inplace) insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=1 ;;
- hybrid_inplace_rekey) insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=1 'sha256_driver=hmac(sha256-asm)' ;;
- hybrid_inplace_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=1 'sha256_driver=hmac(sha256-asm)' ;;
- hybrid_sha1_generic) insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 private_sha1=1 ;;
- hybrid_sha1_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 private_sha1=1 'sha256_driver=hmac(sha256-asm)' ;;
- hybrid_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 'sha256_driver=hmac(sha256-asm)' ;;
+ fallback_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko; insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start ;;
+ hybrid_generic) insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 ;;
+ hybrid_inplace) insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=1 ;;
+ hybrid_inplace_rekey) insmod ./sha256-arm.ko; insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=1 'sha256_driver=hmac(sha256-asm)' ;;
+ hybrid_inplace_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=1 'sha256_driver=hmac(sha256-asm)' ;;
+ hybrid_sha1_generic) insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 private_sha1=1 ;;
+ hybrid_sha1_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 private_sha1=1 'sha256_driver=hmac(sha256-asm)' ;;
+ hybrid_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 'sha256_driver=hmac(sha256-asm)' ;;
  *) echo Unknown phase; exit 1 ;;
 esac
 export PHASE

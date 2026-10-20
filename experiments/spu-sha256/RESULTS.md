@@ -29,8 +29,10 @@ every AES case and succeeded; XFRM failure/replay counters remained zero.
 
 `results.csv` preserves the individual rates without rounding to one decimal.
 The software-only ARM path is simpler than the hybrid and improves all three
-key sizes. The hybrid's best repeatable benefit is with AES256; its 44–46
-Mbit/s is still far below a claim of full hardware SHA256-128 acceleration.
+key sizes. The private-copy hybrid reached 44–46 Mbit/s with AES256. A subsequent
+10-second in-place/ARM repeat reached 48.56/48.94, 48.02/48.80 and
+48.66/49.45 Mbit/s for AES128/192/256 respectively. This is partial AES
+acceleration; CPU SHA256 work remains.
 These short tests are insufficient to rank small differences reliably.
 
 ## Correctness and limitations
@@ -51,11 +53,12 @@ These short tests are insufficient to rank small differences reliably.
   selecting the 16-byte tag. The initial prototype advertised only 16 and SA
   creation failed before traffic; this was corrected. Operational requests
   with any tag size other than 16 are rejected.
-* Hardware packet drops remain. The SHA256 framing/ARM hybrid reached 298
+* Historical packet drops in the original 64-slot driver were observed. The SHA256 framing/ARM hybrid reached 298
   encryption and 420 decryption drops over its three AES cases, with no
   hardware authentication errors or unexpected outer-tag failures. The
   shared RDPA IPv4 host-address table still reports resource exhaustion when
-  synthetic namespace addresses are added. Neither issue is claimed fixed.
+  synthetic namespace addresses are added. The host-pool investigation below resolves the reproduced pool exhaustion;
+  the shared address-table warning is not claimed fixed.
 * The user explicitly authorized the `in_place=1` test after the initial
   automatic approval rejection. Before real tunnel traffic, 96 synthetic
   KAT/guard checks passed at ESP offsets 0 and 20, with 36 successful
@@ -86,3 +89,30 @@ Final SSH checks found no SPU, hybrid, AES/SHA256 ARM, KAT or canary modules,
 no test namespaces, and no root XFRM state/policy. The boot ID and persistent
 hardwarecrypto checksum remained identical to the initial values. No new
 kernel oops or panic was observed; no persistent SPU module was installed.
+
+
+## Final host-pool and full-tag validation
+
+The final KAT includes corruption of the **last** tag byte, explicitly proving
+that the extra 32 bits beyond the hardware's 96-bit framing are authenticated.
+At pool 256, the in-place path passed 60 checks at ESP offset 0 and another
+60 at offset 20 (45 borrowed operations per offset). The private-copy path
+passed another 60 at offset 20. All use an independent generic software
+reference and include tail/length/header guards; no duplicate free occurred.
+
+The host transfer pool, originally 64 entries, was exhausted under UDP bursts.
+At 10 Mbit/s / 1000-byte datagrams / 3 seconds after a key update:
+
+| AES-CBC key | Pool 64: lost / sent | Pool 256: lost / sent |
+| --- | ---: | ---: |
+| 128 | 1305 / 3639 | 3 / 3644 |
+| 192 | 1272 / 3638 | 0 / 3638 |
+| 256 | 1291 / 3638 | 0 / 3639 |
+
+Every loss in the pool-64 run matched a `lab_no_slot` increment. All pool-256
+cases reported `lab_no_slot=lab_tx_error=lab_recycle=lab_double_free=0`.
+The three residual datagrams were not accounted for as driver drops; universal
+loss-free delivery is not claimed. Fragmented pings before and after key
+updates succeeded. Patch 002 bounds the host pool to 64/128/256 and removes
+an O(N) free-list scan; SA descriptors, firmware and registers are unchanged.
+The default remains 64, with 256 selected explicitly for these tests.
