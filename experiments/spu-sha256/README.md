@@ -1,6 +1,7 @@
 # SHA256-128 laboratory for Damson / BCM63138 / Linux 4.1.52
 
-This branch keeps experimental raw modules separate from published kernel feeds.
+The `kmods-4.1.52` branch contains this laboratory alongside the stable builds.
+Experimental raw modules remain separate from published kernel feeds.
 The Actions profile `build-vbntj-kmods.yml: module_set=spu-sha256-lab` rebuilds
 SPU, an extended independent-reference KAT, the ABI canary, scalar ARM AES and
 SHA256 modules from the pinned kernel, and the experimental hybrid wrapper.

@@ -70,7 +70,9 @@ These short tests are insufficient to rank small differences reliably.
 
 ## Source and remote builds
 
-The experiment branch is `codex/spu-sha256-experiments`.
+The laboratory is now integrated into `kmods-4.1.52`. The original experiment
+branch was `codex/spu-sha256-experiments`; the runs below retain their original
+source commit identities.
 The raw-only Actions laboratory profile compiled successfully in
 [run 39472713533](https://github.com/FrancYescO/GUI_ipk/actions/runs/39472713533).
 That first run predates the XFRM metadata correction and final buffer guards;

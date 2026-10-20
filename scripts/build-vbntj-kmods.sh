@@ -11,7 +11,6 @@ build_spu=0
 build_spu_lab=0
 build_spu_inplace_lab=0
 lab_modules=()
-external_modules=()
 
 case "$module_set" in
   tun)
@@ -322,7 +321,7 @@ EOF
 
 rm -rf "$output_dir/.ipk-build"
 if [[ "$build_spu_lab" -eq 0 ]]; then
-for target in ${module_targets[@]+"${module_targets[@]}"} ${external_modules[@]+"${external_modules[@]}"}; do
+for target in "${module_targets[@]}"; do
   build_manual_ipk "$output_dir/$(basename "$target")"
 done
 fi
