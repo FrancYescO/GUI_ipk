@@ -1,0 +1,18 @@
+--- a/package/network/amule/Makefile
++++ b/package/network/amule/Makefile
+@@ -30 +30 @@
+-  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase
++  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase +libcryptopp $(ICONV_DEPENDS) $(INTL_DEPENDS)
+@@ -59,0 +60,2 @@
++	--with-wx-exec-prefix="$(STAGING_DIR)/usr" \
++	--with-wx-config="$(STAGING_DIR)/usr/bin/wx-config" \
+@@ -66,0 +69,6 @@
++define Build/Prepare
++	$(call Build/Prepare/Default)
++	(cd $(PKG_BUILD_DIR) && autopoint --force)
++	(cd $(PKG_BUILD_DIR)/src/pixmaps/flags_xpm && ./makeflags.sh)
++endef
++
+@@ -71 +79 @@
+-		amule install
++		all install

@@ -50,6 +50,10 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# Crypto++ is absent from the archived feeds but required by aMule.
+mkdir -p "$work_dir/package/custom/cryptopp"
+cp "$repo_root/build/cryptopp/Makefile" \
+  "$work_dir/package/custom/cryptopp/Makefile"
 # Provide the dedicated SWIG generator used by the legacy Node bindings.
 mkdir -p "$work_dir/package/custom/swig4"
 cp "$repo_root/build/host-swig4/Makefile" \
@@ -94,6 +98,16 @@ cp "$repo_root/patches/ola-widget-observer-templates.patch" \
   "$work_dir/feeds/packages/net/ola/patches/999-widget-observer-templates.patch"
 cp "$repo_root/patches/libmraa-node-buffer-api.patch" \
   "$work_dir/feeds/packages/libs/libmraa/patches/999-node-buffer-api.patch"
+mkdir -p "$work_dir/package/libs/wxwidgets/patches"
+cp "$repo_root/patches/wxbase-optional-bakefile-presets.patch" \
+  "$work_dir/package/libs/wxwidgets/patches/999-optional-bakefile-presets.patch"
+mkdir -p "$work_dir/package/network/amule/patches"
+cp "$repo_root/patches/amule-bootstrap.patch" \
+  "$work_dir/package/network/amule/patches/999-bootstrap.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/amule-bootstrap-recipe.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/wxbase-sdk.patch"
 mkdir -p "$work_dir/feeds/routing/cjdns/patches"
 cp "$repo_root/patches/cjdns-build-flags.patch" \
   "$work_dir/feeds/routing/cjdns/patches/999-build-flags.patch"

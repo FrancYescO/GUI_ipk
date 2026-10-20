@@ -1,0 +1,9 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -11700,2 +11700,4 @@
+-	$(INSTALL_DIR) $(DESTDIR)$(datadir)/bakefile/presets
+-	(cd $(srcdir)/build/bakefiles/wxpresets/presets ; $(INSTALL_DATA)  wx.bkl wx_unix.bkl wx_win32.bkl $(DESTDIR)$(datadir)/bakefile/presets)
++	if test -d $(srcdir)/build/bakefiles/wxpresets/presets; then \
++	$(INSTALL_DIR) $(DESTDIR)$(datadir)/bakefile/presets; \
++	(cd $(srcdir)/build/bakefiles/wxpresets/presets ; $(INSTALL_DATA) wx.bkl wx_unix.bkl wx_win32.bkl $(DESTDIR)$(datadir)/bakefile/presets); \
++	fi

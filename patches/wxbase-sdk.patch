@@ -1,0 +1,27 @@
+--- a/package/libs/wxwidgets/Makefile
++++ b/package/libs/wxwidgets/Makefile
+@@ -4 +4 @@
+-PKG_VERSION:=2.8.1
++PKG_VERSION:=2.8.12
+@@ -7,3 +7,3 @@
+-PKG_SOURCE:=wxWidgets-$(PKG_VERSION).tar.bz2
+-PKG_SOURCE_URL:=@SF/wxwindows
+-PKG_HASH:=skip
++PKG_SOURCE:=wxBase-$(PKG_VERSION).tar.bz2
++PKG_SOURCE_URL:=https://downloads.sourceforge.net/project/wxwindows/$(PKG_VERSION)
++PKG_HASH:=e7e16a9ea474001a62a71eb48ba6670d63a833468dc1ae6b170eafc1367b544c
+@@ -11 +11 @@
+-PKG_BUILD_DIR:=$(BUILD_DIR)/wxWidgets-$(PKG_VERSION)
++PKG_BUILD_DIR:=$(BUILD_DIR)/wxBase-$(PKG_VERSION)
+@@ -62,4 +62,5 @@
+-	mkdir -p $(STAGING_DIR)/usr/lib
+-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_baseu* $(STAGING_DIR)/usr/lib
+-	mkdir -p $(STAGING_DIR)/usr/include/wx-2.8/wx
+-	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.8/wx/* $(STAGING_DIR)/usr/include/wx-2.8/wx
++	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/include $(1)/usr/bin
++	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_baseu* $(1)/usr/lib/
++	$(CP) $(PKG_INSTALL_DIR)/usr/lib/wx $(1)/usr/lib/
++	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.8 $(1)/usr/include/
++	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/wx/config/* $(1)/usr/bin/wx-config
+@@ -71,0 +73 @@
++		$(STAGING_DIR)/usr/lib/wx \
