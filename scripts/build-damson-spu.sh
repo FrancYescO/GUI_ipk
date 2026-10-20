@@ -9,7 +9,9 @@ test -f "$sdk/bcmdrivers/opensource/char/spudd/impl3/spu.c"
 grep -qx 'CONFIG_BCM_SPU_IMPL=3' "$kernel/.config"
 mkdir -p "$module_dir"
 cp "$sdk/bcmdrivers/opensource/char/spudd/impl3/"*.[ch] "$module_dir/"
-patch --batch --forward -d "$module_dir" -p1 < "$repo_root/patches/vbntj-spu/001-authsize-software-fallback.patch"
+for spu_patch in "$repo_root"/patches/vbntj-spu/*.patch; do
+  patch --batch --forward -d "$module_dir" -p1 < "$spu_patch"
+done
 cat > "$module_dir/Makefile" <<'EOF'
 obj-m := bcmspu.o
 bcmspu-y := spu.o spu_runner.o
