@@ -59,3 +59,15 @@ private tmpfs kernel tree. `build-extras.sh` is the portable Actions entry;
 `build-local.sh` and `env.sh` support incremental local investigation. The
 module checker validates architecture, exact vermagic and checksums. The
 actual modem's ABI canary must pass before any experimental load.
+
+## Unexecuted in-place prototype
+
+The optional `in_place` implementation is present for review, but normal lab
+builds reject `in_place=1` before registering any algorithm. Enabling it needs
+an explicit `SPU_INPLACE_LAB=1` rebuild as well as the load parameter. The
+standard local/Actions profiles never set that build option. Its live test
+was rejected by automatic approval review pending specific user consent;
+none of the reported measurements uses it. Existing templates default to
+`in_place=0`. The KAT now has heap-backed scatterlists/IV storage, tail guards
+and optional `esp_offset=20` synthetic IPv4 framing to support careful future
+validation without relying only on real tunnel traffic.
