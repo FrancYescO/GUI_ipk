@@ -27,6 +27,7 @@ on:
       - "scripts/build-damson-spu.sh"
       - "patches/vbntj-spu/**"
       - "scripts/fetch-damson-build-inputs.sh"
+      - "scripts/fetch-damson-kernel-toolchain.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
   push:
@@ -43,6 +44,7 @@ on:
       - "scripts/build-damson-spu.sh"
       - "patches/vbntj-spu/**"
       - "scripts/fetch-damson-build-inputs.sh"
+      - "scripts/fetch-damson-kernel-toolchain.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
 
@@ -102,6 +104,15 @@ jobs:
 
       - name: Build Ubuntu 12.04 compatibility image
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
+
+      - name: Stage preserved kernel-only compiler for SPU
+        if: inputs.module_set == 'spu-probe'
+        run: |
+          if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
+            scripts/fetch-damson-kernel-toolchain.sh
+            tar -xzf .cache/sources/damson-kernel-toolchain/damson-kernel-gcc-5.5.0-linux-amd64.tgz \
+              --no-same-owner -C .work/vbntj-gpl
+          fi
 
       - name: Prepare kernel and compile modules
         run: |

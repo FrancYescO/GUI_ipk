@@ -21,7 +21,7 @@ case "$module_set" in
     build_connmark=1
     ;;
   spu-probe)
-    module_targets=()
+    module_targets=(bcmspu.ko)
     build_spu=1
     ;;
   router-tested)
@@ -87,7 +87,7 @@ host_bin="$source_dir/staging_dir/host/bin"
 mkdir -p "$host_bin"
 for host_tool in \
   aclocal autoconf autoheader autom4te automake autoreconf \
-  find gettext libtool libtoolize m4 sed; do
+  find gettext libtool libtoolize m4 sed quilt; do
   host_tool_path="$(command -v "$host_tool")"
   ln -sf "$host_tool_path" "$host_bin/$host_tool"
 done
@@ -156,6 +156,7 @@ export KERNEL_BUILD_DIR="$kernel_base"
 export LINUX_DIR="$kernel_dir"
 export TOOLCHAIN_DIR="$toolchain_dir"
 export TARGET_DIR="$source_dir/staging_dir/target-arm_v7-a_glibc-2.26_eabi"
+export STAGING_DIR="$TARGET_DIR"
 export BCM_PROFILE=VMG8825_B50B
 export TARGET_CROSS="$cross"
 export BCM_HOSTTOOLS_DIR="$source_dir/staging_dir/host/bin/502L07"
@@ -189,7 +190,7 @@ if [[ "$build_connmark" -eq 1 ]]; then
   fi
 fi
 
-if [[ "${#module_targets[@]}" -gt 0 ]]; then
+if [[ "$build_spu" -eq 0 ]]; then
   "${kernel_make[@]}" "${module_targets[@]}"
 fi
 if [[ "$build_spu" -eq 1 ]]; then
@@ -208,10 +209,12 @@ rm -f -- \
   "$output_dir"/*.undefined-symbols \
   "$output_dir/SHA256SUMS" \
   "$output_dir/BUILD-METADATA.txt"
-for target in "${module_targets[@]}"; do
-  module_name="$(basename "$target")"
-  cp "$kernel_dir/$target" "$output_dir/$module_name"
-done
+if [[ "$build_spu" -eq 0 ]]; then
+  for target in "${module_targets[@]}"; do
+    module_name="$(basename "$target")"
+    cp "$kernel_dir/$target" "$output_dir/$module_name"
+  done
+fi
 if [[ "$build_spu" -eq 1 ]]; then
   cp "$source_dir/.damson-spu/bcmspu.ko" "$output_dir/"
   cp "$source_dir/.damson-spu-test/damson_spu_test.ko" "$output_dir/"
@@ -297,9 +300,6 @@ rm -rf "$output_dir/.ipk-build"
 for target in "${module_targets[@]}"; do
   build_manual_ipk "$output_dir/$(basename "$target")"
 done
-if [[ "$build_spu" -eq 1 ]]; then
-  build_manual_ipk "$output_dir/bcmspu.ko"
-fi
 rm -rf "$output_dir/.ipk-build"
 
 (
@@ -318,7 +318,8 @@ compiler=OpenWrt GCC $compiler_version
 module_set=$module_set
 abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
-spu_patch=patches/vbntj-spu/001-authsize-software-fallback.patch (spu-probe only)
+spu_patches=patches/vbntj-spu/*.patch (spu-probe only)
+kernel_compiler_seed_manifest=build/vbntj/kernel-toolchain-seed.sha256 (SPU workflow fallback)
 EOF
 
 echo "Built validated Damson modules and manual-only IPKs in $output_dir"
