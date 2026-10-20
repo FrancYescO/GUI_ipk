@@ -5,6 +5,10 @@ for mod in bcmspu spu_sha256_hybrid aes_arm sha256_arm damson_spu_test; do
  if grep -q "^$mod " /proc/modules; then echo "Refusing: $mod already loaded"; exit 1; fi
 done
 if ip netns list | grep -Eq '^spu-check-[ab]( |$)'; then echo 'Refusing existing namespaces'; exit 1; fi
+if [ -n "$(ip xfrm state)" ] || [ -n "$(ip xfrm policy)" ]; then
+ echo 'Refusing: active root-namespace IPsec configuration'
+ exit 1
+fi
 cleanup() {
  ip netns del spu-check-a 2>/dev/null || true
  ip netns del spu-check-b 2>/dev/null || true
@@ -32,8 +36,10 @@ case "${PHASE:?}" in
  aes_asm) insmod ./aes-arm.ko ;;
  both_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko ;;
  fallback_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start ;;
- hybrid_generic) insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko ;;
- hybrid_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko 'sha256_driver=hmac(sha256-asm)' ;;
+ hybrid_generic) insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 ;;
+ hybrid_sha1_generic) insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 private_sha1=1 ;;
+ hybrid_sha1_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 private_sha1=1 'sha256_driver=hmac(sha256-asm)' ;;
+ hybrid_asm) insmod ./sha256-arm.ko; insmod ./bcmspu.ko; spuctl start; insmod ./spu_sha256_hybrid.ko in_place=0 'sha256_driver=hmac(sha256-asm)' ;;
  *) echo Unknown phase; exit 1 ;;
 esac
 export PHASE

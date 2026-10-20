@@ -185,6 +185,7 @@ jobs:
           for module in bcmspu damson_spu_test vbntj_abi_canary aes-arm sha256-arm spu_sha256_hybrid; do
             test -s "dist/vbntj-kmods/$module.ko"
           done
+          strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'
 
       - name: Upload Damson modules and manual-only IPKs
         if: always()

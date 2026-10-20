@@ -19,9 +19,12 @@ static char *sha256_driver = "hmac(sha256-generic)";
 module_param(sha256_driver, charp, 0444);
 static bool private_sha1;
 module_param(private_sha1, bool, 0444);
+static bool in_place;
+module_param(in_place, bool, 0444);
 static atomic_t enc_packets = ATOMIC_INIT(0);
 static atomic_t dec_packets = ATOMIC_INIT(0);
 static atomic_t bad_tags = ATOMIC_INIT(0);
+static atomic_t borrowed_packets = ATOMIC_INIT(0);
 static int counter_get(char *buf, const struct kernel_param *kp)
 {
     return scnprintf(buf, 32, "%d", atomic_read((atomic_t *)kp->arg));
@@ -30,6 +33,7 @@ static const struct kernel_param_ops counter_ops = { .get = counter_get };
 module_param_cb(enc_packets, &counter_ops, &enc_packets, 0444);
 module_param_cb(dec_packets, &counter_ops, &dec_packets, 0444);
 module_param_cb(bad_tags, &counter_ops, &bad_tags, 0444);
+module_param_cb(borrowed_packets, &counter_ops, &borrowed_packets, 0444);
 
 struct hybrid_ctx {
     struct crypto_aead *runner[2];
@@ -40,6 +44,9 @@ struct hybrid_job {
     struct aead_request *outer;
     struct hybrid_ctx *ctx;
     struct sk_buff *skb;
+    u8 *esp;
+    bool borrowed;
+    unsigned int saved_len;
     struct scatterlist assoc, payload;
     unsigned int plen;
     unsigned char iv[AES_BLOCK_SIZE];
@@ -60,7 +67,7 @@ static int hmac(struct crypto_shash *tfm, const u8 *p, unsigned int len, u8 *out
 static int finish_job(struct hybrid_job *j, int err)
 {
     u8 digest[SHA256_DIGEST_SIZE];
-    u8 *data = j->skb->data;
+    u8 *data = j->esp;
     if (!err && j->encrypt) {
         err = hmac(j->ctx->sha256, data, 8 + AES_BLOCK_SIZE + j->plen, digest);
         if (!err && !private_sha1 &&
@@ -69,17 +76,25 @@ static int finish_job(struct hybrid_job *j, int err)
         if (!err) {
             memcpy(data + 8 + AES_BLOCK_SIZE + j->plen, digest, 16);
             memcpy(j->giv, data + 8, AES_BLOCK_SIZE);
-            scatterwalk_map_and_copy(data + 8 + AES_BLOCK_SIZE, j->outer->dst,
-                                     0, j->plen + 16, 1);
+            if (!j->borrowed)
+                scatterwalk_map_and_copy(data + 8 + AES_BLOCK_SIZE, j->outer->dst,
+                                         0, j->plen + 16, 1);
             atomic_inc(&enc_packets);
         }
     } else if (!err) {
-        scatterwalk_map_and_copy(data + 8 + AES_BLOCK_SIZE, j->outer->dst,
-                                 0, j->plen, 1);
+        if (!j->borrowed)
+            scatterwalk_map_and_copy(data + 8 + AES_BLOCK_SIZE, j->outer->dst,
+                                     0, j->plen, 1);
         atomic_inc(&dec_packets);
     }
     memzero_explicit(digest, sizeof(digest));
-    kfree_skb(j->skb);
+    if (j->borrowed) {
+        j->skb->len = j->saved_len;
+        skb_set_tail_pointer(j->skb, j->saved_len);
+        if (!err) atomic_inc(&borrowed_packets);
+    } else {
+        kfree_skb(j->skb);
+    }
     kfree(j);
     return err;
 }
@@ -104,7 +119,8 @@ static int hybrid_submit(struct aead_request *req, struct aead_givcrypt_request 
     unsigned int plen, bytes;
     int err;
     bool enc = greq != NULL;
-    if (req->assoclen != 8 || (!enc && req->cryptlen < 16))
+    if (crypto_aead_authsize(crypto_aead_reqtfm(req)) != 16 ||
+        req->assoclen != 8 || (!enc && req->cryptlen < 16))
         return -EINVAL;
     plen = req->cryptlen - (enc ? 0 : 16);
     if (!plen || (plen & (AES_BLOCK_SIZE - 1)) || plen > 16000)
@@ -113,50 +129,74 @@ static int hybrid_submit(struct aead_request *req, struct aead_givcrypt_request 
     if (!j)
         return -ENOMEM;
     bytes = 8 + AES_BLOCK_SIZE + plen;
-    j->skb = alloc_skb(64 + bytes + SHA256_DIGEST_SIZE + 128, GFP_ATOMIC);
-    if (!j->skb) {
-        kfree(j);
-        return -ENOMEM;
+    if (in_place && !private_sha1 && req->base.data && req->src == req->dst &&
+        !sg_next(req->assoc) && !sg_next(req->src) && req->assoc->length == 8 &&
+        req->src->length >= plen + 16) {
+        struct sk_buff *original = req->base.data;
+        u8 *assoc = page_address(sg_page(req->assoc)) + req->assoc->offset;
+        u8 *payload = page_address(sg_page(req->src)) + req->src->offset;
+        if (!skb_is_nonlinear(original) && !skb_cloned(original) &&
+            atomic_read(&original->users) == 1 &&
+            req->data_offset <= original->len &&
+            original->len - req->data_offset == bytes + 16 &&
+            assoc == original->data + req->data_offset &&
+            payload == assoc + 24 &&
+            (enc ? greq->giv : req->iv) == assoc + 8) {
+            j->skb = original;
+            j->esp = assoc;
+            j->borrowed = true;
+            j->saved_len = original->len;
+        }
     }
-    skb_reserve(j->skb, 64);
-    skb_put(j->skb, bytes + 12); /* Runner's fixed-size private tag. */
-    memset(j->skb->data, 0, bytes + SHA256_DIGEST_SIZE);
+    if (!j->borrowed) {
+        j->skb = alloc_skb(64 + bytes + SHA256_DIGEST_SIZE + 128, GFP_ATOMIC);
+        if (!j->skb) {
+            kfree(j);
+            return -ENOMEM;
+        }
+        skb_reserve(j->skb, 64);
+        skb_put(j->skb, bytes + 12);
+        memset(j->skb->data, 0, bytes + SHA256_DIGEST_SIZE);
+        j->esp = j->skb->data;
+        scatterwalk_map_and_copy(j->esp, req->assoc, 0, 8, 0);
+        scatterwalk_map_and_copy(j->esp + 24, req->src, 0, plen, 0);
+    }
     j->outer = req;
     j->ctx = ctx;
     j->plen = plen;
     j->giv = enc ? greq->giv : NULL;
     j->encrypt = enc;
-    scatterwalk_map_and_copy(j->skb->data, req->assoc, 0, 8, 0);
-    scatterwalk_map_and_copy(j->skb->data + 24, req->src, 0, plen, 0);
     if (!enc) {
-        memcpy(j->skb->data + 8, req->iv, AES_BLOCK_SIZE);
+        memcpy(j->esp + 8, req->iv, AES_BLOCK_SIZE);
         scatterwalk_map_and_copy(received, req->src, plen, 16, 0);
-        err = hmac(ctx->sha256, j->skb->data, bytes, digest);
+        err = hmac(ctx->sha256, j->esp, bytes, digest);
         if (!err && crypto_memneq(digest, received, 16)) {
             atomic_inc(&bad_tags);
             err = -EBADMSG;
         }
         if (!err) {
             if (private_sha1)
-                err = hmac(ctx->sha1, j->skb->data, bytes, digest);
+                err = hmac(ctx->sha1, j->esp, bytes, digest);
             if (!err)
-                memcpy(j->skb->data + bytes, digest, 12);
+                memcpy(j->esp + bytes, digest, 12);
         }
         memzero_explicit(digest, sizeof(digest));
         if (err)
             return finish_job(j, err);
     }
-    sg_init_one(&j->assoc, j->skb->data, 8);
-    sg_init_one(&j->payload, j->skb->data + 24, plen + 12);
+    if (j->borrowed)
+        skb_trim(j->skb, j->saved_len - 4);
+    sg_init_one(&j->assoc, j->esp, 8);
+    sg_init_one(&j->payload, j->esp + 24, plen + 12);
     aead_givcrypt_set_tfm(&j->inner, ctx->runner[enc ? 0 : 1]);
     aead_givcrypt_set_callback(&j->inner, 0, hybrid_done, j->skb);
     aead_givcrypt_set_assoc(&j->inner, &j->assoc, 8);
     aead_givcrypt_set_crypt(&j->inner, &j->payload, &j->payload,
-                          plen + (enc ? 0 : 12), enc ? j->iv : j->skb->data + 8);
+                          plen + (enc ? 0 : 12), enc ? j->iv : j->esp + 8);
     j->inner.areq.next_hdr = req->next_hdr;
-    j->inner.areq.data_offset = 0;
+    j->inner.areq.data_offset = j->borrowed ? req->data_offset : 0;
     if (enc) {
-        aead_givcrypt_set_giv(&j->inner, j->skb->data + 8, greq->seq);
+        aead_givcrypt_set_giv(&j->inner, j->esp + 8, greq->seq);
         err = crypto_aead_givencrypt(&j->inner);
     } else {
         err = crypto_aead_decrypt(&j->inner.areq);
@@ -281,10 +321,19 @@ static struct crypto_alg alg = {
         .decrypt = hybrid_dec,
         .geniv = "<built-in>",
         .ivsize = AES_BLOCK_SIZE,
-        .maxauthsize = 16,
+        .maxauthsize = SHA256_DIGEST_SIZE,
     },
 };
-static int __init init(void) { return crypto_register_alg(&alg); }
+static int __init init(void)
+{
+#ifndef SPU_SHA256_INPLACE_LAB
+    if (in_place) {
+        pr_err("spu_sha256_hybrid: in_place requires SPU_INPLACE_LAB=1 experimental build\n");
+        return -EOPNOTSUPP;
+    }
+#endif
+    return crypto_register_alg(&alg);
+}
 static void __exit fini(void) { crypto_unregister_alg(&alg); }
 module_init(init);
 module_exit(fini);

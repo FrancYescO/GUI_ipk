@@ -4,6 +4,10 @@ cd /tmp/spu-sha256
 for mod in bcmspu spu_sha256_hybrid aes_arm sha256_arm damson_spu_test; do
  if grep -q "^$mod " /proc/modules; then echo "Refusing: $mod already loaded"; exit 1; fi
 done
+if [ -n "$(ip xfrm state)" ] || [ -n "$(ip xfrm policy)" ]; then
+ echo 'Refusing: active root-namespace IPsec configuration'
+ exit 1
+fi
 cleanup() {
  if grep -q '^damson_spu_test ' /proc/modules; then
   rmmod damson_spu_test || { echo 'KAT remains referenced; no forced unload'; return 1; }
@@ -31,11 +35,11 @@ trap 'exit 143' TERM
 sha256sum -c SHA256SUMS
 insmod ./bcmspu.ko
 spuctl start
-insmod ./spu_sha256_hybrid.ko
+insmod ./spu_sha256_hybrid.ko in_place=0 "private_sha1=${PRIVATE_SHA1:-0}"
 for bits in 128 192 256; do
  for part in 0 1 2 3; do
   echo "KAT_GROUP AES$bits corrupt_part=$part"
-  insmod ./damson_spu_test.ko only_sha256=1 aesbits="$bits" corrupt_part="$part" target_driver=authenc-hybrid-sha256-spu
+  insmod ./damson_spu_test.ko only_sha256=1 aesbits="$bits" corrupt_part="$part" "esp_offset=${ESP_OFFSET:-0}" target_driver=authenc-hybrid-sha256-spu
   rmmod damson_spu_test
  done
 done
