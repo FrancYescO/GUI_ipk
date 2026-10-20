@@ -82,3 +82,21 @@ SHA256-128 compatibility is provided by software fallback, not a new Runner
 hardware capability. BLOG ESP flow offload stays off by default. The forum's
 Windows/DHCP crash scenario has not been reproduced with real clients, and
 no long-duration or WAN interoperability certification is claimed.
+
+## Extended matrix and lifecycle
+
+Ten consecutive load/start/KAT/stop/unload cycles passed all 40 known-answer
+and altered-tag checks. A six-case matrix combined AES128/192/256 with
+SHA1-96 hardware and SHA256-128 software fallback, with a 32-packet replay
+window. All 36 fragmented 4,000-byte ping requests succeeded in both directions;
+all twelve TCP forward/reverse transfers completed. Receiver throughput was
+70.3–84.7 Mbit/s for SHA1 and 31.7–37.0 Mbit/s for SHA256, measured between
+namespaces on the same router, not across a WAN. XFRM reported zero failed
+authentication and replay errors. Hardware counters reached 105 encryption
+drops and 366 decryption drops under load; software cases did not increase them.
+
+An immediate stop after namespace removal reported a crypto reference still
+held. Namespace destruction releases XFRM/crypto objects asynchronously.
+A subsequent ordinary stop and unload both returned success after teardown
+completed, with no forced unload or router reboot. Test runners must wait for
+that cleanup, check return codes, and never label a best-effort unload as a pass.

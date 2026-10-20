@@ -93,6 +93,7 @@ jobs:
         run: |
           (cd artifacts/damson-4.1.52-spu && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-spu
+          python3 scripts/verify-kmod-spu.py artifacts/damson-4.1.52-spu 4.1.52
 
       - name: Assemble versioned kernel feeds
         run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --buildroot-kernel-dir artifacts/buildroot-4.1.38
