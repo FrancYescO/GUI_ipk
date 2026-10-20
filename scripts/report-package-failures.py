@@ -15,7 +15,7 @@ BLOCKED_RECIPE = re.compile(
     r"Target ['`](package/[^'`\s]+/compile)['`] not remade because of errors"
 )
 DIAGNOSTIC = re.compile(
-    r"(?:\berror:|CMake Error|cp: cannot stat|undefined reference|"
+    r"(?:\berror:|CMake Error|(?:cp|install): cannot stat|undefined reference|"
     r"No rule to make target|failed to compile|configure: \*\*\*|"
     r"Package .+ is missing dependencies for the following libraries:|"
     r"DSO missing from command line|Exec format error|"
