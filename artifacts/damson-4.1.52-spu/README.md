@@ -1,4 +1,7 @@
-# Router-tested SPU, Damson Linux 4.1.52
+# Router-tested SPU: DGA4130 / VBNT-K, Linux 4.1.52
+
+Tested modem: Technicolor DGA4130 / VBNT-K, firmware 19.4.1051. Historical
+artifact names are build identifiers, not the hardware model.
 
 Published by the main branch in:
 https://francyesco.github.io/GUI_ipk/kernel/4.1.52/
@@ -17,7 +20,10 @@ Its `bcmspu.ko` is byte-identical (SHA256
 IPK timestamps may differ; this directory keeps the original package actually
 extracted and tested on the router.
 
-See `build/vbntj-spu-test/VALIDATION.md` for the functional tests and limitations.
+The actual IPK passed checksum/ABI checks, altered-tag tests, ten load/unload
+cycles, AES128/192/256 SHA1/SHA256 tunnels, fragmented pings and live rekey.
+Experimental hybrid/queue builds later stalled or restarted the modem; those
+modules are excluded from this stable artifact directory.
 No boot autoload is included. SHA256-128 uses software fallback. BLOG ESP flow
 offload is disabled by default; Windows/DHCP interoperability is not proven.
 Hardware Runner packet drops remain observable under TCP/UDP load.

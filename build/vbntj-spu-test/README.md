@@ -1,12 +1,13 @@
-# Damson SPU validation
+# SPU validation: DGA4130 / VBNT-K, firmware 19.4.1051
 
-This profile reconstructs `bcmspu.ko` for **VBNTJ / BCM63138, Damson
-19.4.0866-3401052, Linux 4.1.52** using the pinned Zyxel 502L07 GPL SDK and
-the repository's Damson kernel ABI adjustments. It is not the historical
-VBNTS Linux 4.1.38 IPK, and neither artifact is interchangeable with the other.
+This profile reconstructs `bcmspu.ko` for the tested **DGA4130 / VBNT-K,
+BCM63138, firmware 19.4.1051, Linux 4.1.52**, using the pinned Zyxel 502L07
+GPL SDK and the repository's kernel ABI adjustments. Historical `vbntj` and
+`damson` filenames are build identifiers, not the modem model. It is not the
+historical VBNTS Linux 4.1.38 IPK, and neither artifact is interchangeable with the other.
 
 Run `build-vbntj-kmods.yml` with `module_set=spu-probe`. This profile can use
-the [checksum-pinned kernel compiler seed](../vbntj/KERNEL-TOOLCHAIN.md); it
+the checksum-pinned kernel compiler seed; it
 rebuilds SPU and its tests on Actions, without rebuilding a userspace libc. Its output includes
 `bcmspu.ko`, `damson_spu_test.ko`, the ABI canary, undefined-symbol lists,
 checksums and a manual-only `kmod-bcmspu-damson-4.1.52-manual` IPK. The IPK
@@ -26,7 +27,7 @@ contains the corresponding older Broadcom SPU implementations. The
 provides family context; its mainline BCM63xx support is not proof of
 compatibility with this vendor ARM kernel.
 
-The Damson `impl3` driver hard-codes a 12-byte authentication tag. Patch 001
+The vendor `impl3` driver hard-codes a 12-byte authentication tag. Patch 001
 accepts other tag sizes validated by the existing synchronous software AEAD
 and routes those requests entirely through that implementation. SHA256-128
 therefore remains software cryptography, while SHA1-96 can use Runner.
@@ -48,8 +49,11 @@ does not change the router's firewall or VPN configuration.
 
 ## Temporary tests
 
-The [20 October validation report](VALIDATION.md) records tests of the actual
-Actions IPK, including limitations and cleanup checks.
+The actual Actions IPK passed ABI/checksum checks, four initial cryptographic
+checks, ten load/start/test/stop/unload cycles, the AES128/192/256 SHA1/SHA256
+matrix, fragmented pings and live rekey. Hardware drops remain observable.
+Later experimental hybrids reproduced stalls and restarts; those raw modules
+are separate from this stable package and are not published in its feed.
 
 First verify the router's kernel, configuration, module symbols and archive
 checksums. Extract the payload to `/tmp`; do not install it with OPKG or

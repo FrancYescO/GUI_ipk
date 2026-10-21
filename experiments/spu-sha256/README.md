@@ -1,9 +1,14 @@
-# SHA256-128 laboratory for Damson / BCM63138 / Linux 4.1.52
+# SHA256-128 laboratory: DGA4130 / VBNT-K, firmware 19.4.1051
 
-Further results: [ROUND2_RESULTS.md](ROUND2_RESULTS.md). Queue/fallback patch
-003 remains quarantined after a test lost connectivity and a new boot was
-observed. Its operational flags default to false/zero. Standard-tool tests
-use no SPU module. No experimental Runner fix is recommended for production.
+Target: Technicolor DGA4130 / VBNT-K, BCM63138, firmware 19.4.1051,
+Linux 4.1.52. Historical build identifiers in filenames do not name the modem.
+The hybrid remains laboratory-only: it has reproduced TCP stalls and loss of
+connectivity followed by a restart even with private copies. Standard software,
+AES-GCM and WireGuard tests completed; they do not validate the hybrid.
+Queue-diagnostic flags default to false/zero. RX drain together with software
+pool fallback is rejected by both test scripts before module loading because
+that combination reproduced the failure. No Runner experiment is recommended
+for production or included in the stable feed.
 
 The `kmods-4.1.52` branch contains this laboratory alongside the stable builds.
 Experimental raw modules remain separate from published kernel feeds.
@@ -51,7 +56,9 @@ and callback rather than freeing memory still owned by hardware.
 independent reference, checks encryption as well as decryption, and can corrupt
 the first or last tag byte, ESP header, IV or ciphertext. `kat-run.sh` checks initial module state
 and checksums, fails on the first unsuccessful test, and uses signal/exit traps
-for normal cleanup. No forced module removal or reboot is used.
+for normal cleanup. No forced module removal is used; one stalled run needed an explicitly
+authorized orderly reboot. Other failed stress runs lost connectivity and
+subsequently showed a changed boot ID without a reboot sent by the test session.
 
 `phase.sh` compares providers using `benchmark.sh`, which creates only the
 reserved `spu-check-a/b` namespaces and public disposable test keys. TCP JSON
@@ -69,7 +76,7 @@ actual modem's ABI canary must pass before any experimental load.
 ## Explicit in-place laboratory profile
 
 The user specifically authorized the in-place test after reviewing its kernel
-buffer risk. The final test passed 120 guard/header checks at ESP offsets 0 and 20, with
+buffer risk. The strengthened in-place KAT passed 120 guard/header checks at ESP offsets 0 and 20, with
 45 successful borrowed-buffer operations per offset, then real isolated
 ESP tunnels for AES128/192/256. This remains experimental, not a guarantee
 for every skb layout or long-running production use.
@@ -90,8 +97,11 @@ optional `esp_offset=20` synthetic IPv4 framing.
 The final Actions bundle passes full-tag KATs and bounded UDP exercises but
 has reproduced TCP stalls. One interrupted run retained pending kernel requests
 and prevented normal unload, requiring orderly-reboot recovery. Do not treat
-its 48–51 Mbit/s successful samples as stable throughput. See RESULTS.md for
-both successful and failed runs. These modules must remain laboratory-only.
+its 48–51 Mbit/s successful samples as stable throughput. The latest guarded
+RX build also reproduced loss of ping/SSH and a restart when drain and pool
+fallback were combined with polling. Crash logging over SSH stopped without
+a panic trace; serial capture is the next useful diagnostic. These modules
+must remain laboratory-only.
 
 ## Host transfer pool experiment
 
@@ -105,7 +115,8 @@ duplicate frees. The option applies only to raw laboratory builds.
 With a pool of 64, three AES cases at UDP 10 Mbit/s lost 35–36% of datagrams:
 the loss count matched `lab_no_slot` exactly. At 256, loss was 3/3644, 0/3638,
 and 0/3639, with all four driver error counters zero. These short same-device
-runs include key updates and fragmented pings; see RESULTS.md for scope.
+runs include key updates and fragmented pings. Later TCP stress still stalled;
+the larger pool does not establish stability or universally loss-free delivery.
 
 
 ## Standard comparison tools and external peer
@@ -131,5 +142,5 @@ inside the task-owned container. Private test keys stay in temporary storage.
 
 Hybrid benchmark modes and queue-diagnostic KATs now also require
 `ALLOW_UNSTABLE_RUNNER=1`. This is a technical lab opt-in, not evidence of a
-fix. They remain disabled while the restart cause is unresolved. Standard
-software/GCM/WireGuard comparisons do not require it.
+fix. The unsafe drain/fallback combination remains rejected even with this
+opt-in. Standard software/GCM/WireGuard comparisons do not require it.

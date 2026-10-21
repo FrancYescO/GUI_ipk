@@ -1,6 +1,7 @@
 # SPU validation — 20 October 2026
 
-Runtime: BCM63138, `brcm6xxx-tch/VBNTJ_502L07p1`, OpenWrt revision
+Tested modem: **Technicolor DGA4130 / VBNT-K**, firmware **19.4.1051**,
+BCM63138. Reported build metadata: `brcm6xxx-tch/VBNTJ_502L07p1`, OpenWrt revision
 `r14144-e2ae576c18`, Linux `4.1.52 #0 SMP PREEMPT Fri Oct 28 16:57:49 2022`.
 OPKG accepts `arm_cortex-a9`; it does not list `brcm963xx`.
 
@@ -39,7 +40,7 @@ file remained. The checked kernel log contained no oops or panic.
 ## Preliminary local build
 
 The existing GCC 5.5.0 Linux build environment compiled the SPU driver and
-test module after applying the current Damson ABI patch. All canary offset
+test module after applying the current vendor-kernel ABI patch. All canary offset
 checks passed. Every imported symbol exists in the running kernel or its
 export table. Transferred module SHA-256 digests matched before loading.
 
