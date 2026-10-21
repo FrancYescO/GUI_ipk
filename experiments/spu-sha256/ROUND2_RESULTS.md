@@ -137,3 +137,57 @@ helpers, plus standard AES-GCM dependencies. The WireGuard kernel module is
 the exact previously validated artifact (SHA256 pinned in `standard-sources.tsv`).
 Tools are static ARMv7 soft-float; IPv6 flow-label support is disabled for the
 legacy-header build, while IPv4 TCP/UDP remains upstream. No IPKs are emitted.
+
+
+## Completed external controls and data record
+
+With upstream iperf3, WireGuard external MTU 1420 remained around 12–13 Mbit/s;
+MTU 1280 and veth-offload removal did not improve it. Native software IPsec
+AES256/SHA256 with RPS 3 measured 13.94/14.68 Mbit/s. AES128 with the same RPS
+was repeated; both directions completed without authentication/replay errors.
+Some NAT-T teardown references outlasted the first bounded unload retries and
+were removed by subsequent ordinary unload after reference counts reached
+zero. No forced module removal or reboot was used for that cleanup. The
+controller's wait bound is now 90 seconds per owned provider.
+
+`round2-results.csv` records 98 measurements with tool version, topology,
+configuration, key size, direction, rate, loss and completion status. The
+incomplete/restarted Runner pair is explicitly marked and excluded from the
+comparable upstream table. `round2-logs.sha256` identifies the 27 original
+local logs under `.cache/tests/spu-sha256/`; no private keys are published.
+`collect-round2.py` regenerates the CSV from those preserved workspace logs.
+The Runner's extended-window test remains excluded from recommended settings.
+
+
+## Final remote build and runtime verification
+
+[Actions run 39524956679](https://github.com/FrancYescO/GUI_ipk/actions/runs/39524956679)
+succeeded for source `e83e33a` with `standard_tools=true`; publication was
+skipped. The downloaded bundle contains 12 matching ARM kernel modules and
+four static ARM tools. All 16 checksums, exact 4.1.52 vermagic values, absence
+of userspace ELF interpreter dependencies and the pinned WireGuard module
+hash were verified. It contains no IPKs.
+
+The actual downloaded files were uploaded to `/tmp` and verified there again.
+The ABI canary loaded/unloaded successfully. AES-GCM/AES128 bidirectional
+fragmented pings and TCP passed, followed by WireGuard bidirectional pings/TCP
+and UDP at 30 Mbit/s with zero loss. Both scripts completed ordinary cleanup.
+The quarantined Runner module was not loaded for this validation; its latest
+stop/error guards remain compile-only validation.
+
+Final assertions passed on the modem: same post-restart boot ID, kernel 4.1.52,
+unchanged hardwarecrypto SHA256, no test modules, namespaces, root XFRM state
+or policy, test route or firewall chains, and no filtered new kernel oops or
+panic. The temporary modem directory and test keys were deleted. Both task-owned
+Docker containers and the host TCP relay were removed; unrelated containers,
+volumes and the pre-existing `scripts/__pycache__/` were preserved.
+
+No further restart occurred during the standard software/GCM/WireGuard tests.
+The Runner experiment's restart cause remains unresolved. A native external
+Linux peer without this nested Docker/NAT path is still needed before claiming
+physical WAN throughput or recommending a particular physical IRQ/RPS setting.
+
+The external AES128/RPS-3 repeat measured **14.75 / 14.26 Mbit/s**, with no
+replay/authentication errors. This confirms the similar encapsulated-path
+result across AES128, AES256 and WireGuard in this setup, despite the much
+faster plain TCP control. It does not identify the responsible component.
