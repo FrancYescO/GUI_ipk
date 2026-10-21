@@ -1,0 +1,27 @@
+--- a/libgcc/libgcc2.h
++++ b/libgcc/libgcc2.h
+@@ -33,6 +33,24 @@
+ extern void __clear_cache (char *, char *);
+ extern void __eprintf (const char *, const char *, unsigned int, const char *)
+   __attribute__ ((__noreturn__));
++
++/* GCC 5 supplies these mode macros when building libgcc.  The native
++   compiler package is bootstrapped by the archived ARM GCC 4.8 cross
++   compiler, which supports SF/DF modes but does not define the macros.  */
++#if defined (__arm__) && __GNUC__ < 5
++#ifndef __LIBGCC_HAS_SF_MODE__
++#define __LIBGCC_HAS_SF_MODE__ 1
++#endif
++#ifndef __LIBGCC_HAS_DF_MODE__
++#define __LIBGCC_HAS_DF_MODE__ 1
++#endif
++#ifndef __LIBGCC_SF_MANT_DIG__
++#define __LIBGCC_SF_MANT_DIG__ __FLT_MANT_DIG__
++#endif
++#ifndef __LIBGCC_DF_MANT_DIG__
++#define __LIBGCC_DF_MANT_DIG__ __DBL_MANT_DIG__
++#endif
++#endif
+ 
+ #ifdef __LIBGCC_HAS_SF_MODE__
+ #define LIBGCC2_HAS_SF_MODE 1

@@ -96,6 +96,8 @@ cp "$repo_root/patches/automake-perl-regex.patch" \
 mkdir -p "$work_dir/feeds/packages/net/ola/patches"
 cp "$repo_root/patches/ola-widget-observer-templates.patch" \
   "$work_dir/feeds/packages/net/ola/patches/999-widget-observer-templates.patch"
+cp "$repo_root/patches/gcc-arm-libgcc-bootstrap-modes.patch" \
+  "$work_dir/feeds/packages/devel/gcc/patches/999-arm-libgcc-bootstrap-modes.patch"
 cp "$repo_root/patches/libmraa-node-buffer-api.patch" \
   "$work_dir/feeds/packages/libs/libmraa/patches/999-node-buffer-api.patch"
 mkdir -p "$work_dir/package/libs/wxwidgets/patches"
