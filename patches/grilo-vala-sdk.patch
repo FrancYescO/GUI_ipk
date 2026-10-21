@@ -1,0 +1,16 @@
+--- a/feeds/packages/multimedia/grilo/Makefile
++++ b/feeds/packages/multimedia/grilo/Makefile
+@@ -59 +59 @@
+-	$(INSTALL_DIR) $(STAGING_DIR_HOSTPKG)/share/vala-0.30/vapi/
++	$(INSTALL_DIR) $(STAGING_DIR_HOSTPKG)/share/vala-0.34/vapi/
+@@ -64,2 +64,2 @@
+-		./files/*.vapi \
+-		$(STAGING_DIR_HOSTPKG)/share/vala-0.30/vapi
++		./files/*.vapi ./files/*.deps \
++		$(STAGING_DIR_HOSTPKG)/share/vala-0.34/vapi
+--- a/feeds/packages/multimedia/grilo/files/grilo-0.3.vapi
++++ b/feeds/packages/multimedia/grilo/files/grilo-0.3.vapi
+@@ -124,0 +125 @@
++		public int get_album_disc_number ();
+@@ -204,0 +206 @@
++		public void set_album_disc_number (int disc_number);

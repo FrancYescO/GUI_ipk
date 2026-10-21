@@ -135,6 +135,11 @@ patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/libmraa-swig4-recipe.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/libupm-node8-recipe.patch"
+cp "$repo_root/build/grilo-vapi/grilo-0.3.deps" \
+  "$work_dir/feeds/packages/multimedia/grilo/files/grilo-0.3.deps"
+# Match the archived host Vala compiler (0.34) when staging Grilo bindings.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/grilo-vala-sdk.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
