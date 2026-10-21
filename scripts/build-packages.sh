@@ -330,11 +330,34 @@ compile_with_report() {
   fi
 }
 
+install_host_tools() {
+  local tools_log="$output_dir/host-tools-install.log"
+  if make "${make_args[@]}" tools/install 2>&1 | tee "$tools_log"; then
+    rm -f "$tools_log"
+    return 0
+  fi
+  echo "Retrying host tools serially after the parallel preparation failed" >&2
+  if make --directory "$work_dir" --jobs 1 V=sc tools/install 2>&1 | tee -a "$tools_log"; then
+    return 0
+  fi
+  {
+    echo '# Userspace build preparation failed'
+    echo
+    echo 'Host tools failed in both parallel and serial builds. No package recipes were attempted.'
+    echo 'See host-tools-install.log for the complete output.'
+    echo
+    echo '```text'
+    tail -n 40 "$tools_log"
+    echo '```'
+  } > "$output_dir/failed-packages.md"
+  return 1
+}
+
 if [[ -n "$package_targets" ]]; then
   if [[ "$userspace_only" == 1 ]]; then
     # Direct userspace targets still need pinned host tools and kernel headers.
     configure_kmod_overrides
-    make "${make_args[@]}" tools/install
+    install_host_tools
     make "${make_args[@]}" target/linux/prepare
     make "${make_args[@]}" target/linux/configure
     prepare_kernel_modules
@@ -367,7 +390,7 @@ elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
     "$shard_index" "$shard_count" "$output_dir"
   mapfile -t shard_targets < "$output_dir/shard-targets.txt"
   configure_kmod_overrides
-  make "${make_args[@]}" tools/install
+  install_host_tools
   make "${make_args[@]}" target/linux/prepare
   make "${make_args[@]}" target/linux/configure
   prepare_kernel_modules
@@ -380,7 +403,7 @@ elif [[ "$userspace_only" == 1 ]]; then
   configure_kmod_overrides
   # The matching cross-toolchain is restored from the pinned input archive.
   # Rebuilding it would fetch an obsolete glibc-2.19-r25243 source URL.
-  make "${make_args[@]}" tools/install
+  install_host_tools
   make "${make_args[@]}" target/linux/prepare
   make "${make_args[@]}" target/linux/configure
   prepare_kernel_modules
