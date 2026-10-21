@@ -1,5 +1,10 @@
 # Further performance investigation
 
+Update 2026-10-21: combined RX drain and pool fallback reproduced loss of
+connectivity followed by a restart even with private copies and the new RX
+guards. See [reboot investigation](REBOOT_INVESTIGATION.md). Runner remains
+quarantined; successful isolated trials do not establish production safety.
+
 Target: BCM63138 / VBNTJ Damson, Linux 4.1.52. No experimental module was
 installed or configured for boot. Stable feed artifacts and SPU package patches
 remain unchanged. All tunnel keys were disposable test keys.

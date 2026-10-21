@@ -1,6 +1,10 @@
 #!/bin/sh
 set -eu
 cd /tmp/spu-sha256
+if [ "${RX_DRAIN:-0}" -ne 0 ] && [ "${POOL_FALLBACK:-0}" -ne 0 ]; then
+ echo 'Refusing RX drain + pool fallback: combination reproduced loss of modem ping/SSH; serial diagnosis required'
+ exit 1
+fi
 if [ "${RX_POLL_MS:-0}" -ne 0 ] || [ "${RX_DRAIN:-0}" -ne 0 ] || [ "${POOL_FALLBACK:-0}" -ne 0 ] || [ "${FORCE_POOL_FALLBACK:-0}" -ne 0 ]; then
  test "${ALLOW_UNSTABLE_RUNNER:-0}" -eq 1 || { echo 'Queue diagnostics remain quarantined'; exit 1; }
 fi

@@ -1,6 +1,10 @@
 #!/bin/sh
 set -eu
 cd /tmp/spu-sha256
+if [ "${RX_DRAIN:-0}" -ne 0 ] && [ "${POOL_FALLBACK:-0}" -ne 0 ]; then
+ echo 'Refusing RX drain + pool fallback: combination reproduced loss of modem ping/SSH; serial diagnosis required'
+ exit 1
+fi
 for mod in bcmspu spu_sha256_hybrid aes_arm sha256_arm damson_spu_test gcm ghash_generic ctr gf128mul seqiv; do
  if grep -q "^$mod " /proc/modules; then echo "Refusing: $mod already loaded"; exit 1; fi
 done
