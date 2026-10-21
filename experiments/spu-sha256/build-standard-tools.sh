@@ -24,7 +24,7 @@ sh "$work/musl-1.2.5/tools/musl-gcc.specs.sh" "$work/musl/include" "$work/musl/l
 printf '#!/bin/sh\nexec "%s" "$@" -specs="%s"\n' "${cross}gcc" "$work/musl/lib/musl-gcc.specs" > "$work/musl-gcc"
 chmod +x "$work/musl-gcc"
 tar -C "$work" -xJf "$cache/wireguard-tools-1.0.20210914.tar.xz"
-make -C "$work/wireguard-tools-1.0.20210914/src" CC="$work/musl-gcc" CFLAGS='-Os -march=armv7-a -mfloat-abi=soft' LDFLAGS=-static WITH_BASHCOMPLETION=no WITH_WGQUICK=no -j4
+CFLAGS='-Os -march=armv7-a -mfloat-abi=soft' make -C "$work/wireguard-tools-1.0.20210914/src" CC="$work/musl-gcc" LDFLAGS=-static WITH_BASHCOMPLETION=no WITH_WGQUICK=no -j4
 cp "$work/wireguard-tools-1.0.20210914/src/wg" "$out/wg"
 tar -C "$work" -xzf "$cache/iperf-3.18.tar.gz"
 (

@@ -9,6 +9,16 @@ if [ -n "$(ip xfrm state)" ] || [ -n "$(ip xfrm policy)" ]; then
  echo 'Refusing: active root-namespace IPsec configuration'
  exit 1
 fi
+case "${PHASE:?}" in
+ hybrid*)
+  if [ "${ALLOW_UNSTABLE_RUNNER:-0}" -ne 1 ]; then
+   echo 'Runner hybrid is quarantined after stalls/restart; explicit lab opt-in required'
+   exit 1
+  fi ;;
+esac
+if [ "${RX_POLL_MS:-0}" -ne 0 ] || [ "${RX_DRAIN:-0}" -ne 0 ] || [ "${POOL_FALLBACK:-0}" -ne 0 ] || [ "${FORCE_POOL_FALLBACK:-0}" -ne 0 ]; then
+ test "${ALLOW_UNSTABLE_RUNNER:-0}" -eq 1 || { echo 'Queue diagnostics remain quarantined'; exit 1; }
+fi
 cleanup() {
  ip netns del spu-check-a 2>/dev/null || true
  ip netns del spu-check-b 2>/dev/null || true
@@ -37,7 +47,7 @@ case "${PHASE:?}" in
  plain_generic) : ;;
  sha256_asm) insmod ./sha256-arm.ko ;;
  aes_asm) insmod ./aes-arm.ko ;;
- gcm_asm) insmod ./aes-arm.ko; insmod ./gf128mul.ko; insmod ./ctr.ko; insmod ./ghash-generic.ko; insmod ./gcm.ko; insmod ./seqiv.ko ;;
+ gcm_asm) insmod ./aes-arm.ko; insmod ./gf128mul.ko; insmod ./ctr.ko; insmod ./ghash-generic.ko; insmod ./gcm.ko; insmod ./seqiv.ko; AUTH_MODE=gcm; export AUTH_MODE ;;
  both_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko ;;
  fallback_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko; insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}" "rx_poll_ms=${RX_POLL_MS:-0}" "rx_drain=${RX_DRAIN:-0}" "pool_fallback=${POOL_FALLBACK:-0}" "force_pool_fallback=${FORCE_POOL_FALLBACK:-0}"; spuctl start ;;
  hybrid_pool_asm) insmod ./aes-arm.ko; insmod ./sha256-arm.ko; insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}" "rx_poll_ms=${RX_POLL_MS:-0}" "rx_drain=${RX_DRAIN:-0}" "pool_fallback=${POOL_FALLBACK:-1}" "force_pool_fallback=${FORCE_POOL_FALLBACK:-0}"; spuctl start; insmod ./spu_sha256_hybrid.ko "in_place=${IN_PLACE:-0}" 'sha256_driver=hmac(sha256-asm)' ;;

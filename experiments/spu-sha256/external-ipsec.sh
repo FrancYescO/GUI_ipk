@@ -7,7 +7,7 @@ udp_pid=
 aes_loaded=0
 sha_loaded=0
 unload_own() {
- for attempt in $(seq 1 45); do
+ for attempt in $(seq 1 90); do
   if ! grep -q "^$1 " /proc/modules; then return 0; fi
   if rmmod "$1" 2>/dev/null; then return 0; fi
   sleep 1

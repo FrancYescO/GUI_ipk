@@ -1,6 +1,9 @@
 #!/bin/sh
 set -eu
 cd /tmp/spu-sha256
+if [ "${RX_POLL_MS:-0}" -ne 0 ] || [ "${RX_DRAIN:-0}" -ne 0 ] || [ "${POOL_FALLBACK:-0}" -ne 0 ] || [ "${FORCE_POOL_FALLBACK:-0}" -ne 0 ]; then
+ test "${ALLOW_UNSTABLE_RUNNER:-0}" -eq 1 || { echo 'Queue diagnostics remain quarantined'; exit 1; }
+fi
 for mod in bcmspu spu_sha256_hybrid aes_arm sha256_arm damson_spu_test; do
  if grep -q "^$mod " /proc/modules; then echo "Refusing: $mod already loaded"; exit 1; fi
 done

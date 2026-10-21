@@ -124,7 +124,7 @@ Mbit/s with zero authentication/replay errors. Its asynchronous namespace
 teardown initially retained provider references; they later reached zero and
 ordinary unload succeeded without force or reboot. The controller now flushes
 only its own namespace's SAs/policies and retries ordinary unload for up to
-45 seconds. Further external results and final cleanup are recorded below.
+90 seconds. Further external results and final cleanup are recorded below.
 
 These virtualized/NAT external results do not establish the WAN limit of any
 cipher. The shared encapsulated path remains a limitation of this setup.

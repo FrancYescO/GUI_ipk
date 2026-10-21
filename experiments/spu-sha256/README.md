@@ -127,3 +127,9 @@ only their own namespace/veth and scoped temporary firewall chains, never flush
 foreign rules and remove their changes on exit. `veth-offloads` accepts only
 `spua`/`spub`; it cannot alter physical interfaces. `peer-ipsec.sh` must run only
 inside the task-owned container. Private test keys stay in temporary storage.
+
+
+Hybrid benchmark modes and queue-diagnostic KATs now also require
+`ALLOW_UNSTABLE_RUNNER=1`. This is a technical lab opt-in, not evidence of a
+fix. They remain disabled while the restart cause is unresolved. Standard
+software/GCM/WireGuard comparisons do not require it.
