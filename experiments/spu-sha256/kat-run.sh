@@ -33,7 +33,7 @@ trap 'exit 129' HUP
 trap 'exit 130' INT
 trap 'exit 143' TERM
 sha256sum -c SHA256SUMS
-insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}"
+insmod ./bcmspu.ko "transfer_requests=${TRANSFER_REQUESTS:-64}" "rx_poll_ms=${RX_POLL_MS:-0}" "rx_drain=${RX_DRAIN:-0}" "pool_fallback=${POOL_FALLBACK:-0}" "force_pool_fallback=${FORCE_POOL_FALLBACK:-0}"
 spuctl start
 insmod ./spu_sha256_hybrid.ko "in_place=${IN_PLACE:-0}" "private_sha1=${PRIVATE_SHA1:-0}"
 for bits in 128 192 256; do
@@ -49,4 +49,12 @@ if [ "${IN_PLACE:-0}" -eq 1 ]; then
  test "$borrowed" -eq 45
 fi
 test "$(cat /sys/module/bcmspu/parameters/lab_double_free)" -eq 0
+for stat in lab_rx_polls lab_rx_batches lab_rx_done lab_rx_invalid lab_inflight lab_pool_fallback_uses; do
+ echo "$stat=$(cat /sys/module/bcmspu/parameters/$stat)"
+done
+test "$(cat /sys/module/bcmspu/parameters/lab_inflight)" -eq 0
+if [ "${FORCE_POOL_FALLBACK:-0}" -eq 1 ]; then
+ test "$(cat /sys/module/bcmspu/parameters/lab_pool_fallback_uses)" -gt 0
+ test "$(cat /sys/module/bcmspu/parameters/lab_rx_done)" -eq 0
+fi
 echo KAT_GROUPS_PASS

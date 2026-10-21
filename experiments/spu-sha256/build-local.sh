@@ -23,6 +23,7 @@ make -C /tmp/linux-4.1.52 ARCH=arm CROSS_COMPILE="$cross" olddefconfig modules_p
 /repo/scripts/build-damson-spu.sh "$BCM_BUILD_DIR" /tmp/linux-4.1.52 "$cross" /tmp/spu
 patch -d /tmp/spu -p1 < /repo/experiments/spu-sha256/patches/001-hardware-capability-probe.patch
 patch -d /tmp/spu -p1 < /repo/experiments/spu-sha256/patches/002-host-transfer-pool.patch
+patch -d /tmp/spu -p1 < /repo/experiments/spu-sha256/patches/003-rx-diagnostics-pool-fallback.patch
 make -C /tmp/linux-4.1.52 ARCH=arm CROSS_COMPILE="$cross" SDK="$BCM_BUILD_DIR" M=/tmp/spu modules
 cp -R /repo/build/vbntj-spu-test /tmp/spu-test
 cp /repo/experiments/spu-sha256/kat_extended.c /tmp/spu-test/damson_spu_test.c

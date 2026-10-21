@@ -48,6 +48,11 @@ case "$module_set" in
     ;;
 esac
 
+if [[ "${LAB_STANDARD_TOOLS:-0}" == 1 && "$build_spu_lab" != 1 ]]; then
+  echo 'Standard comparison tools require a raw-only laboratory profile' >&2
+  exit 1
+fi
+
 if [[ ! -f "$source_dir/configs/vmg8825_b50b/vmg8825_b50b.defconfig" ]]; then
   echo "The pinned VMG8825-B50B GPL source is missing from $source_dir" >&2
   exit 1
@@ -217,6 +222,12 @@ if [[ "$build_spu_lab" -eq 1 ]]; then
   rm -rf "$lab_dir"
   SPU_INPLACE_LAB="$build_spu_inplace_lab" bash "$repo_root/experiments/spu-sha256/build-extras.sh"     "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.damson-spu"     "$source_dir/.damson-spu-test" "$lab_dir"
   lab_modules=("$lab_dir/armcrypto/aes-arm.ko" "$lab_dir/armcrypto/sha256-arm.ko" "$lab_dir/hybrid/spu_sha256_hybrid.ko")
+  if [[ "${LAB_STANDARD_TOOLS:-0}" == 1 ]]; then
+    bash "$repo_root/experiments/spu-sha256/build-standard-tools.sh" "$kernel_dir" "$cross" "$repo_root/.cache/sources/spu-standard-tools" "$lab_dir/standards"
+    for module in gcm ghash-generic gf128mul ctr seqiv wireguard; do
+      lab_modules+=("$lab_dir/standards/$module.ko")
+    done
+  fi
 fi
 rm -rf "$canary_dir"
 cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
@@ -245,7 +256,9 @@ fi
 cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
 
 for module in "$output_dir"/*.ko; do
-  "$cross_strip" --strip-debug "$module"
+  if [[ "${LAB_STANDARD_TOOLS:-0}" != 1 || "$(basename "$module")" != wireguard.ko ]]; then
+    "$cross_strip" --strip-debug "$module"
+  fi
   vermagic="$("$cross_readelf" -p .modinfo "$module" \
     | sed -n 's/.*vermagic=//p' | head -n1 | sed 's/[[:space:]]*$//')"
   if [[ "$vermagic" != '4.1.52 SMP preempt mod_unload ARMv7' ]]; then
@@ -331,6 +344,10 @@ rm -rf "$output_dir/.ipk-build"
   cd "$output_dir"
   if [[ "$build_spu_lab" -eq 1 ]]; then
     sha256sum ./*.ko > SHA256SUMS
+    if [[ "${LAB_STANDARD_TOOLS:-0}" == 1 ]]; then
+      cp "$lab_dir/standards/wg" "$lab_dir/standards/iperf3-lab" "$lab_dir/standards/udp-encap" "$lab_dir/standards/veth-offloads" "$lab_dir/standards/STANDARD-SOURCES.tsv" .
+      sha256sum ./wg ./iperf3-lab ./udp-encap ./veth-offloads >> SHA256SUMS
+    fi
   else
     sha256sum ./*.ko ./*.ipk > SHA256SUMS
   fi

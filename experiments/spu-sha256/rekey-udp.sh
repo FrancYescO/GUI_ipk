@@ -85,7 +85,7 @@ for hash in sha256; do
   for stat in enc_packets dec_packets bad_tags borrowed_packets; do
     echo "$stat=$(cat /sys/module/spu_sha256_hybrid/parameters/$stat)"
   done
-  for stat in transfer_requests lab_no_slot lab_tx_error lab_recycle lab_double_free; do
+  for stat in transfer_requests lab_no_slot lab_tx_error lab_recycle lab_double_free lab_rx_polls lab_rx_batches lab_rx_done lab_rx_invalid lab_inflight lab_pool_fallback_uses; do
     echo "$stat=$(cat /sys/module/bcmspu/parameters/$stat)"
   done
   test "$(cat /sys/module/bcmspu/parameters/lab_double_free)" -eq 0

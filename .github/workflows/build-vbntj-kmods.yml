@@ -18,6 +18,10 @@ on:
           - router-tested
           - spu-sha256-lab
           - spu-sha256-inplace-lab
+      standard_tools:
+        description: "Include pinned static iperf3/wg and standard crypto modules (raw lab profiles only)"
+        type: boolean
+        default: false
   pull_request:
     paths:
       - ".github/workflows/build-vbntj-kmods.yml"
@@ -68,6 +72,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       DAMSON_INPUTS_TAG: damson-build-inputs-v1
       MODULE_SET: ${{ inputs.module_set || 'router-tested' }}
+      LAB_STANDARD_TOOLS: ${{ inputs.standard_tools && '1' || '0' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -118,6 +123,12 @@ jobs:
               --no-same-owner -C .work/vbntj-gpl
           fi
 
+      - name: Stage pinned standard comparison tools
+        if: inputs.standard_tools
+        run: |
+          [[ "$MODULE_SET" == spu-sha256-lab || "$MODULE_SET" == spu-sha256-inplace-lab ]]
+          experiments/spu-sha256/fetch-standard-tools.sh .cache/sources/spu-standard-tools
+
       - name: Prepare kernel and compile modules
         run: |
           mkdir -p dist/vbntj-kmods
@@ -125,6 +136,7 @@ jobs:
           docker run --rm \
             --platform linux/amd64 \
             --env MODULE_SET \
+            --env LAB_STANDARD_TOOLS \
             --env OUTPUT_DIR=/out \
             --env SOURCE_DIR=/app \
             --volume "$PWD:/repo" \
@@ -148,6 +160,16 @@ jobs:
             test -s "dist/vbntj-kmods/$module.ko"
           done
           strings dist/vbntj-kmods/bcmspu.ko | grep -F 'parmtype=transfer_requests:int'
+          strings dist/vbntj-kmods/bcmspu.ko | grep -F 'parmtype=pool_fallback:bool'
+          if [[ "$LAB_STANDARD_TOOLS" == 1 ]]; then
+            for module in gcm ghash-generic gf128mul ctr seqiv wireguard; do
+              test -s "dist/vbntj-kmods/$module.ko"
+            done
+            for binary in wg iperf3-lab udp-encap veth-offloads; do
+              readelf -h "dist/vbntj-kmods/$binary" | grep -Eq 'Machine:[[:space:]]+ARM'
+              if readelf -l "dist/vbntj-kmods/$binary" | grep -q INTERP; then exit 1; fi
+            done
+          fi
           if [[ "$MODULE_SET" == spu-sha256-inplace-lab ]]; then
             if strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'; then
               echo 'In-place profile was not compiled with its explicit opt-in'

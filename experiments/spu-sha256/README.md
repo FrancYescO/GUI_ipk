@@ -1,5 +1,10 @@
 # SHA256-128 laboratory for Damson / BCM63138 / Linux 4.1.52
 
+Further results: [ROUND2_RESULTS.md](ROUND2_RESULTS.md). Queue/fallback patch
+003 remains quarantined after a test lost connectivity and a new boot was
+observed. Its operational flags default to false/zero. Standard-tool tests
+use no SPU module. No experimental Runner fix is recommended for production.
+
 The `kmods-4.1.52` branch contains this laboratory alongside the stable builds.
 Experimental raw modules remain separate from published kernel feeds.
 The Actions profile `build-vbntj-kmods.yml: module_set=spu-sha256-lab` rebuilds
@@ -101,3 +106,24 @@ With a pool of 64, three AES cases at UDP 10 Mbit/s lost 35–36% of datagrams:
 the loss count matched `lab_no_slot` exactly. At 256, loss was 3/3644, 0/3638,
 and 0/3639, with all four driver error counters zero. These short same-device
 runs include key updates and fragmented pings; see RESULTS.md for scope.
+
+
+## Standard comparison tools and external peer
+
+Dispatch either raw profile with `standard_tools=true` to include static
+upstream iperf3/wg, the tested WireGuard module and AES-GCM dependencies.
+`standard-sources.tsv` pins every download; `build-standard-tools.sh` uses the
+preserved compiler and a temporary static musl sysroot. The default stable
+profiles do not invoke it. Artifact checksums include the userspace tools.
+
+Test scripts accept `IPERF=/tmp/spu-sha256/iperf3-lab`. `benchmark.sh` supports
+`AUTH_MODE=gcm`, CPU affinity pairs, MSS and test-veth RPS; it bounds client
+runtime with `timeout`. `udp-control.sh` measures the same UDP rates without a
+VPN. `wireguard-local.sh` compares the same two-modem-namespace topology.
+
+External scripts require a dedicated peer at the explicitly allowlisted Mac
+address, synthetic keys and no root-namespace XFRM configuration. They create
+only their own namespace/veth and scoped temporary firewall chains, never flush
+foreign rules and remove their changes on exit. `veth-offloads` accepts only
+`spua`/`spub`; it cannot alter physical interfaces. `peer-ipsec.sh` must run only
+inside the task-owned container. Private test keys stay in temporary storage.
