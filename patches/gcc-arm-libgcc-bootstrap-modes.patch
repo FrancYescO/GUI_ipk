@@ -1,6 +1,6 @@
 --- a/libgcc/libgcc2.h
 +++ b/libgcc/libgcc2.h
-@@ -33,6 +33,24 @@
+@@ -33,6 +33,37 @@
  extern void __clear_cache (char *, char *);
  extern void __eprintf (const char *, const char *, unsigned int, const char *)
    __attribute__ ((__noreturn__));
@@ -14,6 +14,19 @@
 +#endif
 +#ifndef __LIBGCC_HAS_DF_MODE__
 +#define __LIBGCC_HAS_DF_MODE__ 1
++#endif
++#ifndef __LIBGCC_SF_FUNC_EXT__
++#define __LIBGCC_SF_FUNC_EXT__ f
++#endif
++#ifndef __LIBGCC_DF_FUNC_EXT__
++#define __LIBGCC_DF_FUNC_EXT__
++#endif
++/* ARM evaluates both modes at their native precision.  */
++#ifndef __LIBGCC_SF_EXCESS_PRECISION__
++#define __LIBGCC_SF_EXCESS_PRECISION__ 0
++#endif
++#ifndef __LIBGCC_DF_EXCESS_PRECISION__
++#define __LIBGCC_DF_EXCESS_PRECISION__ 0
 +#endif
 +#ifndef __LIBGCC_SF_MANT_DIG__
 +#define __LIBGCC_SF_MANT_DIG__ __FLT_MANT_DIG__
