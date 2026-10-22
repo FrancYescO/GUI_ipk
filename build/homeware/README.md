@@ -24,3 +24,5 @@ python3 scripts/report-homeware-coverage.py build/homeware/catalog.tsv dist
 ```
 
 Add `--metadata /path/to/buildroot/tmp/.packageinfo --config /path/to/buildroot/.config` to distinguish missing recipes, disabled packages and selected packages not built. Per-shard reports describe the IPKs available in that shard, including dependencies; only the aggregate report measures the complete merged feed. Exact package names are compared across sections; versions are shown without treating newer ABI names as equivalents. Missing coverage is diagnostic and does not bypass the existing feed validation or shard checks.
+
+The archived LuCI makefile also treated loose `.pot` template files as language directories. The userspace patch limits translation packages to directories, preventing an empty `luci-i18n-https-dns-proxy-https-dns-proxy.pot` package and its invalid UCI language registration. That malformed package remains in the baseline because it was actually listed by Homeware.

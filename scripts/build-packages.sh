@@ -212,6 +212,9 @@ fi
 if [[ "$userspace_only" == 1 ]]; then
   (cd "$repo_root/build/homeware-overlay" && sha256sum --check SHA256SUMS)
   cp -a "$repo_root/build/homeware-overlay/feeds/." "$work_dir/feeds/"
+  # Translation templates are source files, not language directories.
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/homeware-luci-translation-directories.patch"
   mkdir -p "$work_dir/package/feeds/packages" "$work_dir/package/feeds/luci"
   for package in banip https-dns-proxy; do
     ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"

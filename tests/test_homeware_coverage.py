@@ -4,6 +4,7 @@ import gzip
 import hashlib
 import importlib.util
 import tempfile
+import subprocess
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -87,6 +88,21 @@ class CoverageTests(unittest.TestCase):
         names = {row['name'] for row in rows}
         self.assertTrue({'rtl_433', 'ddns-scripts_freedns_42_pl', 'busybox_telnet'} <= names)
         self.assertNotIn('rtl', names)
+
+    def test_translation_templates_do_not_become_language_packages(self):
+        source = self.root / 'feeds/luci/luci.mk'
+        source.parent.mkdir(parents=True)
+        source.write_text('\n' * 9 + 'LUCI_LANGUAGES:=$(sort $(filter-out templates,$(notdir $(wildcard ${CURDIR}/po/*))))\n')
+        subprocess.run(['patch', '-s', '-p1', '-d', str(self.root), '-i',
+                        str(ROOT / 'patches/homeware-luci-translation-directories.patch')], check=True)
+        app = self.root / 'application'
+        for language in ('en', 'de', 'templates'):
+            (app / 'po' / language).mkdir(parents=True)
+        (app / 'po' / 'application.pot').write_text('translation template')
+        makefile = self.root / 'check.mk'
+        makefile.write_text("all:\n\t@printf '%s\\n' '$(LUCI_LANGUAGES)'\n")
+        result = subprocess.check_output(['make', '-s', '-f', str(source), '-f', str(makefile)], cwd=app)
+        self.assertEqual(result.decode().strip(), 'de en')
 
     def test_imported_recipe_files_match_the_manifest(self):
         overlay = ROOT / 'build/homeware-overlay'

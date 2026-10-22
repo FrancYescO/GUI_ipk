@@ -1,0 +1,5 @@
+--- a/feeds/luci/luci.mk
++++ b/feeds/luci/luci.mk
+@@ -10 +10 @@
+-LUCI_LANGUAGES:=$(sort $(filter-out templates,$(notdir $(wildcard ${CURDIR}/po/*))))
++LUCI_LANGUAGES:=$(sort $(filter-out templates,$(notdir $(patsubst %/.,%,$(wildcard ${CURDIR}/po/*/.)))))
