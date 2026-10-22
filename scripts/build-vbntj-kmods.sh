@@ -16,6 +16,9 @@ case "$module_set" in
   tun)
     module_targets=(drivers/net/tun.ko)
     ;;
+  rndis-compat)
+    module_targets=(drivers/net/usb/cdc_ether.ko drivers/net/usb/rndis_host.ko)
+    ;;
   network-smoke)
     module_targets=(drivers/net/tun.ko drivers/net/usb/usbnet.ko drivers/net/usb/cdc_ether.ko)
     ;;
@@ -153,6 +156,13 @@ fi
 patch --batch --forward --directory "$kernel_dir" -p1 \
   < "$repo_root/patches/vbntj-4.1.52/001-damson-network-abi.patch"
 
+if [[ "$module_set" == rndis-compat ]]; then
+  for compatibility_patch in 002-rndis-misc-class.patch 003-cdc-ether-damson-led-abi.patch; do
+    patch --batch --forward --directory "$kernel_dir" -p1 \
+      < "$repo_root/patches/vbntj-4.1.52/$compatibility_patch"
+  done
+fi
+
 cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
 "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
   --enable WIRELESS_EXT \
@@ -163,7 +173,8 @@ cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
   --disable BCM_MAP \
   --module TUN \
   --module USB_USBNET \
-  --module USB_NET_CDCETHER
+  --module USB_NET_CDCETHER \
+  --module USB_NET_RNDIS_HOST
 if [[ "$build_connmark" -eq 1 ]]; then
   "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
     --module NET_ACT_CONNMARK
@@ -289,7 +300,7 @@ build_manual_ipk() {
   package_name="kmod-${module_stem//_/-}-damson-4.1.52-manual"
   package_version="4.1.52-1"
   package_arch="brcm963xx"
-  if [[ "$module_stem" == bcmspu ]]; then
+  if [[ "$module_stem" == bcmspu || "$module_set" == rndis-compat ]]; then
     # This is the architecture accepted by OPKG on the validated VBNTJ.
     package_arch="arm_cortex-a9"
   fi
@@ -365,6 +376,7 @@ module_set=$module_set
 spu_inplace_lab=$build_spu_inplace_lab
 abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
+rndis_patches=patches/vbntj-4.1.52/00[23]-*.patch (rndis-compat only)
 spu_patches=patches/vbntj-spu/*.patch (spu-probe only)
 kernel_compiler_seed_manifest=build/vbntj/kernel-toolchain-seed.sha256 (SPU workflow fallback)
 EOF

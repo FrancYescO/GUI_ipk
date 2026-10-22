@@ -20,7 +20,7 @@ while IFS= read -r -d '' ipk; do
   ipk_count=$((ipk_count + 1))
   filename="$(basename "$ipk")"
   package_arch=brcm963xx
-  if [[ "$filename" == kmod-bcmspu-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk ]]; then
+  if [[ "$filename" =~ ^kmod-(bcmspu|cdc-ether|rndis-host)-damson-4\.1\.52-manual_4\.1\.52-1_arm_cortex-a9\.ipk$ ]]; then
     package_arch=arm_cortex-a9
   elif [[ ! "$filename" =~ ^kmod-[a-z0-9.-]+-damson-4\.1\.52-manual_4\.1\.52-1_brcm963xx\.ipk$ ]]; then
     echo "Unexpected manual IPK filename: $filename" >&2
