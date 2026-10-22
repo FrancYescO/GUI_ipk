@@ -1,0 +1,14 @@
+source=https://github.com/avwarez/vmg8825_b50b.git
+source_commit=af23960e39003ba7788f5ced0c256b1bc676a712
+build_repository=https://github.com/FrancYescO/GUI_ipk
+build_base_commit=1b3b40688a9a413dc697432c97a4e0a17ab77df9
+module_set=rndis-compat
+kernel=4.1.52
+vermagic=4.1.52 SMP preempt mod_unload ARMv7
+compiler=OpenWrt GCC 5.5.0
+abi_canary=compile-time net_device and sk_buff layout checks passed
+undefined_symbols=both runtime modules match the original Damson module import sets
+kernel.config_sha256=e4bb7b3ac1d08438c1bf80387f854a247e697deb5c9075f14401de2816868147
+001-damson-network-abi.patch_sha256=83ce77bf17f57e8bd3e5c01e777298b9d9697d37859af998cec5c3f029843c16
+002-rndis-misc-class.patch_sha256=d806795622dc638b7e9bcea70219b5fc0f11309b42e72c7bc4072b52677a3e04
+003-cdc-ether-damson-led-abi.patch_sha256=49c19efe0bfb0ed60a98f46ead49be3ebf1e430649517d5494cdf97be663de3e

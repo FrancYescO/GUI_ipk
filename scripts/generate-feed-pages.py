@@ -92,8 +92,10 @@ def page(title, selected, groups, prefix, partial=False):
         "ABI before installation; they have not been tested on a router.</p>"
         if selected == "kernel/4.1.38" else
         "<p><strong>Damson 4.1.52 modules require the exact firmware ABI.</strong> "
-        "TUN and act_connmark were tested on VBNT-K Damson "
-        "19.4.0866-3401052. WireGuard passed loading, local handshake and "
+        "TUN, act_connmark and the cdc_ether/rndis_host compatibility pair "
+        "were tested on VBNT-K Damson 19.4.0866-3401052. "
+        "The RNDIS pair uses the firmware's native usbnet module. "
+        "WireGuard passed loading, local handshake and "
         "unloading on VBNT-K 19.4.1051; routed VPN traffic remains untested. "
         "WireGuard requires the stock udp_tunnel and ip6_udp_tunnel modules "
         "already loaded. Other additional modules passed build checks only. "

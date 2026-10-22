@@ -68,6 +68,14 @@ sufficient. Additional 4.1.52 modules are build-verified only and should be
 tested as raw `.ko` files from `/tmp` before any persistent installation.
 The kernel feed is not part of the userspace source list below.
 
+The `kernel/4.1.52` feed also includes the router-tested `cdc_ether` and
+`rndis_host` compatibility pair from PR #7, using architecture `arm_cortex-a9`.
+Both modules support miscellaneous-class USB RNDIS (`ef/04/01`) and must be
+used together with the firmware's native `usbnet`. Their IPKs have no boot
+autoload entries or installation scripts. They target the exact Damson
+firmware above; the publication workflow verifies their checksums and payloads
+before indexing both packages and deploying the feed.
+
 Browse and search the published packages at
 [francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).
 Each feed section has its own package list and direct IPK download links.
