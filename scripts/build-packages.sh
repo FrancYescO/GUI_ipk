@@ -207,6 +207,21 @@ if [[ "$userspace_only" == 1 ]]; then
   rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
 fi
 
+# Build the additional Homeware userspace recipes from pinned source overlays.
+# Keep upstream payloads immutable and register the new recipes before defconfig.
+if [[ "$userspace_only" == 1 ]]; then
+  (cd "$repo_root/build/homeware-overlay" && sha256sum --check SHA256SUMS)
+  cp -a "$repo_root/build/homeware-overlay/feeds/." "$work_dir/feeds/"
+  mkdir -p "$work_dir/package/feeds/packages" "$work_dir/package/feeds/luci"
+  for package in banip https-dns-proxy; do
+    ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
+  done
+  ln -sfn ../../../feeds/luci/applications/luci-app-https-dns-proxy \
+    "$work_dir/package/feeds/luci/luci-app-https-dns-proxy"
+  ln -sfn ../../../feeds/luci/modules/luci-compat "$work_dir/package/feeds/luci/luci-compat"
+  rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
+fi
+
 if [[ "${ENABLE_ASTERISK20:-0}" == 1 ]]; then
   # Keep the new PJSIP ABI scoped to the experimental SIP profile.
   rm -rf "$work_dir/feeds/telephony/libs/pjproject"
@@ -438,6 +453,12 @@ if [[ "$ipk_count" -eq 0 ]]; then
 fi
 
 echo "Built $ipk_count packages in $output_dir"
+if [[ "$userspace_only" == 1 ]]; then
+  python3 "$repo_root/scripts/report-homeware-coverage.py" \
+    "$repo_root/build/homeware/catalog.tsv" "$output_dir" \
+    --metadata "$work_dir/tmp/.packageinfo" --config "$work_dir/.config"
+fi
+
 if [[ "$package_compile_failed" -ne 0 ]]; then
   echo "Some package recipes failed; successful IPKs and diagnostics were preserved in $output_dir" >&2
   exit 1

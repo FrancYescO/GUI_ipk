@@ -58,6 +58,8 @@ on:
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
+      - "scripts/report-homeware-coverage.py"
+      - "tests/test_homeware_coverage.py"
   push:
     branches: [main]
     paths:
@@ -85,6 +87,8 @@ on:
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
+      - "scripts/report-homeware-coverage.py"
+      - "tests/test_homeware_coverage.py"
 
 concurrency:
   group: packages-${{ github.ref }}-${{ inputs.reuse_run_id || inputs.package_targets || 'full' }}
@@ -94,7 +98,16 @@ permissions:
   contents: read
 
 jobs:
+  homeware-checks:
+    name: Homeware catalog and coverage checks
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify catalog, pinned recipes and coverage semantics
+        run: python3 -m unittest discover -s tests -p 'test_homeware_coverage.py' -v
+
   build:
+    needs: homeware-checks
     if: inputs.reuse_run_id == ''
     name: ${{ (inputs.package_targets != '' || inputs.build_profile == 'asterisk20') && 'Targeted build' || format('Userspace shard {0}/16', matrix.shard) }}
     runs-on: ubuntu-24.04
@@ -179,8 +192,8 @@ jobs:
 
   aggregate:
     name: Merge and verify userspace feed
-    if: ${{ always() && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
-    needs: [build, asterisk20]
+    if: ${{ always() && needs.homeware-checks.result == 'success' && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
+    needs: [build, asterisk20, homeware-checks]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -230,6 +243,11 @@ jobs:
 
       - name: Verify package feed
         run: scripts/verify-feed.sh dist
+
+      - name: Report Homeware package coverage
+        run: |
+          python3 scripts/report-homeware-coverage.py build/homeware/catalog.tsv dist
+          cat dist/homeware-coverage.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Add verified Asterisk 20 feed
         uses: actions/download-artifact@v7

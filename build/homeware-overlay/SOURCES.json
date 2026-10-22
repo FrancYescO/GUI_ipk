@@ -1,0 +1,26 @@
+[
+  {
+    "repository": "https://github.com/openwrt/packages",
+    "commit": "0171d18e051a0afdc5bc52b9e7913518b2e2a2a0",
+    "path": "net/https-dns-proxy",
+    "destination": "feeds/packages/net/https-dns-proxy"
+  },
+  {
+    "repository": "https://github.com/openwrt/packages",
+    "commit": "6df6880800397ab3821572c6c5ad18e300374d9e",
+    "path": "net/banip",
+    "destination": "feeds/packages/net/banip"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "20b3600d4d64bf60588cf4975c7a62104411870e",
+    "path": "applications/luci-app-https-dns-proxy",
+    "destination": "feeds/luci/applications/luci-app-https-dns-proxy"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "20b3600d4d64bf60588cf4975c7a62104411870e",
+    "path": "modules/luci-compat",
+    "destination": "feeds/luci/modules/luci-compat"
+  }
+]
