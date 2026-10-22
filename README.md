@@ -256,8 +256,10 @@ Every set also compiles the repository's
 [`vbntj_abi_canary.ko`](build/vbntj-canary/vbntj_abi_canary.c), which checks
 `sizeof(net_device)=0x4c0`, the offsets of `flags`, `mc.count` and `_tx`, and
 `sk_buff.end` at compile time. It is included as a raw module, without an IPK.
-Only the allowlisted module targets and this canary are compiled after
-`modules_prepare`; enabling USB modules in the configuration does not export
+The allowlisted module targets and this canary are compiled after
+`modules_prepare`. The `rndis-compat` profile also compiles `usbnet` to record
+module dependencies, but retains the firmware's native `usbnet` at runtime.
+Enabling USB modules in the configuration does not export
 them unless `network-smoke` or `rndis-compat` is selected. This pipeline does not run `make world`
 or replace the running kernel, Broadcom DSL/Wi-Fi drivers or Zyxel userspace.
 
