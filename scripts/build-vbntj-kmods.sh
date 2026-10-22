@@ -221,6 +221,11 @@ if [[ "$build_connmark" -eq 1 ]]; then
 fi
 
 if [[ "$build_spu" -eq 0 ]]; then
+  if [[ "$module_set" == rndis-compat ]]; then
+    # Populate modpost's symbol ownership so both replacement modules retain
+    # their dependency on the firmware's native usbnet. Do not export this ko.
+    "${kernel_make[@]}" drivers/net/usb/usbnet.ko
+  fi
   "${kernel_make[@]}" "${module_targets[@]}"
 fi
 if [[ "$build_spu" -eq 1 ]]; then
@@ -289,6 +294,31 @@ if [[ -f "$output_dir/tun.ko" ]] && \
   echo "tun.ko undefined-symbol ABI differs from the router-validated baseline" >&2
   diff -u "$repo_root/build/vbntj/tun.undefined-symbols" "$output_dir/tun.undefined-symbols" || true
   exit 1
+fi
+
+if [[ "$module_set" == rndis-compat ]]; then
+  for module_name in cdc_ether rndis_host; do
+    baseline="$repo_root/artifacts/damson-4.1.52-rndis-compat/$module_name.undefined-symbols"
+    if ! cmp -s "$baseline" "$output_dir/$module_name.undefined-symbols"; then
+      echo "$module_name.ko undefined-symbol ABI differs from the router-tested RNDIS baseline" >&2
+      diff -u "$baseline" "$output_dir/$module_name.undefined-symbols" || true
+      exit 1
+    fi
+    expected_dependencies=usbnet
+    if [[ "$module_name" == rndis_host ]]; then
+      expected_dependencies=cdc_ether,usbnet
+    fi
+    dependencies="$("$cross_readelf" -p .modinfo "$output_dir/$module_name.ko" \
+      | sed -n 's/.*depends=//p' | tr ',' '\n' | LC_ALL=C sort | paste -sd, -)"
+    if [[ "$dependencies" != "$expected_dependencies" ]]; then
+      echo "Unexpected dependencies in $module_name.ko: $dependencies (expected $expected_dependencies)" >&2
+      exit 1
+    fi
+  done
+  if [[ -e "$output_dir/usbnet.ko" ]]; then
+    echo 'RNDIS compatibility artifacts must retain the native firmware usbnet module' >&2
+    exit 1
+  fi
 fi
 
 build_manual_ipk() {
