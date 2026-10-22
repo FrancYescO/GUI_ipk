@@ -246,6 +246,7 @@ disabled for this reconstruction.
 | `module_set` | Runtime modules compiled | Purpose |
 | --- | --- | --- |
 | `tun` | `drivers/net/tun.ko` | TUN/TAP virtual network interfaces |
+| `rndis-compat` | `drivers/net/usb/cdc_ether.ko`, `drivers/net/usb/rndis_host.ko` | Backport USB miscellaneous-class RNDIS recognition; manual testing required |
 | `network-smoke` | `drivers/net/tun.ko`, `drivers/net/usb/usbnet.ko`, `drivers/net/usb/cdc_ether.ko` | Additional USB networking compilation checks |
 | `qos-probe` | `net/sched/act_connmark.ko` | Traffic-control conntrack mark action; IFB, ingress, U32 and police stay built into the kernel configuration |
 | `spu-probe` | `bcmspu.ko`, raw `damson_spu_test.ko` | Hardware SHA1-96, software fallback for SHA256-128, and opt-in ESP flow offload; see [temporary validation](build/vbntj-spu-test/README.md) |
@@ -255,14 +256,17 @@ Every set also compiles the repository's
 [`vbntj_abi_canary.ko`](build/vbntj-canary/vbntj_abi_canary.c), which checks
 `sizeof(net_device)=0x4c0`, the offsets of `flags`, `mc.count` and `_tx`, and
 `sk_buff.end` at compile time. It is included as a raw module, without an IPK.
-Only the allowlisted module targets and this canary are compiled after
-`modules_prepare`; enabling USB modules in the configuration does not export
-them unless `network-smoke` is selected. This pipeline does not run `make world`
+The allowlisted module targets and this canary are compiled after
+`modules_prepare`. The `rndis-compat` profile also compiles `usbnet` to record
+module dependencies, but retains the firmware's native `usbnet` at runtime.
+Enabling USB modules in the configuration does not export
+them unless `network-smoke` or `rndis-compat` is selected. This pipeline does not run `make world`
 or replace the running kernel, Broadcom DSL/Wi-Fi drivers or Zyxel userspace.
 
 Output goes to `dist/vbntj-kmods/`: stripped-debug `.ko` files, a
 `kmod-<module>-damson-4.1.52-manual_4.1.52-1_brcm963xx.ipk` for each runtime
-module, per-module `.undefined-symbols`, `SHA256SUMS` and `BUILD-METADATA.txt`.
+module (the `rndis-compat` and SPU packages use the runtime OPKG architecture
+`arm_cortex-a9`), per-module `.undefined-symbols`, `SHA256SUMS` and `BUILD-METADATA.txt`.
 Each IPK contains only `/lib/modules/4.1.52/<module>.ko`, with no installation
 scripts or boot autoload entry. The workflow uploads these files as an Actions
 artifact; the publish job creates versioned Release downloads under its branch
@@ -319,3 +323,20 @@ specific userspace packages needed and review replacements of core components
 such as BusyBox, `procd`, OpenSSL or the package manager itself.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/AnsuelS)
+
+### RNDIS compatibility profile
+
+The `rndis-compat` module set backports recognition of USB class `ef/04/01`
+from modern Linux into both the RNDIS host match table and the CDC descriptor
+parser. It also removes Zyxel-specific USB LED callbacks that Damson does not
+export. Both modules must be used together. Existing USB networking support and
+the vendor kernel ABI are retained. The patch follows the miscellaneous-class
+RNDIS handling in upstream Linux (`is_novatel_rndis` in `cdc_ether.c` and the
+corresponding `USB_CLASS_MISC, 4, 1` match in `rndis_host.c`).
+
+Select `rndis-compat` in the Damson module workflow. Artifacts are manual-only;
+matching the kernel release alone is insufficient. Before loading, compare
+vermagic and undefined symbols with the running firmware, save the original
+modules, and verify that existing USB network users can be stopped safely.
+Test without changing WAN routes before enabling persistent module replacement.
+No device-specific identifiers or captured telemetry are needed by this profile.

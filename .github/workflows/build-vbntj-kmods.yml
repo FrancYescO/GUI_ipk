@@ -1,6 +1,6 @@
 name: Damson 4.1.52 kernel-module artifacts
 
-run-name: Damson 4.1.52 — ${{ inputs.module_set || 'router-tested' }}
+run-name: Damson 4.1.52 — ${{ inputs.module_set || 'router-tested + rndis-compat' }}
 
 on:
   workflow_dispatch:
@@ -13,6 +13,7 @@ on:
         options:
           - tun
           - network-smoke
+          - rndis-compat
           - qos-probe
           - spu-probe
           - router-tested
@@ -37,6 +38,7 @@ on:
       - "scripts/fetch-damson-kernel-toolchain.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
+      - "artifacts/damson-4.1.52-rndis-compat/**"
   push:
     branches:
       - kmods-4.1.52
@@ -55,6 +57,7 @@ on:
       - "scripts/fetch-damson-kernel-toolchain.sh"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "artifacts/damson-4.1.52-manual/**"
+      - "artifacts/damson-4.1.52-rndis-compat/**"
 
 concurrency:
   group: vbntj-kmods-${{ github.ref }}
@@ -65,13 +68,17 @@ permissions:
 
 jobs:
   build:
-    name: Compile and verify ${{ inputs.module_set || 'router-tested' }} modules
+    strategy:
+      fail-fast: false
+      matrix:
+        module_set: ${{ fromJSON(github.event_name == 'workflow_dispatch' && format('["{0}"]', inputs.module_set) || '["router-tested", "rndis-compat"]') }}
+    name: Compile and verify ${{ matrix.module_set }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
       GH_TOKEN: ${{ github.token }}
       DAMSON_INPUTS_TAG: damson-build-inputs-v1
-      MODULE_SET: ${{ inputs.module_set || 'router-tested' }}
+      MODULE_SET: ${{ matrix.module_set }}
       LAB_STANDARD_TOOLS: ${{ inputs.standard_tools && '1' || '0' }}
     steps:
       - uses: actions/checkout@v7
@@ -80,6 +87,11 @@ jobs:
         run: |
           (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
+
+      - name: Verify committed RNDIS compatibility packages
+        run: |
+          (cd artifacts/damson-4.1.52-rndis-compat && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-rndis-compat
 
       - name: Cache pinned Damson release inputs
         uses: actions/cache@v6
