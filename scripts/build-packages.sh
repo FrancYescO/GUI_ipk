@@ -143,6 +143,8 @@ cp "$repo_root/build/grilo-vapi/grilo-0.3.deps" \
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/grilo-vala-sdk.patch"
 patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/swconfig-kernel-uapi.patch"
+patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-source-mirror.patch"
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/freeswitch-swig-patch-context.patch"
