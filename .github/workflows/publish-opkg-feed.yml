@@ -1,6 +1,13 @@
 name: Publish verified OPKG feeds
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/publish-opkg-feed.yml"
+      - "artifacts/damson-4.1.52-rndis-compat/**"
+      - "scripts/assemble-kernel-feed.py"
+      - "scripts/verify-manual-kmod-ipks.sh"
+      - "tests/test_rndis_feed.py"
   workflow_dispatch:
     inputs:
       reuse_userspace_run_id:
@@ -24,6 +31,7 @@ on:
       - "artifacts/damson-4.1.52-manual/**"
       - "artifacts/damson-4.1.52-network/**"
       - "artifacts/damson-4.1.52-spu/**"
+      - "artifacts/damson-4.1.52-rndis-compat/**"
       - "artifacts/buildroot-4.1.38/**"
       - "scripts/verify-feed.sh"
       - "scripts/sanitize-opkg-feed.sh"
@@ -42,8 +50,6 @@ concurrency:
 permissions:
   contents: read
   actions: read
-  pages: write
-  id-token: write
 
 jobs:
   verify:
@@ -91,6 +97,12 @@ jobs:
           scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
           python3 scripts/verify-kmod-spu.py artifacts/buildroot-4.1.38 4.1.38
 
+      - name: Verify router-tested RNDIS packages
+        run: |
+          (cd artifacts/damson-4.1.52-rndis-compat && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-rndis-compat
+          python3 -m unittest discover -s tests -p test_rndis_feed.py
+
       - name: Verify tested SPU artifact
         run: |
           (cd artifacts/damson-4.1.52-spu && sha256sum --check SHA256SUMS)
@@ -98,7 +110,7 @@ jobs:
           python3 scripts/verify-kmod-spu.py artifacts/damson-4.1.52-spu 4.1.52
 
       - name: Assemble versioned kernel feeds
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --buildroot-kernel-dir artifacts/buildroot-4.1.38
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods
@@ -113,7 +125,11 @@ jobs:
 
   deploy:
     name: Publish verified feed to Pages
+    if: github.event_name != 'pull_request'
     needs: verify
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-24.04
     environment:
       name: github-pages

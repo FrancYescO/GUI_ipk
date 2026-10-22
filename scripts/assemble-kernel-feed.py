@@ -37,9 +37,14 @@ def write_feed(version, ipks, feed_root):
             version == "4.1.52"
             and fields.get("Package", "").startswith("kmod-")
             and (fields.get("Architecture") == "brcm963xx" or (
-                fields.get("Package") == "kmod-bcmspu-damson-4.1.52-manual"
+                fields.get("Package") in {
+                    "kmod-bcmspu-damson-4.1.52-manual",
+                    "kmod-cdc-ether-damson-4.1.52-manual",
+                    "kmod-rndis-host-damson-4.1.52-manual",
+                }
                 and fields.get("Architecture") == "arm_cortex-a9"
                 and fields.get("X-Damson-Target") == "VBNTJ_502L07p1"
+                and fields.get("X-Damson-Firmware") == "19.4.0866-3401052"
             ))
             and fields.get("X-Kernel-Vermagic", "").startswith(version + " ")
             and fields.get("X-Manual-Install-Only") == "yes"
@@ -98,6 +103,7 @@ def main():
     parser.add_argument("--buildroot-kernel-dir", type=Path, help="directory with verified 4.1.38 kernel and kmod IPKs")
     parser.add_argument("--damson-extra-dir", type=Path, help="directory with additional verified manual-only Damson IPKs")
     parser.add_argument("--damson-spu-dir", type=Path, help="directory with the verified manual-only SPU IPK")
+    parser.add_argument("--damson-rndis-dir", type=Path, help="directory with the router-tested CDC Ethernet/RNDIS pair")
     args = parser.parse_args()
     damson_ipks = list(args.source.glob("*.ipk"))
     if args.damson_extra_dir:
@@ -112,6 +118,17 @@ def main():
         if len(spu_ipks) != 1 or not spu_ipks[0].name.startswith("kmod-bcmspu-"):
             raise ValueError("Expected exactly the verified SPU package")
         damson_ipks.extend(spu_ipks)
+    if args.damson_rndis_dir:
+        subprocess.run([str(Path(__file__).resolve().with_name("verify-manual-kmod-ipks.sh")),
+                        str(args.damson_rndis_dir)], check=True)
+        rndis_ipks = list(args.damson_rndis_dir.glob("*.ipk"))
+        expected = {
+            "kmod-cdc-ether-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
+            "kmod-rndis-host-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
+        }
+        if {ipk.name for ipk in rndis_ipks} != expected:
+            raise ValueError("Expected exactly the router-tested CDC Ethernet/RNDIS package pair")
+        damson_ipks.extend(rndis_ipks)
     verifier = Path(__file__).resolve().with_name("verify-wireguard-kmod.sh")
     for directory in (args.source, args.damson_extra_dir):
         if directory and list(directory.glob("kmod-wireguard*.ipk")):
