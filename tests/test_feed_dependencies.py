@@ -48,10 +48,17 @@ class DependencyTests(unittest.TestCase):
         self.assertIn('replacement=2 [base]', issues[0]['providers'])
 
     def test_inline_versioned_provider_retains_declared_version(self):
-        self.index('base', 'Package: app\nVersion: 1\nDepends: erlang-erts (>= 6.4)\n\nPackage: erlang\nVersion: 20\nProvides: erlang-erts=6.4\n\n')
+        self.index('base', 'Package: app\nVersion: 1\nDepends: erlang-erts (>= 7.0)\n\nPackage: erlang\nVersion: 20\nProvides: erlang-erts=6.4\n\n')
         issues, _ = AUDIT.audit(self.root)
         self.assertEqual(issues[0]['status'], 'version-check-required')
         self.assertIn('Provides: erlang-erts=6.4', issues[0]['providers'])
+
+    def test_equal_versions_resolve_only_non_strict_constraints(self):
+        self.index('base', 'Package: app\nVersion: 1\nDepends: direct (= 2), old_name (>= 3), direct (> 2)\n\nPackage: direct\nVersion: 2\n\nPackage: replacement\nVersion: 9\nProvides: old_name=3\n\n')
+        issues, summary = AUDIT.audit(self.root)
+        self.assertEqual(summary['statuses']['exact-version-available'], 2)
+        self.assertEqual([r['dependency'] for r in issues], ['direct (> 2)'])
+        self.assertEqual(issues[0]['status'], 'version-check-required')
 
     def test_kernel_profiles_do_not_supply_each_others_modules(self):
         self.index('base', 'Package: app\nVersion: 1\nDepends: kmod-example\n\n')

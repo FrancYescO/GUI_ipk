@@ -92,3 +92,14 @@ cross-build; the repaired recipe outputs still require CI verification.
 Manual-only kernel packages remain distinct from generic `kmod-*` names.
 Their presence does not automatically satisfy application dependencies.
 The report also lists version checks separately from unavailable names.
+
+For the current candidate, 15 versioned dependency groups use exactly the
+explicit version available and can be checked without approximating version
+ordering. Other comparisons remain listed for review. Unversioned virtual
+providers are not assumed to satisfy versioned dependencies.
+
+The native GCC CRT repair maps the older ARM target section definitions to
+the private names introduced in GCC 5, only for ARM GCC 4.8. A local source
+check reproduced the unpatched failure, compiled all four begin/end and
+normal/PIC combinations, and verified emitted init/fini array sections using
+an ARM EABI header fixture. The full configured cross-build remains required.

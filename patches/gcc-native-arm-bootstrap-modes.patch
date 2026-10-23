@@ -37,3 +37,35 @@
 +#endif
 +#endif
  #if !defined(inhibit_libc)
+--- a/libgcc/crtstuff.c
++++ b/libgcc/crtstuff.c
+@@ -65,0 +66,29 @@
++
++/* GCC 4.8 exposes the ARM target section definitions through tm.h,
++   rather than the private builtins introduced in later compilers. */
++#if defined (__arm__) && __GNUC__ == 4 && __GNUC_MINOR__ < 9
++#if defined (EH_FRAME_SECTION_NAME) && !defined (__LIBGCC_EH_FRAME_SECTION_NAME__)
++#define __LIBGCC_EH_FRAME_SECTION_NAME__ EH_FRAME_SECTION_NAME
++#endif
++#if defined (JCR_SECTION_NAME) && !defined (__LIBGCC_JCR_SECTION_NAME__)
++#define __LIBGCC_JCR_SECTION_NAME__ JCR_SECTION_NAME
++#endif
++#if defined (CTORS_SECTION_ASM_OP) && !defined (__LIBGCC_CTORS_SECTION_ASM_OP__)
++#define __LIBGCC_CTORS_SECTION_ASM_OP__ CTORS_SECTION_ASM_OP
++#endif
++#if defined (DTORS_SECTION_ASM_OP) && !defined (__LIBGCC_DTORS_SECTION_ASM_OP__)
++#define __LIBGCC_DTORS_SECTION_ASM_OP__ DTORS_SECTION_ASM_OP
++#endif
++#if defined (TEXT_SECTION_ASM_OP) && !defined (__LIBGCC_TEXT_SECTION_ASM_OP__)
++#define __LIBGCC_TEXT_SECTION_ASM_OP__ TEXT_SECTION_ASM_OP
++#endif
++#if defined (INIT_SECTION_ASM_OP) && !defined (__LIBGCC_INIT_SECTION_ASM_OP__)
++#define __LIBGCC_INIT_SECTION_ASM_OP__ INIT_SECTION_ASM_OP
++#endif
++#if defined (INIT_ARRAY_SECTION_ASM_OP) && !defined (__LIBGCC_INIT_ARRAY_SECTION_ASM_OP__)
++#define __LIBGCC_INIT_ARRAY_SECTION_ASM_OP__
++#endif
++#if defined (EH_TABLES_CAN_BE_READ_ONLY) && !defined (__LIBGCC_EH_TABLES_CAN_BE_READ_ONLY__)
++#define __LIBGCC_EH_TABLES_CAN_BE_READ_ONLY__ EH_TABLES_CAN_BE_READ_ONLY
++#endif
++#endif

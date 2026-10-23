@@ -37,6 +37,21 @@ def term(value, provided=False):
     return match.groups()
 
 
+
+def exact_version_available(name, operator, required, candidates):
+    if operator not in ('=', '>=', '<='):
+        return False
+    for package, version, _, declaration in candidates:
+        actual = version if package == name else None
+        if declaration and package != name:
+            _, provided_operator, provided_version = term(declaration, provided=True)
+            if provided_operator == '=':
+                actual = provided_version
+        if actual == required:
+            return True
+    return False
+
+
 def audit(root, extra_feeds=()):
     sections = list(FEEDS)
     for extra in extra_feeds:
@@ -85,6 +100,9 @@ def audit(root, extra_feeds=()):
             matches = sorted({provider for name, _, _ in choices for provider in providers[name]})
             if any(providers[name] and not operator for name, operator, _ in choices):
                 status = 'name-available'
+            elif any(exact_version_available(name, operator, required, providers[name])
+                     for name, operator, required in choices):
+                status = 'exact-version-available'
             elif matches:
                 status = 'version-check-required'
             elif all(name == 'kernel' or name.startswith('kmod-') for name, _, _ in choices):
@@ -92,7 +110,7 @@ def audit(root, extra_feeds=()):
             else:
                 status = 'unresolved-userspace'
             counts[status] += 1
-            if status == 'name-available':
+            if status in ('name-available', 'exact-version-available'):
                 continue
             if status.startswith('unresolved'):
                 missing[group.strip()].add(package['Package'])
@@ -119,7 +137,7 @@ def write(output, issues, summary):
              '| Result | Dependency groups |', '|---|---:|']
     lines += ['| {} | {} |'.format(name, count) for name, count in summary['statuses'].items()]
     lines += ['', '`dependency-issues.csv` contains unresolved dependencies and version checks only.', '',
-              'Availability checks exact names and explicit OPKG providers. Version constraints remain for review; provider versions are shown, not assumed compatible. This is not a runtime or ELF-symbol check.', '',
+              'Availability checks exact names and explicit OPKG providers. Identical explicit versions satisfy =, >= and <= constraints. Other version comparisons remain for review; package and declared provider versions are shown. This is not a runtime or ELF-symbol check.', '',
               'Missing modules may be installed by vendor firmware, but this audit does not assume that. Kernel profiles are audited separately; indexes from the other kernel version are not consulted.', '',
               '| Missing dependency | Affected package names |', '|---|---:|']
     lines += ['| {} | {} |'.format(row['dependency'].replace('|', '\\|'), row['affected_packages'])
