@@ -68,5 +68,9 @@ template that should not be packaged. These counts do not imply compatibility
 between old Asterisk modules and Asterisk 20, or between distinct library ABIs.
 
 The candidate occupies 1,063,287,580 bytes (about 1,014 MiB), close to the
-hosting limit. The native GCC repair is a separate build and is not included
+hosting limit. A GNU TAR fixture with identical file names and sizes measured
+1,067,642,880 bytes, leaving 6,098,944 bytes below the deployment action's 1 GiB
+threshold. The workflow measures the real TAR and blocks publication above
+that threshold while retaining the complete downloadable build artifact.
+The native GCC repair is a separate build and is not included
 in this verified candidate. Publication has not been enabled for these runs.

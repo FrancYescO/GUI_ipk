@@ -322,6 +322,8 @@ jobs:
 
       - name: Report assembled site size
         run: |
+          export PAGES_TAR_BYTES="$(tar --dereference --hard-dereference --directory dist --exclude=.git --exclude=.github -cf - . | wc -c)"
+          printf 'PAGES_TAR_BYTES=%s\n' "$PAGES_TAR_BYTES" >> "$GITHUB_ENV"
           python3 - <<'PYCODE'
           import os
           from pathlib import Path
@@ -330,6 +332,7 @@ jobs:
           count = sum(path.suffix == ".ipk" for path in files)
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
               summary.write("\nAssembled site: {:,} bytes ({:.1f} MiB), {:,} IPKs.\n".format(size, size / 1048576, count))
+              summary.write("Pages TAR: {:,} bytes; margin below 1 GiB: {:,} bytes.\n".format(int(os.environ["PAGES_TAR_BYTES"]), 1073741824 - int(os.environ["PAGES_TAR_BYTES"])))
               summary.write("Check the [GitHub Pages size limit](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) before publishing.\n")
           PYCODE
 
@@ -340,6 +343,14 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 30
+
+      - name: Check GitHub Pages deployment size
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish_pages))
+        run: |
+          if (( PAGES_TAR_BYTES > 1073741824 )); then
+            echo "::error::Pages TAR exceeds the 1 GiB deployment limit; the complete feed remains available as a workflow artifact."
+            exit 1
+          fi
 
       - name: Upload GitHub Pages artifact
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish_pages))
