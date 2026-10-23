@@ -74,3 +74,21 @@ threshold. The workflow measures the real TAR and blocks publication above
 that threshold while retaining the complete downloadable build artifact.
 The native GCC repair is a separate build and is not included
 in this verified candidate. Publication has not been enabled for these runs.
+
+## Declared dependency audit
+
+`report-feed-dependencies.py` reads the six shared indexes plus explicitly
+selected extra feeds. CI writes separate reports under `dependencies-4.1.38/`
+and `dependencies-4.1.52/`. It recognizes alternatives and declared providers,
+keeps version constraints for review, and never supplies modules from the
+other kernel profile. The dedicated Asterisk feed retains its own checks.
+
+The 5,500-name candidate audit found two unresolved userspace dependency
+names: `giflib-utils` for `ddns-scripts-cnkuai`, and `gnu-wget` for `acme`.
+The repair packages the eight existing giflib tools and declares `gnu-wget`
+only on the TLS-enabled GNU Wget variant. The eight tools passed a local ARM
+cross-build; the repaired recipe outputs still require CI verification.
+
+Manual-only kernel packages remain distinct from generic `kmod-*` names.
+Their presence does not automatically satisfy application dependencies.
+The report also lists version checks separately from unavailable names.

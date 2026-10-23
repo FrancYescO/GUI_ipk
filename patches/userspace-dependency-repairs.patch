@@ -1,0 +1,23 @@
+--- a/feeds/packages/libs/giflib/Makefile
++++ b/feeds/packages/libs/giflib/Makefile
+@@ -35,0 +36,8 @@
++define Package/giflib-utils
++  SECTION:=utils
++  CATEGORY:=Utilities
++  TITLE:=GIF image conversion utilities
++  URL:=http://sourceforge.net/projects/giflib
++  DEPENDS:=+giflib
++endef
++
+@@ -60,0 +69,5 @@
++define Package/giflib-utils/install
++	$(INSTALL_DIR) $(1)/usr/bin
++	$(INSTALL_BIN) $(addprefix $(PKG_BUILD_DIR)/util/.libs/,gif2rgb gifbuild gifecho giffix gifinto giftext giftool gifclrmp) $(1)/usr/bin/
++endef
++
+@@ -62,0 +76 @@
++$(eval $(call BuildPackage,giflib-utils))
+--- a/feeds/packages/net/wget/Makefile
++++ b/feeds/packages/net/wget/Makefile
+@@ -45,0 +46 @@
++  PROVIDES:=gnu-wget

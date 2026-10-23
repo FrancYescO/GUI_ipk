@@ -176,6 +176,8 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/swconfig-vendor-uapi.patch"
   cp "$repo_root/patches/gcc-native-arm-bootstrap-modes.patch" \
     "$work_dir/feeds/packages/devel/gcc/patches/999-arm-bootstrap-modes.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-dependency-repairs.patch"
   # Import selected source updates while keeping the legacy build framework.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-package-updates.patch"

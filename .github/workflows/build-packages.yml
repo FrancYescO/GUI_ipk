@@ -48,6 +48,7 @@ on:
       - "patches/userspace-ipset-no-kmod.patch"
       - "patches/userspace-legacy-recipes.patch"
       - "patches/userspace-mixed-recipes.patch"
+      - "patches/userspace-dependency-repairs.patch"
       - "patches/swconfig-vendor-uapi.patch"
       - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/homeware-luci-translation-directories.patch"
@@ -70,6 +71,7 @@ on:
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
       - "scripts/report-homeware-coverage.py"
+      - "scripts/report-feed-dependencies.py"
       - "scripts/fetch-userspace-repairs.py"
       - "scripts/merge-userspace-repairs.py"
       - "tests/test_*.py"
@@ -85,6 +87,7 @@ on:
       - "patches/userspace-ipset-no-kmod.patch"
       - "patches/userspace-legacy-recipes.patch"
       - "patches/userspace-mixed-recipes.patch"
+      - "patches/userspace-dependency-repairs.patch"
       - "patches/swconfig-vendor-uapi.patch"
       - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/homeware-luci-translation-directories.patch"
@@ -107,6 +110,7 @@ on:
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
       - "scripts/report-homeware-coverage.py"
+      - "scripts/report-feed-dependencies.py"
       - "scripts/fetch-userspace-repairs.py"
       - "scripts/merge-userspace-repairs.py"
       - "tests/test_*.py"
@@ -316,6 +320,14 @@ jobs:
           scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
           python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --buildroot-kernel-dir artifacts/buildroot-4.1.38
           scripts/verify-feed.sh dist --allow-kmods
+
+      - name: Audit declared dependencies for each kernel profile
+        run: |
+          for kernel in 4.1.38 4.1.52; do
+            python3 scripts/report-feed-dependencies.py dist \
+              --extra-feed "kernel/$kernel" --output "dist/dependencies-$kernel"
+            cat "dist/dependencies-$kernel/dependency-report.md" >> "$GITHUB_STEP_SUMMARY"
+          done
 
       - name: Generate browsable package pages
         run: python3 scripts/generate-feed-pages.py dist
