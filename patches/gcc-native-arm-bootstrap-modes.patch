@@ -24,3 +24,16 @@
  
  #ifdef __LIBGCC_HAS_SF_MODE__
  #define LIBGCC2_HAS_SF_MODE 1
+--- a/libgcc/libgcov-profiler.c
++++ b/libgcc/libgcov-profiler.c
+@@ -26,2 +26,10 @@
+ #include "libgcov.h"
++
++/* ARM EABI vtables contain function addresses, not descriptors.
++   GCC 4.8 does not expose GCC 5's private libgcov macro. */
++#if defined (__arm__) && __GNUC__ == 4 && __GNUC_MINOR__ < 9
++#ifndef __LIBGCC_VTABLE_USES_DESCRIPTORS__
++#define __LIBGCC_VTABLE_USES_DESCRIPTORS__ 0
++#endif
++#endif
+ #if !defined(inhibit_libc)
