@@ -1,0 +1,22 @@
+--- a/libgcc/libgcc2.h
++++ b/libgcc/libgcc2.h
+@@ -33,6 +33,19 @@
+ extern void __clear_cache (char *, char *);
+ extern void __eprintf (const char *, const char *, unsigned int, const char *)
+   __attribute__ ((__noreturn__));
++
++/* GCC 4.8 does not expose the mode macros used by GCC 5's libgcc.
++   The ARM bootstrap compiler still provides IEEE single and double modes. */
++#if defined (__arm__) && __GNUC__ == 4 && __GNUC_MINOR__ < 9
++#ifndef __LIBGCC_HAS_SF_MODE__
++#define __LIBGCC_HAS_SF_MODE__ 1
++#define __LIBGCC_SF_MANT_DIG__ __FLT_MANT_DIG__
++#endif
++#ifndef __LIBGCC_HAS_DF_MODE__
++#define __LIBGCC_HAS_DF_MODE__ 1
++#define __LIBGCC_DF_MANT_DIG__ __DBL_MANT_DIG__
++#endif
++#endif
+ 
+ #ifdef __LIBGCC_HAS_SF_MODE__
+ #define LIBGCC2_HAS_SF_MODE 1

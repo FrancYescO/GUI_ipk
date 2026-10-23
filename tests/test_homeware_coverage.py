@@ -5,6 +5,8 @@ import hashlib
 import importlib.util
 import tempfile
 import subprocess
+import re
+import shutil
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -49,8 +51,18 @@ class CoverageTests(unittest.TestCase):
         rows, summary = HOMEWARE.compare(self.catalog, feed)
         self.assertEqual([row['status'] for row in rows], ['present', 'missing'])
         self.assertEqual(rows[0]['built_versions'], '2-1')
-        self.assertTrue(rows[0]['source_url'].endswith('/base/rtl_433_1-1_arm_cortex-a9_neon.ipk'))
+        self.assertEqual(rows[0]['source_file'], 'base/rtl_433_1-1_arm_cortex-a9_neon.ipk')
         self.assertEqual(summary['versions'][0]['present'], 1)
+
+    def test_report_contains_no_external_repository_urls(self):
+        self.catalog_rows(['example'])
+        feed = self.index('base', ['example'])
+        subprocess.run(['python3', str(ROOT / 'scripts/report-homeware-coverage.py'),
+                        str(self.catalog), str(feed)], check=True, stdout=subprocess.DEVNULL)
+        for suffix in ('csv', 'md', 'json'):
+            text = (feed / ('homeware-coverage.' + suffix)).read_text()
+            self.assertNotIn('https://', text)
+            self.assertNotIn('http://', text)
 
     def test_recipe_and_selection_distinguish_remaining_work(self):
         self.catalog_rows(['available', 'disabled', 'unknown'])
@@ -103,6 +115,20 @@ class CoverageTests(unittest.TestCase):
         makefile.write_text("all:\n\t@printf '%s\\n' '$(LUCI_LANGUAGES)'\n")
         result = subprocess.check_output(['make', '-s', '-f', str(source), '-f', str(makefile)], cwd=app)
         self.assertEqual(result.decode().strip(), 'de en')
+
+    def test_kernel_overrides_clear_make_variables(self):
+        script = (ROOT / 'scripts/build-packages.sh').read_text()
+        function = re.search(r'configure_kmod_overrides\(\) \{\n.*?\n\}', script, re.S).group(0)
+        bash = next((candidate for candidate in ['/opt/homebrew/bin/bash', shutil.which('bash')]
+                     if candidate and Path(candidate).is_file() and subprocess.call(
+                         [candidate, '-c', 'test "${BASH_VERSINFO[0]}" -ge 4']) == 0), None)
+        if not bash:
+            self.skipTest('The build function requires Bash 4 or newer')
+        (self.root / '.config').write_text('CONFIG_PACKAGE_kmod-tun=m\nCONFIG_PACKAGE_kmod-usb-core=y\nCONFIG_PACKAGE_curl=y\n')
+        command = function + '\nwork_dir="$1"\nmake_args=(--jobs 2)\nconfigure_kmod_overrides\nprintf "ARG:%s\\n" "${make_args[@]}"\n'
+        result = subprocess.check_output([bash, '-c', command, 'test', str(self.root)]).decode()
+        args = [line[4:] for line in result.splitlines() if line.startswith('ARG:')]
+        self.assertEqual(args, ['--jobs', '2', 'CONFIG_PACKAGE_kmod-tun=', 'CONFIG_PACKAGE_kmod-usb-core='])
 
     def test_imported_recipe_files_match_the_manifest(self):
         overlay = ROOT / 'build/homeware-overlay'

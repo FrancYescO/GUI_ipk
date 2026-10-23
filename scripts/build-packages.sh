@@ -166,6 +166,12 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/userspace-ipset-no-kmod.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-legacy-recipes.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-mixed-recipes.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/swconfig-vendor-uapi.patch"
+  cp "$repo_root/patches/gcc-native-arm-bootstrap-modes.patch" \
+    "$work_dir/feeds/packages/devel/gcc/patches/999-arm-bootstrap-modes.patch"
   # Import selected source updates while keeping the legacy build framework.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-package-updates.patch"
@@ -215,6 +221,8 @@ if [[ "$userspace_only" == 1 ]]; then
   # Translation templates are source files, not language directories.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/homeware-luci-translation-directories.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/https-dns-proxy-gnu99.patch"
   mkdir -p "$work_dir/package/feeds/packages" "$work_dir/package/feeds/luci"
   for package in banip https-dns-proxy; do
     ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
@@ -307,7 +315,7 @@ fi
 configure_kmod_overrides() {
   # Keep non-kernel packages selected while avoiding an unrelated kernel build.
   mapfile -t kmod_overrides < <(
-    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=n/p' "$work_dir/.config"
+    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=/p' "$work_dir/.config"
   )
   make_args+=("${kmod_overrides[@]}")
   echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"

@@ -6,13 +6,9 @@ import gzip
 import json
 from collections import Counter
 from pathlib import Path
-from urllib.parse import quote
 
 FEEDS = ('base', 'luci', 'packages', 'routing', 'telephony', 'target/packages')
-SOURCES = {
-    '18': 'https://repository.macoers.com/homeware/18/brcm63xx-tch/VANTW/',
-    '19': 'https://repository.macoers.com/homeware/19/brcm6xxx-tch/VANTW/',
-}
+SOURCE_VERSIONS = ('18', '19')
 
 
 def stanzas(text):
@@ -34,7 +30,7 @@ def inventory(catalog):
     seen = set()
     for row in rows:
         version, section = row['homeware'], row['section']
-        if version not in SOURCES or section not in FEEDS + ('freifunk',):
+        if version not in SOURCE_VERSIONS or section not in FEEDS + ('freifunk',):
             raise ValueError('Invalid catalog source: {!r}'.format(row))
         for field in ('name', 'version', 'architecture'):
             if not row[field] or '/' in row[field] or '\n' in row[field]:
@@ -98,10 +94,10 @@ def compare(catalog, feed, metadata=None, config=None):
         row.update(status=status, built_versions=';'.join(sorted(versions)),
                    recipe=recipes.get(name, ''))
         filename = '{}_{}_{}.ipk'.format(name, row['version'], row['architecture'])
-        row['source_url'] = SOURCES[row['homeware']] + row['section'] + '/' + quote(filename)
+        row['source_file'] = row['section'] + '/' + filename
         results.append(row)
     summaries = []
-    for version in SOURCES:
+    for version in SOURCE_VERSIONS:
         rows = [row for row in results if row['homeware'] == version]
         by_name = {row['name']: row['status'] for row in rows}
         counts = Counter(by_name.values())
@@ -126,7 +122,7 @@ def main():
         output = args.output or args.feed
         output.mkdir(parents=True, exist_ok=True)
         fields = ['homeware', 'section', 'name', 'version', 'architecture', 'status',
-                  'built_versions', 'recipe', 'source_url']
+                  'built_versions', 'recipe', 'source_file']
         with (output / 'homeware-coverage.csv').open('w', encoding='utf-8', newline='') as stream:
             writer = csv.DictWriter(stream, fields)
             writer.writeheader()
@@ -137,7 +133,7 @@ def main():
                  '| Homeware | Distinct names | Present | Missing |', '|---|---:|---:|---:|']
         for item in summary['versions']:
             lines.append('| {homeware} | {names} | {present} | {missing} |'.format(**item))
-        lines += ['', 'See `homeware-coverage.csv` for every package, source link and built version.', '',
+        lines += ['', 'See `homeware-coverage.csv` for every package, recorded filename and built version.', '',
                   'Presence does not establish ABI, dependency or runtime compatibility. Different ABI package names remain distinct; versions are recorded without ranking them.',
                   'Catalog entries come from IPK filenames, not their internal control metadata. Homeware 18/19 are source labels, not verified kernel ABI declarations.', '',
                   'When metadata is supplied, `no-recipe`, `not-selected` and `not-built` distinguish remaining work. No missing package is silently considered integrated.', '']

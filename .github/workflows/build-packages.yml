@@ -33,6 +33,7 @@ on:
         default: true
         type: boolean
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/build-packages.yml"
       - ".github/workflows/build-asterisk20.yml"
@@ -42,7 +43,11 @@ on:
       - "patches/userspace-skip-kernel-package.patch"
       - "patches/userspace-ipset-no-kmod.patch"
       - "patches/userspace-legacy-recipes.patch"
+      - "patches/userspace-mixed-recipes.patch"
+      - "patches/swconfig-vendor-uapi.patch"
+      - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/homeware-luci-translation-directories.patch"
+      - "patches/https-dns-proxy-gnu99.patch"
       - "patches/userspace-package-updates.patch"
       - "patches/userspace-kernel-configure.patch"
       - "patches/libpcap-c99.patch"
@@ -72,7 +77,11 @@ on:
       - "patches/userspace-skip-kernel-package.patch"
       - "patches/userspace-ipset-no-kmod.patch"
       - "patches/userspace-legacy-recipes.patch"
+      - "patches/userspace-mixed-recipes.patch"
+      - "patches/swconfig-vendor-uapi.patch"
+      - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/homeware-luci-translation-directories.patch"
+      - "patches/https-dns-proxy-gnu99.patch"
       - "patches/userspace-package-updates.patch"
       - "patches/userspace-kernel-configure.patch"
       - "patches/libpcap-c99.patch"
@@ -110,7 +119,7 @@ jobs:
 
   build:
     needs: homeware-checks
-    if: inputs.reuse_run_id == ''
+    if: inputs.reuse_run_id == '' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
     name: ${{ (inputs.package_targets != '' || inputs.build_profile == 'asterisk20') && 'Targeted build' || format('Userspace shard {0}/16', matrix.shard) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 350
@@ -184,7 +193,7 @@ jobs:
 
   asterisk20:
     name: Asterisk 20 feed
-    if: inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == ''
+    if: (github.event_name != 'pull_request' || !github.event.pull_request.draft) && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == ''
     uses: ./.github/workflows/build-asterisk20.yml
     with:
       reuse_run_id: ${{ inputs.asterisk_reuse_run_id || '' }}
@@ -194,7 +203,7 @@ jobs:
 
   aggregate:
     name: Merge and verify userspace feed
-    if: ${{ always() && needs.homeware-checks.result == 'success' && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
+    if: ${{ always() && (github.event_name != 'pull_request' || !github.event.pull_request.draft) && needs.homeware-checks.result == 'success' && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
     needs: [build, asterisk20, homeware-checks]
     runs-on: ubuntu-24.04
     permissions:

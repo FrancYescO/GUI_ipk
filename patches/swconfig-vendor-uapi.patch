@@ -1,0 +1,131 @@
+--- a/package/network/config/swconfig/Makefile
++++ b/package/network/config/swconfig/Makefile
+@@ -23,8 +23,17 @@
+   TITLE:=Switch configuration utility
+ endef
+ 
++# Keep the kernel's actual switch UAPI values. Older vendor headers do not
++# implement the structured link attribute, so only expose it when all of the
++# required identifiers are available.
++SWCONFIG_HAS_LINK := $(shell \
++	grep -q SWITCH_ATTR_OP_VALUE_LINK $(LINUX_DIR)/user_headers/include/linux/switch.h 2>/dev/null && \
++	grep -q SWITCH_TYPE_LINK $(LINUX_DIR)/user_headers/include/linux/switch.h 2>/dev/null && \
++	grep -q SWITCH_LINK_FLAG_RX_FLOW $(LINUX_DIR)/user_headers/include/linux/switch.h 2>/dev/null && echo 1)
++
+ TARGET_CPPFLAGS := \
+ 	-D_GNU_SOURCE \
++	$(if $(SWCONFIG_HAS_LINK),-DSWCONFIG_HAS_LINK) \
+ 	-I$(STAGING_DIR)/usr/include/libnl-tiny \
+ 	-I$(PKG_BUILD_DIR) \
+ 	$(TARGET_CPPFLAGS) \
+--- a/package/network/config/swconfig/src/swlib.c
++++ b/package/network/config/swconfig/src/swlib.c
+@@ -51,6 +51,7 @@
+ 	[SWITCH_PORTMAP_VIRT] = { .type = NLA_U32 },
+ };
+ 
++#ifdef SWCONFIG_HAS_LINK
+ static struct nla_policy link_policy[SWITCH_LINK_ATTR_MAX] = {
+ 	[SWITCH_LINK_FLAG_LINK] = { .type = NLA_FLAG },
+ 	[SWITCH_LINK_FLAG_DUPLEX] = { .type = NLA_FLAG },
+@@ -59,6 +60,8 @@
+ 	[SWITCH_LINK_FLAG_EEE_100BASET] = { .type = NLA_FLAG },
+ 	[SWITCH_LINK_FLAG_EEE_1000BASET] = { .type = NLA_FLAG },
+ };
++#endif
++
+ 
+ static inline void *
+ swlib_alloc(size_t size)
+@@ -211,6 +214,7 @@
+ 	return err;
+ }
+ 
++#ifdef SWCONFIG_HAS_LINK
+ static int
+ store_link_val(struct nl_msg *msg, struct nlattr *nla, struct switch_val *val)
+ {
+@@ -242,6 +246,8 @@
+ 	return err;
+ }
+ 
++#endif
++
+ static int
+ store_val(struct nl_msg *msg, void *arg)
+ {
+@@ -262,8 +268,10 @@
+ 		val->value.s = strdup(nla_get_string(tb[SWITCH_ATTR_OP_VALUE_STR]));
+ 	else if (tb[SWITCH_ATTR_OP_VALUE_PORTS])
+ 		val->err = store_port_val(msg, tb[SWITCH_ATTR_OP_VALUE_PORTS], val);
++#ifdef SWCONFIG_HAS_LINK
+ 	else if (tb[SWITCH_ATTR_OP_VALUE_LINK])
+ 		val->err = store_link_val(msg, tb[SWITCH_ATTR_OP_VALUE_LINK], val);
++#endif
+ 
+ 	val->err = 0;
+ 	return 0;
+@@ -337,6 +345,7 @@
+ 	return -1;
+ }
+ 
++#ifdef SWCONFIG_HAS_LINK
+ static int
+ send_attr_link(struct nl_msg *msg, struct switch_val *val)
+ {
+@@ -361,6 +370,8 @@
+ 	return -1;
+ }
+ 
++#endif
++
+ static int
+ send_attr_val(struct nl_msg *msg, void *arg)
+ {
+@@ -385,10 +396,12 @@
+ 		if (send_attr_ports(msg, val) < 0)
+ 			goto nla_put_failure;
+ 		break;
++#ifdef SWCONFIG_HAS_LINK
+ 	case SWITCH_TYPE_LINK:
+ 		if (send_attr_link(msg, val))
+ 			goto nla_put_failure;
+ 		break;
++#endif
+ 	default:
+ 		goto nla_put_failure;
+ 	}
+@@ -480,6 +493,7 @@
+ 		}
+ 		val.value.ports = ports;
+ 		break;
++#ifdef SWCONFIG_HAS_LINK
+ 	case SWITCH_TYPE_LINK:
+ 		link = malloc(sizeof(struct switch_port_link));
+ 		memset(link, 0, sizeof(struct switch_port_link));
+@@ -522,6 +536,7 @@
+ 		}
+ 		val.value.link = link;
+ 		break;
++#endif
+ 	case SWITCH_TYPE_NOVAL:
+ 		if (str && !strcmp(str, "0"))
+ 			return 0;
+--- a/package/network/config/swconfig/src/cli.c
++++ b/package/network/config/swconfig/src/cli.c
+@@ -122,6 +122,7 @@
+ 				 SWLIB_PORT_FLAG_TAGGED) ? "t" : "");
+ 		}
+ 		break;
++#ifdef SWCONFIG_HAS_LINK
+ 	case SWITCH_TYPE_LINK:
+ 		link = val->value.link;
+ 		if (link->link)
+@@ -137,6 +138,7 @@
+ 		else
+ 			printf("port:%d link:down", val->port_vlan);
+ 		break;
++#endif
+ 	default:
+ 		printf("?unknown-type?");
+ 	}
