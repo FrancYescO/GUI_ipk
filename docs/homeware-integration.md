@@ -50,3 +50,23 @@ need individual review. Native GCC and packages requiring a newer C++ compiler
 need successful cross-builds before inclusion. The dedicated Asterisk 20 feed
 has separate dependency checks and does not automatically satisfy legacy
 Asterisk package names. Missing names remain visible in coverage reports.
+
+## Verified candidate, 23 October 2026
+
+Assembly run [39977638070](https://github.com/FrancYescO/GUI_ipk/actions/runs/39977638070)
+passed feed, payload, Asterisk dependency and versioned kernel checks. It
+contains 5,500 names in the shared userspace sections and 5,596 IPKs overall.
+
+| Generation | Exact names present | Inventory names | Missing | Missing with explicit provider |
+| --- | ---: | ---: | ---: | ---: |
+| 18 | 3,954 | 4,066 | 112 | 6 |
+| 19 | 342 | 494 | 152 | 0 |
+
+The 112 unmatched generation-18 names comprise 104 legacy Asterisk names,
+six DDNS aliases declared by current packages, `libgomp`, and one translation
+template that should not be packaged. These counts do not imply compatibility
+between old Asterisk modules and Asterisk 20, or between distinct library ABIs.
+
+The candidate occupies 1,063,287,580 bytes (about 1,014 MiB), close to the
+hosting limit. The native GCC repair is a separate build and is not included
+in this verified candidate. Publication has not been enabled for these runs.
