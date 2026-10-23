@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       asterisk_reuse_run_id:
-        description: "Optional successful targeted Asterisk run to republish instead of rebuilding"
+        description: "Optional completed run with successful Asterisk output to republish"
         required: false
         type: string
       build_profile:

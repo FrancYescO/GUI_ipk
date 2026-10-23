@@ -23,7 +23,12 @@ The manual userspace workflow accepts `reuse_run_id` for a completed full build
 and `repair_run_ids` for up to eight successful targeted builds. This allows
 corrected packages to be assembled with existing shard outputs. For a branch
 validation run, leave `package_targets` and `shard_index` empty and set
-`publish_pages=false`.
+`publish_pages=false`. The optional `asterisk_reuse_run_id` can reuse either a
+successful targeted Asterisk build or a completed run with a successful
+Asterisk feed job and its assembled artifact. Other shard failures do not
+invalidate that successful job. Source workflow, repository and revision
+ancestry are checked; the final assembly checks Asterisk dependencies against
+the shared feed.
 
 Repair downloads verify the source repository, workflow, successful completion
 and revision ancestry. Assembly checks package metadata, architecture and

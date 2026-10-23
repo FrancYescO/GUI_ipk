@@ -4,14 +4,14 @@ on:
   workflow_call:
     inputs:
       reuse_run_id:
-        description: "Successful targeted Asterisk run to reuse instead of rebuilding"
+        description: "Completed run with successful Asterisk output to reuse instead of rebuilding"
         type: string
         required: false
         default: ""
   workflow_dispatch:
     inputs:
       reuse_run_id:
-        description: "Successful targeted Asterisk run to reuse instead of rebuilding"
+        description: "Completed run with successful Asterisk output to reuse instead of rebuilding"
         type: string
         required: false
 
@@ -77,27 +77,45 @@ jobs:
           import json, os, re
           from pathlib import Path
           run = json.loads(Path("source-run.json").read_text())
-          assert run["status"] == "completed" and run["conclusion"] == "success", "Source run did not succeed"
+          assert run["status"] == "completed", "Source run is not complete"
+          assert run["path"].split("@", 1)[0] in (".github/workflows/build-packages.yml", ".github/workflows/build-asterisk20.yml"), "Unexpected source workflow"
           assert run["head_repository"]["full_name"] == os.environ["GITHUB_REPOSITORY"], "Source run belongs to another repository"
           assert re.fullmatch(r"[0-9a-f]{40}", run["head_sha"])
+          import subprocess
+          prefix = "repos/{}/actions/runs/{}".format(os.environ["GITHUB_REPOSITORY"], os.environ["SOURCE_RUN_ID"])
+          comparison = json.loads(subprocess.check_output(["gh", "api", "repos/{}/compare/{}...{}".format(os.environ["GITHUB_REPOSITORY"], run["head_sha"], os.environ["GITHUB_SHA"])]))
+          assert comparison["status"] in ("identical", "ahead"), "Source revision is not an ancestor"
+          artifacts = json.loads(subprocess.check_output(["gh", "api", prefix + "/artifacts?per_page=100"]))["artifacts"]
+          assembled_name = "asterisk20-opkg-feed-" + os.environ["SOURCE_RUN_ID"]
+          assembled = any(item["name"] == assembled_name and not item["expired"] for item in artifacts)
+          if assembled:
+              jobs = json.loads(subprocess.check_output(["gh", "api", prefix + "/jobs?per_page=100"]))["jobs"]
+              assert any(job["name"].split(" / ")[-1] == "Build and verify Asterisk 20 feed" and job["conclusion"] == "success" for job in jobs), "Asterisk source job did not succeed"
+          else:
+              assert run["conclusion"] == "success", "Targeted source run did not succeed"
           with open(os.environ["GITHUB_ENV"], "a") as env:
+              env.write("SOURCE_ASSEMBLED=" + str(int(assembled)) + "\n")
+              env.write("SOURCE_ARTIFACT=" + (assembled_name if assembled else "userspace-shard-0-" + os.environ["SOURCE_RUN_ID"]) + "\n")
               env.write("SOURCE_COMMIT=" + run["head_sha"] + "\n")
           PY
 
-      - name: Download verified targeted build output
+      - name: Download verified Asterisk build output
         if: inputs.reuse_run_id != ''
         uses: actions/download-artifact@v7
         with:
-          name: userspace-shard-0-${{ inputs.reuse_run_id }}
+          name: ${{ env.SOURCE_ARTIFACT }}
           run-id: ${{ inputs.reuse_run_id }}
           github-token: ${{ github.token }}
-          path: dist
+          path: ${{ env.SOURCE_ASSEMBLED == '1' && 'asterisk20-feed' || 'dist' }}
 
       - name: Assemble dedicated feed
+        if: env.SOURCE_ASSEMBLED != '1'
         run: |
           python3 scripts/assemble-asterisk-feed.py dist asterisk20-feed \
             --source-run-id "$SOURCE_RUN_ID" --source-commit "$SOURCE_COMMIT"
-          scripts/verify-feed.sh asterisk20-feed
+
+      - name: Verify assembled feed files
+        run: scripts/verify-feed.sh asterisk20-feed
 
       - name: Upload verified Asterisk feed
         uses: actions/upload-artifact@v7
