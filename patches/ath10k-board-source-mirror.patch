@@ -1,0 +1,7 @@
+--- a/package/firmware/ath10k-firmware/Makefile
++++ b/package/firmware/ath10k-firmware/Makefile
+@@ -389,2 +389,2 @@
+-  URL:=https://source.codeaurora.org/quic/qsdk/oss/firmware/ath10k-firmware/plain/ath10k/QCA99X0/hw2.0
+-  URL_FILE:=board-2.bin?id=$(QCA99X0_BOARD_REV)
++  URL:=https://sources.openwrt.org
++  URL_FILE:=$(QCA99X0_BOARD_FILE)

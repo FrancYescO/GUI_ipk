@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       asterisk_reuse_run_id:
-        description: "Optional successful targeted Asterisk run to republish instead of rebuilding"
+        description: "Optional completed run with successful Asterisk output to republish"
         required: false
         type: string
       build_profile:
@@ -17,6 +17,10 @@ on:
           - asterisk20
       reuse_run_id:
         description: "Optional completed run whose shard artifacts should be republished without rebuilding"
+        required: false
+        type: string
+      repair_run_ids:
+        description: "Optional space-separated targeted runs to await and apply after success"
         required: false
         type: string
       package_targets:
@@ -33,6 +37,7 @@ on:
         default: true
         type: boolean
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/build-packages.yml"
       - ".github/workflows/build-asterisk20.yml"
@@ -42,6 +47,12 @@ on:
       - "patches/userspace-skip-kernel-package.patch"
       - "patches/userspace-ipset-no-kmod.patch"
       - "patches/userspace-legacy-recipes.patch"
+      - "patches/userspace-mixed-recipes.patch"
+      - "patches/userspace-dependency-repairs.patch"
+      - "patches/swconfig-vendor-uapi.patch"
+      - "patches/homeware-luci-translation-directories.patch"
+      - "patches/https-dns-proxy-gnu99.patch"
+      - "patches/ath10k-board-source-mirror.patch"
       - "patches/userspace-package-updates.patch"
       - "patches/userspace-kernel-configure.patch"
       - "patches/libpcap-c99.patch"
@@ -58,6 +69,11 @@ on:
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
+      - "scripts/report-homeware-coverage.py"
+      - "scripts/report-feed-dependencies.py"
+      - "scripts/fetch-userspace-repairs.py"
+      - "scripts/merge-userspace-repairs.py"
+      - "tests/test_*.py"
   push:
     branches: [main]
     paths:
@@ -69,6 +85,12 @@ on:
       - "patches/userspace-skip-kernel-package.patch"
       - "patches/userspace-ipset-no-kmod.patch"
       - "patches/userspace-legacy-recipes.patch"
+      - "patches/userspace-mixed-recipes.patch"
+      - "patches/userspace-dependency-repairs.patch"
+      - "patches/swconfig-vendor-uapi.patch"
+      - "patches/homeware-luci-translation-directories.patch"
+      - "patches/https-dns-proxy-gnu99.patch"
+      - "patches/ath10k-board-source-mirror.patch"
       - "patches/userspace-package-updates.patch"
       - "patches/userspace-kernel-configure.patch"
       - "patches/libpcap-c99.patch"
@@ -85,6 +107,11 @@ on:
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
+      - "scripts/report-homeware-coverage.py"
+      - "scripts/report-feed-dependencies.py"
+      - "scripts/fetch-userspace-repairs.py"
+      - "scripts/merge-userspace-repairs.py"
+      - "tests/test_*.py"
 
 concurrency:
   group: packages-${{ github.ref }}-${{ inputs.reuse_run_id || inputs.package_targets || 'full' }}
@@ -94,8 +121,17 @@ permissions:
   contents: read
 
 jobs:
+  homeware-checks:
+    name: Catalog, coverage and repair checks
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify catalog, pinned recipes and coverage semantics
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+
   build:
-    if: inputs.reuse_run_id == ''
+    needs: homeware-checks
+    if: inputs.reuse_run_id == '' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
     name: ${{ (inputs.package_targets != '' || inputs.build_profile == 'asterisk20') && 'Targeted build' || format('Userspace shard {0}/16', matrix.shard) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 350
@@ -169,7 +205,7 @@ jobs:
 
   asterisk20:
     name: Asterisk 20 feed
-    if: inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == ''
+    if: (github.event_name != 'pull_request' || !github.event.pull_request.draft) && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == ''
     uses: ./.github/workflows/build-asterisk20.yml
     with:
       reuse_run_id: ${{ inputs.asterisk_reuse_run_id || '' }}
@@ -179,14 +215,29 @@ jobs:
 
   aggregate:
     name: Merge and verify userspace feed
-    if: ${{ always() && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
-    needs: [build, asterisk20]
+    if: ${{ always() && (github.event_name != 'pull_request' || !github.event.pull_request.draft) && needs.homeware-checks.result == 'success' && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
+    needs: [build, asterisk20, homeware-checks]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
       actions: read
     steps:
       - uses: actions/checkout@v7
+
+      - name: Await successful targeted repair runs
+        if: inputs.repair_run_ids != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPAIR_RUN_IDS: ${{ inputs.repair_run_ids }}
+        run: |
+          read -ra repair_runs <<< "$REPAIR_RUN_IDS"
+          (( ${#repair_runs[@]} > 0 && ${#repair_runs[@]} <= 8 ))
+          for repair_run in "${repair_runs[@]}"; do
+            [[ "$repair_run" =~ ^[0-9]+$ ]]
+          done
+          for repair_run in "${repair_runs[@]}"; do
+            gh run watch "$repair_run" --exit-status --interval 60
+          done
 
       - name: Download shard artifacts
         uses: actions/download-artifact@v7
@@ -199,6 +250,16 @@ jobs:
 
       - name: Merge packages and reports
         run: python3 scripts/merge-userspace-shards.py shards dist 16
+
+      - name: Apply successful targeted build repairs
+        if: inputs.repair_run_ids != ''
+        env:
+          REPAIR_RUN_IDS: ${{ inputs.repair_run_ids }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/fetch-userspace-repairs.py "$REPAIR_RUN_IDS" repairs
+          python3 scripts/merge-userspace-repairs.py dist repairs
+          cat dist/repairs-report.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Show combined shard report
         if: always()
@@ -225,11 +286,24 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+      - name: Reject experimental native GCC from the shared feed
+        run: |
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          if any(Path("dist").rglob("gcc_*.ipk")):
+              raise SystemExit("Native GCC is experimental and excluded from the shared userspace feed")
+          PYCODE
+
       - name: Prepare safe shared OPKG feed
         run: scripts/sanitize-opkg-feed.sh dist
 
       - name: Verify package feed
         run: scripts/verify-feed.sh dist
+
+      - name: Report Homeware package coverage
+        run: |
+          python3 scripts/report-homeware-coverage.py build/homeware/catalog.tsv dist
+          cat dist/homeware-coverage.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Add verified Asterisk 20 feed
         uses: actions/download-artifact@v7
@@ -253,8 +327,32 @@ jobs:
           python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --buildroot-kernel-dir artifacts/buildroot-4.1.38
           scripts/verify-feed.sh dist --allow-kmods
 
+      - name: Audit declared dependencies for each kernel profile
+        run: |
+          for kernel in 4.1.38 4.1.52; do
+            python3 scripts/report-feed-dependencies.py dist \
+              --extra-feed "kernel/$kernel" --output "dist/dependencies-$kernel"
+            cat "dist/dependencies-$kernel/dependency-report.md" >> "$GITHUB_STEP_SUMMARY"
+          done
+
       - name: Generate browsable package pages
         run: python3 scripts/generate-feed-pages.py dist
+
+      - name: Report assembled site size
+        run: |
+          export PAGES_TAR_BYTES="$(tar --dereference --hard-dereference --directory dist --exclude=.git --exclude=.github -cf - . | wc -c)"
+          printf 'PAGES_TAR_BYTES=%s\n' "$PAGES_TAR_BYTES" >> "$GITHUB_ENV"
+          python3 - <<'PYCODE'
+          import os
+          from pathlib import Path
+          files = [path for path in Path("dist").rglob("*") if path.is_file()]
+          size = sum(path.stat().st_size for path in files)
+          count = sum(path.suffix == ".ipk" for path in files)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+              summary.write("\nAssembled site: {:,} bytes ({:.1f} MiB), {:,} IPKs.\n".format(size, size / 1048576, count))
+              summary.write("Pages TAR: {:,} bytes; margin below 1 GiB: {:,} bytes.\n".format(int(os.environ["PAGES_TAR_BYTES"]), 1073741824 - int(os.environ["PAGES_TAR_BYTES"])))
+              summary.write("Check the [GitHub Pages size limit](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) before publishing.\n")
+          PYCODE
 
       - name: Upload package feed
         uses: actions/upload-artifact@v7
@@ -263,6 +361,14 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 30
+
+      - name: Check GitHub Pages deployment size
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish_pages))
+        run: |
+          if (( PAGES_TAR_BYTES > 1073741824 )); then
+            echo "::error::Pages TAR exceeds the 1 GiB deployment limit; the complete feed remains available as a workflow artifact."
+            exit 1
+          fi
 
       - name: Upload GitHub Pages artifact
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish_pages))

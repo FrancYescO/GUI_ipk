@@ -1,0 +1,2 @@
+# Preserve the exact bytes of pinned upstream recipes, including their whitespace.
+build/homeware-overlay/** -whitespace

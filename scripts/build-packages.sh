@@ -151,6 +151,10 @@ cp "$repo_root/patches/freeswitch-target-perl-flags.patch" \
 cp "$repo_root/patches/freeswitch-target-python.patch" \
   "$work_dir/feeds/telephony/net/freeswitch/patches/glibc/zz-target-python.patch"
 
+# Retrieve the identical pinned board data from the official source mirror.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/ath10k-board-source-mirror.patch"
+
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.
 if [[ "$userspace_only" == 1 ]]; then
@@ -166,6 +170,12 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/userspace-ipset-no-kmod.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-legacy-recipes.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-mixed-recipes.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/swconfig-vendor-uapi.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-dependency-repairs.patch"
   # Import selected source updates while keeping the legacy build framework.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-package-updates.patch"
@@ -204,6 +214,26 @@ if [[ "$userspace_only" == 1 ]]; then
     "$work_dir/package/network/utils/tcpdump" \
     "$work_dir/feeds/packages/net/ddns-scripts"
   cp -a "$repo_root/build/network-updates-overlay/." "$work_dir/"
+  rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
+fi
+
+# Build the additional Homeware userspace recipes from pinned source overlays.
+# Keep upstream payloads immutable and register the new recipes before defconfig.
+if [[ "$userspace_only" == 1 ]]; then
+  (cd "$repo_root/build/homeware-overlay" && sha256sum --check SHA256SUMS)
+  cp -a "$repo_root/build/homeware-overlay/feeds/." "$work_dir/feeds/"
+  # Translation templates are source files, not language directories.
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/homeware-luci-translation-directories.patch"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/https-dns-proxy-gnu99.patch"
+  mkdir -p "$work_dir/package/feeds/packages" "$work_dir/package/feeds/luci"
+  for package in banip https-dns-proxy; do
+    ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
+  done
+  ln -sfn ../../../feeds/luci/applications/luci-app-https-dns-proxy \
+    "$work_dir/package/feeds/luci/luci-app-https-dns-proxy"
+  ln -sfn ../../../feeds/luci/modules/luci-compat "$work_dir/package/feeds/luci/luci-compat"
   rm -f "$work_dir/tmp/.config-package.in" "$work_dir/tmp/.packagedeps"
 fi
 
@@ -289,7 +319,7 @@ fi
 configure_kmod_overrides() {
   # Keep non-kernel packages selected while avoiding an unrelated kernel build.
   mapfile -t kmod_overrides < <(
-    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=n/p' "$work_dir/.config"
+    sed -n 's/^\(CONFIG_PACKAGE_kmod-[^=]*\)=[ym]$/\1=/p' "$work_dir/.config"
   )
   make_args+=("${kmod_overrides[@]}")
   echo "Skipping ${#kmod_overrides[@]} kernel-module package selections"
@@ -438,6 +468,12 @@ if [[ "$ipk_count" -eq 0 ]]; then
 fi
 
 echo "Built $ipk_count packages in $output_dir"
+if [[ "$userspace_only" == 1 ]]; then
+  python3 "$repo_root/scripts/report-homeware-coverage.py" \
+    "$repo_root/build/homeware/catalog.tsv" "$output_dir" \
+    --metadata "$work_dir/tmp/.packageinfo" --config "$work_dir/.config"
+fi
+
 if [[ "$package_compile_failed" -ne 0 ]]; then
   echo "Some package recipes failed; successful IPKs and diagnostics were preserved in $output_dir" >&2
   exit 1

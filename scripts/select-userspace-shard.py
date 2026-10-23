@@ -23,7 +23,8 @@ def select(config_path, dependencies_path, index, count):
         match = PACKAGE_RECIPE.match(line)
         if match and match.group(1) in selected:
             recipe = match.group(2)
-            if not recipe.startswith("kernel/"):
+            # This script-only recipe lives under kernel/ in the legacy tree.
+            if not recipe.startswith("kernel/") or recipe == "kernel/om-watchdog":
                 package_recipes[match.group(1)] = recipe
 
     recipes = sorted(set(package_recipes.values()))

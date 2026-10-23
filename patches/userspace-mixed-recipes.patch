@@ -1,0 +1,66 @@
+--- a/feeds/packages/net/openvswitch/Makefile
++++ b/feeds/packages/net/openvswitch/Makefile
+@@ -298,7 +298,10 @@
+ $(eval $(call BuildPackage,openvswitch-python))
+ $(eval $(call BuildPackage,openvswitch))
+ 
++# Preserve kernel metadata, but build only userspace IPKs in that profile.
++ifneq ($(USERSPACE_ONLY):$(DUMP),1:)
+ $(eval $(call KernelPackage,openvswitch))
+ $(eval $(call KernelPackage,openvswitch-gre))
+ $(eval $(call KernelPackage,openvswitch-vxlan))
+ $(eval $(call KernelPackage,openvswitch-geneve))
++endif
+--- a/feeds/packages/net/xtables-addons/Makefile
++++ b/feeds/packages/net/xtables-addons/Makefile
+@@ -40,6 +40,10 @@
+ CONFIGURE_ARGS+= \
+ 	--with-kbuild="$(LINUX_DIR)" \
+ 	--with-xtlibdir="/usr/lib/iptables" \
++
++ifeq ($(USERSPACE_ONLY),1)
++  CONFIGURE_ARGS += --without-kbuild
++endif
+ 
+ define Build/Compile
+ 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+@@ -94,7 +98,9 @@
+     AUTOLOAD:=$(call AutoProbe,$(notdir $(4)))
+   endef
+ 
+-  $$(eval $$(call KernelPackage,ipt-$(1)))
++  ifneq ($(USERSPACE_ONLY):$(DUMP),1:)
++    $$(eval $$(call KernelPackage,ipt-$(1)))
++  endif
+  endif
+ 
+ endef
+--- a/feeds/packages/net/wifidog-ng/Makefile
++++ b/feeds/packages/net/wifidog-ng/Makefile
+@@ -95,7 +95,7 @@
+ 
+ define Build/Compile
+ 	$(call Build/Compile/Default)
+-	$(MAKE) $(KERNEL_MAKEOPTS) SUBDIRS="$(PKG_BUILD_DIR)"/kmod modules
++	$(if $(filter 1,$(USERSPACE_ONLY)),,$(MAKE) $(KERNEL_MAKEOPTS) SUBDIRS="$(PKG_BUILD_DIR)"/kmod modules)
+ endef
+ 
+ $(eval $(call BuildPackage,wifidog-ng-nossl))
+@@ -103,4 +103,6 @@
+ $(eval $(call BuildPackage,wifidog-ng-wolfssl))
+ $(eval $(call BuildPackage,wifidog-ng-openssl))
+ 
++ifneq ($(USERSPACE_ONLY):$(DUMP),1:)
+ $(eval $(call KernelPackage,wifidog-ng))
++endif
+--- a/package/network/amule/Makefile
++++ b/package/network/amule/Makefile
+@@ -27,7 +27,7 @@
+   CATEGORY:=Network
+   TITLE:=A multi-platform eMule-like ed2k client
+   URL:=http://www.amule.org/
+-  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase +libcryptopp $(ICONV_DEPENDS) $(INTL_DEPENDS)
++  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase +libcryptopp $(ICONV_DEPENDS) $(INTL_DEPENDS) +libbfd
+ endef
+ 
+ CONFIGURE_ARGS+= \

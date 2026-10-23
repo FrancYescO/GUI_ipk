@@ -28,3 +28,12 @@
 +	cp $(LINUX_DIR)/.config $(LINUX_DIR)/.config.set
  	$(_SINGLE) [ -d $(LINUX_DIR)/user_headers ] || $(KERNEL_MAKE) INSTALL_HDR_PATH=$(LINUX_DIR)/user_headers headers_install
  	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | mkhash md5 > $(LINUX_DIR)/.vermagic
+
+--- a/scripts/package-metadata.pl
++++ b/scripts/package-metadata.pl
+@@ -410,0 +411,5 @@
++					# Keep runtime module dependencies, but do not build their
++					# source packages as part of the separate userspace feed.
++					if ($vdep->{name} =~ /^kmod-/) {
++						$depstr = sprintf '$(if $(filter 1,$(USERSPACE_ONLY)),,%s)', $depstr;
++					}

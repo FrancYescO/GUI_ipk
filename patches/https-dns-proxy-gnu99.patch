@@ -1,0 +1,12 @@
+--- a/feeds/packages/net/https-dns-proxy/Makefile
++++ b/feeds/packages/net/https-dns-proxy/Makefile
+@@ -19,6 +19,9 @@
+ 
+ CMAKE_OPTIONS += -DCLANG_TIDY_EXE=
+ 
++# GCC 4.8 defaults to GNU89, while the proxy declares loop variables in C99.
++TARGET_CFLAGS += -std=gnu99
++
+ define Package/https-dns-proxy
+ 	SECTION:=net
+ 	CATEGORY:=Network
