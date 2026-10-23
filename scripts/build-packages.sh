@@ -151,6 +151,10 @@ cp "$repo_root/patches/freeswitch-target-perl-flags.patch" \
 cp "$repo_root/patches/freeswitch-target-python.patch" \
   "$work_dir/feeds/telephony/net/freeswitch/patches/glibc/zz-target-python.patch"
 
+# Retrieve the identical pinned board data from the official source mirror.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/ath10k-board-source-mirror.patch"
+
 # CONFIG_ALL in this snapshot selects kmod-* too. The userspace profile keeps
 # every userspace recipe while leaving bulk kernel modules unselected.
 if [[ "$userspace_only" == 1 ]]; then
