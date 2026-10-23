@@ -1,6 +1,6 @@
 --- a/libgcc/libgcc2.h
 +++ b/libgcc/libgcc2.h
-@@ -33,6 +33,19 @@
+@@ -33,6 +33,23 @@
  extern void __clear_cache (char *, char *);
  extern void __eprintf (const char *, const char *, unsigned int, const char *)
    __attribute__ ((__noreturn__));
@@ -11,10 +11,14 @@
 +#ifndef __LIBGCC_HAS_SF_MODE__
 +#define __LIBGCC_HAS_SF_MODE__ 1
 +#define __LIBGCC_SF_MANT_DIG__ __FLT_MANT_DIG__
++#define __LIBGCC_SF_FUNC_EXT__ f
++#define __LIBGCC_SF_EXCESS_PRECISION__ 0
 +#endif
 +#ifndef __LIBGCC_HAS_DF_MODE__
 +#define __LIBGCC_HAS_DF_MODE__ 1
 +#define __LIBGCC_DF_MANT_DIG__ __DBL_MANT_DIG__
++#define __LIBGCC_DF_FUNC_EXT__
++#define __LIBGCC_DF_EXCESS_PRECISION__ 0
 +#endif
 +#endif
  
