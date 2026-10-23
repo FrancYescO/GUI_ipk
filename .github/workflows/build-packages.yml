@@ -50,7 +50,6 @@ on:
       - "patches/userspace-mixed-recipes.patch"
       - "patches/userspace-dependency-repairs.patch"
       - "patches/swconfig-vendor-uapi.patch"
-      - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/homeware-luci-translation-directories.patch"
       - "patches/https-dns-proxy-gnu99.patch"
       - "patches/ath10k-board-source-mirror.patch"
@@ -89,7 +88,6 @@ on:
       - "patches/userspace-mixed-recipes.patch"
       - "patches/userspace-dependency-repairs.patch"
       - "patches/swconfig-vendor-uapi.patch"
-      - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/homeware-luci-translation-directories.patch"
       - "patches/https-dns-proxy-gnu99.patch"
       - "patches/ath10k-board-source-mirror.patch"
@@ -287,6 +285,14 @@ jobs:
           path: dist/
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Reject experimental native GCC from the shared feed
+        run: |
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          if any(Path("dist").rglob("gcc_*.ipk")):
+              raise SystemExit("Native GCC is experimental and excluded from the shared userspace feed")
+          PYCODE
 
       - name: Prepare safe shared OPKG feed
         run: scripts/sanitize-opkg-feed.sh dist
