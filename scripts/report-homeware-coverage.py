@@ -4,6 +4,7 @@ import argparse
 import csv
 import gzip
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -45,6 +46,7 @@ def inventory(catalog):
 def compare(catalog, feed, metadata=None, config=None):
     expected = inventory(catalog)
     built = {}
+    providers = {}
     indexes = 0
     for section in FEEDS:
         index = feed / section / 'Packages'
@@ -60,6 +62,10 @@ def compare(catalog, feed, metadata=None, config=None):
         for entry in stanzas(text):
             if entry.get('Package') and entry.get('Version'):
                 built.setdefault(entry['Package'], set()).add(entry['Version'])
+                for provided in entry.get('Provides', '').split(','):
+                    match = re.fullmatch(r'([A-Za-z0-9+_.-]+)(?:\s+\([^)]*\))?', provided.strip())
+                    if match:
+                        providers.setdefault(match.group(1), set()).add(entry['Package'])
     if not indexes:
         raise ValueError('No OPKG indexes found under {}'.format(feed))
     recipes = {}
@@ -92,7 +98,8 @@ def compare(catalog, feed, metadata=None, config=None):
         else:
             status = 'missing'
         row.update(status=status, built_versions=';'.join(sorted(versions)),
-                   recipe=recipes.get(name, ''))
+                   recipe=recipes.get(name, ''),
+                   provided_by=';'.join(sorted(providers.get(name, set()))))
         filename = '{}_{}_{}.ipk'.format(name, row['version'], row['architecture'])
         row['source_file'] = row['section'] + '/' + filename
         results.append(row)
@@ -103,7 +110,9 @@ def compare(catalog, feed, metadata=None, config=None):
         counts = Counter(by_name.values())
         summaries.append(dict(homeware=version, names=len(by_name),
                               present=counts['present'], missing=len(by_name)-counts['present'],
-                              statuses=dict(sorted(counts.items()))))
+                              statuses=dict(sorted(counts.items())),
+                              provided_missing=len({row['name'] for row in rows
+                                                    if row['status'] != 'present' and row['provided_by']})))
     return results, dict(indexes_read=indexes, built_names=len(built), versions=summaries)
 
 
@@ -122,7 +131,7 @@ def main():
         output = args.output or args.feed
         output.mkdir(parents=True, exist_ok=True)
         fields = ['homeware', 'section', 'name', 'version', 'architecture', 'status',
-                  'built_versions', 'recipe', 'source_file']
+                  'built_versions', 'recipe', 'provided_by', 'source_file']
         with (output / 'homeware-coverage.csv').open('w', encoding='utf-8', newline='') as stream:
             writer = csv.DictWriter(stream, fields)
             writer.writeheader()
@@ -130,10 +139,11 @@ def main():
         (output / 'homeware-coverage.json').write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
         lines = ['# Homeware package coverage', '',
                  'Baseline: public directory listings recorded on 2026-10-22. Presence is compared by exact package name across the six userspace feeds.', '',
-                 '| Homeware | Distinct names | Present | Missing |', '|---|---:|---:|---:|']
+                 '| Homeware | Distinct names | Present | Missing | Missing with declared provider |', '|---|---:|---:|---:|---:|']
         for item in summary['versions']:
-            lines.append('| {homeware} | {names} | {present} | {missing} |'.format(**item))
+            lines.append('| {homeware} | {names} | {present} | {missing} | {provided_missing} |'.format(**item))
         lines += ['', 'See `homeware-coverage.csv` for every package, recorded filename and built version.', '',
+                  'The `provided_by` column records explicit OPKG `Provides` declarations. Such names remain missing from exact-name counts; declarations do not verify version constraints or runtime equivalence.', '',
                   'Presence does not establish ABI, dependency or runtime compatibility. Different ABI package names remain distinct; versions are recorded without ranking them.',
                   'Catalog entries come from IPK filenames, not their internal control metadata. Homeware 18/19 are source labels, not verified kernel ABI declarations.', '',
                   'When metadata is supplied, `no-recipe`, `not-selected` and `not-built` distinguish remaining work. No missing package is silently considered integrated.', '']

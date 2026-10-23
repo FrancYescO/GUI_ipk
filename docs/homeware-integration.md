@@ -2,7 +2,9 @@
 
 The comparison baseline in `build/homeware/catalog.tsv` records 4,562 package
 files across the Homeware 18 and 19 generations. Reports compare exact package
-names against all six userspace feed sections. They preserve underscores and
+names against all six userspace feed sections. Reports also list explicit OPKG
+`Provides` declarations in `provided_by`, without changing exact-name counts
+or assuming version/runtime equivalence. They preserve underscores and
 distinguish library ABI suffixes. Generation labels alone do not establish
 kernel ABI compatibility; kernel modules must match the installed firmware.
 

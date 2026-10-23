@@ -54,6 +54,20 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(rows[0]['source_file'], 'base/rtl_433_1-1_arm_cortex-a9_neon.ipk')
         self.assertEqual(summary['versions'][0]['present'], 1)
 
+    def test_declared_providers_are_visible_without_changing_exact_name_counts(self):
+        self.catalog_rows(['old_name', 'libcurl4', 'direct'])
+        feed = self.index('packages', ['replacement', 'libcurl', 'direct'])
+        index = feed / 'packages/Packages'
+        index.write_text(index.read_text().replace('Package: replacement',
+                         'Provides: old_name (= 2-1), other_alias\nPackage: replacement'))
+        rows, summary = HOMEWARE.compare(self.catalog, feed)
+        self.assertEqual([row['status'] for row in rows], ['missing', 'missing', 'present'])
+        self.assertEqual(rows[0]['provided_by'], 'replacement')
+        self.assertEqual(rows[1]['provided_by'], '')
+        self.assertEqual(summary['versions'][0]['provided_missing'], 1)
+        self.assertEqual(summary['versions'][0]['present'], 1)
+        self.assertEqual(summary['versions'][0]['missing'], 2)
+
     def test_report_contains_no_external_repository_urls(self):
         self.catalog_rows(['example'])
         feed = self.index('base', ['example'])
