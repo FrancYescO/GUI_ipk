@@ -19,6 +19,10 @@ on:
         description: "Optional completed run whose shard artifacts should be republished without rebuilding"
         required: false
         type: string
+      repair_run_ids:
+        description: "Optional space-separated successful targeted runs to apply to the assembled feed"
+        required: false
+        type: string
       package_targets:
         description: "Optional recipe paths for a targeted build (empty builds every shard)"
         required: false
@@ -65,7 +69,10 @@ on:
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
       - "scripts/report-homeware-coverage.py"
+      - "scripts/fetch-userspace-repairs.py"
+      - "scripts/merge-userspace-repairs.py"
       - "tests/test_homeware_coverage.py"
+      - "tests/test_userspace_repairs.py"
   push:
     branches: [main]
     paths:
@@ -99,7 +106,10 @@ on:
       - "scripts/verify-feed.sh"
       - "scripts/check-userspace-payloads.py"
       - "scripts/report-homeware-coverage.py"
+      - "scripts/fetch-userspace-repairs.py"
+      - "scripts/merge-userspace-repairs.py"
       - "tests/test_homeware_coverage.py"
+      - "tests/test_userspace_repairs.py"
 
 concurrency:
   group: packages-${{ github.ref }}-${{ inputs.reuse_run_id || inputs.package_targets || 'full' }}
@@ -110,12 +120,12 @@ permissions:
 
 jobs:
   homeware-checks:
-    name: Homeware catalog and coverage checks
+    name: Catalog, coverage and repair checks
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - name: Verify catalog, pinned recipes and coverage semantics
-        run: python3 -m unittest discover -s tests -p 'test_homeware_coverage.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
 
   build:
     needs: homeware-checks
@@ -223,6 +233,16 @@ jobs:
 
       - name: Merge packages and reports
         run: python3 scripts/merge-userspace-shards.py shards dist 16
+
+      - name: Apply successful targeted build repairs
+        if: inputs.repair_run_ids != ''
+        env:
+          REPAIR_RUN_IDS: ${{ inputs.repair_run_ids }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/fetch-userspace-repairs.py "$REPAIR_RUN_IDS" repairs
+          python3 scripts/merge-userspace-repairs.py dist repairs
+          cat dist/repairs-report.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Show combined shard report
         if: always()

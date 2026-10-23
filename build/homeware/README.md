@@ -27,3 +27,9 @@ The proxy backport explicitly enables GNU99 for the GCC 4.8 toolchain. Reports u
 The userspace profile keeps module metadata for dependency selection, but omits kernel IPK packaging and kernel compilation from mixed userspace/module recipes. Module overrides use empty Make values, because a literal `n` still evaluates as nonempty in several archived recipes. Runtime kernel requirements are retained in package metadata.
 
 Additional compatibility fixes declare aMule's `libbfd` dependency, recover GCC 5.4 libgcc mode detection when bootstrapping with ARM GCC 4.8, and limit swconfig's structured-link code to headers that actually expose the necessary vendor UAPI. These changes preserve the firmware's header values and do not claim support for missing kernel features.
+
+## Applying targeted build repairs
+
+A completed full build can be reused through `reuse_run_id`. Set `repair_run_ids` to space-separated successful targeted workflow runs to apply corrected IPKs before normal feed validation. Downloads must come from this repository's userspace workflow, and their source commits must be ancestors of the workflow revision assembling the feed. Kernel payloads, malformed packages, full-shard artifacts and conflicting targeted versions are rejected.
+
+Targeted repairs can add new package names or replace the same version and architecture. A version or architecture change to an existing baseline package requires a full build. A JSON/Markdown repair report records the exact package names and source runs; the existing shard diagnostics remain available. Draft PRs run the fast checks, while requesting review starts the full build. Manual targeted builds remain available during development.

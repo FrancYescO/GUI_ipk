@@ -59,8 +59,8 @@
    CATEGORY:=Network
    TITLE:=A multi-platform eMule-like ed2k client
    URL:=http://www.amule.org/
--  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase
-+  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase +libbfd
+-  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase +libcryptopp $(ICONV_DEPENDS) $(INTL_DEPENDS)
++  DEPENDS:=+libpng +libpthread +libncurses +libreadline +wxbase +libcryptopp $(ICONV_DEPENDS) $(INTL_DEPENDS) +libbfd
  endef
  
  CONFIGURE_ARGS+= \
