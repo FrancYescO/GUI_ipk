@@ -20,7 +20,8 @@ runtime compatibility on every router.
 ## Incremental assembly
 
 The manual userspace workflow accepts `reuse_run_id` for a completed full build
-and `repair_run_ids` for up to eight successful targeted builds. This allows
+and `repair_run_ids` for up to eight targeted builds. Assembly waits for each
+repair run and stops if any fails; only successful outputs can be applied. This allows
 corrected packages to be assembled with existing shard outputs. For a branch
 validation run, leave `package_targets` and `shard_index` empty and set
 `publish_pages=false`. The optional `asterisk_reuse_run_id` can reuse either a

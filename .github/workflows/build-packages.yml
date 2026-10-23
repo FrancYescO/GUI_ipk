@@ -20,7 +20,7 @@ on:
         required: false
         type: string
       repair_run_ids:
-        description: "Optional space-separated successful targeted runs to apply to the assembled feed"
+        description: "Optional space-separated targeted runs to await and apply after success"
         required: false
         type: string
       package_targets:
@@ -221,6 +221,21 @@ jobs:
       actions: read
     steps:
       - uses: actions/checkout@v7
+
+      - name: Await successful targeted repair runs
+        if: inputs.repair_run_ids != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPAIR_RUN_IDS: ${{ inputs.repair_run_ids }}
+        run: |
+          read -ra repair_runs <<< "$REPAIR_RUN_IDS"
+          (( ${#repair_runs[@]} > 0 && ${#repair_runs[@]} <= 8 ))
+          for repair_run in "${repair_runs[@]}"; do
+            [[ "$repair_run" =~ ^[0-9]+$ ]]
+          done
+          for repair_run in "${repair_runs[@]}"; do
+            gh run watch "$repair_run" --exit-status --interval 60
+          done
 
       - name: Download shard artifacts
         uses: actions/download-artifact@v7
