@@ -228,7 +228,7 @@ if [[ "$userspace_only" == 1 ]]; then
   cp -a "$repo_root/build/libgomp-overlay/." "$work_dir/"
   # Large optional packages are built only by explicit targeted jobs, never
   # selected by the shared Pages profile's CONFIG_ALL.
-  if [[ "$package_targets" == *feeds/packages/net/rclone* ]]; then
+  if [[ "$package_targets" == *feeds/packages/rclone* ]]; then
     (cd "$repo_root/build/rclone-overlay" && sha256sum --check SHA256SUMS)
     cp -a "$repo_root/build/rclone-overlay/feeds/." "$work_dir/feeds/"
     mkdir -p "$work_dir/package/feeds/packages"
@@ -431,6 +431,18 @@ install_host_tools() {
   } > "$output_dir/failed-packages.md"
   return 1
 }
+
+# Fail before rebuilding host tools if a targeted recipe path is misspelled.
+if [[ -n "$package_targets" ]]; then
+  for target in $package_targets; do
+    target="${target#package/}"
+    target="${target%/compile}"
+    if [[ ! -f "$work_dir/package/$target/Makefile" ]]; then
+      echo "Unknown package target: package/$target (expected a recipe under package/)" >&2
+      exit 1
+    fi
+  done
+fi
 
 if [[ -n "$package_targets" ]]; then
   if [[ "$userspace_only" == 1 ]]; then

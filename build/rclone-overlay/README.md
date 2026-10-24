@@ -37,7 +37,7 @@ matching helper availability before using that command.
 Build these three recipe targets together:
 
 ```
-feeds/packages/net/rclone feeds/packages/net/rclone-ng feeds/packages/net/rclone-webui-react
+feeds/packages/rclone feeds/packages/rclone-ng feeds/packages/rclone-webui-react
 ```
 
 Distribute the resulting packages through an optional release snapshot; they
