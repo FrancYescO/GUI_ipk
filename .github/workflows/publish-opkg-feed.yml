@@ -6,6 +6,7 @@ on:
       - ".github/workflows/publish-opkg-feed.yml"
       - "artifacts/damson-4.1.52-rndis-compat/**"
       - "scripts/assemble-kernel-feed.py"
+      - "scripts/report-feed-dependencies.py"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "tests/test_rndis_feed.py"
   workflow_dispatch:
@@ -37,6 +38,7 @@ on:
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/generate-feed-pages.py"
       - "scripts/assemble-kernel-feed.py"
+      - "scripts/report-feed-dependencies.py"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "scripts/verify-wireguard-kmod.sh"
       - "scripts/verify-kmod-tun.sh"
@@ -114,6 +116,14 @@ jobs:
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods
+
+      - name: Audit dependencies against final kernel feeds
+        run: |
+          for kernel in 4.1.38 4.1.52; do
+            python3 scripts/report-feed-dependencies.py dist \
+              --extra-feed "kernel/$kernel" --output "dist/dependencies-$kernel"
+            cat "dist/dependencies-$kernel/dependency-report.md" >> "$GITHUB_STEP_SUMMARY"
+          done
 
       - name: Generate browsable package pages
         run: python3 scripts/generate-feed-pages.py dist
