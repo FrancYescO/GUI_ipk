@@ -63,7 +63,7 @@ define Build/Compile
 		GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org \
 		GOPATH=$(PKG_BUILD_DIR)/.gopath GOCACHE=$(PKG_BUILD_DIR)/.gocache \
 		GOROOT=$(PKG_BUILD_DIR)/.host-go/go \
-		$(PKG_BUILD_DIR)/.host-go/go/bin/go build -p $(PKG_JOBS) \
+		$(PKG_BUILD_DIR)/.host-go/go/bin/go build -p 2 \
 		-trimpath -buildvcs=false -tags noselfupdate \
 		-ldflags '-s -w -buildid= -X github.com/rclone/rclone/fs.Version=v$(PKG_VERSION)' \
 		-o $(PKG_BUILD_DIR)/rclone .
