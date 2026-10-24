@@ -1,0 +1,206 @@
+[
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "modules/luci-base/po/bg/base.po",
+    "destination": "feeds/luci/modules/luci-base/po/bg/base.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "modules/luci-base/po/hi/base.po",
+    "destination": "feeds/luci/modules/luci-base/po/hi/base.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "modules/luci-base/po/mr/base.po",
+    "destination": "feeds/luci/modules/luci-base/po/mr/base.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-firewall/po/bg/firewall.po",
+    "destination": "feeds/luci/applications/luci-app-firewall/po/bg/firewall.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-firewall/po/mr/firewall.po",
+    "destination": "feeds/luci/applications/luci-app-firewall/po/mr/firewall.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr/po/bg/olsr.po",
+    "destination": "feeds/luci/applications/luci-app-olsr/po/bg/olsr.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr/po/ko/olsr.po",
+    "destination": "feeds/luci/applications/luci-app-olsr/po/ko/olsr.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr/po/mr/olsr.po",
+    "destination": "feeds/luci/applications/luci-app-olsr/po/mr/olsr.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/bg/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/bg/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/cs/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/cs/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/de/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/de/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/es/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/es/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/fr/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/fr/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/hu/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/hu/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/it/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/it/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/ja/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/ja/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/ko/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/ko/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/mr/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/mr/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/nb_NO/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/no/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/pl/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/pl/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/pt/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/pt/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/pt_BR/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/pt-br/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/ro/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/ro/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/ru/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/ru/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/sk/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/sk/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/sv/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/sv/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/tr/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/tr/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/uk/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/uk/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/vi/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/vi/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/zh_Hans/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/zh-cn/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-olsr-services/po/zh_Hant/olsr-services.po",
+    "destination": "feeds/luci/applications/luci-app-olsr-services/po/zh-tw/olsr-services.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-splash/po/bg/splash.po",
+    "destination": "feeds/luci/applications/luci-app-splash/po/bg/splash.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-splash/po/ko/splash.po",
+    "destination": "feeds/luci/applications/luci-app-splash/po/ko/splash.po"
+  },
+  {
+    "repository": "https://github.com/openwrt/luci",
+    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
+    "path": "applications/luci-app-splash/po/mr/splash.po",
+    "destination": "feeds/luci/applications/luci-app-splash/po/mr/splash.po"
+  }
+]
