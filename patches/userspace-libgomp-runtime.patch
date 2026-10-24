@@ -1,0 +1,8 @@
+--- a/package/libs/toolchain/Makefile
++++ b/package/libs/toolchain/Makefile
+@@ -625,5 +625,4 @@
+ $(eval $(call BuildPackage,librt))
+ $(eval $(call BuildPackage,libgfortran))
+-$(eval $(call BuildPackage,libgomp))
+ $(eval $(call BuildPackage,ldd))
+ $(eval $(call BuildPackage,ldconfig))

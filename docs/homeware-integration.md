@@ -105,3 +105,30 @@ bootstrap investigation is preserved on the separate
 and is not part of this feed integration. Assembly rejects accidental native
 compiler IPKs. A newer suitable bootstrap compiler is needed before publishing
 that experiment.
+
+## Published feed, 24 October 2026
+
+[Publication 40085533067](https://github.com/FrancYescO/GUI_ipk/actions/runs/40085533067)
+preserves all 5,501 shared userspace names and publishes 50 kernel packages for
+4.1.52. Coverage and the 4.1.52 dependency audit were independently recomputed
+from the public indexes and match the published reports. The final publisher
+now regenerates both kernel-profile audits after adding SPU and RNDIS packages.
+
+The remaining exact-name gaps can be grouped as follows. These are inventory
+categories, not assertions that packages with different names are equivalent.
+
+| Remaining category | Generation 18 | Generation 19 |
+| --- | ---: | ---: |
+| Legacy Asterisk | 104 | 22 |
+| Libraries and runtimes | 1 | 34 |
+| LuCI translations | 0 | 72 |
+| LuCI/web stack | 0 | 16 |
+| CUPS printing applications | 0 | 4 |
+| Rclone and interfaces | 0 | 4 |
+| DDNS names with declared providers | 6 | 0 |
+| Translation template | 1 | 0 |
+
+The next runtime recipe is `build/libgomp-overlay`, which builds OpenMP with
+the existing cross-compiler. It needs a successful packaged build before
+incremental publication; it is absent from the publication above. Distinct
+library ABIs and the newer LuCI/web stack require their own compatibility work.

@@ -222,6 +222,10 @@ fi
 if [[ "$userspace_only" == 1 ]]; then
   (cd "$repo_root/build/homeware-overlay" && sha256sum --check SHA256SUMS)
   cp -a "$repo_root/build/homeware-overlay/feeds/." "$work_dir/feeds/"
+  # Build OpenMP separately: the supplied cross-toolchain has no libgomp.
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/userspace-libgomp-runtime.patch"
+  cp -a "$repo_root/build/libgomp-overlay/." "$work_dir/"
   # Translation templates are source files, not language directories.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/homeware-luci-translation-directories.patch"
