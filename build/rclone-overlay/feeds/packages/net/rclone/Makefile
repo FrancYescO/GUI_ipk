@@ -48,7 +48,7 @@ endef
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	test "$$(uname -s)-$$(uname -m)" = Linux-x86_64
+	test "$(shell uname -s)-$(shell uname -m)" = Linux-x86_64
 	mkdir -p $(PKG_BUILD_DIR)/.host-go
 	tar -xzf $(DL_DIR)/$(RCLONE_GO_ARCHIVE) -C $(PKG_BUILD_DIR)/.host-go
 endef
