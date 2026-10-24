@@ -44,6 +44,13 @@ for interface in ng react; do
 	done
 	[ "$ready" -eq 1 ] || { cat "$work/server.log"; exit 1; }
 	grep -q 'v1.75.2' "$work/version.json"
+	curl --silent --fail --max-time 2 --user smoke:private-smoke-test \
+		-X POST "http://127.0.0.1:$port/config/listremotes" > "$work/remotes.json"
+	grep -q '"remotes"' "$work/remotes.json"
+	curl --silent --fail --max-time 2 --user smoke:private-smoke-test \
+		--data-urlencode "fs=$work/input" --data-urlencode 'remote=' \
+		"http://127.0.0.1:$port/operations/list" > "$work/list.json"
+	grep -q 'a file.txt' "$work/list.json"
 	status=$(curl --silent --max-time 2 --output /dev/null --write-out '%{http_code}' \
 		-X POST "http://127.0.0.1:$port/core/version")
 	[ "$status" = 401 ]
