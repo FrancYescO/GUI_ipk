@@ -8,9 +8,10 @@ Rclone requires a newer Go compiler than the archived feed's Go 1.10. Its recipe
 extracts a SHA256-pinned Go 1.26.10 Linux/amd64 host toolchain inside its build
 directory. Other Go recipes are unchanged. Go modules are resolved using the
 pinned upstream go.mod/go.sum with readonly module mode and checksum database
-verification. The target is Linux ARMv7, CGO disabled, with paths and build IDs
+verification. The target is Linux ARMv7 with software floating point, CGO disabled, with paths and build IDs
 removed and self-update disabled. Go 1.26 requires Linux 3.2 or later according to
 [the supported platform requirements](https://go.dev/wiki/MinimumRequirements).
+The inspected BCM963138 reports ARMv7 but no VFP/NEON CPU features.
 The Linux CI runner builds the packages with the existing OpenWrt packaging tools.
 
 `rclone-config` supplies an initially disabled procd service. Enabling it requires

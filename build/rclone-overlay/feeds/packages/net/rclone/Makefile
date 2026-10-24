@@ -58,7 +58,7 @@ endef
 
 define Build/Compile
 	cd $(PKG_BUILD_DIR) && \
-		CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 \
+		CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7,softfloat \
 		GOENV=off GOTOOLCHAIN=local GOFLAGS=-mod=readonly \
 		GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org \
 		GOPATH=$(PKG_BUILD_DIR)/.gopath GOCACHE=$(PKG_BUILD_DIR)/.gocache \
