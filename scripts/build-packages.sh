@@ -226,8 +226,16 @@ if [[ "$userspace_only" == 1 ]]; then
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-libgomp-runtime.patch"
   cp -a "$repo_root/build/libgomp-overlay/." "$work_dir/"
-  (cd "$repo_root/build/rclone-overlay" && sha256sum --check SHA256SUMS)
-  cp -a "$repo_root/build/rclone-overlay/feeds/." "$work_dir/feeds/"
+  # Large optional packages are built only by explicit targeted jobs, never
+  # selected by the shared Pages profile's CONFIG_ALL.
+  if [[ "$package_targets" == *feeds/packages/net/rclone* ]]; then
+    (cd "$repo_root/build/rclone-overlay" && sha256sum --check SHA256SUMS)
+    cp -a "$repo_root/build/rclone-overlay/feeds/." "$work_dir/feeds/"
+    mkdir -p "$work_dir/package/feeds/packages"
+    for package in rclone rclone-ng rclone-webui-react; do
+      ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
+    done
+  fi
   (cd "$repo_root/build/luci-translations-overlay" && sha256sum --check SHA256SUMS)
   cp -a "$repo_root/build/luci-translations-overlay/feeds/." "$work_dir/feeds/"
   patch --directory "$work_dir" --strip 1 \
@@ -242,7 +250,7 @@ if [[ "$userspace_only" == 1 ]]; then
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/https-dns-proxy-gnu99.patch"
   mkdir -p "$work_dir/package/feeds/packages" "$work_dir/package/feeds/luci"
-  for package in banip https-dns-proxy rclone rclone-ng rclone-webui-react; do
+  for package in banip https-dns-proxy; do
     ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
   done
   ln -sfn ../../../feeds/luci/applications/luci-app-https-dns-proxy \
