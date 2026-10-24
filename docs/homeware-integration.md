@@ -189,7 +189,9 @@ payloads and hashes before publication. Native GCC and kernel packages are
 excluded; package compatibility and dependencies still require their own review.
 
 Each snapshot has an immutable release tag derived from its source build and
-package manifest. Packages and indexes are uploaded to a draft before the
+package manifest and exact index hashes. Python/zlib versions can emit different
+compressed bytes for equivalent indexes; those outputs receive distinct tags.
+Packages and indexes are uploaded to a draft before the
 release becomes visible. Retries compare existing asset bytes and refuse any
 replacement. A published snapshot cannot gain or lose packages. Existing
 snapshots remain available to clients with cached indexes.

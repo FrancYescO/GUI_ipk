@@ -38,6 +38,19 @@ def publish(directory, metadata):
     for name, digest in expected.items():
         if hashlib.sha256(files[name].read_bytes()).hexdigest() != digest:
             raise ValueError('Snapshot checksum differs: ' + name)
+    indexes = provenance.get('indexes', {})
+    if provenance.get('format_version') != 2 or set(indexes) != {'Packages', 'Packages.gz'}:
+        raise ValueError('Snapshot must identify both index hashes')
+    package_files = {record['filename'] for record in provenance['packages']}
+    if set(files) != package_files | {'Packages', 'Packages.gz', 'source.json', 'SHA256SUMS'}:
+        raise ValueError('Snapshot files differ from package manifest')
+    for name, digest in indexes.items():
+        if expected.get(name) != digest:
+            raise ValueError('Index differs from immutable snapshot identity: ' + name)
+    for record in provenance['packages']:
+        if (expected.get(record['filename']) != record['sha256']
+                or files[record['filename']].stat().st_size != record['size']):
+            raise ValueError('Package differs from immutable snapshot identity: ' + record['filename'])
     # Resolve existence through a successful listing: network/auth failures must not
     # be mistaken for a missing release.
     releases = json.loads(gh('api', '--paginate', '--slurp', 'repos/{}/releases?per_page=100'.format(repository)))
