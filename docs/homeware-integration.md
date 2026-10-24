@@ -119,7 +119,11 @@ adds `libgomp` 4.8.3-1, bringing the shared feed to 5,502 names. The published
 IPK's SHA-256 matches the CI artifact tested with an ARM OpenMP parallel
 reduction under QEMU. Generation 18 now has 3,955/4,066 exact names present,
 with 111 missing. Generation 19 remains at 342/494 before the translation batch.
-Router execution of the new runtime remains unverified.
+The packaged runtime also passed the four-thread reduction on a VBNTJ router
+with Linux 4.1.52 and glibc 2.27. The library and test executable were extracted
+under `/tmp` and removed afterward. Boot ID and kernel taint remained unchanged,
+with no new kernel Oops, BUG or panic messages. This verifies the smoke test on
+that firmware, not prolonged stability or all OpenMP applications.
 
 The remaining exact-name gaps can be grouped as follows. These are inventory
 categories, not assertions that packages with different names are equivalent.

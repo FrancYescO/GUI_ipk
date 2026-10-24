@@ -230,6 +230,10 @@ if [[ "$userspace_only" == 1 ]]; then
   cp -a "$repo_root/build/luci-translations-overlay/feeds/." "$work_dir/feeds/"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/luci-additional-languages.patch"
+  # New po directories change the package list without changing recipe Makefiles.
+  # The archived scanner does not track luci.mk or translation directory globs.
+  rm -f "$work_dir/tmp/.packageinfo" "$work_dir/tmp/.config-package.in" \
+    "$work_dir/tmp/.packagedeps" "$work_dir/tmp/info"/.packageinfo-*luci*
   # Translation templates are source files, not language directories.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/homeware-luci-translation-directories.patch"
@@ -319,6 +323,33 @@ cp "$build_config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)
 make "${make_args[@]}" defconfig
+if [[ "$userspace_only" == 1 ]]; then
+  python3 - "$repo_root/build/luci-translations-overlay/SOURCES.json" "$work_dir" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+manifest, work = Path(sys.argv[1]), Path(sys.argv[2])
+expected = set()
+for entry in json.loads(manifest.read_text(encoding='utf-8')):
+    path = Path(entry['destination'])
+    module = path.parts[-4]
+    module = module[len('luci-app-'):] if module.startswith('luci-app-') else module[len('luci-'):]
+    expected.add('luci-i18n-{}-{}'.format(module, path.parts[-2]))
+metadata = {line[len('Package: '):] for line in (work / 'tmp/.packageinfo').read_text(encoding='utf-8').splitlines()
+            if line.startswith('Package: ')}
+missing = expected - metadata
+if missing:
+    raise SystemExit('LuCI translations absent from metadata: ' + ', '.join(sorted(missing)))
+config = set((work / '.config').read_text(encoding='utf-8').splitlines())
+if 'CONFIG_ALL=y' in config:
+    unselected = {name for name in expected
+                  if not any('CONFIG_PACKAGE_{}={}'.format(name, flag) in config for flag in ('y', 'm'))}
+    if unselected:
+        raise SystemExit('LuCI translations not selected: ' + ', '.join(sorted(unselected)))
+print('Verified {} additional LuCI translation package declarations'.format(len(expected)))
+PY
+fi
 if [[ "$userspace_only" == 1 ]] && grep -qx 'CONFIG_ALL_KMODS=y' "$work_dir/.config"; then
   echo 'Userspace profile unexpectedly selected CONFIG_ALL_KMODS=y' >&2
   exit 1
