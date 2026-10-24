@@ -125,6 +125,11 @@ under `/tmp` and removed afterward. Boot ID and kernel taint remained unchanged,
 with no new kernel Oops, BUG or panic messages. This verifies the smoke test on
 that firmware, not prolonged stability or all OpenMP applications.
 
+With the verified translation batch applied, the shared feed contains 5,536
+names. Generation 19 reaches 376/494 exact names, leaving 118 missing;
+generation 18 remains at 3,955/4,066, with 111 missing. The candidate indexes
+were checked using the same coverage reporter before incremental publication.
+
 The remaining exact-name gaps can be grouped as follows. These are inventory
 categories, not assertions that packages with different names are equivalent.
 
@@ -132,7 +137,7 @@ categories, not assertions that packages with different names are equivalent.
 | --- | ---: | ---: |
 | Legacy Asterisk | 104 | 22 |
 | Libraries and runtimes | 0 | 34 |
-| LuCI translations | 0 | 72 |
+| LuCI translations | 0 | 38 |
 | LuCI/web stack | 0 | 16 |
 | CUPS printing applications | 0 | 4 |
 | Rclone and interfaces | 0 | 4 |
@@ -143,8 +148,32 @@ The runtime recipe in `build/libgomp-overlay` builds OpenMP with the existing
 cross-compiler and retains the disabled native compiler. Distinct library ABIs
 and the newer LuCI/web stack require their own compatibility work.
 
-`build/luci-translations-overlay` stages 34 nonempty official dictionaries for
-existing applications. It excludes eight dictionaries with no translated
-messages plus one identity-only dictionary, maps language identifiers to the legacy framework, and preserves
-partial translation coverage. These additions require a successful packaged
-build and incremental publication before changing the inventory counts above.
+`build/luci-translations-overlay` supplies 34 nonempty official dictionaries
+for existing applications. Run
+[40096559656](https://github.com/FrancYescO/GUI_ipk/actions/runs/40096559656)
+produced 250 targeted IPKs, including all 34 new names. Existing package versions
+and architectures are preserved. Every new LMO payload matches the legacy
+generator's output; the parser binary matches the one tested on the router,
+where the private Italian catalog translated `Services` to `Servizi`.
+
+The overlay excludes eight dictionaries with no translated messages and one
+identity-only dictionary that produces no LMO. It maps language identifiers to
+the legacy framework and preserves partial translation coverage. The build
+invalidates stale LuCI scan metadata and checks that all imported names are
+declared and selected by the full profile before compilation.
+
+## Inspected router dependency availability
+
+The pre-existing package database on the inspected VBNTJ contains 52 exact
+names that the 4.1.52 feed-only audit marks as missing. Adding those installed
+names to a local audit reduces unresolved kernel dependency groups from 192
+to 106. This checks name availability on that device; it does not audit the
+firmware's own dependency closure or verify every module's functionality.
+The `tun` module is present and loaded even though the generic `kmod-tun`
+package marker is absent. Manual feed packages retain their distinct names;
+no generic kernel providers are inferred from these observations.
+
+The remaining version check for `dovecot-pigeonhole` was reviewed using the
+router's OPKG comparator: `dovecot` 2.2.36.4-1 satisfies the required
+`>= 2.2.36.4`. The automatic reporter intentionally retains its conservative
+version-check classification.
