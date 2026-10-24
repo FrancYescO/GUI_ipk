@@ -143,8 +143,8 @@ The runtime recipe in `build/libgomp-overlay` builds OpenMP with the existing
 cross-compiler and retains the disabled native compiler. Distinct library ABIs
 and the newer LuCI/web stack require their own compatibility work.
 
-`build/luci-translations-overlay` stages 35 nonempty official dictionaries for
+`build/luci-translations-overlay` stages 34 nonempty official dictionaries for
 existing applications. It excludes eight dictionaries with no translated
-messages, maps language identifiers to the legacy framework, and preserves
+messages plus one identity-only dictionary, maps language identifiers to the legacy framework, and preserves
 partial translation coverage. These additions require a successful packaged
 build and incremental publication before changing the inventory counts above.

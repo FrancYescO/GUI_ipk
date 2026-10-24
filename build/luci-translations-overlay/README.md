@@ -1,10 +1,12 @@
 # Additional LuCI translations
 
-This overlay imports 35 nonempty official translation dictionaries for the
+This overlay imports 34 nonempty official translation dictionaries for the
 existing luci-base, firewall, OLSR, OLSR services and splash applications.
 `SOURCES.json` pins each upstream path and revision; `SHA256SUMS` checks the
 unchanged bytes. Eight candidate dictionaries contain no translated messages
-and are intentionally excluded. Partial translations remain partial.
+and are intentionally excluded. A ninth dictionary contains only translations
+identical to the source text and produces no LMO, so it is also excluded.
+Partial translations remain partial.
 
 Norwegian, Brazilian Portuguese and Chinese directory names map to the legacy
 LuCI language identifiers (`no`, `pt-br`, `zh-cn`, `zh-tw`). The accompanying

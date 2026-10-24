@@ -4,7 +4,6 @@
 f5422973ec54d60c8126fee41fb1e596abfbb1fdf0acef78de2701489f57973d  feeds/luci/applications/luci-app-firewall/po/bg/firewall.po
 dc502bde28737f4bc5ce067de6f33398146ccf53ab44bcae55e5dadd59c0c4e3  feeds/luci/applications/luci-app-firewall/po/mr/firewall.po
 b4336531e57693f70100106739343bd1055eb1bb5a37068da8eb08c60d512cd1  feeds/luci/applications/luci-app-olsr/po/bg/olsr.po
-21e952407a856488b5ed7a4bea754bdcf1dbc40d63fe9ce8afe8a8c8e56d479c  feeds/luci/applications/luci-app-olsr/po/hi/olsr.po
 8610218c19b0ac4c94cc174cb41f3847b902f3e61ec87ec64683e2597e9c226e  feeds/luci/applications/luci-app-olsr/po/ko/olsr.po
 5db4ec7ea98eed4cfc10fe875721564bf6d13d16d198ab9f650afb3ea0975237  feeds/luci/applications/luci-app-olsr/po/mr/olsr.po
 c275a3b4affd2e475fd55f14d50c98ef4b2eb4d975064289e01a913a6feaf12d  feeds/luci/applications/luci-app-olsr-services/po/bg/olsr-services.po

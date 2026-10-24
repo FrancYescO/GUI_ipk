@@ -38,12 +38,6 @@
   {
     "repository": "https://github.com/openwrt/luci",
     "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
-    "path": "applications/luci-app-olsr/po/hi/olsr.po",
-    "destination": "feeds/luci/applications/luci-app-olsr/po/hi/olsr.po"
-  },
-  {
-    "repository": "https://github.com/openwrt/luci",
-    "commit": "f25285a6c26e8776f153994704710cb8e51fad91",
     "path": "applications/luci-app-olsr/po/ko/olsr.po",
     "destination": "feeds/luci/applications/luci-app-olsr/po/ko/olsr.po"
   },
