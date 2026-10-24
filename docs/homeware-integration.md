@@ -209,3 +209,40 @@ firmware wget timed out with GitHub even with the updated bundle; the default
 curl trust store also rejected the server chain. This device therefore needs a
 working TLS downloader and current certificates before using release sources
 normally. The test installed no packages and left no source or TLS settings.
+
+## Validated optional Rclone candidate
+
+Targeted run
+[40138032911](https://github.com/FrancYescO/GUI_ipk/actions/runs/40138032911)
+produced `rclone`, `rclone-config`, `rclone-ng` and `rclone-webui-react`.
+The runtime is upstream 1.75.2, replacing the inventory's older 1.57.0;
+the two interfaces retain versions 0.5.0 and 2.0.5. All packaged interface files
+match the SHA256-pinned upstream release archives byte for byte.
+
+The runtime was compiled by the isolated Go 1.26.10 toolchain with
+`CGO_ENABLED=0` and `GOARM=7,softfloat`. Its ARM EABI5 ELF has no dynamic loader
+or dynamic library dependencies. The inspected BCM963138 reports ARMv7 but no
+VFP/NEON features, so hardware floating point is deliberately avoided.
+
+On the VBNTJ running Linux 4.1.52, the extracted CI binary copied and checked
+three local files, including an empty file and binary data. Authenticated RC
+calls to version, remote enumeration and local directory listing succeeded;
+unauthenticated calls returned HTTP 401. Both interfaces served their original
+index bytes. A public HTTPS download through Rclone, using a temporary current
+CA bundle, matched the expected SHA256. Temporary files were removed; the boot
+ID and kernel taint were unchanged. No package, user, service or persistent
+configuration was installed. Real cloud accounts, FUSE mounts, a persistent
+procd installation and a physical 4.1.38 device have not been tested.
+
+The runtime binary alone is 79,238,320 bytes (75.6 MiB). The inspected root has
+about 29 MiB free, so permanent installation needs suitable external storage
+or another destination with enough space. The service package defaults to
+disabled and requires credentials before enabling its loopback-only listener.
+
+The four packages remain an optional candidate pending merge and publication.
+Combining their index with the published shared indexes yields 5,540 distinct
+names and generation-19 coverage of 380/494 (114 missing). The current Pages
+coverage remains 376/494. Dependency audits with the candidate add no unresolved
+userspace groups for either kernel profile; existing unresolved kernel groups
+remain 148 for 4.1.38 and 192 for 4.1.52. The scripts register these large recipes
+only for explicit targeted builds, keeping them out of the shared Pages build.

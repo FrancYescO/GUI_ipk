@@ -44,3 +44,16 @@ feeds/packages/rclone feeds/packages/rclone-ng feeds/packages/rclone-webui-react
 Distribute the resulting packages through an optional release snapshot; they
 are excluded from the shared Pages assembly by its size limit until a separate
 storage migration is implemented.
+
+## Verified output
+
+Run `40138032911` produced all four IPKs. The runtime is a 79,238,320-byte static
+ARM EABI5 executable; build metadata confirms Go 1.26.10, software floating point
+and disabled self-update. Every file in both interface packages matches the
+pinned upstream assets. On the inspected Linux 4.1.52 device the extracted binary
+passed local copy/check, authenticated RC, unauthenticated-request rejection,
+interface index comparison and HTTPS download with a temporary current CA bundle.
+See `tests/rclone-smoke.sh` for the isolated local and RC checks. These tests
+neither install the packages nor validate FUSE, real cloud accounts or procd
+startup. The device's root has insufficient free space for permanent installation
+of the runtime; use suitable external storage or another package destination.
