@@ -177,3 +177,35 @@ The remaining version check for `dovecot-pigeonhole` was reviewed using the
 router's OPKG comparator: `dovecot` 2.2.36.4-1 satisfies the required
 `>= 2.2.36.4`. The automatic reporter intentionally retains its conservative
 version-check classification.
+
+## Optional release snapshots
+
+The shared Pages site has little space left below its deployment limit. The
+`Publish optional release OPKG snapshot` workflow provides additional capacity
+for individually reviewed userspace packages. It accepts exact package names
+from a successful targeted userspace build whose source revision is already
+merged into the workflow revision. It checks package metadata, architecture,
+payloads and hashes before publication. Native GCC and kernel packages are
+excluded; package compatibility and dependencies still require their own review.
+
+Each snapshot has an immutable release tag derived from its source build and
+package manifest. Packages and indexes are uploaded to a draft before the
+release becomes visible. Retries compare existing asset bytes and refuse any
+replacement. A published snapshot cannot gain or lose packages. Existing
+snapshots remain available to clients with cached indexes.
+
+The workflow summary gives an optional `src/gz gui_extras` source line. Its URL
+ends at `releases/download/<snapshot-tag>` and each index uses relative package
+filenames, as required by the legacy OPKG downloader. Adding an absolute URL to
+`Filename` would still prepend the configured feed root and fail. Updating to a
+new snapshot requires changing the optional source URL explicitly; existing
+Pages source lines continue to work. No router source is changed automatically.
+
+The first snapshot, `extras-40086518503-d97cb2260f311fed`, contains the existing
+verified `libgomp` IPK. The inspected VBNTJ successfully ran OPKG `update` and
+`download` against it using an isolated root, a temporary curl downloader and
+an updated CA bundle. The downloaded SHA256 matched the build artifact. Its
+firmware wget timed out with GitHub even with the updated bundle; the default
+curl trust store also rejected the server chain. This device therefore needs a
+working TLS downloader and current certificates before using release sources
+normally. The test installed no packages and left no source or TLS settings.

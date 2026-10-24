@@ -1,0 +1,71 @@
+name: Publish optional release OPKG snapshot
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Successful targeted userspace build run (revision must be merged)
+        required: true
+        type: string
+      package_names:
+        description: Exact space-separated package names to include
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: optional-release-feed
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+      PACKAGE_NAMES: ${{ inputs.package_names }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify successful build provenance and download targeted output
+        run: python3 scripts/fetch-userspace-repairs.py "$SOURCE_RUN_ID" inputs
+      - name: Select exact packages and prepare a deterministic feed
+        run: |
+          python3 - <<'PY'
+          import importlib.util
+          import json
+          import os
+          from pathlib import Path
+          spec = importlib.util.spec_from_file_location('release_feed', 'scripts/prepare-release-feed.py')
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          info = module.prepare(Path('inputs') / os.environ['SOURCE_RUN_ID'], Path('release-feed'),
+                                os.environ['PACKAGE_NAMES'].split(), os.environ['GITHUB_REPOSITORY'])
+          Path('release-feed.json').write_text(json.dumps(info, sort_keys=True) + '\n')
+          PY
+      - name: Verify package payloads and feed indexes
+        run: bash scripts/verify-feed.sh release-feed
+      - name: Retain the prepared snapshot before publication
+        uses: actions/upload-artifact@v7
+        with:
+          name: optional-release-feed-${{ github.run_id }}
+          path: |
+            release-feed/
+            release-feed.json
+          retention-days: 30
+      - name: Publish all verified assets before exposing the snapshot
+        run: |
+          python3 scripts/publish-release-feed.py release-feed release-feed.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          info = json.loads(Path('release-feed.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write('Published {} packages. Optional OPKG source:\n\n```\nsrc/gz gui_extras {}\n```\n'.format(info['packages'], info['url']))
+          PY
