@@ -226,6 +226,10 @@ if [[ "$userspace_only" == 1 ]]; then
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-libgomp-runtime.patch"
   cp -a "$repo_root/build/libgomp-overlay/." "$work_dir/"
+  (cd "$repo_root/build/luci-translations-overlay" && sha256sum --check SHA256SUMS)
+  cp -a "$repo_root/build/luci-translations-overlay/feeds/." "$work_dir/feeds/"
+  patch --directory "$work_dir" --strip 1 \
+    < "$repo_root/patches/luci-additional-languages.patch"
   # Translation templates are source files, not language directories.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/homeware-luci-translation-directories.patch"
