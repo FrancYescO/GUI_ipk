@@ -241,7 +241,7 @@ if [[ "$userspace_only" == 1 ]]; then
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/https-dns-proxy-gnu99.patch"
   mkdir -p "$work_dir/package/feeds/packages" "$work_dir/package/feeds/luci"
-  for package in banip https-dns-proxy rclone; do
+  for package in banip https-dns-proxy rclone rclone-ng rclone-webui-react; do
     ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
   done
   ln -sfn ../../../feeds/luci/applications/luci-app-https-dns-proxy \
