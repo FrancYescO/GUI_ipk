@@ -226,6 +226,7 @@ if [[ "$userspace_only" == 1 ]]; then
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-libgomp-runtime.patch"
   cp -a "$repo_root/build/libgomp-overlay/." "$work_dir/"
+  (cd "$repo_root/build/rclone-overlay" && sha256sum --check SHA256SUMS)
   cp -a "$repo_root/build/rclone-overlay/feeds/." "$work_dir/feeds/"
   (cd "$repo_root/build/luci-translations-overlay" && sha256sum --check SHA256SUMS)
   cp -a "$repo_root/build/luci-translations-overlay/feeds/." "$work_dir/feeds/"

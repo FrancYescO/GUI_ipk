@@ -19,11 +19,6 @@ start_service() {
 	fi
 	case "$port" in ''|*[!0-9]*) return 1 ;; esac
 	[ "$port" -ge 1 ] && [ "$port" -le 65535 ] || return 1
-	mkdir -p /etc/rclone
-	touch /etc/rclone/rclone.conf
-	chmod 700 /etc/rclone
-	chmod 600 /etc/rclone/rclone.conf
-	chown rclone:rclone /etc/rclone /etc/rclone/rclone.conf
 
 	config_get interface main interface
 	case "$interface" in
@@ -35,6 +30,12 @@ start_service() {
 		logger -t rclone 'Install the selected web interface package first'
 		return 1
 	fi
+	mkdir -p /etc/rclone
+	touch /etc/rclone/rclone.conf
+	chmod 700 /etc/rclone
+	chmod 600 /etc/rclone/rclone.conf
+	chown rclone:rclone /etc/rclone /etc/rclone/rclone.conf
+
 	procd_open_instance
 	procd_set_param command /usr/bin/rclone rcd \
 		--config=/etc/rclone/rclone.conf \

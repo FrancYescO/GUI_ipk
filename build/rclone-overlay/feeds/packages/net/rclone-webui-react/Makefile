@@ -5,12 +5,19 @@ PKG_VERSION:=2.0.5
 PKG_RELEASE:=1
 PKG_SOURCE:=rclone-webui-react-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=https://github.com/rclone/rclone-webui-react/releases/download/v$(PKG_VERSION)
-PKG_SOURCE_URL_FILE:=currentbuild.zip
 PKG_HASH:=afd6836ecc5c5a1161e25cb0633c1167eb5933bb5069545680d69fcba635f011
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
 include $(INCLUDE_DIR)/package.mk
+
+# The archived downloader predates PKG_SOURCE_URL_FILE.
+define Download/default
+  FILE:=$(PKG_SOURCE)
+  URL:=$(PKG_SOURCE_URL)
+  URL_FILE:=currentbuild.zip
+  HASH:=$(PKG_HASH)
+endef
 
 define Package/rclone-webui-react
   SECTION:=net

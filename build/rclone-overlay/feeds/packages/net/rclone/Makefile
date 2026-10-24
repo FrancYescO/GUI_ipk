@@ -29,7 +29,7 @@ define Package/rclone
   SUBMENU:=File Transfer
   TITLE:=Rclone cloud storage client
   URL:=https://rclone.org
-  DEPENDS:=@arm +ca-bundle +fuse-utils
+  DEPENDS:=@arm +ca-bundle
   USERID:=rclone:rclone
 endef
 

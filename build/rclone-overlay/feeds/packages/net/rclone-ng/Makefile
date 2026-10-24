@@ -22,7 +22,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	tar -xzf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR) --strip-components=1
+	tar -xzf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR)
 	$(CP) ./files/LICENSE $(PKG_BUILD_DIR)/LICENSE
 endef
 
@@ -34,7 +34,7 @@ endef
 
 define Package/rclone-ng/install
 	$(INSTALL_DIR) $(1)/usr/share/rclone/ng $(1)/usr/share/licenses/rclone-ng
-	$(CP) $(PKG_BUILD_DIR)/. $(1)/usr/share/rclone/ng/
+	$(CP) $(PKG_BUILD_DIR)/RcloneNg/. $(1)/usr/share/rclone/ng/
 	$(INSTALL_DATA) ./files/LICENSE $(1)/usr/share/licenses/rclone-ng/
 endef
 
