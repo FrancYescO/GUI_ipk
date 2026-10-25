@@ -18,5 +18,7 @@ CXXFLAGS='-Os -std=gnu++11 -pthread' LIBS=-latomic ./configure \
  --with-openssl --with-libz --without-gnutls --without-libnettle --without-libgcrypt \
  --without-gmp --without-libxml2 --without-libexpat --without-libssh2 --without-libcares \
  --without-sqlite3 --without-libuv --enable-bittorrent --disable-metalink --enable-websocket
-make -j2
+# libtool interprets -static as library selection only; -all-static also
+# makes the compiler runtime and libc static in the final executable.
+make -j2 LDFLAGS="$LDFLAGS -all-static"
 make DESTDIR="$stage" install
