@@ -1,0 +1,61 @@
+# Optional application updates
+
+Baseline and upstream releases inspected on 2026-10-25:
+
+| Application | Published baseline | Update target | Validation state |
+|---|---|---|---|
+| Transmission | 2.94 | 4.1.4 | Modern private stack build in progress |
+| aria2 | 1.33.0 | 1.37.0 | C++11 build correction under test |
+| aMule | 2.3.2 | 3.0.0 | Preparing wxWidgets 3.2 and private dependencies |
+| Android Debug Bridge | android.5.0.2_r1 | android.37.0.0p1 | Portable client build in progress |
+| Tailscale | Not in the shared feed | 1.104.2 | Static IPK and private userspace daemon tested on router |
+| WireGuard tools | 1.0.20260223-2 | Already at inspected upstream release | No tool update needed |
+
+The application overlay is enabled only by explicit targeted builds. Large
+updates will use optional release feeds; the shared Pages feed remains unchanged
+until an update has its own completed build and runtime checks.
+
+## Compatibility boundary
+
+The supplied GCC 4.8 toolchain supports aria2's C++11 requirement when that
+language mode is explicitly retained. Transmission 4 requires C++17 and newer
+crypto libraries; aMule 3 requires wxWidgets 3.2 and Boost; portable ADB 37 uses
+C++20. These cannot be implemented by relabelling the shared legacy libraries.
+
+The modern path uses the SHA256-pinned Bootlin ARMv5 EABI musl SDK 2026.08-1
+(GCC 15.3.0, musl 1.2.6) and CMake 3.31.8. Applications and their required modern
+libraries are built privately and linked statically. The shared glibc, C++ and
+crypto packages are not replaced. The SDK's software floating point avoids
+assuming VFP/NEON from the feed's architecture name.
+
+An extracted SDK built `tests/modern-cpp-smoke.cpp` on Linux. The resulting
+static ARM EABI5 program passed threads, 64-bit atomics, filesystem queries and
+monotonic clock checks on the VBNTJ running kernel 4.1.52. Its temporary file was
+removed, with unchanged boot ID and taint. This validates the toolchain baseline;
+each application still requires its own build and runtime checks.
+
+## Tailscale
+
+Run `40175326506` produced `tailscale_1.104.2-1_arm_cortex-a9_neon.ipk`.
+The combined daemon/CLI is 36,909,272 bytes. ELF inspection confirms static ARM
+without an interpreter or dynamic dependencies; Go metadata records Go 1.27.3,
+`GOARM=7,softfloat`, disabled CGO and the upstream `ts_include_cli` feature.
+The installed `tailscale` command is a symlink to the combined `tailscaled` binary.
+
+Both commands reported 1.104.2 on the router. A private daemon with in-memory
+state, an isolated Unix socket, `--tun=userspace-networking`, a temporary log
+directory and log upload disabled reached `NeedsLogin`; its CLI returned that
+state. No login, peer connection, routed VPN test or persistent installation was
+performed. Temporary processes and files were removed; boot ID and taint were
+unchanged. The packaged service defaults to disabled and never runs `tailscale
+up` automatically. Normal TUN mode still requires appropriate device/kernel
+support; userspace mode does not require installing a kernel WireGuard module.
+
+## WireGuard
+
+The current command-line tools are already updated. Linux 4.1 uses the separate
+`wireguard-linux-compat` 1.0.20220627 backport and matching kernel-specific IPKs.
+A newer tool version does not update the kernel implementation or prove module
+ABI compatibility. See [wireguard-updates.md](wireguard-updates.md) for the
+existing kernel builds and firmware-specific validation. Running a modern
+in-tree WireGuard implementation requires a newer supported kernel/firmware.

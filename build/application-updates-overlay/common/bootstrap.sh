@@ -7,6 +7,7 @@ source_file() {
 }
 bootstrap_modern() {
   local topdir=$1 downloads=$2
+  native_pkg_config="$(command -v pkg-config)"
   tools="$topdir/.modern-application-tools"
   mkdir -p "$tools"
   exec 9>"$tools/bootstrap.lock"
@@ -31,6 +32,7 @@ setup_private_prefix() {
   prefix=$1
   mkdir -p "$prefix"
   export PKG_CONFIG_LIBDIR="$prefix/lib/pkgconfig"
+  export PKG_CONFIG="$native_pkg_config --static"
   export CFLAGS=-Os CXXFLAGS=-Os CPPFLAGS="-I$prefix/include" LDFLAGS="-static -L$prefix/lib"
   toolchain="$prefix/toolchain.cmake"
   cat > "$toolchain" <<EOF
