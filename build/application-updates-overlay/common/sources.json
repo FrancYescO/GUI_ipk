@@ -83,11 +83,6 @@
     "url": "https://github.com/boostorg/boost/releases/download/boost-1.92.0/boost-1.92.0-cmake.tar.xz",
     "sha256": "9bed76128d4e46755dbe818487788c6fceb6f72b378f4daa49b7e1e600d9088d"
   },
-  "gd": {
-    "file": "libgd-2.3.3.tar.gz",
-    "url": "https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.gz",
-    "sha256": "dd3f1f0bb016edcc0b2d082e8229c822ad1d02223511997c80461481759b1ed2"
-  },
   "png": {
     "file": "libpng-1.6.59.tar.gz",
     "url": "https://codeload.github.com/pnggroup/libpng/tar.gz/refs/tags/v1.6.59",

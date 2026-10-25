@@ -9,7 +9,7 @@ PKG_HASH:=850a09d1a5ec7d1b8962e4051d51b29355ac3df84a7b0b1209f2d0dd5c62eab4
 PKG_LICENSE:=GPL-2.0-or-later
 PKG_LICENSE_FILES:=COPYING
 PKG_BUILD_PARALLEL:=1
-MODERN_COMPONENTS:=sdk cmake openssl curl zlib wx cryptopp boost gd png ncurses readline
+MODERN_COMPONENTS:=sdk cmake openssl curl zlib wx cryptopp boost png ncurses readline
 
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/.application-build/downloads.mk

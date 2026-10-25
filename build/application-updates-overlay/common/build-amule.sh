@@ -24,12 +24,6 @@ if [[ ! -f "$prefix/lib/libpng16.a" ]]; then
  extract_private png "$private/png"
  build_cmake_dependency png "$private/png" -DPNG_SHARED=OFF -DPNG_STATIC=ON -DPNG_TESTS=OFF -DPNG_TOOLS=OFF -DZLIB_ROOT="$prefix"
 fi
-if [[ ! -f "$prefix/lib/libgd.a" ]]; then
- extract_private gd "$private/gd"
- build_cmake_dependency gd "$private/gd" -DENABLE_PNG=ON -DENABLE_JPEG=OFF \
-  -DENABLE_TIFF=OFF -DENABLE_FREETYPE=OFF -DENABLE_FONTCONFIG=OFF \
-  -DENABLE_WEBP=OFF -DENABLE_HEIF=OFF -DENABLE_AVIF=OFF -DENABLE_XPM=OFF
-fi
 if [[ ! -f "$prefix/lib/libcryptopp.a" ]]; then
  extract_private cryptopp "$private/cryptopp"
  (cd "$private/cryptopp"; make -j2 static CXX="$CXX" AR="$AR" RANLIB="$RANLIB" \

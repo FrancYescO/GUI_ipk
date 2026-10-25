@@ -158,16 +158,6 @@ ifneq ($(filter boost,$(MODERN_COMPONENTS)),)
 $(eval $(call Download,modern-boost))
 endif
 
-define Download/modern-gd
-  FILE:=libgd-2.3.3.tar.gz
-  URL:=https://github.com/libgd/libgd/releases/download/gd-2.3.3
-  URL_FILE:=libgd-2.3.3.tar.gz
-  HASH:=dd3f1f0bb016edcc0b2d082e8229c822ad1d02223511997c80461481759b1ed2
-endef
-ifneq ($(filter gd,$(MODERN_COMPONENTS)),)
-$(eval $(call Download,modern-gd))
-endif
-
 define Download/modern-png
   FILE:=libpng-1.6.59.tar.gz
   URL:=https://codeload.github.com/pnggroup/libpng/tar.gz/refs/tags

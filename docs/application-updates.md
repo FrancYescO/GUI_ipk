@@ -34,6 +34,16 @@ monotonic clock checks on the VBNTJ running kernel 4.1.52. Its temporary file wa
 removed, with unchanged boot ID and taint. This validates the toolchain baseline;
 each application still requires its own build and runtime checks.
 
+## Installation space
+
+The raw Transmission payload is about 38.6 MiB for all four packages; the daemon
+and web alone are about 6.5 MiB. Tailscale's combined executable is about 35.2
+MiB. The tested router reported about 29 MiB free on its writable root filesystem.
+Flash compression can change actual consumption, but the temporary RAM tests do
+not establish that every package fits in internal storage. Select the required
+components and verify available writable space or an external installation
+location before deployment.
+
 ## Certificate trust
 
 Private TLS libraries still need a current trusted CA store. The legacy
