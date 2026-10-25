@@ -16,6 +16,9 @@ class ModernPrefixTests(unittest.TestCase):
             (tools/'ready').touch()
             binaries=work/'staging_dir/host/bin'
             binaries.mkdir(parents=True)
+            lock=binaries/'flock'
+            lock.write_text('#!/bin/sh\nexit 0\n')
+            lock.chmod(0o755)
             wrapper=binaries/'pkg-config'
             wrapper.write_text('#!/bin/sh\necho WRONG_LEGACY_PREFIX\n')
             wrapper.chmod(0o755)
