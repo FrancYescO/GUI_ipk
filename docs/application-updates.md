@@ -34,6 +34,15 @@ monotonic clock checks on the VBNTJ running kernel 4.1.52. Its temporary file wa
 removed, with unchanged boot ID and taint. This validates the toolchain baseline;
 each application still requires its own build and runtime checks.
 
+## Certificate trust
+
+Private TLS libraries still need a current trusted CA store. The legacy
+`ca-bundle` package in the shared feed dates from 2019; upgrading OpenSSL alone
+does not refresh its certificates. HTTPS smoke tests use a current temporary CA
+bundle with certificate verification enabled. A deployment must provide an
+up-to-date trust store; these optional application builds do not replace the
+router's system trust configuration or disable certificate verification.
+
 ## Transmission
 
 Run `40177095441` produced the four 4.1.4-1 packages:
