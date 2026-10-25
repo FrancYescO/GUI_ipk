@@ -187,3 +187,13 @@ endef
 ifneq ($(filter readline,$(MODERN_COMPONENTS)),)
 $(eval $(call Download,modern-readline))
 endif
+
+define Download/modern-gtest
+  FILE:=googletest-1.17.0.tar.gz
+  URL:=https://codeload.github.com/google/googletest/tar.gz/refs/tags
+  URL_FILE:=v1.17.0
+  HASH:=65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c
+endef
+ifneq ($(filter gtest,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-gtest))
+endif

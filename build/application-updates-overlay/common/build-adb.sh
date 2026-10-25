@@ -14,6 +14,13 @@ if [[ ! -f "$prefix/lib/libz.a" ]]; then
  extract_private zlib "$private/zlib"
  (cd "$private/zlib"; ./configure --static --prefix="$prefix"; make -j2; make install)
 fi
+# libziparchive's public header includes the production FRIEND_TEST macro.
+# Copy upstream headers only; no Google Test binary is built or packaged.
+if [[ ! -f "$prefix/include/gtest/gtest_prod.h" ]]; then
+ extract_private gtest "$private/gtest"
+ mkdir -p "$prefix/include"
+ cp -R "$private/gtest/googletest/include/gtest" "$prefix/include/"
+fi
 build_cmake_dependency() {
   local name=$1 directory=$2
   shift 2

@@ -97,5 +97,10 @@
     "file": "readline-8.3.tar.gz",
     "url": "https://ftp.gnu.org/gnu/readline/readline-8.3.tar.gz",
     "sha256": "fe5383204467828cd495ee8d1d3c037a7eba1389c22bc6a041f627976f9061cc"
+  },
+  "gtest": {
+    "file": "googletest-1.17.0.tar.gz",
+    "url": "https://codeload.github.com/google/googletest/tar.gz/refs/tags/v1.17.0",
+    "sha256": "65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c"
   }
 }
