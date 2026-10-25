@@ -21,6 +21,13 @@ bootstrap_modern() {
     tar -xzf "$downloads/$(source_file cmake)" -C "$tools/cmake" --strip-components=1
     touch "$tools/ready"
   fi
+  # This SDK is private to static applications. Legacy libtool can otherwise
+  # resolve its runtime .la metadata to absolute shared-object paths. Keep all
+  # actual libraries, and perform metadata cleanup before releasing the lock.
+  if [[ ! -f "$tools/static-runtime-ready" ]]; then
+    find "$tools/sdk/arm-buildroot-linux-musleabi" -type f -name '*.la' -delete
+    touch "$tools/static-runtime-ready"
+  fi
   flock -u 9
   exec 9>&-
   sdk="$tools/sdk"

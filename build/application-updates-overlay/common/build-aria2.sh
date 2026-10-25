@@ -11,10 +11,6 @@ mkdir -p "$private"
 setup_private_prefix "$private/prefix"
 source "$(dirname "$0")/tls.sh"
 ensure_private_tls
-# The optional SDK is used only for static applications. Its libtool metadata
-# can resolve compiler runtimes to absolute .so paths under the legacy builder;
-# without those .la files, -all-static lets GCC select its real static archives.
-find "$sdk/arm-buildroot-linux-musleabi" -type f -name '*.la' -delete
 cd "$source_dir"
 ARIA2_STATIC=yes CXXFLAGS='-Os -std=gnu++11 -pthread' LIBS=-latomic ./configure \
  --host=arm-buildroot-linux-musleabi --prefix=/usr --disable-shared --enable-static \

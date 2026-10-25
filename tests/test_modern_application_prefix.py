@@ -14,6 +14,7 @@ class ModernPrefixTests(unittest.TestCase):
             tools=work/'.modern-application-tools'
             tools.mkdir()
             (tools/'ready').touch()
+            (tools/'sdk/arm-buildroot-linux-musleabi').mkdir(parents=True)
             binaries=work/'staging_dir/host/bin'
             binaries.mkdir(parents=True)
             lock=binaries/'flock'
