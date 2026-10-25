@@ -9,6 +9,11 @@ bootstrap_modern "$topdir" "$downloads"
 private="$source_dir/.private"
 mkdir -p "$private"
 setup_private_prefix "$private/prefix"
+# android-tools links zlib directly rather than through an imported CMake target.
+if [[ ! -f "$prefix/lib/libz.a" ]]; then
+ extract_private zlib "$private/zlib"
+ (cd "$private/zlib"; ./configure --static --prefix="$prefix"; make -j2; make install)
+fi
 build_cmake_dependency() {
   local name=$1 directory=$2
   shift 2

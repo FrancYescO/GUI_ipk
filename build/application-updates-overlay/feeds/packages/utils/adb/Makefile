@@ -8,7 +8,7 @@ PKG_SOURCE_URL:=https://github.com/nmeum/android-tools/releases/download/$(PKG_V
 PKG_HASH:=2c6de1abe16b211c7d9f59276217e14fd9e0e18b20e331d3c84358f5dffd576e
 PKG_LICENSE:=Apache-2.0 BSD-3-Clause MIT
 PKG_BUILD_PARALLEL:=1
-MODERN_COMPONENTS:=sdk cmake brotli lz4 zstd pcre2 libusb protobuf protoc absl
+MODERN_COMPONENTS:=sdk cmake zlib brotli lz4 zstd pcre2 libusb protobuf protoc absl
 
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/.application-build/downloads.mk
