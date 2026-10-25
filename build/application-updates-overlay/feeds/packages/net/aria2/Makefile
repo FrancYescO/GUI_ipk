@@ -8,53 +8,29 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aria2
 PKG_VERSION:=1.37.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=https://github.com/aria2/aria2/releases/download/release-$(PKG_VERSION)/
 PKG_HASH:=60a420ad7085eb616cb6e2bdf0a7206d68ff3d37fb5a956dc44242eb2f79b66b
-PKG_INSTALL:=1
 
 PKG_MAINTAINER:=Imre Kaloz <kaloz@openwrt.org>, \
 	Hsing-Wang Liao <kuoruan@gmail.com>
 PKG_LICENSE:=GPLv2
 PKG_LICENSE_FILES:=COPYING
 
-PKG_CONFIG_DEPENDS := \
-	CONFIG_ARIA2_NOSSL \
-	CONFIG_ARIA2_OPENSSL \
-	CONFIG_ARIA2_GNUTLS \
-	CONFIG_ARIA2_NOCRYPTO \
-	CONFIG_ARIA2_NETTLE \
-	CONFIG_ARIA2_LIBGCRYPT \
-	CONFIG_ARIA2_LIBXML2 \
-	CONFIG_ARIA2_EXPAT \
-	CONFIG_ARIA2_GMP \
-	CONFIG_ARIA2_BITTORRENT \
-	CONFIG_ARIA2_METALINK \
-	CONFIG_ARIA2_SFTP \
-	CONFIG_ARIA2_ASYNC_DNS \
-	CONFIG_ARIA2_COOKIE \
-	CONFIG_ARIA2_WEBSOCKET
-
-TARGET_CXXFLAGS += -std=gnu++11
+MODERN_COMPONENTS:=sdk cmake openssl curl zlib
 
 include $(INCLUDE_DIR)/package.mk
-
-define Package/aria2/config
-  source "$(SOURCE)/Config.in"
-endef
+include $(TOPDIR)/.application-build/downloads.mk
 
 define Package/aria2
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=File Transfer
-  TITLE:=lightweight download utility
+  TITLE:=aria2 download client (private static OpenSSL)
   URL:=https://aria2.github.io/
-  DEPENDS:=+zlib +libstdcpp +ARIA2_OPENSSL:libopenssl +ARIA2_GNUTLS:libgnutls \
-	+ARIA2_NETTLE:libnettle +ARIA2_LIBGCRYPT:libgcrypt +ARIA2_GMP:libgmp \
-	+ARIA2_LIBXML2:libxml2 +ARIA2_EXPAT:libexpat +ARIA2_SFTP:libssh2 \
-	+ARIA2_ASYNC_DNS:libcares +ARIA2_COOKIE:libsqlite3
+  DEPENDS:=@arm +ca-bundle
   USERID:=aria2=6800:aria2=6800
 endef
 
@@ -63,24 +39,12 @@ define Package/aria2/description
   utility
 endef
 
-CONFIGURE_ARGS += \
-	--disable-nls \
-	$(if $(CONFIG_ARIA2_NOSSL),--disable,--enable)-ssl \
-	$(if $(CONFIG_ARIA2_BITTORRENT),--enable,--disable)-bittorrent \
-	$(if $(CONFIG_ARIA2_METALINK),--enable,--disable)-metalink \
-	$(if $(CONFIG_ARIA2_WEBSOCKET),--enable,--disable)-websocket \
-	$(if $(CONFIG_ARIA2_OPENSSL),--with,--without)-openssl \
-	$(if $(CONFIG_ARIA2_GNUTLS),--with,--without)-gnutls \
-	$(if $(CONFIG_ARIA2_NETTLE),--with,--without)-libnettle \
-	$(if $(CONFIG_ARIA2_LIBGCRYPT),--with,--without)-libgcrypt \
-	$(if $(CONFIG_ARIA2_GMP),--with,--without)-libgmp \
-	$(if $(CONFIG_ARIA2_LIBXML2),--with,--without)-libxml2 \
-	$(if $(CONFIG_ARIA2_EXPAT),--with,--without)-libexpat \
-	$(if $(CONFIG_ARIA2_SFTP),--with,--without)-libssh2 \
-	$(if $(CONFIG_ARIA2_ASYNC_DNS),--with,--without)-libcares \
-	$(if $(CONFIG_ARIA2_COOKIE),--with,--without)-sqlite3 \
-	--without-libuv \
-	--with-libz
+define Build/Configure
+endef
+
+define Build/Compile
+	bash $(TOPDIR)/.application-build/build-aria2.sh $(PKG_BUILD_DIR) $(PKG_INSTALL_DIR) $(DL_DIR) $(TOPDIR)
+endef
 
 define Package/aria2/install
 	$(INSTALL_DIR) $(1)/usr/bin
