@@ -37,6 +37,8 @@ PKG_CONFIG_DEPENDS := \
 	CONFIG_ARIA2_COOKIE \
 	CONFIG_ARIA2_WEBSOCKET
 
+TARGET_CXXFLAGS += -std=gnu++11
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/aria2/config
