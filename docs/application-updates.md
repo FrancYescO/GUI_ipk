@@ -2,7 +2,7 @@
 
 Baseline and upstream releases inspected on 2026-10-25:
 
-| Application | Published baseline | Update target | Validation state |
+| Application | Published baseline | Optional version | Validation state |
 |---|---|---|---|
 | Transmission | 2.94 | 4.1.4 | Static IPKs, authenticated RPC and web tested on router |
 | aria2 | 1.33.0 | 1.37.0 | Static IPK, HTTP/HTTPS and protected RPC tested on router |
@@ -12,8 +12,50 @@ Baseline and upstream releases inspected on 2026-10-25:
 | WireGuard tools | 1.0.20260223-2 | Already at inspected upstream release | No tool update needed |
 
 The application overlay is enabled only by explicit targeted builds. Publication
-uses optional release feeds. The shared Pages build continues using its archived
-recipes; these application artifacts have not yet been published.
+uses the optional release feeds listed below. The shared Pages build continues
+using its archived recipes.
+
+## Published optional feeds
+
+PR [#17](https://github.com/FrancYescO/GUI_ipk/pull/17) was merged on
+2026-10-25. The five immutable release snapshots below are published and
+independently verified.
+
+| Application | Packages | Snapshot | Publication run |
+|---|---|---|---|
+| Transmission 4.1.4 | 4 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40177095441-bf82a77a324a8fda) | [40196087342](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196087342) |
+| aria2 1.37.0 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40181376755-dfb5865d9912a3c7) | [40196170052](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196170052) |
+| aMule 3.0.0 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40180412146-a4c51066b9401856) | [40196265891](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196265891) |
+| Android Debug Bridge 37.0.0p1 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40182356876-091de5949fa6266c) | [40196361523](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196361523) |
+| Tailscale 1.104.2 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40175326506-01fc237ad21cba54) | [40196840555](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196840555) |
+
+Optional OPKG sources (add only the applications you intend to use):
+
+```text
+src/gz gui_transmission https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40177095441-bf82a77a324a8fda
+src/gz gui_aria2 https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40181376755-dfb5865d9912a3c7
+src/gz gui_amule https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40180412146-a4c51066b9401856
+src/gz gui_adb https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40182356876-091de5949fa6266c
+src/gz gui_tailscale https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40175326506-01fc237ad21cba54
+```
+
+Transmission includes `transmission-daemon-openssl`,
+`transmission-cli-openssl`, `transmission-remote-openssl` and `transmission-web`.
+The command-line and remote packages are optional; the daemon and web interface
+can be selected separately. Other snapshots contain their single named package.
+
+All eight public IPKs were downloaded independently and matched the SHA256 and
+size of the router-tested CI artifacts (46,581,505 compressed bytes in total).
+Every public asset matched the prepared snapshot; plain and compressed indexes
+agree, and their entries match the source manifests. Existing snapshots were
+not replaced. The six shared Pages indexes remain byte-identical to the
+pre-publication baseline, with 5,536 distinct package names.
+
+Publication installed no packages and changed no router configuration. Use a
+working TLS downloader and current certificates before enabling these GitHub
+release sources. The inspected firmware's default downloader previously failed
+to fetch release assets; see the [release-feed checks](homeware-integration.md#published-optional-rclone-feed).
+Review storage requirements below before installing selected packages.
 
 ## Compatibility boundary
 
