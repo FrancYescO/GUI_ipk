@@ -62,15 +62,19 @@ if [[ ! -d "$prefix/lib/cmake/Boost-1.92.0" ]]; then
  extract_private boost "$private/boost"
  build_cmake_dependency boost "$private/boost" -DBOOST_INCLUDE_LIBRARIES=asio -DCMAKE_CXX_STANDARD=17
 fi
+# The pinned Crypto++ source supplies its version; a cross build cannot run
+# upstream's target-side version probe on the x86 builder.
 "$cmake" -S "$source_dir" -B "$private/amule-build" \
  -DCMAKE_TOOLCHAIN_FILE="$toolchain" -DCMAKE_INSTALL_PREFIX=/usr \
  -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_CXX_STANDARD=17 \
+ -DCMAKE_CXX_FLAGS="-Os -I$prefix/include" \
  -DBUILD_MONOLITHIC=OFF -DBUILD_REMOTEGUI=OFF -DBUILD_ALC=OFF -DBUILD_ALCC=OFF \
  -DBUILD_CAS=OFF -DBUILD_WXCAS=OFF -DBUILD_ED2K=OFF -DBUILD_FILEVIEW=OFF \
  -DBUILD_DAEMON=ON -DBUILD_AMULECMD=ON -DBUILD_WEBSERVER=ON -DBUILD_TESTING=OFF \
  -DENABLE_UPNP=OFF -DENABLE_IP2COUNTRY=OFF -DENABLE_NLS=ON \
  -DwxWidgets_CONFIG_EXECUTABLE="$prefix/bin/wx-config" -DwxWidgets_USE_STATIC=ON \
- -DCRYPTOPP_INCLUDE_PREFIX="$prefix/include" -DCRYPTOPP_LIBRARY="$prefix/lib/libcryptopp.a" \
+ -DCRYPTOPP_INCLUDE_PREFIX=cryptopp -DCRYPTOPP_INCLUDE_DIR="$prefix/include" \
+ -DCRYPTOPP_VERSION=8.9.0 -DCRYPTOPP_LIBRARY="$prefix/lib/libcryptopp.a" \
  -DCURL_ROOT="$prefix" -DOPENSSL_ROOT_DIR="$prefix" -DOPENSSL_USE_STATIC_LIBS=ON
 "$cmake" --build "$private/amule-build" --parallel 2
 DESTDIR="$stage" "$cmake" --install "$private/amule-build"

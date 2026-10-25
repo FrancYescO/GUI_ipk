@@ -4,9 +4,9 @@ Baseline and upstream releases inspected on 2026-10-25:
 
 | Application | Published baseline | Update target | Validation state |
 |---|---|---|---|
-| Transmission | 2.94 | 4.1.4 | Modern private stack build in progress |
-| aria2 | 1.33.0 | 1.37.0 | C++11 build correction under test |
-| aMule | 2.3.2 | 3.0.0 | Preparing wxWidgets 3.2 and private dependencies |
+| Transmission | 2.94 | 4.1.4 | Static IPKs, authenticated RPC and web tested on router |
+| aria2 | 1.33.0 | 1.37.0 | Private static OpenSSL build in progress |
+| aMule | 2.3.2 | 3.0.0 | Private wxWidgets 3.2 build in progress |
 | Android Debug Bridge | android.5.0.2_r1 | android.37.0.0p1 | Portable client build in progress |
 | Tailscale | Not in the shared feed | 1.104.2 | Static IPK and private userspace daemon tested on router |
 | WireGuard tools | 1.0.20260223-2 | Already at inspected upstream release | No tool update needed |
@@ -17,10 +17,10 @@ until an update has its own completed build and runtime checks.
 
 ## Compatibility boundary
 
-The supplied GCC 4.8 toolchain supports aria2's C++11 requirement when that
-language mode is explicitly retained. Transmission 4 requires C++17 and newer
-crypto libraries; aMule 3 requires wxWidgets 3.2 and Boost; portable ADB 37 uses
-C++20. These cannot be implemented by relabelling the shared legacy libraries.
+Transmission 4 requires C++17 and newer crypto libraries; aMule 3 requires
+wxWidgets 3.2 and Boost; portable ADB 37 uses C++20. aria2 is also built with
+a private modern TLS stack. These updates cannot be implemented by relabelling
+the shared legacy libraries.
 
 The modern path uses the SHA256-pinned Bootlin ARMv5 EABI musl SDK 2026.08-1
 (GCC 15.3.0, musl 1.2.6) and CMake 3.31.8. Applications and their required modern
@@ -33,6 +33,28 @@ static ARM EABI5 program passed threads, 64-bit atomics, filesystem queries and
 monotonic clock checks on the VBNTJ running kernel 4.1.52. Its temporary file was
 removed, with unchanged boot ID and taint. This validates the toolchain baseline;
 each application still requires its own build and runtime checks.
+
+## Transmission
+
+Run `40177095441` produced the four 4.1.4-1 packages:
+`transmission-daemon-openssl`, `transmission-cli-openssl`,
+`transmission-remote-openssl` and `transmission-web`. All six executable files
+are static ARM with software floating point, without ELF interpreters or dynamic
+dependencies. The private stack uses OpenSSL 3.5.9, curl 8.23.0 and zlib 1.3.2.
+
+On the kernel 4.1.52 router, an isolated daemon accepted the legacy hyphenated
+settings format (including `cache-size-mb: 7`). RPC bound to loopback returned
+401 without authentication, 409 for the session challenge and a successful
+`session-get` with credentials and the session header. The packaged remote
+client retrieved session information; all packaged CLI tools reported 4.1.4.
+The authenticated web index matched the packaged file byte for byte.
+
+DHT, LPD, PEX, port mapping and uTP were disabled, with peer listeners restricted
+to loopback. No torrents or P2P transfers were used. The temporary daemon and
+payload were removed; boot ID and kernel taint were unchanged. The existing UCI
+configuration/service is retained and defaults to disabled; persistent service
+startup and real P2P traffic still need deployment validation. These packages
+update the OpenSSL variants; they do not replace the legacy mbedTLS variants.
 
 ## Tailscale
 
