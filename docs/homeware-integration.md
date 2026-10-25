@@ -267,3 +267,9 @@ unresolved userspace groups for either kernel profile; existing unresolved
 kernel groups remain 148 for 4.1.38 and 192 for 4.1.52. The scripts register these
 large recipes only for explicit targeted builds, keeping them out of the shared
 Pages build.
+
+Further published optional feeds provide Transmission 4.1.4, aria2 1.37.0,
+aMule 3.0.0, Android Debug Bridge 37.0.0p1 and Tailscale 1.104.2. See
+[application updates](application-updates.md#published-optional-feeds) for the
+verified snapshots, individual OPKG source labels and runtime validation limits.
+The Rclone-only coverage figures above do not include these additional feeds.
