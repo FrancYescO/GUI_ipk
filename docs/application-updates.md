@@ -5,7 +5,7 @@ Baseline and upstream releases inspected on 2026-10-25:
 | Application | Published baseline | Update target | Validation state |
 |---|---|---|---|
 | Transmission | 2.94 | 4.1.4 | Static IPKs, authenticated RPC and web tested on router |
-| aria2 | 1.33.0 | 1.37.0 | Private static OpenSSL build in progress |
+| aria2 | 1.33.0 | 1.37.0 | Static IPK, HTTP/HTTPS and protected RPC tested on router |
 | aMule | 2.3.2 | 3.0.0 | Static IPK and authenticated daemon/client tested on router |
 | Android Debug Bridge | android.5.0.2_r1 | android.37.0.0p1 | Portable client build in progress |
 | Tailscale | Not in the shared feed | 1.104.2 | Static IPK and private userspace daemon tested on router |
@@ -74,6 +74,27 @@ payload were removed; boot ID and kernel taint were unchanged. The existing UCI
 configuration/service is retained and defaults to disabled; persistent service
 startup and real P2P traffic still need deployment validation. These packages
 update the OpenSSL variants; they do not replace the legacy mbedTLS variants.
+
+## aria2
+
+Run `40181376755` produced `aria2_1.37.0-2_arm_cortex-a9_neon.ipk`.
+The executable is static ARM with software floating point, without an ELF
+interpreter or dynamic dependencies, and uses OpenSSL 3.5.9. Upstream's
+`ARIA2_STATIC=yes` mode is enabled; shared-runtime libtool metadata is removed
+from the private SDK before building. The fixed profile retains BitTorrent,
+GZip, HTTPS and message-digest support, matching the previous default features.
+Metalink/XML, SFTP, asynchronous DNS and SQLite cookies are not enabled.
+
+On the kernel 4.1.52 router, a loopback HTTP download matched its source byte for
+byte. An HTTPS download from a fixed Git commit also matched an independent curl
+download, with certificate verification enabled and a current temporary CA
+bundle. A private loopback RPC server rejected requests without its secret and
+returned version 1.37.0 and the expected features with the correct token.
+
+No BitTorrent traffic or persistent service startup was tested. The HTTP/RPC
+processes and payload were removed, with unchanged boot ID and kernel taint.
+The existing UCI service/configuration is retained. The optional static recipe
+has a fixed feature profile; it does not expose the legacy build menu toggles.
 
 ## aMule
 
