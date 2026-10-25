@@ -212,7 +212,7 @@ curl trust store also rejected the server chain. This device therefore needs a
 working TLS downloader and current certificates before using release sources
 normally. The test installed no packages and left no source or TLS settings.
 
-## Validated optional Rclone candidate
+## Published optional Rclone feed
 
 Targeted run
 [40138032911](https://github.com/FrancYescO/GUI_ipk/actions/runs/40138032911)
@@ -241,10 +241,29 @@ about 29 MiB free, so permanent installation needs suitable external storage
 or another destination with enough space. The service package defaults to
 disabled and requires credentials before enabling its loopback-only listener.
 
-The four packages remain an optional candidate pending merge and publication.
-Combining their index with the published shared indexes yields 5,540 distinct
-names and generation-19 coverage of 380/494 (114 missing). The current Pages
-coverage remains 376/494. Dependency audits with the candidate add no unresolved
-userspace groups for either kernel profile; existing unresolved kernel groups
-remain 148 for 4.1.38 and 192 for 4.1.52. The scripts register these large recipes
-only for explicit targeted builds, keeping them out of the shared Pages build.
+Run
+[40174844214](https://github.com/FrancYescO/GUI_ipk/actions/runs/40174844214)
+published the four packages in the immutable
+[release snapshot](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40138032911-876d3f994e42dec4).
+All four public IPKs were downloaded independently and matched the verified
+build hashes. The plain and compressed indexes agree, and all index entries,
+sizes and SHA256 values match the published package manifest. The package
+assets total 36,477,076 bytes.
+
+Optional OPKG source:
+
+```text
+src/gz gui_extras https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40138032911-876d3f994e42dec4
+```
+
+Use a working TLS downloader and current certificates as described above.
+Adding the source or installing packages is a separate device administration
+step; publication did not change any router configuration.
+
+Combining this optional index with the published shared indexes yields 5,540
+distinct names and generation-19 coverage of 380/494 (114 missing). The current
+Pages coverage remains 376/494. Dependency audits with the optional feed add no
+unresolved userspace groups for either kernel profile; existing unresolved
+kernel groups remain 148 for 4.1.38 and 192 for 4.1.52. The scripts register these
+large recipes only for explicit targeted builds, keeping them out of the shared
+Pages build.
