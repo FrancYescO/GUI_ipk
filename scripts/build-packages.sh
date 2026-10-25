@@ -236,11 +236,13 @@ if [[ "$userspace_only" == 1 ]]; then
       ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
     done
   fi
-  if [[ "$package_targets" == *feeds/packages/aria2* || "$package_targets" == *feeds/packages/tailscale* ]]; then
+  if [[ "$package_targets" == *feeds/packages/aria2* || "$package_targets" == *feeds/packages/tailscale* || "$package_targets" == *feeds/packages/transmission* ]]; then
     (cd "$repo_root/build/application-updates-overlay" && sha256sum --check SHA256SUMS)
     cp -a "$repo_root/build/application-updates-overlay/feeds/." "$work_dir/feeds/"
     mkdir -p "$work_dir/package/feeds/packages"
-    for package in aria2 tailscale; do
+    mkdir -p "$work_dir/.application-build"
+    cp -a "$repo_root/build/application-updates-overlay/common/." "$work_dir/.application-build/"
+    for package in aria2 tailscale transmission; do
       ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
     done
   fi
