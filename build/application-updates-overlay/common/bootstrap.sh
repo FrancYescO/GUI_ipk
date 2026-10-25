@@ -43,9 +43,16 @@ setup_private_prefix() {
   export PKG_CONFIG_LIBDIR="$prefix/lib/pkgconfig"
   export PKG_CONFIG="$native_pkg_config --static"
   export CFLAGS=-Os CXXFLAGS=-Os CPPFLAGS="-I$prefix/include" LDFLAGS="-static -L$prefix/lib"
+  # CMake's Linux platform initialization resets library suffixes after loading
+  # the toolchain. Reapply the static-only policy after each project() call so
+  # imported pkg-config dependencies cannot resolve an SDK .so by accident.
+  cat > "$prefix/static-libraries.cmake" <<'EOF'
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+EOF
   toolchain="$prefix/toolchain.cmake"
   cat > "$toolchain" <<EOF
 set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_PROJECT_INCLUDE "$prefix/static-libraries.cmake")
 set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_C_COMPILER "$CC")
 set(CMAKE_CXX_COMPILER "$CXX")
