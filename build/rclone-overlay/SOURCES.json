@@ -1,0 +1,28 @@
+[
+  {
+    "package": "rclone",
+    "version": "1.75.2",
+    "url": "https://codeload.github.com/rclone/rclone/tar.gz/refs/tags/v1.75.2",
+    "sha256": "68afd7f68c84bd978966feae2116339aa7bf454b39c573910c462e87c3774d5a"
+  },
+  {
+    "component": "host-go",
+    "version": "1.26.10",
+    "url": "https://dl.google.com/go/go1.26.10.linux-amd64.tar.gz",
+    "sha256": "ccfe7ae822d2c2f41f4fe7c956199967a4dac22d0ee0d2b2bfdb440aab3b20c5"
+  },
+  {
+    "package": "rclone-ng",
+    "version": "0.5.0",
+    "url": "https://github.com/ElonH/RcloneNg/releases/download/v0.5.0/RcloneNg-v0.5.0.tar.gz",
+    "sha256": "0b4916ddd0bacb5b358dc8d36b64c30f4182c0ace3eb06cda94b6578c419dcd9",
+    "license_revision": "e32098207f1a07f7bc5fe4d9a6ff31fcec7951a5"
+  },
+  {
+    "package": "rclone-webui-react",
+    "version": "2.0.5",
+    "url": "https://github.com/rclone/rclone-webui-react/releases/download/v2.0.5/currentbuild.zip",
+    "sha256": "afd6836ecc5c5a1161e25cb0633c1167eb5933bb5069545680d69fcba635f011",
+    "license_revision": "d94b21762252007b5230e63b97b5a915455e8aed"
+  }
+]
