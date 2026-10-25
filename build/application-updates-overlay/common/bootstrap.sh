@@ -7,7 +7,9 @@ source_file() {
 }
 bootstrap_modern() {
   local topdir=$1 downloads=$2
-  native_pkg_config="$(command -v pkg-config)"
+  # The buildroot wrapper forcibly rewrites prefix to its legacy sysroot.
+  native_pkg_config="$topdir/staging_dir/host/bin/pkg-config.real"
+  test -x "$native_pkg_config"
   tools="$topdir/.modern-application-tools"
   mkdir -p "$tools"
   exec 9>"$tools/bootstrap.lock"
