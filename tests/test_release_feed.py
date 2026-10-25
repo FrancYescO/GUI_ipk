@@ -201,6 +201,36 @@ class ReleaseFeedTests(unittest.TestCase):
                 publish.publish(self.output, metadata)
             gh.assert_not_called()
 
+    def test_equivalent_index_compression_changes_snapshot_identity(self):
+        first = self.prepared()
+        other = self.root / 'other'
+        original = prepare.shards.write_index
+
+        def alternative_compression(directory, entries):
+            original(directory, entries)
+            path = directory / 'Packages.gz'
+            path.write_bytes(path.read_bytes() + gzip.compress(b'', mtime=0))
+
+        with patch.object(prepare.shards, 'write_index', alternative_compression):
+            second = prepare.prepare(self.source, other, ['example'], 'example/feed')
+        self.assertEqual((self.output / 'Packages').read_bytes(), (other / 'Packages').read_bytes())
+        self.assertEqual(gzip.decompress((self.output / 'Packages.gz').read_bytes()),
+                         gzip.decompress((other / 'Packages.gz').read_bytes()))
+        self.assertNotEqual(first['tag'], second['tag'])
+
+    def test_regenerated_checksums_cannot_change_index_identity(self):
+        info = self.prepared()
+        metadata = self.root / 'info.json'
+        metadata.write_text(json.dumps(info))
+        (self.output / 'Packages.gz').write_bytes(b'changed index')
+        files = sorted(p for p in self.output.iterdir() if p.name != 'SHA256SUMS')
+        (self.output / 'SHA256SUMS').write_text(''.join(
+            hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name + '\n' for p in files))
+        with patch.object(publish, 'gh') as gh:
+            with self.assertRaisesRegex(ValueError, 'Index differs'):
+                publish.publish(self.output, metadata)
+            gh.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

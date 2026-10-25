@@ -57,10 +57,6 @@ def prepare(source, output, names, repository):
         records.append(dict(package=name, version=fields['Version'], architecture=fields['Architecture'],
                             filename=ipk.name, sha256=hashlib.sha256(ipk.read_bytes()).hexdigest(),
                             size=ipk.stat().st_size))
-    manifest = dict(repository=repository, source=provenance, packages=records)
-    serialized = json.dumps(manifest, indent=2, sort_keys=True) + '\n'
-    digest = hashlib.sha256(serialized.encode()).hexdigest()
-    tag = 'extras-{}-{}'.format(provenance['run_id'], digest[:16])
     if output.exists():
         raise ValueError('Output directory must not already exist')
     output.mkdir(parents=True)
@@ -70,6 +66,16 @@ def prepare(source, output, names, repository):
         shutil.copyfile(ipk, target)
         entries.append((target, text))
     shards.write_index(output, entries)
+    # Index compression can differ across Python/zlib versions. Include the
+    # actual index bytes in the identity so retries never collide with a prior
+    # immutable snapshot containing the same package payloads.
+    indexes = {name: hashlib.sha256((output / name).read_bytes()).hexdigest()
+               for name in ('Packages', 'Packages.gz')}
+    manifest = dict(format_version=2, repository=repository, source=provenance,
+                    packages=records, indexes=indexes)
+    serialized = json.dumps(manifest, indent=2, sort_keys=True) + '\n'
+    digest = hashlib.sha256(serialized.encode()).hexdigest()
+    tag = 'extras-{}-{}'.format(provenance['run_id'], digest[:16])
     (output / 'source.json').write_text(serialized)
     files = sorted(output.iterdir())
     (output / 'SHA256SUMS').write_text(''.join('{}  {}\n'.format(
