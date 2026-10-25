@@ -127,3 +127,73 @@ endef
 ifneq ($(filter absl,$(MODERN_COMPONENTS)),)
 $(eval $(call Download,modern-absl))
 endif
+
+define Download/modern-wx
+  FILE:=wxWidgets-3.2.12.tar.bz2
+  URL:=https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.12
+  URL_FILE:=wxWidgets-3.2.12.tar.bz2
+  HASH:=a62719bb5e1dcc41c1a6fc1eecd499c7ee8521f70402c7b1bb3342a1e16344e0
+endef
+ifneq ($(filter wx,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-wx))
+endif
+
+define Download/modern-cryptopp
+  FILE:=cryptopp-8.9.0.tar.gz
+  URL:=https://codeload.github.com/weidai11/cryptopp/tar.gz/refs/tags
+  URL_FILE:=CRYPTOPP_8_9_0
+  HASH:=ab5174b9b5c6236588e15a1aa1aaecb6658cdbe09501c7981ac8db276a24d9ab
+endef
+ifneq ($(filter cryptopp,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-cryptopp))
+endif
+
+define Download/modern-boost
+  FILE:=boost-1.92.0-cmake.tar.xz
+  URL:=https://github.com/boostorg/boost/releases/download/boost-1.92.0
+  URL_FILE:=boost-1.92.0-cmake.tar.xz
+  HASH:=9bed76128d4e46755dbe818487788c6fceb6f72b378f4daa49b7e1e600d9088d
+endef
+ifneq ($(filter boost,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-boost))
+endif
+
+define Download/modern-gd
+  FILE:=libgd-2.3.3.tar.gz
+  URL:=https://github.com/libgd/libgd/releases/download/gd-2.3.3
+  URL_FILE:=libgd-2.3.3.tar.gz
+  HASH:=dd3f1f0bb016edcc0b2d082e8229c822ad1d02223511997c80461481759b1ed2
+endef
+ifneq ($(filter gd,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-gd))
+endif
+
+define Download/modern-png
+  FILE:=libpng-1.6.59.tar.gz
+  URL:=https://codeload.github.com/pnggroup/libpng/tar.gz/refs/tags
+  URL_FILE:=v1.6.59
+  HASH:=2540302a1844ad2b2b501977abecfa850f265f97b78f065a712ab4074a89f5b5
+endef
+ifneq ($(filter png,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-png))
+endif
+
+define Download/modern-ncurses
+  FILE:=ncurses-6.6.tar.gz
+  URL:=https://ftp.gnu.org/gnu/ncurses
+  URL_FILE:=ncurses-6.6.tar.gz
+  HASH:=355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11
+endef
+ifneq ($(filter ncurses,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-ncurses))
+endif
+
+define Download/modern-readline
+  FILE:=readline-8.3.tar.gz
+  URL:=https://ftp.gnu.org/gnu/readline
+  URL_FILE:=readline-8.3.tar.gz
+  HASH:=fe5383204467828cd495ee8d1d3c037a7eba1389c22bc6a041f627976f9061cc
+endef
+ifneq ($(filter readline,$(MODERN_COMPONENTS)),)
+$(eval $(call Download,modern-readline))
+endif

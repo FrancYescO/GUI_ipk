@@ -67,5 +67,40 @@
     "file": "abseil-20250512.1.tar.gz",
     "url": "https://codeload.github.com/abseil/abseil-cpp/tar.gz/20250512.1",
     "sha256": "9b7a064305e9fd94d124ffa6cc358592eb42b5da588fb4e07d09254aa40086db"
+  },
+  "wx": {
+    "file": "wxWidgets-3.2.12.tar.bz2",
+    "url": "https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.12/wxWidgets-3.2.12.tar.bz2",
+    "sha256": "a62719bb5e1dcc41c1a6fc1eecd499c7ee8521f70402c7b1bb3342a1e16344e0"
+  },
+  "cryptopp": {
+    "file": "cryptopp-8.9.0.tar.gz",
+    "url": "https://codeload.github.com/weidai11/cryptopp/tar.gz/refs/tags/CRYPTOPP_8_9_0",
+    "sha256": "ab5174b9b5c6236588e15a1aa1aaecb6658cdbe09501c7981ac8db276a24d9ab"
+  },
+  "boost": {
+    "file": "boost-1.92.0-cmake.tar.xz",
+    "url": "https://github.com/boostorg/boost/releases/download/boost-1.92.0/boost-1.92.0-cmake.tar.xz",
+    "sha256": "9bed76128d4e46755dbe818487788c6fceb6f72b378f4daa49b7e1e600d9088d"
+  },
+  "gd": {
+    "file": "libgd-2.3.3.tar.gz",
+    "url": "https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.gz",
+    "sha256": "dd3f1f0bb016edcc0b2d082e8229c822ad1d02223511997c80461481759b1ed2"
+  },
+  "png": {
+    "file": "libpng-1.6.59.tar.gz",
+    "url": "https://codeload.github.com/pnggroup/libpng/tar.gz/refs/tags/v1.6.59",
+    "sha256": "2540302a1844ad2b2b501977abecfa850f265f97b78f065a712ab4074a89f5b5"
+  },
+  "ncurses": {
+    "file": "ncurses-6.6.tar.gz",
+    "url": "https://ftp.gnu.org/gnu/ncurses/ncurses-6.6.tar.gz",
+    "sha256": "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11"
+  },
+  "readline": {
+    "file": "readline-8.3.tar.gz",
+    "url": "https://ftp.gnu.org/gnu/readline/readline-8.3.tar.gz",
+    "sha256": "fe5383204467828cd495ee8d1d3c037a7eba1389c22bc6a041f627976f9061cc"
   }
 }
