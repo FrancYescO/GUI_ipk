@@ -6,7 +6,7 @@ Baseline and upstream releases inspected on 2026-10-25:
 |---|---|---|---|
 | Transmission | 2.94 | 4.1.4 | Static IPKs, authenticated RPC and web tested on router |
 | aria2 | 1.33.0 | 1.37.0 | Private static OpenSSL build in progress |
-| aMule | 2.3.2 | 3.0.0 | Private wxWidgets 3.2 build in progress |
+| aMule | 2.3.2 | 3.0.0 | Static IPK and authenticated daemon/client tested on router |
 | Android Debug Bridge | android.5.0.2_r1 | android.37.0.0p1 | Portable client build in progress |
 | Tailscale | Not in the shared feed | 1.104.2 | Static IPK and private userspace daemon tested on router |
 | WireGuard tools | 1.0.20260223-2 | Already at inspected upstream release | No tool update needed |
@@ -74,6 +74,26 @@ payload were removed; boot ID and kernel taint were unchanged. The existing UCI
 configuration/service is retained and defaults to disabled; persistent service
 startup and real P2P traffic still need deployment validation. These packages
 update the OpenSSL variants; they do not replace the legacy mbedTLS variants.
+
+## aMule
+
+Run `40180412146` produced `amule_3.0.0-1_arm_cortex-a9_neon.ipk`.
+`amuled`, `amulecmd` and `amuleweb` are static ARM executables with software
+floating point, without ELF interpreters or dynamic dependencies. The private
+stack includes wxBase 3.2.12, Boost 1.92.0 and Crypto++ 8.9.0; GD is not needed
+for the selected daemon, command client and webserver targets.
+
+On the kernel 4.1.52 router, all three programs reported 3.0.0. The daemon started
+with temporary home, configuration, incoming and temporary-file directories;
+peer and EC sockets used loopback. eD2K, Kad, automatic connection/reconnection,
+server-list/IP-filter/version updates, UPnP and automatic web startup were
+disabled. `amulecmd` authenticated to the private EC port and retrieved status
+with no P2P connections. `amuled --version` returns 255 after displaying its
+version, as expected from upstream's early initialization exit.
+
+The daemon and payload were removed, with unchanged boot ID and kernel taint.
+No P2P traffic, persistent installation or live web interface was tested. The
+package retains the previous three-program layout and adds no automatic service.
 
 ## Tailscale
 
