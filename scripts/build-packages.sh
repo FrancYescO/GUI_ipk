@@ -236,12 +236,15 @@ if [[ "$userspace_only" == 1 ]]; then
       ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
     done
   fi
-  if [[ "$package_targets" == *feeds/packages/aria2* || "$package_targets" == *feeds/packages/tailscale* || "$package_targets" == *feeds/packages/transmission* ]]; then
+  if [[ "$package_targets" == *feeds/packages/aria2* || "$package_targets" == *feeds/packages/tailscale* || "$package_targets" == *feeds/packages/transmission* || "$package_targets" == *feeds/packages/adb* ]]; then
     (cd "$repo_root/build/application-updates-overlay" && sha256sum --check SHA256SUMS)
     cp -a "$repo_root/build/application-updates-overlay/feeds/." "$work_dir/feeds/"
+    # Replace the archived 2014 adb client only in this optional build.
+    rm -rf "$work_dir/package/utils/adb"
     mkdir -p "$work_dir/package/feeds/packages"
     mkdir -p "$work_dir/.application-build"
     cp -a "$repo_root/build/application-updates-overlay/common/." "$work_dir/.application-build/"
+    ln -sfn ../../../feeds/packages/utils/adb "$work_dir/package/feeds/packages/adb"
     for package in aria2 tailscale transmission; do
       ln -sfn "../../../feeds/packages/net/$package" "$work_dir/package/feeds/packages/$package"
     done

@@ -25,7 +25,7 @@ bootstrap_modern() {
   export CC="$sdk/bin/arm-linux-gcc" CXX="$sdk/bin/arm-linux-g++"
   export AR="$sdk/bin/arm-linux-ar" RANLIB="$sdk/bin/arm-linux-ranlib" STRIP="$sdk/bin/arm-linux-strip"
   export PATH="$tools/cmake/bin:$sdk/bin:$PATH"
-  unset LD_LIBRARY_PATH PKG_CONFIG_PATH PKG_CONFIG_SYSROOT_DIR
+  unset LD_LIBRARY_PATH PKG_CONFIG_PATH PKG_CONFIG_SYSROOT_DIR CROSS_COMPILE
 }
 setup_private_prefix() {
   prefix=$1
@@ -43,6 +43,8 @@ set(CMAKE_RANLIB "$RANLIB")
 set(CMAKE_C_FLAGS_INIT "-Os")
 set(CMAKE_CXX_FLAGS_INIT "-Os")
 set(CMAKE_EXE_LINKER_FLAGS_INIT "-static")
+set(CMAKE_C_STANDARD_LIBRARIES "-latomic" CACHE STRING "" FORCE)
+set(CMAKE_CXX_STANDARD_LIBRARIES "-latomic" CACHE STRING "" FORCE)
 set(CMAKE_FIND_ROOT_PATH "$prefix" "$sdk/arm-buildroot-linux-musleabi/sysroot")
 set(CMAKE_PREFIX_PATH "$prefix")
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
