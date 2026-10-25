@@ -1,9 +1,13 @@
 # GUI_ipk
 
 OpenWrt package feed for the `brcm63xx-tch/VBNTS` target
-(`arm_cortex-a9_neon`). Packages are compiled by GitHub Actions from the
+(`arm_cortex-a9_neon`). Shared packages are compiled by GitHub Actions from the
 archived custom OpenWrt 18.06 buildroot and its matching GCC 4.8/glibc
 toolchain.
+
+Newer optional ARM applications use pinned static SDKs. See
+[application updates](docs/application-updates.md) for versions, completed router
+checks, installation requirements and publication status.
 
 ## Building packages
 

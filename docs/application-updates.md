@@ -7,13 +7,13 @@ Baseline and upstream releases inspected on 2026-10-25:
 | Transmission | 2.94 | 4.1.4 | Static IPKs, authenticated RPC and web tested on router |
 | aria2 | 1.33.0 | 1.37.0 | Static IPK, HTTP/HTTPS and protected RPC tested on router |
 | aMule | 2.3.2 | 3.0.0 | Static IPK and authenticated daemon/client tested on router |
-| Android Debug Bridge | android.5.0.2_r1 | android.37.0.0p1 | Portable client build in progress |
+| Android Debug Bridge | android.5.0.2_r1 | android.37.0.0p1 | Static IPK and private client/server tested on router |
 | Tailscale | Not in the shared feed | 1.104.2 | Static IPK and private userspace daemon tested on router |
 | WireGuard tools | 1.0.20260223-2 | Already at inspected upstream release | No tool update needed |
 
-The application overlay is enabled only by explicit targeted builds. Large
-updates will use optional release feeds; the shared Pages feed remains unchanged
-until an update has its own completed build and runtime checks.
+The application overlay is enabled only by explicit targeted builds. Publication
+uses optional release feeds. The shared Pages build continues using its archived
+recipes; these application artifacts have not yet been published.
 
 ## Compatibility boundary
 
@@ -115,6 +115,28 @@ version, as expected from upstream's early initialization exit.
 The daemon and payload were removed, with unchanged boot ID and kernel taint.
 No P2P traffic, persistent installation or live web interface was tested. The
 package retains the previous three-program layout and adds no automatic service.
+
+## Android Debug Bridge
+
+Run `40182356876` produced `adb_android.37.0.0p1-1_arm_cortex-a9_neon.ipk`.
+The 6,048,932-byte executable is static ARM with software floating point, without
+an ELF interpreter or dynamic dependencies. It uses portable android-tools
+37.0.0p1, with the Rust mDNS component omitted. The package continues to install
+only the host client `/usr/bin/adb`, without `adbd` or automatic startup.
+
+On the kernel 4.1.52 router, `adb version` reported protocol version 1.0.41 and
+build 37.0.0p1-android-tools. The client launched its matching server on the
+private default-loopback socket `tcp:15037`, retrieved `server-status` and
+terminated it. Status identified the extracted executable and temporary log,
+key and known-host paths. Home and temporary directories were private to the
+test. OPKG's version comparison confirms the package sorts after the shared
+`android.5.0.2_r1-1` version.
+
+The temporary server, keys and payload were removed; boot ID and kernel taint
+were unchanged. No Android device commands, USB transfer, network pairing or
+mDNS discovery were tested. USB/device compatibility still requires a physical
+device test; the local client/server check establishes runtime compatibility on
+this router.
 
 ## Tailscale
 
