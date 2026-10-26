@@ -1,0 +1,4 @@
+OpenVPN 2.6.23 arm-openwrt-linux-gnu [SSL (mbed TLS)] [LZO] [LZ4] [EPOLL] [MH/PKTINFO] [AEAD]
+library versions: mbed TLS 2.16.3, LZO 2.10
+Originally developed by James Yonan
+Copyright (C) 2002-2024 OpenVPN Inc <sales@openvpn.net>

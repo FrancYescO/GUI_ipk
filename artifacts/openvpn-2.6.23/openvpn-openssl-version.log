@@ -1,0 +1,4 @@
+OpenVPN 2.6.23 arm-openwrt-linux-gnu [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [MH/PKTINFO] [AEAD]
+library versions: OpenSSL 1.0.2t  10 Sep 2019, LZO 2.10
+Originally developed by James Yonan
+Copyright (C) 2002-2024 OpenVPN Inc <sales@openvpn.net>

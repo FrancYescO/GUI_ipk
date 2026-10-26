@@ -50,6 +50,9 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# Apply the pinned OpenVPN recipes before generating package metadata.
+bash "$repo_root/scripts/apply-userspace-overlay.sh" "$work_dir"
+
 # Crypto++ is absent from the archived feeds but required by aMule.
 mkdir -p "$work_dir/package/custom/cryptopp"
 cp "$repo_root/build/cryptopp/Makefile" \

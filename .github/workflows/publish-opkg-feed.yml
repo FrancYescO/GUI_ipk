@@ -9,6 +9,9 @@ on:
       - "scripts/report-feed-dependencies.py"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "tests/test_rndis_feed.py"
+      - "artifacts/openvpn-2.6.23/**"
+      - "scripts/overlay-openvpn-feed.py"
+      - "tests/test_openvpn_feed.py"
   workflow_dispatch:
     inputs:
       reuse_userspace_run_id:
@@ -44,6 +47,8 @@ on:
       - "scripts/verify-kmod-tun.sh"
       - "scripts/verify-kmod-connmark.sh"
       - "scripts/verify-kmod-spu.py"
+      - "artifacts/openvpn-2.6.23/**"
+      - "scripts/overlay-openvpn-feed.py"
 
 concurrency:
   group: github-pages
@@ -77,6 +82,11 @@ jobs:
           cp -a base luci packages routing telephony dist/
           cp -a target/packages dist/target/
           touch dist/.nojekyll
+
+      - name: Apply verified OpenVPN update
+        run: |
+          python3 -m unittest discover -s tests -p test_openvpn_feed.py
+          python3 scripts/overlay-openvpn-feed.py dist
 
       - name: Remove kernel packages from shared feeds
         run: scripts/sanitize-opkg-feed.sh dist

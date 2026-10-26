@@ -1,0 +1,31 @@
+# Preserve the archived recipe's disabled NTLM proxy support. The target
+# mbedTLS library omits DES; do not emit calls to unavailable DES functions.
+--- a/src/openvpn/syshead.h
++++ b/src/openvpn/syshead.h
+@@ -492,7 +492,7 @@
+ /*
+  * Should we include NTLM proxy functionality
+  */
+-#define NTLM 1
++#define NTLM 0
+ 
+ /*
+  * Should we include proxy digest auth functionality
+--- a/src/openvpn/crypto_mbedtls.c
++++ b/src/openvpn/crypto_mbedtls.c
+@@ -758,6 +758,7 @@
+     return 1;
+ }
+ 
++#ifdef MBEDTLS_DES_C
+ void
+ cipher_des_encrypt_ecb(const unsigned char key[DES_KEY_LENGTH],
+                        unsigned char src[DES_KEY_LENGTH],
+@@ -768,6 +769,7 @@
+     ASSERT(mbed_ok(mbedtls_des_setkey_enc(&ctx, key)));
+     ASSERT(mbed_ok(mbedtls_des_crypt_ecb(&ctx, src, dst)));
+ }
++#endif /* MBEDTLS_DES_C */
+ 
+ 
+ 

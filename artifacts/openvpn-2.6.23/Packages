@@ -1,0 +1,59 @@
+Package: libcap-ng
+Version: 0.8.5-1
+Depends: libc, librt, libpthread
+Source: package/libs/libcap-ng
+License: LGPL-2.1+
+LicenseFiles: COPYING.LIB
+Section: libs
+Architecture: arm_cortex-a9_neon
+Installed-Size: 8665
+Filename: libcap-ng_0.8.5-1_arm_cortex-a9_neon.ipk
+Size: 9372
+SHA256sum: 75517645f2022be038ffe50a08e90cae0b09b51edb771798ba42c5ea0a95c88a
+Description:  POSIX capabilities library
+
+Package: liblz4
+Version: v1.7.5-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/libs/liblz4
+License: BSD-2-Clause
+Section: libs
+Maintainer: Darik Horn <dajhorn@vanadac.com>
+Architecture: arm_cortex-a9_neon
+Installed-Size: 54257
+Filename: liblz4_v1.7.5-1_arm_cortex-a9_neon.ipk
+Size: 54672
+SHA256sum: c28f031fa646ff36b77769c3ca2af92a3d735cff50f421c6698fafe43a9463ee
+Description:  LZ4 is a compression codec that features a very fast encoder and an
+ even faster decoder. This package provides the liblz4 shared library.
+
+Package: openvpn-mbedtls
+Version: 2.6.23-1
+Depends: libc, librt, libpthread, kmod-tun, libcap-ng, liblz4, liblzo, libmbedtls
+Provides: openvpn, openvpn-crypto
+Source: package/network/services/openvpn
+License: GPL-2.0
+Section: net
+Maintainer: Felix Fietkau <nbd@nbd.name>
+Architecture: arm_cortex-a9_neon
+Installed-Size: 255730
+Filename: openvpn-mbedtls_2.6.23-1_arm_cortex-a9_neon.ipk
+Size: 256257
+SHA256sum: c5955426e8df1eaffd98377d0154c5233086ffa80d5ed5a17ad6af6ec30e049b
+Description:  Open source VPN solution using mbedTLS
+
+Package: openvpn-openssl
+Version: 2.6.23-1
+Depends: libc, librt, libpthread, kmod-tun, libcap-ng, liblz4, liblzo, libopenssl
+Provides: openvpn, openvpn-crypto
+Source: package/network/services/openvpn
+License: GPL-2.0
+Section: net
+Maintainer: Felix Fietkau <nbd@nbd.name>
+Architecture: arm_cortex-a9_neon
+Installed-Size: 261248
+Filename: openvpn-openssl_2.6.23-1_arm_cortex-a9_neon.ipk
+Size: 261380
+SHA256sum: f5009eacc004b2336ecc312578fbbe10c4df609686b5300c6ca589f662c2abee
+Description:  Open source VPN solution using OpenSSL
+

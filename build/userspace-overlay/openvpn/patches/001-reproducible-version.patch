@@ -1,0 +1,12 @@
+--- a/src/openvpn/options.c
++++ b/src/openvpn/options.c
+@@ -107,9 +107,6 @@
+     " [AEAD]"
+ #ifdef ENABLE_DCO
+     " [DCO]"
+-#endif
+-#ifdef CONFIGURE_GIT_REVISION
+-    " built on " __DATE__
+ #endif
+ ;
+ 

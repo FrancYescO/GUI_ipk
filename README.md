@@ -9,6 +9,37 @@ Newer optional ARM applications use pinned static SDKs. See
 [application updates](docs/application-updates.md) for versions, completed router
 checks, installation requirements and publication status.
 
+### OpenVPN backport
+
+The userspace recipe overlay in `build/userspace-overlay/` updates OpenVPN
+from 2.4.5 to **2.6.23**, with OpenSSL and mbedTLS variants, and adds libcap-ng
+0.8.5. It uses the archived OpenSSL 1.0.2t / mbedTLS 2.16.3 libraries; updating
+OpenVPN alone does not update those libraries. OpenVPN 2.7 requires newer TLS
+libraries. The obsolete plaintext `openvpn-nossl` variant is no longer built.
+DCO is disabled: this build uses the existing TUN interface and does not
+introduce a new kernel module. LZ4 support now depends on `liblz4`.
+
+The upstream [DCO documentation](https://github.com/OpenVPN/openvpn/blob/v2.6.23/README.dco.md) documents Linux 5.4 or
+newer as known working. The vendor 4.1.38/4.1.52 kernels in this repository
+are outside that baseline; a DCO module would require a separate driver
+backport and ABI/runtime validation, not just enabling the OpenVPN flag.
+
+For a targeted build, set `package_targets` to
+`network/services/openvpn` in the userspace profile; its build path prepares
+the kernel headers and host tools required by the archived snapshot.
+Install one TLS variant and its dependencies. Before upgrading a router,
+back up the configuration and review the OpenVPN 2.6 migration notes:
+old directives such as `ns-cert-type`, `keysize`, and `ncp-disable` were
+removed. Use `data_ciphers` and, only when required by an older peer,
+`data_ciphers_fallback` in UCI. Raw `.conf` files use hyphenated names.
+An existing `cipher` setting alone does not select TLS data-channel ciphers
+in 2.6. The UCI allowlist includes the new cipher and TLS options.
+
+The verified IPKs and provenance are in
+[`artifacts/openvpn-2.6.23`](artifacts/openvpn-2.6.23/README.md). Pages publication
+applies these four packages over the assembled userspace feed, preserving
+other packages and retiring the old plaintext variant.
+
 ## Building packages
 
 Use **Actions → Build OpenWrt packages → Run workflow**. Leave

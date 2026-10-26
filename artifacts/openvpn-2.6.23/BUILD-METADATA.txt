@@ -1,0 +1,33 @@
+Date: 2026-10-26
+Target: brcm63xx-tch/VBNTS, arm_cortex-a9_neon
+Compiler: arm-openwrt-linux-gnueabi-gcc 4.8.3 (OpenWrt/Linaro GCC 4.8-2014.04 r0-b7e7d22)
+OpenVPN: 2.6.23-1 (openssl and mbedtls variants)
+OpenSSL: 1.0.2t
+mbedTLS: 2.16.3
+libcap-ng: 0.8.5-1
+liblz4: v1.7.5-1
+LZO: 2.10
+DCO: disabled; no kernel modules included
+NTLM proxy authentication: disabled, as in the archived recipe
+Integration: archived OpenWrt init script and updated UCI option allowlist
+
+Build: existing Linux userspace buildroot, archived matching cross-toolchain,
+repository recipe overlay, compiled userspace dependencies, then:
+make -j8 package/network/services/openvpn/compile NO_DEPS=1 V=s
+
+Checks: both final IPK executables extracted and run through the ARM loader;
+both version outputs identify 2.6.23 with the expected TLS backend;
+both OpenVPN AES-256-CBC / SHA256 crypto self-tests succeeded.
+No router or live tunnel test. No complete clean build/feed claim.
+
+OpenVPN source: https://swupdate.openvpn.net/community/releases/openvpn-2.6.23.tar.gz
+SHA256: 4041c709162bec1325abf5aa8cf27a255cc477c634b15ee310411c701fc40a96
+libcap-ng source: https://people.redhat.com/sgrubb/libcap-ng/libcap-ng-0.8.5.tar.gz
+SHA256: 3ba5294d1cbdfa98afaacfbc00b6af9ed2b83e8a21817185dfd844cc8c7ac6ff
+
+Archived build-input digests: build/checksums.sha256
+Recipe and overlay digests: RECIPE-SHA256SUMS (paths relative to repository root)
+
+Publication integration was ported onto the current main branch. The recipe
+manifest covers the unchanged compiled package overlay and its apply helper;
+the surrounding build orchestration may differ from the original local run.
