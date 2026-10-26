@@ -7,6 +7,17 @@ output_dir="$3"
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 mkdir -p "$output_dir"
 cp "$kernel_dir/.config" "$output_dir/tested.config"
+sdk_dir="${BCM_BUILD_DIR:?Missing Broadcom source directory}"
+for headers in \
+  "$sdk_dir/bcmdrivers/opensource/include/bcm963xx" \
+  "$sdk_dir/bcmdrivers/broadcom/include/bcm963xx" \
+  "$sdk_dir/shared/opensource/include/bcm963xx" \
+  "$sdk_dir/shared/opensource/include" \
+  "$sdk_dir/shared/opensource/include/rdp" \
+  "$sdk_dir/shared/opensource/include/pmc" \
+  "$sdk_dir/shared/broadcom/include/bcm963xx"; do
+  export KCFLAGS="${KCFLAGS:-} -I$headers"
+done
 
 # Preserve every existing built-in/module setting; add only optional modules.
 for option in IFB NET_ACT_CONNMARK NET_ACT_SKBEDIT NET_SCH_FQ_CODEL \
@@ -73,6 +84,48 @@ full_rc=0
 "${kernel_make[@]}" -k -j"${JOBS:-2}" modules \
   > "$output_dir/full-build.log" 2>&1 || full_rc=$?
 
+# The vendor root Makefile makes net/ depend on proprietary driver builds.
+# Traverse standard subtrees independently when that dependency cannot finish.
+subtrees_rc=0
+: > "$output_dir/subtree-build.log"
+for subtree in net crypto fs lib drivers; do
+  "${kernel_make[@]}" -k -j"${JOBS:-2}" M="$subtree" modules \
+    >> "$output_dir/subtree-build.log" 2>&1 || subtrees_rc=$?
+done
+
+# A failed vendor subtree prevents the final global modpost. Link each
+# independently discovered in-tree module so unrelated successes are retained.
+python3 - "$kernel_dir" "$output_dir/module-targets.txt" <<'PY'
+import sys
+from pathlib import Path
+root = Path(sys.argv[1])
+targets = set()
+def add_target(target):
+    if target.startswith(str(root) + '/'):
+        target = target[len(str(root)) + 1:]
+    if target.startswith('kernel/'):
+        target = target[7:]
+    if target.endswith('.ko') and not target.startswith('/') and '..' not in Path(target).parts:
+        targets.add(target)
+for order in root.rglob('modules.order'):
+    for line in order.read_text().splitlines():
+        add_target(line.strip())
+for version in root.rglob('*.mod'):
+    if version.parent.name != '.tmp_versions':
+        continue
+    lines = version.read_text().splitlines()
+    if lines:
+        add_target(lines[0])
+Path(sys.argv[2]).write_text('\n'.join(sorted(targets)) + '\n')
+PY
+mapfile -t module_targets < "$output_dir/module-targets.txt"
+links_rc=0
+if [[ ${#module_targets[@]} -gt 0 ]]; then
+  "${kernel_make[@]}" -k -j"${JOBS:-2}" "${module_targets[@]}" \
+    > "$output_dir/module-links-build.log" 2>&1 || links_rc=$?
+fi
+
+rm -rf "$output_dir/modules"
 mkdir -p "$output_dir/modules"
 while IFS= read -r -d '' module; do
   relative="${module#"$kernel_dir/"}"
@@ -84,7 +137,8 @@ if [[ -f "$wg_dir/src/wireguard.ko" ]]; then
 fi
 export CROSS_COMPILE="$cross"
 python3 "$repo_root/scripts/report-expanded-kmods.py" "$output_dir" \
-  --priority-exit "$priority_rc" --wireguard-exit "$wireguard_rc" --full-exit "$full_rc"
+  --priority-exit "$priority_rc" --wireguard-exit "$wireguard_rc" \
+  --full-exit "$full_rc" --links-exit "$links_rc" --subtrees-exit "$subtrees_rc"
 test -f "$output_dir/modules/wireguard.ko"
 while IFS= read -r target; do
   test -f "$output_dir/modules/$target" || {
