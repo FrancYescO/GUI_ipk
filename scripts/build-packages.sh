@@ -42,7 +42,7 @@ mkdir -p "$work_dir" "$output_dir"
 # Several pinned feed recipes still use the retired GitHub git:// transport.
 # Keep the rewrite in this disposable build directory.
 export GIT_CONFIG_GLOBAL="$work_dir/.gitconfig"
-git config --global url.https://github.com/.insteadOf git://github.com/
+git config --file "$GIT_CONFIG_GLOBAL" url.https://github.com/.insteadOf git://github.com/
 
 # The snapshot intentionally has no build/staging products. J is an accidental
 # nested tar file and is not used by the OpenWrt build system.
@@ -351,6 +351,11 @@ cp "$build_config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)
 make "${make_args[@]}" defconfig
+if [[ "${PREPARE_KERNEL_ONLY:-0}" == 1 ]]; then
+  make "${make_args[@]}" target/linux/prepare
+  echo "Prepared kernel source tree in $work_dir"
+  exit 0
+fi
 if [[ "$userspace_only" == 1 ]]; then
   python3 - "$repo_root/build/luci-translations-overlay/SOURCES.json" "$work_dir" <<'PY'
 import json

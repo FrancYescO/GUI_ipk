@@ -55,6 +55,11 @@ static int check(const char *hash, unsigned int authsize, bool corrupt)
     if (IS_ERR(sw))
         return PTR_ERR(sw);
     hw = crypto_alloc_aead(driver, 0, 0);
+    if (IS_ERR(hw) && PTR_ERR(hw) == -ENOENT) {
+        /* Older impl3 registers a flat driver name for the same algorithm. */
+        snprintf(driver, sizeof(driver), "authenc-hmac-%s-cbc-aes-spu", hash);
+        hw = crypto_alloc_aead(driver, 0, 0);
+    }
     if (IS_ERR(hw)) {
         err = PTR_ERR(hw);
         goto free_sw;

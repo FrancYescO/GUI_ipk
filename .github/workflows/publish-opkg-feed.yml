@@ -5,7 +5,9 @@ on:
     paths:
       - ".github/workflows/publish-opkg-feed.yml"
       - "artifacts/damson-4.1.52-rndis-compat/**"
+      - "artifacts/vbnto-4.1.38-manual/**"
       - "scripts/assemble-kernel-feed.py"
+      - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/report-feed-dependencies.py"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "tests/test_rndis_feed.py"
@@ -37,10 +39,12 @@ on:
       - "artifacts/damson-4.1.52-spu/**"
       - "artifacts/damson-4.1.52-rndis-compat/**"
       - "artifacts/buildroot-4.1.38/**"
+      - "artifacts/vbnto-4.1.38-manual/**"
       - "scripts/verify-feed.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/generate-feed-pages.py"
       - "scripts/assemble-kernel-feed.py"
+      - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/report-feed-dependencies.py"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "scripts/verify-wireguard-kmod.sh"
@@ -109,6 +113,11 @@ jobs:
           scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
           python3 scripts/verify-kmod-spu.py artifacts/buildroot-4.1.38 4.1.38
 
+      - name: Verify router-tested DGA4131FWB 4.1.38 IPKs
+        run: |
+          (cd artifacts/vbnto-4.1.38-manual && sha256sum --check SHA256SUMS)
+          python3 scripts/verify-vbnto-4.1.38-ipks.py artifacts/vbnto-4.1.38-manual
+
       - name: Verify router-tested RNDIS packages
         run: |
           (cd artifacts/damson-4.1.52-rndis-compat && sha256sum --check SHA256SUMS)
@@ -122,7 +131,7 @@ jobs:
           python3 scripts/verify-kmod-spu.py artifacts/damson-4.1.52-spu 4.1.52
 
       - name: Assemble versioned kernel feeds
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38 --vbnto-kernel-dir artifacts/vbnto-4.1.38-manual
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods

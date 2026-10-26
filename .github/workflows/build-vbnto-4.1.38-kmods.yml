@@ -1,0 +1,91 @@
+name: DGA4131FWB 4.1.38 TUN and SPU
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/build-vbnto-4.1.38-kmods.yml
+      - build/vbnto-4.1.38/**
+      - build/vbntj-spu-test/damson_spu_test.c
+      - patches/vbntj-spu/**
+      - patches/vbnts-spu/**
+      - scripts/build-vbnto-4.1.38-kmods.sh
+      - scripts/build-damson-spu.sh
+      - scripts/build-packages.sh
+      - scripts/package-vbnto-4.1.38.py
+      - scripts/verify-vbnto-4.1.38-ipks.py
+      - artifacts/vbnto-4.1.38-manual/**
+  push:
+    branches:
+      - kmods-4.1.38-vbnto
+    paths:
+      - .github/workflows/build-vbnto-4.1.38-kmods.yml
+      - build/vbnto-4.1.38/**
+      - scripts/build-vbnto-4.1.38-kmods.sh
+      - scripts/package-vbnto-4.1.38.py
+      - scripts/verify-vbnto-4.1.38-ipks.py
+      - artifacts/vbnto-4.1.38-manual/**
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Rebuild tested 4.1.38 ABI and verify IPKs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BUILD_INPUTS_TAG: build-inputs-v1
+    steps:
+      - uses: actions/checkout@v7
+      - name: Restore pinned source archives
+        uses: actions/cache@v6
+        with:
+          path: |
+            .cache/sources
+            .cache/downloads
+          key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
+      - name: Download and verify source archives
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+          scripts/fetch-build-inputs.sh
+      - name: Build compatibility image
+        run: docker build --platform linux/amd64 --tag gui-ipk-builder --file build/Dockerfile .
+      - name: Rebuild TUN, SPU and Crypto API test module
+        run: |
+          mkdir -p "$RUNNER_TEMP/vbnto-build"
+          docker run --rm --platform linux/amd64 \
+            --user "$(id -u):$(id -g)" \
+            --entrypoint /bin/bash --workdir /build \
+            --env HOME=/tmp --env JOBS=2 --env BUILD_SPU=1 \
+            --env WORK_DIR=/build/openwrt \
+            --volume "$RUNNER_TEMP/vbnto-build:/build" \
+            --volume "$PWD:/repo" gui-ipk-builder \
+            /repo/scripts/build-vbnto-4.1.38-kmods.sh \
+            > vbnto-build.log 2>&1 || { tail -80 vbnto-build.log; exit 1; }
+      - name: Verify router-tested modules and manual packages
+        run: |
+          python3 scripts/package-vbnto-4.1.38.py \
+            dist/vbnto-4.1.38-probe dist/vbnto-4.1.38-ipks
+          (cd artifacts/vbnto-4.1.38-manual && sha256sum --check SHA256SUMS)
+          python3 scripts/verify-vbnto-4.1.38-ipks.py artifacts/vbnto-4.1.38-manual
+          python3 scripts/verify-vbnto-4.1.38-ipks.py dist/vbnto-4.1.38-ipks
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vbnto-4.1.38-build-log-${{ github.sha }}
+          path: vbnto-build.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Upload tested kernel modules and IPKs
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vbnto-4.1.38-kmods-${{ github.sha }}
+          path: |
+            dist/vbnto-4.1.38-probe/
+            dist/vbnto-4.1.38-ipks/
+          retention-days: 30
