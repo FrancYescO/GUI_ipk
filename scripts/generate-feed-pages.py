@@ -8,7 +8,7 @@ from urllib.parse import quote
 
 
 USERSPACE_FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
-KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.52")
+KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.38-vbnto", "kernel/4.1.52")
 ASTERISK_FEED = "telephony/asterisk-20"
 FEEDS = USERSPACE_FEEDS + KERNEL_FEEDS + (ASTERISK_FEED,)
 STYLE = """
