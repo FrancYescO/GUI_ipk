@@ -40,7 +40,8 @@ Stock busy conntrack core is not replaced on the live router.
 `xt_nat` payload `340112b7526852684bf03b922da156c524ac436a663b101c0eaff23892563120`
 is quarantined: a previous session emitted its test-start record, then a kernel
 NULL dereference and reboot before a result. The cause is unresolved. Its IPK
-is withheld and the probe refuses to test it. Raw diagnostic archives can still
+is withheld and the probe refuses to test it. Rebuilding with a different hash
+does not bypass the module quarantine. Raw diagnostic archives can still
 contain this module.
 
 The helpers in `validation/` are temporary, manual tools. The probe verifies the

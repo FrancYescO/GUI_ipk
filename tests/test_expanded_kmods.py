@@ -82,6 +82,12 @@ class ExpandedModulePackages(unittest.TestCase):
         checksums = (self.root / 'ipks/SHA256SUMS').read_text().splitlines()
         self.assertEqual(len(checksums), len(names))
 
+    def test_rebuilding_xt_nat_cannot_bypass_quarantine(self):
+        module = dict(self.module, name='xt_nat')
+        result = self.package([module])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(list((self.root / 'ipks').glob('*.ipk')), [])
+
     def test_archive_preserves_case_sensitive_payloads(self):
         modules = []
         source = self.root / 'original.tar.gz'

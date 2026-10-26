@@ -13,6 +13,7 @@ QUARANTINED = {
     '340112b7526852684bf03b922da156c524ac436a663b101c0eaff23892563120':
         'xt_nat: kernel crash during test start; root cause unresolved',
 }
+QUARANTINED_NAMES = {'xt_nat'}
 
 
 def archive(files):
@@ -59,7 +60,7 @@ def main():
         if hashlib.sha256(payload).hexdigest() != module['sha256']:
             raise ValueError('Module changed after compilation: ' + name)
         seen[name] = module['sha256']
-        if module['sha256'] in QUARANTINED:
+        if name in QUARANTINED_NAMES or module['sha256'] in QUARANTINED:
             continue
         stem = name.replace('_', '-').lower()
         if len(by_stem[stem]) > 1:
@@ -94,7 +95,8 @@ def main():
         (destination / filename).write_bytes(contents)
         sums.append(hashlib.sha256(contents).hexdigest() + '  ' + filename)
     (destination / 'SHA256SUMS').write_text('\n'.join(sums) + '\n')
-    (destination / 'QUARANTINED.txt').write_text(''.join(
+    (destination / 'QUARANTINED.txt').write_text(
+        'xt_nat: all candidate builds withheld until the crash cause is resolved\n' + ''.join(
         digest + '  ' + reason + '\n' for digest, reason in QUARANTINED.items()))
     print('Packaged {} staged module candidates'.format(len(package_owners)))
 
