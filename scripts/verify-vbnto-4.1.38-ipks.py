@@ -20,7 +20,10 @@ def main():
     parser.add_argument("directory", type=Path)
     args = parser.parse_args()
     config = runpy.run_path(str(Path(__file__).with_name("package-vbnto-4.1.38.py")))
-    expected = config["MODULES"]
+    expected = dict(config["MODULES"])
+    wireguard_ipk = args.directory / "kmod-wireguard-vbnto-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk"
+    if not wireguard_ipk.is_file():
+        expected.pop("wireguard")
     kernel = config["KERNEL"]
     ipks = list(args.directory.glob("*.ipk"))
     if len(ipks) != len(expected):
@@ -37,6 +40,8 @@ def main():
         if set(control_files) != {"./control"}:
             raise ValueError(f"Unexpected control scripts: {filename}")
         control = control_files["./control"].decode()
+        if module == "wireguard" and "X-Required-Loaded-Modules: udp_tunnel, ip6_udp_tunnel\n" not in control:
+            raise ValueError("WireGuard must document its stock UDP tunnel dependencies")
         for field in (
             f"Package: {package}\n",
             "Architecture: arm_cortex-a9\n",
@@ -50,7 +55,7 @@ def main():
         path = f"./lib/modules/4.1.38/{module}.ko"
         if set(data) != {path} or hashlib.sha256(data[path]).hexdigest() != digest:
             raise ValueError(f"Unexpected module payload: {filename}")
-    print("Verified two exact-ABI 4.1.38 modules; no install scripts or boot autoload")
+    print(f"Verified {len(expected)} exact-ABI 4.1.38 modules; no install scripts or boot autoload")
 
 
 if __name__ == "__main__":

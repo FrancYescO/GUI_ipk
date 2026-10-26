@@ -93,7 +93,7 @@ The six shared feeds contain userspace packages. Kernel IPKs are split into
 [`kernel/4.1.38`](https://francyesco.github.io/GUI_ipk/kernel/4.1.38/) and
 [`kernel/4.1.52`](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/).
 The DGA4131FWB / VBNT-O firmware 18.3.n.0439 has a different 4.1.38 ABI;
-its router-tested TUN and SPU modules use the separate
+its router-tested TUN, SPU and WireGuard modules use the separate
 [`kernel/4.1.38-vbnto`](https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnto/)
 feed, with an exact kernel dependency and no boot autoload. See
 [`artifacts/vbnto-4.1.38-manual/README.md`](artifacts/vbnto-4.1.38-manual/README.md)

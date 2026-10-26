@@ -8,6 +8,10 @@ on:
         type: choice
         default: tested
         options: [tested, expanded]
+      publish_candidates:
+        description: "Publish expanded staged IPKs as a separate public prerelease"
+        type: boolean
+        default: false
   pull_request:
     paths:
       - .github/workflows/build-vbnto-4.1.38-kmods.yml
@@ -47,6 +51,8 @@ jobs:
     name: Build 4.1.38 ${{ inputs.module_set || 'tested' }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 180
+    permissions:
+      contents: write
     env:
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
@@ -67,7 +73,7 @@ jobs:
           scripts/fetch-build-inputs.sh
       - name: Build compatibility image
         run: docker build --platform linux/amd64 --tag gui-ipk-builder --file build/Dockerfile .
-      - name: Rebuild TUN, SPU and Crypto API test module
+      - name: Compile selected stock-ABI modules and diagnostics
         run: |
           mkdir -p "$RUNNER_TEMP/vbnto-build"
           docker run --rm --platform linux/amd64 \
@@ -86,14 +92,43 @@ jobs:
           python3 -m unittest discover -s tests -p test_expanded_kmods.py
           if [[ -f dist/vbnto-4.1.38-expanded/modules.json ]]; then
             python3 scripts/package-expanded-kmods.py dist/vbnto-4.1.38-expanded
+            python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          summary = json.loads(Path('dist/vbnto-4.1.38-expanded/modules.json').read_text())
+          print('Compiled candidate modules:', summary['module_count'])
+          print('Missing priority modules:', summary['missing_priority'])
+          for module in summary['modules']:
+              if module['name'] in ('wireguard', 'nf_conntrack', 'nf_conntrack_netlink'):
+                  print(module['name'], module['sha256'])
+          PY
           fi
       - name: Verify router-tested modules and manual packages
         run: |
+          if [[ "$MODULE_SET" == expanded ]]; then
+            cp dist/vbnto-4.1.38-expanded/modules/wireguard.ko dist/vbnto-4.1.38-probe/
+          fi
           python3 scripts/package-vbnto-4.1.38.py \
             dist/vbnto-4.1.38-probe dist/vbnto-4.1.38-ipks
           (cd artifacts/vbnto-4.1.38-manual && sha256sum --check SHA256SUMS)
           python3 scripts/verify-vbnto-4.1.38-ipks.py artifacts/vbnto-4.1.38-manual
           python3 scripts/verify-vbnto-4.1.38-ipks.py dist/vbnto-4.1.38-ipks
+      - name: Publish staged candidate IPKs separately
+        if: github.event_name == 'workflow_dispatch' && inputs.module_set == 'expanded' && inputs.publish_candidates
+        run: |
+          tag="kernel-4.1.38-candidates-${GITHUB_SHA:0:7}"
+          root=dist/vbnto-4.1.38-expanded
+          tar -czf "$root/modules-4.1.38-stock-abi.tar.gz" -C "$root" \
+            modules modules.json build.config BUILD-REPORT.md SHA256SUMS \
+            priority-build.log wireguard-build.log full-build.log subtree-build.log module-links-build.log
+          gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
+              --prerelease --target "$GITHUB_SHA" \
+              --title "Linux 4.1.38 staged module candidates (${GITHUB_SHA:0:7})" \
+              --notes-file "$root/BUILD-REPORT.md"
+          gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber \
+            "$root"/ipks/*.ipk "$root/ipks/SHA256SUMS" \
+            "$root/modules.json" "$root/BUILD-REPORT.md" "$root/modules-4.1.38-stock-abi.tar.gz"
       - name: Upload build log on failure
         if: failure()
         uses: actions/upload-artifact@v7

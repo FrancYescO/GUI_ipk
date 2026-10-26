@@ -60,7 +60,9 @@ priority_targets=(
 )
 printf '%s\n' "${priority_targets[@]}" > "$output_dir/priority-targets.txt"
 priority_rc=0
-"${kernel_make[@]}" -k -j"${JOBS:-2}" "${priority_targets[@]}" \
+# Individual .ko targets each invoke modpost; concurrent invocations overwrite
+# the same generated .mod.c/.mod.o files in this vendor kernel.
+"${kernel_make[@]}" -k -j1 "${priority_targets[@]}" \
   > "$output_dir/priority-build.log" 2>&1 || priority_rc=$?
 
 wg_dir="$kernel_dir/../wireguard-linux-compat"
@@ -106,7 +108,7 @@ def add_target(target):
     if target.startswith('kernel/'):
         target = target[7:]
     if target.endswith('.ko') and not target.startswith('/') and '..' not in Path(target).parts:
-        targets.add(target)
+        targets.add(str(Path(target)))
 for order in root.rglob('modules.order'):
     for line in order.read_text().splitlines():
         add_target(line.strip())
@@ -121,7 +123,7 @@ PY
 mapfile -t module_targets < "$output_dir/module-targets.txt"
 links_rc=0
 if [[ ${#module_targets[@]} -gt 0 ]]; then
-  "${kernel_make[@]}" -k -j"${JOBS:-2}" "${module_targets[@]}" \
+  "${kernel_make[@]}" -k -j1 "${module_targets[@]}" \
     > "$output_dir/module-links-build.log" 2>&1 || links_rc=$?
 fi
 

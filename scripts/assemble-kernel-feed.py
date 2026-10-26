@@ -65,6 +65,7 @@ def write_feed(version, ipks, feed_root):
             and fields.get("Package") in {
                 "kmod-tun-vbnto-4.1.38-manual",
                 "kmod-bcmspu-vbnto-4.1.38-manual",
+                "kmod-wireguard-vbnto-4.1.38-manual",
             }
             and fields.get("Architecture") == "arm_cortex-a9"
             and fields.get("Depends") ==

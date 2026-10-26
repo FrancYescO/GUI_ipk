@@ -14,6 +14,7 @@ VERMAGIC = "4.1.38 SMP preempt mod_unload ARMv7"
 MODULES = {
     "tun": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430",
     "bcmspu": "f5280ce13913803daf53ad500b55b478ecd5575fa0014323471223ab329016b1",
+    "wireguard": "feb7ac9824f0615fe62a20ae4f1ff4385c0422d9f7892a20da6f4f4f64f97336",
 }
 
 
@@ -43,6 +44,8 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     sums = []
     for module, expected in MODULES.items():
+        if module == "wireguard" and not (args.source / "wireguard.ko").is_file():
+            continue
         payload = (args.source / (module + ".ko")).read_bytes()
         actual = hashlib.sha256(payload).hexdigest()
         if actual != expected:
@@ -62,6 +65,8 @@ def main():
             f"X-Kernel-Vermagic: {VERMAGIC}\n"
             "X-Manual-Install-Only: yes\n"
         ).encode()
+        if module == "wireguard":
+            control += b"X-Required-Loaded-Modules: udp_tunnel, ip6_udp_tunnel\n"
         contents = archive([
             ("debian-binary", b"2.0\n", 0o644),
             ("control.tar.gz", archive([("control", control, 0o644)]), 0o644),

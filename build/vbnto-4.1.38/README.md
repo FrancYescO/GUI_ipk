@@ -23,4 +23,10 @@ Expanded IPKs have an exact kernel dependency and no installation scripts.
 They stage `.ko` files in `/usr/lib/kernel-module-candidates/4.1.38/`, outside
 the firmware's `/lib/modules` boot path. Installing one therefore does not
 replace a stock conntrack module already loaded at boot. These candidates
-remain separate from the router-tested feed until runtime validation.
+remain separate from the router-tested feed until runtime validation. WireGuard
+has already passed a temporary two-peer handshake and encrypted-traffic test;
+the expanded build checks its bytes before producing its tested manual IPK.
+
+Dispatching `expanded` with `publish_candidates=true` also uploads the staged
+IPKs, raw modules and build diagnostics to a separate public prerelease. It
+does not add unvalidated candidates to the normal OPKG feed.

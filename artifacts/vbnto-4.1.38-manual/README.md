@@ -1,6 +1,6 @@
 # DGA4131FWB Linux 4.1.38 modules
 
-These two IPKs contain the exact TUN and SPU modules tested on a DGA4131FWB / VBNT-O,
+These IPKs contain the exact TUN, SPU and WireGuard modules tested on a DGA4131FWB / VBNT-O,
 firmware 18.3.n.0439, Linux 4.1.38. The firmware reports target
 `brcm63xx-tch/VBNTJ`, architecture `arm_cortex-a9`, and kernel package
 `4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d`. The separate VBNTS
@@ -9,8 +9,8 @@ firmware. The packages here declare the exact kernel dependency.
 
 The build uses the router's `/proc/config.gz` (SHA-256
 `c653774986e2a0ce0a1a0614f374c7ba3af830ba49cc2ad195e4fc151991432e`),
-the pinned 4.1.38 source and the Broadcom `impl3` SPU source. TUN is the sole
-new kernel configuration option. The SPU build applies the authsize fallback,
+the pinned 4.1.38 source and the Broadcom `impl3` SPU source. The TUN/SPU probe adds only `CONFIG_TUN=m`. The expanded build also enables optional
+modules while preserving all existing built-in and module settings. The SPU build applies the authsize fallback,
 disabled-by-default ESP BLOG offload, and idempotent RDPA teardown patches.
 
 ## Router validation
@@ -23,10 +23,11 @@ The boot ID remained `c0db9ffe-ef96-43ad-955d-84438ac3043c` throughout.
 - SPU loaded with `blog_offload=0`; `spuctl start` registered its algorithms.
   The Crypto API test passed AES128/SHA256-128 software fallback and
   AES128/SHA1-96 Runner decryption, including rejection of altered tags.
+- WireGuard `1.0.20220627` (SHA-256 `feb7ac9824f0615fe62a20ae4f1ff4385c0422d9f7892a20da6f4f4f64f97336`) passed loading, handshake and encrypted traffic between two temporary namespaces: 5/5 pings in each direction and matching transfer counters. It unloaded normally. It requires the stock `udp_tunnel` and `ip6_udp_tunnel` modules already loaded.
 - Two temporary IPsec namespaces exchanged 5/5 pings in both directions for
   SHA1-96 and SHA256-128. SPU reported 40 ingress, 40 egress, 20 fallback,
   zero errors and zero drops for both encryption and decryption.
-- `spuctl stop`, `rmmod` and namespace cleanup succeeded. No TUN, SPU or
+- `spuctl stop`, `rmmod` and namespace cleanup succeeded. No TUN, SPU, WireGuard or
   test module remained loaded. No file was written to `/overlay`.
 
 The IPKs contain one `.ko` each, with no install scripts and no boot autoload.
