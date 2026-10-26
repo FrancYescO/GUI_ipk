@@ -49,6 +49,11 @@ for required in \
 done
 
 "${kernel_make[@]}" modules_prepare
+if [[ "${BUILD_VALIDATION_KAT:-0}" == 1 ]]; then
+  cp -R "$repo_root/build/vbnto-4.1.38/validation/kat" "$work_dir/candidate-kat"
+  "${kernel_make[@]}" M="$work_dir/candidate-kat" modules
+  cp "$work_dir/candidate-kat/kmod38_kat.ko" "$probe_dir/"
+fi
 "${kernel_make[@]}" -j2 drivers/net/tun.ko
 cp "$kernel_dir/drivers/net/tun.ko" "$probe_dir/tun.ko"
 cp "$kernel_dir/.config" "$probe_dir/build.config"

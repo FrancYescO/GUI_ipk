@@ -3,6 +3,9 @@
 
 import argparse
 import html
+import json
+import shutil
+from collections import Counter
 from pathlib import Path
 from urllib.parse import quote
 
@@ -68,6 +71,7 @@ def packages(index):
 
 def page(title, selected, groups, prefix, partial=False):
     nav = [f'<a href="{prefix}index.html">All packages</a>']
+    nav.append(f'<a href="{prefix}validation/4.1.38/index.html">4.1.38 validation results</a>')
     nav.extend(
         f'<a href="{prefix}{feed}/index.html">{html.escape(feed)} ({len(groups[feed])})</a>'
         for feed in groups
@@ -147,6 +151,65 @@ def page(title, selected, groups, prefix, partial=False):
 """
 
 
+def write_validation_page(root):
+    source = Path(__file__).resolve().parents[1] / "build/vbnto-4.1.38/validation"
+    report = json.loads((source / "results.json").read_text())
+    destination = root / "validation/4.1.38"
+    destination.mkdir(parents=True, exist_ok=True)
+    for filename in ("results.json", "results.tsv", "additional-functional-results.txt"):
+        shutil.copyfile(source / filename, destination / filename)
+    counts = Counter((row["status"], row["level"]) for row in report["modules"])
+    functional = counts["passed", "load-unload-functional"]
+    smoke = counts["passed", "load-unload-namespace"]
+    previous = counts["passed", "previous-functional-validation"]
+    labels = {
+        "load-unload-functional": "Functional test passed",
+        "load-unload-namespace": "Load/unload + namespace only",
+        "previous-functional-validation": "Previously validated; tested feed",
+        "build-only": "Built; runtime not tested",
+        "crash-during-test-start": "BLOCKED: crash during test start",
+    }
+    rows = []
+    for module in report["modules"]:
+        label = labels[module["level"]]
+        if module["status"] == "functional_failed":
+            label = "Functional test incomplete; load/unload passed"
+        download = "Withheld"
+        if module["status"] != "blocked":
+            url = report["asset_base"] + quote(module["asset"], safe="")
+            download = f'<a href="{html.escape(url, quote=True)}">Staged candidate IPK</a>'
+        rows.append(
+            f'<tr><td>{html.escape(module["name"])}</td><td>{label}</td>'
+            f'<td>{html.escape(module.get("note", ""))}</td>'
+            f'<td><code>{html.escape(module["sha256"])}</code></td><td>{download}</td></tr>'
+        )
+    content = f'''<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Linux 4.1.38 module validation</title><style>{STYLE}code {{ overflow-wrap: anywhere; }}</style></head><body>
+<header><h1>Linux 4.1.38 module validation</h1>
+<p>Updated {html.escape(report['updated'])}. Device: {html.escape(report['device'])}, firmware {html.escape(report['firmware'])}.
+Exact kernel package: <code>{html.escape(report['kernel_package'])}</code>.</p>
+<p>{functional} candidates passed functional tests; {smoke} passed load/unload and namespace smoke tests only;
+{previous} exact candidate payloads were already validated (TUN and WireGuard).
+SPU is validated separately in the tested feed. A successful smoke test does not establish full functionality.</p>
+<p><strong>xt_nat is blocked:</strong> a previous session crashed after starting its test, before a result was recorded.
+The cause remains unresolved. Stock conntrack core remains in use; its candidate has not been runtime validated.</p>
+<p>New tests use temporary payloads under /tmp and disposable network namespaces. The latest session retained its boot ID,
+restored original modules and left no test namespaces or test helper loaded. An earlier session rebooted as described above.</p>
+<p>Downloads below are <strong>staged candidates, separate from the tested OPKG feed</strong>.
+They install under <code>/usr/lib/kernel-module-candidates/4.1.38/</code>, with no boot autoload or stock module replacement.
+Tested-feed TUN, SPU and WireGuard are available in the <a href="../../kernel/4.1.38-vbnto/index.html">manual feed</a>.
+These results apply to the listed SHA-256 payloads and firmware ABI, not every Linux 4.1.38 device.</p></header>
+<nav><a href="../../index.html">All packages</a><a href="results.json">Machine-readable results</a>
+<a href="results.tsv">Test history</a><a href="additional-functional-results.txt">Additional functional test output</a>
+<a href="{html.escape(report['release'], quote=True)}">Candidate release and build diagnostics</a></nav>
+<label for="search">Search modules or test results</label><input id="search" type="search" placeholder="Search modules…">
+<p id="count" class="muted"></p><div class="table-wrap"><table><thead><tr><th>Module</th><th>Validation</th><th>Notes</th>
+<th>Module SHA-256</th><th>Download</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
+<script>{SCRIPT}</script></body></html>'''
+    (destination / "index.html").write_text(content, encoding="utf-8")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("feed_root", type=Path)
@@ -160,6 +223,7 @@ def main():
     if missing_userspace:
         raise ValueError(f"Missing userspace feeds: {sorted(missing_userspace)}")
     (root / ".nojekyll").touch()
+    write_validation_page(root)
     report = root / "shard-report.md"
     report_text = report.read_text() if report.is_file() else ""
     partial = "## Shard " in report_text or "## Skipped malformed IPKs" in report_text

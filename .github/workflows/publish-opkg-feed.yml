@@ -45,6 +45,7 @@ on:
       - "scripts/verify-feed.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/generate-feed-pages.py"
+      - "build/vbnto-4.1.38/validation/**"
       - "scripts/assemble-kernel-feed.py"
       - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/report-feed-dependencies.py"

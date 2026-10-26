@@ -80,6 +80,7 @@ jobs:
             --user "$(id -u):$(id -g)" \
             --entrypoint /bin/bash --workdir /build \
             --env HOME=/tmp --env JOBS=2 --env BUILD_SPU=1 \
+            --env BUILD_VALIDATION_KAT=1 \
             --env MODULE_SET \
             --env WORK_DIR=/build/openwrt \
             --volume "$RUNNER_TEMP/vbnto-build:/build" \
@@ -127,7 +128,7 @@ jobs:
               --title "Linux 4.1.38 staged module candidates (${GITHUB_SHA:0:7})" \
               --notes-file "$root/BUILD-REPORT.md"
           gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber \
-            "$root"/ipks/*.ipk "$root/ipks/SHA256SUMS" \
+            "$root"/ipks/*.ipk "$root/ipks/SHA256SUMS" "$root/ipks/QUARANTINED.txt" \
             "$root/modules.json" "$root/BUILD-REPORT.md" "$root/modules-4.1.38-stock-abi.tar.gz"
       - name: Upload build log on failure
         if: failure()

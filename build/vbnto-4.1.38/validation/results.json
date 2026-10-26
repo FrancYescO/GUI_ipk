@@ -1,0 +1,1876 @@
+{
+  "kernel": "4.1.38",
+  "kernel_package": "4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d",
+  "firmware": "18.3.n.0439",
+  "device": "DGA4131FWB",
+  "updated": "2026-10-26",
+  "source_commit": "a94ca439c94a46a5d39866349760a4da6bac9071",
+  "release": "https://github.com/FrancYescO/GUI_ipk/releases/tag/kernel-4.1.38-candidates-a94ca43",
+  "asset_base": "https://github.com/FrancYescO/GUI_ipk/releases/download/kernel-4.1.38-candidates-a94ca43/",
+  "modules": [
+    {
+      "name": "act_connmark",
+      "sha256": "2cde682ab9b363342341c12b09af0b8f0b35bb07920dd60c31cef6c23a1d4759",
+      "asset": "kmod-act-connmark-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "act_ipt",
+      "sha256": "59b7c4a3e3f10cc6e517cada6d67b96a702b837e149c42201bf91e5bbc100db7",
+      "asset": "kmod-act-ipt-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "functional_failed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 1,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3",
+      "note": "Load/unload passed; tc cannot find the DSCP target extension. Functional validation remains incomplete."
+    },
+    {
+      "name": "act_skbedit",
+      "sha256": "e5072a30bb01263db9de6f4fcb0a59094a03c726176e060c3c2f28503d8b639f",
+      "asset": "kmod-act-skbedit-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "af_key",
+      "sha256": "f4ccd4821ad6527360573055745fd07426f3cd22671eec126dc748b2b6b78a65",
+      "asset": "kmod-af-key-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ah4",
+      "sha256": "69499d7d0c0e43dcf2346f100ef49ea8be76a03852b60e18fdcfb018f245d018",
+      "asset": "kmod-ah4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ah6",
+      "sha256": "f3bb2327ce0b4ba9b09310911ea7b07c7ef766f761a14542e0438d241069e7dc",
+      "asset": "kmod-ah6-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "autofs4",
+      "sha256": "ced06909b276f1a216919e7bbc56c03ca1d509a41544de4e30f803868cd0b673",
+      "asset": "kmod-autofs4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ccm",
+      "sha256": "a10c97ac9740a422fde366c7b41ce2bc1ceaff8a0ed19763b37cfc68139ad62f",
+      "asset": "kmod-ccm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "cdc-acm",
+      "sha256": "144b8031abce74194ff038625387ca3cec8cd36a1e5b85eb37b0773c3c7d8b11",
+      "asset": "kmod-cdc-acm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "cdc-wdm",
+      "sha256": "f1556800d0abe48dde9c29e36dc0fd3c9ffa4eb69e90dff4a7150ec8802cdf35",
+      "asset": "kmod-cdc-wdm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "cdc_ether",
+      "sha256": "ef4e13212f3e6d19275ecdc3e5c9a5536600d0fe0c92dc823bd29cdb3f150400",
+      "asset": "kmod-cdc-ether-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "cdc_ncm",
+      "sha256": "f6b1cc6c1b22260d7d88be7a3ca9b129814da304e2e66e2a8e53867c684611ad",
+      "asset": "kmod-cdc-ncm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "cls_basic",
+      "sha256": "435b07efb78a6ea7b22db6d571662d57539a3d00708ebcc4cad43213682adc45",
+      "asset": "kmod-cls-basic-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "cls_flow",
+      "sha256": "7acf46b1f2bdc6f8963d161ad0b16fbf0ac8ecf298497b0f4edf335031eaa8f1",
+      "asset": "kmod-cls-flow-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "crc16",
+      "sha256": "852a7aade450fd32544474c994cd0a03b950d8ea763e49acb8a4d205a91beca0",
+      "asset": "kmod-crc16-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "crc32c_generic",
+      "sha256": "c3fcdc75fb878ca61a9bfede287b5d03f9ba00fb8b3d7d8e25a0887966acd1a4",
+      "asset": "kmod-crc32c-generic-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "ctr",
+      "sha256": "f70c4ebbe45b9765faad4dd78abeefd3a7217bf9bcc8775431fcb2f5ecd91eb1",
+      "asset": "kmod-ctr-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "deflate",
+      "sha256": "aaf029dfd2cab5345a109c8963735db3b04aa6792cd2d64e340e2ff7a67895d6",
+      "asset": "kmod-deflate-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "ebt_802_3",
+      "sha256": "d8800ca68648f2fce9dcdadc6c22f9b3b9ff1b1ace1fcc94f9e601192a60d89c",
+      "asset": "kmod-ebt-802-3-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ebt_among",
+      "sha256": "4694b591708c647364984f41418c6236ba32178dffcf7541b8f6a503f333507f",
+      "asset": "kmod-ebt-among-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ebt_limit",
+      "sha256": "6d0c80969ac4ead4f86dc15bb80215094553a24df7bc5c02da364c5572fb6888",
+      "asset": "kmod-ebt-limit-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ebt_pkttype",
+      "sha256": "b301ed11cd088d7c4b6a6f4c2116452c17b8055ff53d56d07a992b9903184e90",
+      "asset": "kmod-ebt-pkttype-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ebt_redirect",
+      "sha256": "c404b75eb95d4d36622efad93c4f4e52f21431a66d5717fbcd6513753f5fa8be",
+      "asset": "kmod-ebt-redirect-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ebt_stp",
+      "sha256": "c4fa9e27f3e805abf63b1935537d8b18848d30ec32b92e006a595d7c4d2eefe8",
+      "asset": "kmod-ebt-stp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ecb",
+      "sha256": "7e89fddf3f9d0ad63eb18fb9a55344e1ab607c06e51918af0a80d2c5a0108963",
+      "asset": "kmod-ecb-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "ehci-hcd",
+      "sha256": "c25a36a466ec84f1b6fa90c8d166e24c6b84b595ef086ce9115c74616cad6372",
+      "asset": "kmod-ehci-hcd-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ehci-pci",
+      "sha256": "eed65345c2a526dd7e6baf313863a99e95d02c15b41da21c157944aeefb50bcb",
+      "asset": "kmod-ehci-pci-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ehci-platform",
+      "sha256": "290834dfe2f5d5a9ed1219776c24ba4a3d409ba34e867a2e37ba14d1c0905888",
+      "asset": "kmod-ehci-platform-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "em_cmp",
+      "sha256": "c2f183a2853bc3c8ee5f70f212b26b139efaad429f94e34c468181b5addc10e5",
+      "asset": "kmod-em-cmp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "em_meta",
+      "sha256": "78d765ad6cf327a0ff99434bf8f906e802758643672bfa0963e91d1559c87d18",
+      "asset": "kmod-em-meta-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "em_nbyte",
+      "sha256": "6862bfb6626bbac108f4904717485d3fed210f01c7a5426ee80ff6ae87192b69",
+      "asset": "kmod-em-nbyte-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "em_text",
+      "sha256": "1a018821b0118eda136f3c8c9a9506073423cf92cca8678ed560e8b56c798b2e",
+      "asset": "kmod-em-text-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "em_u32",
+      "sha256": "78f4a980574df49162b45177114b8fdd82b3cf0b4f6061265c82b5cd218a6e33",
+      "asset": "kmod-em-u32-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "esp4",
+      "sha256": "496b08314d13e509f9de85cbdec5fe75df4579a24eb4630475c1bf90b3b1bee6",
+      "asset": "kmod-esp4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "esp6",
+      "sha256": "77218cee00b38100b7485142dc29370195b9a20fa107b5427372dbc8723f6abb",
+      "asset": "kmod-esp6-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ext4",
+      "sha256": "9f7f793fcd44676ac8631b5fc4a10560bc70bcdd5c61e08f6e80fc69825520ca",
+      "asset": "kmod-ext4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "gcm",
+      "sha256": "a43e0f95719314aedcf60928aa5cc011bdc73447df79fcc5fb50ebcdfcec039f",
+      "asset": "kmod-gcm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "gf128mul",
+      "sha256": "e802b325d9f56f548573da1aff55bba7b577682684cc04c2bd0693f6307fe064",
+      "asset": "kmod-gf128mul-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ghash-generic",
+      "sha256": "10aabc072c447c733e006339985623061d6de6f4ad4fc1d1c37a208ad2b4944b",
+      "asset": "kmod-ghash-generic-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "gpio_keys_polled",
+      "sha256": "605daed11f140d029aca109498de0b96c57ea343bb60d70af93921fcc62acf3f",
+      "asset": "kmod-gpio-keys-polled-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "gre",
+      "sha256": "5cc405b3d58d6639eb1c7d4f966f1d8e4372f091aab9fe7fefdc84c9105d67c0",
+      "asset": "kmod-gre-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "huawei_cdc_ncm",
+      "sha256": "9e2601029d715a835fded74f1deca8f2b2cdd4eda4292dc9d5e3e6fc8af24a82",
+      "asset": "kmod-huawei-cdc-ncm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "hwmon",
+      "sha256": "11b3b62e6dd5023e13788bfdd308ca55172c78f2e498b79b2b9b8316dd07fbe1",
+      "asset": "kmod-hwmon-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "i2c-algo-bit",
+      "sha256": "7ffe107eafe72a4b203104189427cbb04ccaf39ed2181022f2da21082b2e2216",
+      "asset": "kmod-i2c-algo-bit-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "i2c-core",
+      "sha256": "cd80cb54bd094552f3f414330798a888929f91e751dcdddb1b14148f6882e082",
+      "asset": "kmod-i2c-core-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "i2c-dev",
+      "sha256": "208b8bcae9e9297843509c490ca295fec5e72322db94e0b2978cf7f8d6b83528",
+      "asset": "kmod-i2c-dev-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "input-core",
+      "sha256": "da5586317761455972010d1dd1bb287c12209426918f8dfdaa4f3b5af83d99dc",
+      "asset": "kmod-input-core-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "input-polldev",
+      "sha256": "3cde77cfd71ad135e19f11532b699e6c109da818603ac9b454f85847a823dcd0",
+      "asset": "kmod-input-polldev-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip6_gre",
+      "sha256": "f3e1a8a27c39a6306cfdebdefe301a6b117da3d7a08602d2803ecc0e151c97b8",
+      "asset": "kmod-ip6-gre-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip6_tables",
+      "sha256": "2bd4ccb999bec4a63bd87a1e2456500c66f2f95fe2ebc77f8cc52c3c31d2d43e",
+      "asset": "kmod-ip6-tables-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip6_udp_tunnel",
+      "sha256": "ae3069f8fee7443ed794047ad4d82f6e176339bf730d3313555642c44a6eb8f1",
+      "asset": "kmod-ip6-udp-tunnel-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip6t_REJECT",
+      "sha256": "b42e8e6ad596648a440d64c9552956196e96fd3d378fceafd3d3caee891bb4ae",
+      "asset": "kmod-ip6t-reject-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip6t_rpfilter",
+      "sha256": "0011ffabebb01082ca9da268f8cf6b4324963efdd006b68d65123e09979bb1a6",
+      "asset": "kmod-ip6t-rpfilter-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip6table_filter",
+      "sha256": "62a1e775cd49b76a463cd23b0b324c8873aecaaea7e9f9312fb5a18808304ab2",
+      "asset": "kmod-ip6table-filter-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip6table_mangle",
+      "sha256": "6575a9e25e3906692e84d74be7f9c8b112869a99e5f5f990160d3d3a5bc1276a",
+      "asset": "kmod-ip6table-mangle-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip6table_raw",
+      "sha256": "6b2eba1d4d06a2243c24e3b8cac5a71bb891412ff04b070a2bafa0b1498d2645",
+      "asset": "kmod-ip6table-raw-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip_gre",
+      "sha256": "9cc81c73303eda774e2c2ff9a9b5f7e6ada5d4014e5316b2366f146829b0d670",
+      "asset": "kmod-ip-gre-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip_set",
+      "sha256": "789224288f99e4c6b83fa6e943a714096629bdc8d488c7e2c8884483527192c9",
+      "asset": "kmod-ip-set-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip_set_bitmap_ip",
+      "sha256": "1678f125d92c4add2bac1c91bc95c9fb65da1334733261f3435beba72d97b1b6",
+      "asset": "kmod-ip-set-bitmap-ip-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_bitmap_ipmac",
+      "sha256": "32a15e58bb99f9e6fd36a2f669cd3333887e785b26428cf43351252eef9b793a",
+      "asset": "kmod-ip-set-bitmap-ipmac-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_bitmap_port",
+      "sha256": "8835559305be819dad3acc660136b7f8f5ef5a3d527ec2cc779ceebcd164a8d2",
+      "asset": "kmod-ip-set-bitmap-port-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_ip",
+      "sha256": "73a041e4f0d9ce0b2135b9077011bbd3f4ec27603653e9a89a7f66cec231856e",
+      "asset": "kmod-ip-set-hash-ip-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ip_set_hash_ipmark",
+      "sha256": "b9073a2ff420c1c7d9fd1991298fcee58cae1d2dace85206a97a02b8e1feaae7",
+      "asset": "kmod-ip-set-hash-ipmark-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_ipport",
+      "sha256": "b6cdbcbbe59f948c7b1fead2293854f6c55b60f2762b23a7d908a21880ccb86a",
+      "asset": "kmod-ip-set-hash-ipport-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_ipportip",
+      "sha256": "45f9f58e6ad83d52bede1f4de11b7498ba3a097d00fbf165e9b434d672deeb71",
+      "asset": "kmod-ip-set-hash-ipportip-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_ipportnet",
+      "sha256": "1e003c8c4c4b6b8144a9524a4b7fa4412334b80ca7ee9d389c859da60346890f",
+      "asset": "kmod-ip-set-hash-ipportnet-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_mac",
+      "sha256": "f9d7f8c923697b7c46ad0fb3c32a2a562cf1a7c69ad6264954e1c0e6d345825f",
+      "asset": "kmod-ip-set-hash-mac-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_net",
+      "sha256": "2f4cf8ca84b2378d2023cb69fa9761d046f4e01a82f7e3f5f61474d4351cd381",
+      "asset": "kmod-ip-set-hash-net-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_netiface",
+      "sha256": "d4b0211d77c698891a2503a9d6f5b2d174035f006d833cda0cce6516a1985f66",
+      "asset": "kmod-ip-set-hash-netiface-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_netnet",
+      "sha256": "91eb0d85c527398f3c7fa291c962b0b39850605e1d67803199234094c43b3fed",
+      "asset": "kmod-ip-set-hash-netnet-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_netport",
+      "sha256": "49159c186c283df6ce3e1a842dbf2c8eb138f7cf1705816934758aec8a3b4e05",
+      "asset": "kmod-ip-set-hash-netport-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_hash_netportnet",
+      "sha256": "d068892b749498bc0bbb1cc925c1517721999e306ea2b5d6da42470bcbc9e812",
+      "asset": "kmod-ip-set-hash-netportnet-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_set_list_set",
+      "sha256": "9b2315e43fe44c3bade15e3a701887eac91406bd6c2c10cc4037ca46c0a00d4d",
+      "asset": "kmod-ip-set-list-set-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ip_tables",
+      "sha256": "13321891981a877bf6ee97857cc9056166170f164959757d27eb2dc339ba27e7",
+      "asset": "kmod-ip-tables-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ipcomp",
+      "sha256": "f30cbd8f7d6fe550dcc6b9af986c1e6b2ba4c71a4bdebdda7944076420ea8924",
+      "asset": "kmod-ipcomp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ipcomp6",
+      "sha256": "9403a0db18360c24322c92b7beccc94cbbaf8e5f6683b0df47a5cddc1216092b",
+      "asset": "kmod-ipcomp6-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ipip",
+      "sha256": "203147e62943df6062505dbbd1788fee99a68934d75b8c484af9fb24922d24ec",
+      "asset": "kmod-ipip-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ipt_ECN",
+      "sha256": "d3332c4ad18538f0b3e0ca5edb3cfec4936d1eb534ab54f61bb77c8605e985cf",
+      "asset": "kmod-ipt-ecn-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ipt_MASQUERADE",
+      "sha256": "2a664da030bd64a03ab008ce9279b8d1a03862b09a10c298f5b50f3a6667f01c",
+      "asset": "kmod-ipt-masquerade-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ipt_REJECT",
+      "sha256": "b45640935e0f27dc1e6abd30537c663a21c3d6e038fe10bc2538e235ab88fb21",
+      "asset": "kmod-ipt-reject-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ipt_ah",
+      "sha256": "c0913ea028e074d453724ce2654db249973acba8973edcf3f1d40507a6148cf4",
+      "asset": "kmod-ipt-ah-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "ipt_rpfilter",
+      "sha256": "8a402e633f80b94c526166ea7dffbf6cd1e33c9b6deb0d5de790d8c5ba20f55b",
+      "asset": "kmod-ipt-rpfilter-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "iptable_filter",
+      "sha256": "d4e7349caf43ef3a410172c7d08c0f75e44e2edc42e2eb369823f044e959607f",
+      "asset": "kmod-iptable-filter-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "iptable_mangle",
+      "sha256": "a4fd905abc6d66093dc10f9786a291f6afc5ce8f2d8a77cfa18c43da48934188",
+      "asset": "kmod-iptable-mangle-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "iptable_nat",
+      "sha256": "b579aeaafdcf6b0c61ccbd5dcc5cb1782e5b37fba8e1bbdadf90d4d0a83a99b3",
+      "asset": "kmod-iptable-nat-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "iptable_raw",
+      "sha256": "ab5eaa4e2df2dccf5b08f16a93344dccfae86e8751ce72d55a359394294cbfac",
+      "asset": "kmod-iptable-raw-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "jbd2",
+      "sha256": "3cc300809f1160ffd40574b76aa2d8b05e0f5754f760b333ce52ffe5c6351c4c",
+      "asset": "kmod-jbd2-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "l2tp_core",
+      "sha256": "31aed991e9510989a5321470c5ca76f6e904525eb67113e55edd0fed80696fb7",
+      "asset": "kmod-l2tp-core-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "l2tp_netlink",
+      "sha256": "e0a3a7a03a2093b07b0b1ca99c295da75bf3c598a67b534d24f683aa89a55e7e",
+      "asset": "kmod-l2tp-netlink-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "l2tp_ppp",
+      "sha256": "0a76688f7320cef942414d6316c9d81aa2c1f535695edd235d0b89321e4fec94",
+      "asset": "kmod-l2tp-ppp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "leds-gpio",
+      "sha256": "88f3a6b340a83228079a81e839f8aa8ac8b3da147035b2941e2c09247ed189a5",
+      "asset": "kmod-leds-gpio-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ledtrig-default-on",
+      "sha256": "3ca6fa4c173178c0e7915f546b13e93b20b1a89bb68ad4344b375ab26fcc18b7",
+      "asset": "kmod-ledtrig-default-on-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ledtrig-netdev",
+      "sha256": "751ac4a0c262d2fa49d092bb2c7397dfd0a27c383de7fcd83de71dc83d3a6f0f",
+      "asset": "kmod-ledtrig-netdev-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ledtrig-pattern",
+      "sha256": "2f92b33644d5345c3756a920ae9759220e22108564c13bae1282acf99f16422f",
+      "asset": "kmod-ledtrig-pattern-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ledtrig-timer",
+      "sha256": "fd9de1d753c15d10af52a097222eb49306dd51bd163c85c5acc5f32fba27e847",
+      "asset": "kmod-ledtrig-timer-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "lm75",
+      "sha256": "004f7e59c7946b2bf9edde406c750a285fab5f96a52b804b2e91ef7d77311ffd",
+      "asset": "kmod-lm75-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "mii",
+      "sha256": "d31d9ccc8d49b105f92327d1b9309c90a33549b370a0f1960e7332e9a8798ddf",
+      "asset": "kmod-mii-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack",
+      "sha256": "7d1e1dd4c8ac07735d83b354de24124afd443fc50a6d29598f062f63711520d8",
+      "asset": "kmod-nf-conntrack-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only",
+      "note": "Stock conntrack is busy on the live router. Candidate core has not been substituted or runtime validated."
+    },
+    {
+      "name": "nf_conntrack_amanda",
+      "sha256": "937cc11e29b9249277ee5d1f9c61bfa0e3b04d388bd8beb629a24afe9be718c5",
+      "asset": "kmod-nf-conntrack-amanda-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_broadcast",
+      "sha256": "cdf21c6eb1d1f855774242d3d651eef86fb1fc98c158c3b014d5a6a0a3535a56",
+      "asset": "kmod-nf-conntrack-broadcast-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_ftp",
+      "sha256": "95a296db4decb0efc234d8eea1ac3069929af90962879d25f274fa261d71e215",
+      "asset": "kmod-nf-conntrack-ftp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_h323",
+      "sha256": "cfc5dcb4dc7591a1e73f64c7143bc4d3d2000c78901e0c97ed6181acb5ac40a2",
+      "asset": "kmod-nf-conntrack-h323-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_ipv4",
+      "sha256": "a822d90f768c57b660fb9e826fa94363b3f35de5d3a4c234d5e64c38f838721d",
+      "asset": "kmod-nf-conntrack-ipv4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_ipv6",
+      "sha256": "e3eaae932ba058b37386da23ae10495b3ef3e3b7a53430a272cc256bc1b59d72",
+      "asset": "kmod-nf-conntrack-ipv6-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_irc",
+      "sha256": "ad22e3dfa3e6fba31628bd00498d383299e350e2994e278a168c4ef1bf81e460",
+      "asset": "kmod-nf-conntrack-irc-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_netlink",
+      "sha256": "ca6c0a119c102e4831b1568245466a7a539b1f9026ddce391ed9798cc5615061",
+      "asset": "kmod-nf-conntrack-netlink-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "nf_conntrack_pptp",
+      "sha256": "8250c107d02cc5998736e24dab6614205ebb9c8377939b5aff759e074cfe7e36",
+      "asset": "kmod-nf-conntrack-pptp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_proto_gre",
+      "sha256": "fb4948bc7e0d3de7853de2bc8f95aa2cc69a5506287601eac5937a84fb78c6a9",
+      "asset": "kmod-nf-conntrack-proto-gre-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_rtcache",
+      "sha256": "289ba5c8d6753a723797c9c5aa940ea779df8d21b325f080081137d47e741856",
+      "asset": "kmod-nf-conntrack-rtcache-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_sip",
+      "sha256": "e190aa2a8c458cfe5c1ec35e739d71bda5fb9956d2545b797ec246ae5d89deba",
+      "asset": "kmod-nf-conntrack-sip-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_snmp",
+      "sha256": "b101b89b485a15d0369f834668cbc6df3e823df7e7cb85ce253b510c95736258",
+      "asset": "kmod-nf-conntrack-snmp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_conntrack_tftp",
+      "sha256": "d8a2c6dc125f72ea628f839900b3c95c27a7356c0ed2e3a0186cdf802e5fb906",
+      "asset": "kmod-nf-conntrack-tftp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_defrag_ipv4",
+      "sha256": "0d1bebf8ecd7dbd4a4c071cf15c17687a0809f870e044efbae17d88b2c0c6519",
+      "asset": "kmod-nf-defrag-ipv4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_defrag_ipv6",
+      "sha256": "ae19c5b8ab0593e00c591b8669691423ad17303420a866d0f99daadc1cb8c8a1",
+      "asset": "kmod-nf-defrag-ipv6-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_log_common",
+      "sha256": "366fe533e362545a5bceecab6e1feca6c392cd6da4b80f33d9b90e287d7de80b",
+      "asset": "kmod-nf-log-common-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_log_ipv4",
+      "sha256": "cf072309400ce0d8dc2efee181ae206d8b658efbcc2fc31d86ad58b4384fb93c",
+      "asset": "kmod-nf-log-ipv4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "nf_log_ipv6",
+      "sha256": "e50072c6f5523a2bfdd3e45f8cfb1d4a36e37e758cedc03b25710a6bf32866cc",
+      "asset": "kmod-nf-log-ipv6-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "nf_nat",
+      "sha256": "8c0dede39f331b0abe8f248967939dba5bfcabc2aaa7cdfd3422b500fb3947ff",
+      "asset": "kmod-nf-nat-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_amanda",
+      "sha256": "b0d8f127bd0ee8bf160655a36a87aba5c362d3eafa2ace3175f673086ea60e42",
+      "asset": "kmod-nf-nat-amanda-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_ftp",
+      "sha256": "50cc361033e07e7deac76b611e921630b5776841de58627a4169e41d80fe5c01",
+      "asset": "kmod-nf-nat-ftp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_h323",
+      "sha256": "644c3e675ec6fc70b6b09416e5649c51775cf82f7fff71709cbb1d70bd3f9b93",
+      "asset": "kmod-nf-nat-h323-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_ipv4",
+      "sha256": "d8d513d4af819a07da35c77533145af382a97c2641be3c534574535e0c271ba8",
+      "asset": "kmod-nf-nat-ipv4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_irc",
+      "sha256": "247c90a4f7a38ee57aacb5c0c5fb24bfd72eaa5e16a50abffcb7f334089c31f5",
+      "asset": "kmod-nf-nat-irc-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_masquerade_ipv4",
+      "sha256": "e3b69862c2ba107b16df3ff922151b2748b220a72e8dd5af59d829502d2f77d8",
+      "asset": "kmod-nf-nat-masquerade-ipv4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_pptp",
+      "sha256": "f8baeb3a7c528d327e776fc9975af513aa2b8d6b27bc44f5373bb8113697a671",
+      "asset": "kmod-nf-nat-pptp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_proto_gre",
+      "sha256": "dfe63f10f96ccc511f1d61898e1e0c31aabb1252946af272e320a94261aba1b0",
+      "asset": "kmod-nf-nat-proto-gre-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_redirect",
+      "sha256": "4d1721303c0032f5185d0a0bfc44b8864864c3d2f5e9682b47084b8bd633c697",
+      "asset": "kmod-nf-nat-redirect-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_sip",
+      "sha256": "56a9dc3609fb85f66135dde157d192d5a97811650943a9af5e864fb2f85a5ea5",
+      "asset": "kmod-nf-nat-sip-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_snmp_basic",
+      "sha256": "556f820144a5e7c914f0aff3cfd3b2d33ebbded041c88a0897b6888349cdd16c",
+      "asset": "kmod-nf-nat-snmp-basic-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_nat_tftp",
+      "sha256": "0474875f3ff2e406648aeb19942ddaeb450ab09f7cc82550b8c482382a63b4e7",
+      "asset": "kmod-nf-nat-tftp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_reject_ipv4",
+      "sha256": "009e01ec5f05a6b5d02fcb6bb7936b0138077aee1755bb624302ff4f3efac2b8",
+      "asset": "kmod-nf-reject-ipv4-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nf_reject_ipv6",
+      "sha256": "4c29dcae537d5060883320c413ddd73b84c82e627919eb1ba4357761fc74324b",
+      "asset": "kmod-nf-reject-ipv6-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nfnetlink",
+      "sha256": "f253bc9edfdab5d9d62f6027533df845b43b53b8e9eecabc12c4e1a747cf4bab",
+      "asset": "kmod-nfnetlink-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nfnetlink_queue",
+      "sha256": "a4213a5923682381debf320a7df721869d5cdf10a09423a636415911f12ccf09",
+      "asset": "kmod-nfnetlink-queue-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "nls_utf8",
+      "sha256": "cdc9ecb3a713ce6a870d348bca06ad15b65fdb36bea03e0836c57519d34cc17f",
+      "asset": "kmod-nls-utf8-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "ohci-hcd",
+      "sha256": "aaaaf70d21229d01dcc2a5b2148034635fc896806e6fd204db09db04f197e97e",
+      "asset": "kmod-ohci-hcd-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ohci-pci",
+      "sha256": "96f0104ec354b017359a21e435d70bc2faa8cc078b822fb15dcd7845321961b2",
+      "asset": "kmod-ohci-pci-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ohci-platform",
+      "sha256": "d5f3c55e56c07129b8c111e7dfbe84848f3ac40a80b6698a6c0b36ce65f604d5",
+      "asset": "kmod-ohci-platform-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "option",
+      "sha256": "d148193a5ac57c4607d97d057738c28edca5d02502d26e795c478bdb04081e86",
+      "asset": "kmod-option-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "qcserial",
+      "sha256": "a9ef3676667ad822347c5cb6f4b42ff5557d21193ab1a6062dc19556038c4350",
+      "asset": "kmod-qcserial-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "qmi_wwan",
+      "sha256": "4de0ea6addbf4062c9a628bbafc9f79953f6465dd55d6ae02c3220ad0469f66b",
+      "asset": "kmod-qmi-wwan-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "sch_codel",
+      "sha256": "b62630e485bebbf9eeb3e1c4c18aa2e54e6a641fa81faaac8ecb65109ce29734",
+      "asset": "kmod-sch-codel-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "sch_fq",
+      "sha256": "b5317ab88e11d6313acf0de1abd0fba324d57698ec2bf3404f64270a08e871df",
+      "asset": "kmod-sch-fq-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "sch_gred",
+      "sha256": "fd2b9ff5dfed3c6d32dbbacd916e00f28c8799199378914e8dc77f19169fbe16",
+      "asset": "kmod-sch-gred-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "sch_hfsc",
+      "sha256": "7ca6e51a8bb4895bc4c85f7bf8343d31b99b55a38a99c9456ff97369253b5d30",
+      "asset": "kmod-sch-hfsc-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "sch_pie",
+      "sha256": "0afa00031c771583b57d0ec8851d8c488a8b19064208cda7ef57b524d87c832e",
+      "asset": "kmod-sch-pie-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "sch_red",
+      "sha256": "16c5f187736ab2cecf423c601e308d765c82dc642aac06329e55d3907d7cee97",
+      "asset": "kmod-sch-red-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "sch_teql",
+      "sha256": "098dfcfdd51f890a97da9bf0713df4a861ce1d128a7c0ec604db08c6679c6758",
+      "asset": "kmod-sch-teql-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "seqiv",
+      "sha256": "4a18f8fda964407e2856cb72d308171594f13df80bbbc98c082d488d4fd2f788",
+      "asset": "kmod-seqiv-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "sha256_generic",
+      "sha256": "1190bd374bd2e6cee869fb9cb1cd27a559035798747ffc71dd6b3bd5595f9431",
+      "asset": "kmod-sha256-generic-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "sha512_generic",
+      "sha256": "59c84a576c6cfb0e4f9cdc339e43035f17c9ee138744a1d08e6d74dcb74e6ece",
+      "asset": "kmod-sha512-generic-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "ts_bm",
+      "sha256": "bf4f185243ffc3861fac513ccfd6af68c3e0772e705cfb8812627c82ae0cae72",
+      "asset": "kmod-ts-bm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ts_fsm",
+      "sha256": "d6e8ab1306105880d2867924bd175436f0611a11c3684158de9e634cb0629acb",
+      "asset": "kmod-ts-fsm-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "ts_kmp",
+      "sha256": "59f4c18e5e5fdb4b92ebae8d2e0cb06e3315b5cfe0678828e3401636d2a42224",
+      "asset": "kmod-ts-kmp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "tun",
+      "sha256": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430",
+      "asset": "kmod-tun-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "previous-functional-validation",
+      "note": "Exact payload already validated and available in the tested manual feed; see build/vbnto-4.1.38/README.md."
+    },
+    {
+      "name": "udp_tunnel",
+      "sha256": "cc1db5c09457bc2b679ea17c1991a4ee65785b48e0fc429fed87bdfa2f102b4f",
+      "asset": "kmod-udp-tunnel-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "usb-storage",
+      "sha256": "8b7e2fd70a82165bb318e4442039f00ce82ab6a4bc11a40a09cafee3131545a8",
+      "asset": "kmod-usb-storage-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "usb_wwan",
+      "sha256": "2ffb2bc8935702157a2f5e14d12c0c64bbb5b6543effc5bb190a65a3604e9877",
+      "asset": "kmod-usb-wwan-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "usblp",
+      "sha256": "2aebadbe2d9ca86876d1a1991083408acc5f7f2c6d72148a94b66120b8aa27fd",
+      "asset": "kmod-usblp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "usbnet",
+      "sha256": "8beac700c823bc0e2a7f132f93c558569ff318f2dbe94f9bf5bf02b7675201f7",
+      "asset": "kmod-usbnet-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "usbserial",
+      "sha256": "51a23a39ea5222189601374a32327e462d86102db7d7d290de3b62c51be70465",
+      "asset": "kmod-usbserial-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "wireguard",
+      "sha256": "feb7ac9824f0615fe62a20ae4f1ff4385c0422d9f7892a20da6f4f4f64f97336",
+      "asset": "kmod-wireguard-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "previous-functional-validation",
+      "note": "Exact payload already validated and available in the tested manual feed; see build/vbnto-4.1.38/README.md."
+    },
+    {
+      "name": "xfrm4_mode_beet",
+      "sha256": "ff8d5d53a1dba9f864c38ef8b0ee50bc6f75caf415623dffb1777afabc5ad47c",
+      "asset": "kmod-xfrm4-mode-beet-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm4_mode_transport",
+      "sha256": "0d2a2d470ec3103adfcfacaa058e41216a89d8c7e275e6a7e4696b45cb1aa7ed",
+      "asset": "kmod-xfrm4-mode-transport-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm4_mode_tunnel",
+      "sha256": "b78777ced84f14e4b6cb9dfe33ab0cee863d1019f8b32843cc2da04a46b690e6",
+      "asset": "kmod-xfrm4-mode-tunnel-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm4_tunnel",
+      "sha256": "80a6b18ef5c7264ad4d3c75a98c2eeaccc50c8d8613cc3f3d0759e2f607cd407",
+      "asset": "kmod-xfrm4-tunnel-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm6_mode_beet",
+      "sha256": "84a59f41af11d73cbb379f2c10cb7f2d5e36c0ec17c79a228b3ef79b20927af6",
+      "asset": "kmod-xfrm6-mode-beet-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm6_mode_transport",
+      "sha256": "79bfda04d2011486ec6d8c495e5dadf1031f37f769d1048ffd26428ddbec467b",
+      "asset": "kmod-xfrm6-mode-transport-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm6_mode_tunnel",
+      "sha256": "cd44cc144be3a0ee0e319ac76181e1e45507a69702863665be6bf3b6bb32587a",
+      "asset": "kmod-xfrm6-mode-tunnel-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm6_tunnel",
+      "sha256": "0c64944cf5fe070a8f1c6a661cbe21f748f8b278ee6cd18de8c707aa95e73c89",
+      "asset": "kmod-xfrm6-tunnel-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm_algo",
+      "sha256": "b4c35de545d1f8b1ce58ee29a876f22d9e076f9d1e4960ee9c61dd74077896ab",
+      "asset": "kmod-xfrm-algo-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm_ipcomp",
+      "sha256": "3f124ee63cda82a37d9abc0c3acfc1cdb091fb89276b8af090a753297d4934a3",
+      "asset": "kmod-xfrm-ipcomp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xfrm_user",
+      "sha256": "3786d2e51d2b3f9f2145a899763fada7b56b58b9870e70dc84ef63e3284f8e2a",
+      "asset": "kmod-xfrm-user-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xhci-hcd",
+      "sha256": "05f1c780fb29235bc9d97fde7019beba9f91cacd294caf95fefdbc8a1234b33a",
+      "asset": "kmod-xhci-hcd-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xhci-pci",
+      "sha256": "61a4c8a578f25c89a294d9b3fe1758493989e2f57a4af9061fefeae564a44a16",
+      "asset": "kmod-xhci-pci-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xhci-plat-hcd",
+      "sha256": "c6b4d811317893605ea871dfc6a0d2cbc31b9a2c18c721295b6e467bb1c43c5b",
+      "asset": "kmod-xhci-plat-hcd-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_CLASSIFY",
+      "sha256": "22e9d81da6ee723b6eae264bc49f8a6e8d92de695a0f455da8d80cf835b73654",
+      "asset": "kmod-xt-classify-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_CT",
+      "sha256": "5e3087b5496a0b79c5a504caf6ad21be4e93e7e278ecc044db586bf91bb644a3",
+      "asset": "kmod-xt-ct-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_DSCP",
+      "sha256": "45871a60ae23d855c8dbbbcfa96dd763fa0b56edc89b75931ae6d3d586c1edd5",
+      "asset": "kmod-xt-dscp-target-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_HL",
+      "sha256": "a7223bd54dead947c329c269b9ebf49917e4990f61bf8151b31cedba052128ef",
+      "asset": "kmod-xt-hl-target-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_LOG",
+      "sha256": "6c84b91c31394961781867f74cb93a39059e7998978d568061d7d7df4c5c6673",
+      "asset": "kmod-xt-log-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_NETMAP",
+      "sha256": "a89e594d0f6e88e432d0db9e288c90fa276ab06a3a68e2364c9fd13792aefdeb",
+      "asset": "kmod-xt-netmap-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_NFQUEUE",
+      "sha256": "28d1a2c346cf23b03fe6939d48a0e2ae46edb8ca8214b3a9cd749f8b69ee538e",
+      "asset": "kmod-xt-nfqueue-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_REDIRECT",
+      "sha256": "7b7e568d4b5a8df869643631d643b2149fd0ff27cd09ec43e48cd2936554076b",
+      "asset": "kmod-xt-redirect-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_SKIPLOG",
+      "sha256": "20b65f9c417c95cd59bf9e3b569524562e52d6519dab0dc64b1b402b37b85c18",
+      "asset": "kmod-xt-skiplog-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_TCPMSS",
+      "sha256": "b061c7a9fb5fe3eb82404dcca47e44fe24adb66d6d50d64e82f3eaa93a8a4105",
+      "asset": "kmod-xt-tcpmss-target-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_TPROXY",
+      "sha256": "1936407caa83aa8d292a0c2f1ac7dc3478ac45ccb9ba55d242bf11da3cbf227d",
+      "asset": "kmod-xt-tproxy-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_TRACE",
+      "sha256": "041666c52ce2293f95d3685e0d7a28a0291fd6d5e0a804d8bc137b02fff96ddd",
+      "asset": "kmod-xt-trace-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_addrtype",
+      "sha256": "d3c329319c906f98457c89b8c04d586d6bf3fc0e8db5d6684d22b2f20ca518b7",
+      "asset": "kmod-xt-addrtype-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_bpf",
+      "sha256": "983d335c71fa5578bd631396616148218f141a374a9711c8260b3711707f6268",
+      "asset": "kmod-xt-bpf-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_comment",
+      "sha256": "50821d404413d2da01747ed9d21644f74f8aa197a68290f2eb3afa187f5e3e2d",
+      "asset": "kmod-xt-comment-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_connbytes",
+      "sha256": "22e5e108a2de0e389d9715777f36cbc2215e16c35eef0f630e028bcbc5f48350",
+      "asset": "kmod-xt-connbytes-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_connlimit",
+      "sha256": "7c691e0185021174d40868c6c9c04b14f0db3777eca530a2a2ee1de86d6a3e85",
+      "asset": "kmod-xt-connlimit-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_connmark",
+      "sha256": "79fe5bb140b7bb561a537aa4fe3e210cb64222cb45d56973a460dc674d776ece",
+      "asset": "kmod-xt-connmark-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_conntrack",
+      "sha256": "2e30db0184ddb9acff11d8ba773bf3516a06948b9481da2a6e762944b6b9345a",
+      "asset": "kmod-xt-conntrack-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_dscp",
+      "sha256": "cde41396bb2c0e371ffc48e929d3bccc774857de55faf93f7b52edcfb0a52e03",
+      "asset": "kmod-xt-dscp-match-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_ecn",
+      "sha256": "bebf004a1c0b4f36ae991008226472a48a6a8d9583a186c24c0b77073e354b8e",
+      "asset": "kmod-xt-ecn-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_esp",
+      "sha256": "85466911d62945c9600f38453b9d85f551ebfb3bb98754f3907013eaa25ac04a",
+      "asset": "kmod-xt-esp-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_hashlimit",
+      "sha256": "32bf3b2159fb84523f7484f7de7a2c1b99100e19959305408ae145df816bee87",
+      "asset": "kmod-xt-hashlimit-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_helper",
+      "sha256": "a8f342c5ee288fd5ade2c42bec1d3b157013e5213149b018ff00072bf94f7324",
+      "asset": "kmod-xt-helper-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_hl",
+      "sha256": "5c8e220704766fdda01784bf0f341072fb63e5e7864102a016db4840ac10dc8a",
+      "asset": "kmod-xt-hl-match-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_iprange",
+      "sha256": "e76ca0b86d601a7a3333d18b38baf426831217774a06a4f836d6b6318199419e",
+      "asset": "kmod-xt-iprange-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_length",
+      "sha256": "0d933a265fa1591ce7de701813ecff85d431a900a6124968f8454987f587daaa",
+      "asset": "kmod-xt-length-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_limit",
+      "sha256": "8bbf6da6df6389a45b05abc63cf818ef7017b72c1ee64d4c6a9de73853aeada7",
+      "asset": "kmod-xt-limit-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_mac",
+      "sha256": "29348cfd0566fd05fda2c29ab6322f4f3888ad598391267f902e6f389cc7b3a1",
+      "asset": "kmod-xt-mac-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "c0db9ffe-ef96-43ad-955d-84438ac3043c"
+    },
+    {
+      "name": "xt_mark",
+      "sha256": "c61da93fcccb55343a637a170d7fc83682f4a4164dcc2b2859d1a9672865c376",
+      "asset": "kmod-xt-mark-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_multiport",
+      "sha256": "0cf2d68f27625df1d381a749354cb190a7ca11a7c09f3d6a476b33a3e2fe138a",
+      "asset": "kmod-xt-multiport-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_nat",
+      "sha256": "340112b7526852684bf03b922da156c524ac436a663b101c0eaff23892563120",
+      "asset": null,
+      "status": "blocked",
+      "level": "crash-during-test-start",
+      "note": "Previous session emitted BEGIN xt_nat, then a kernel NULL dereference and reboot before a result. Root cause is unresolved; do not load this candidate."
+    },
+    {
+      "name": "xt_owner",
+      "sha256": "88c7e088f75b7ba2c2750ae559b3d3e28b44db5ffef167c93f9b63330d7f276c",
+      "asset": "kmod-xt-owner-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_physdev",
+      "sha256": "32bccfa0ea647da7c1c1541a36871817e6b46d8af609647a20f63117951b8abb",
+      "asset": "kmod-xt-physdev-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_pkttype",
+      "sha256": "b3e2644a1e89e669f0a1295b76d945c72c9d8cafc91928af6ddbf8c10fc24d66",
+      "asset": "kmod-xt-pkttype-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_policy",
+      "sha256": "391aea38fd8a9a4122b01214b578c36e05af816d7d7ae8af301788911461aff0",
+      "asset": "kmod-xt-policy-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_quota",
+      "sha256": "443da2b4fc4f10c55dbaa853699c48c13c34d62b9a7e3530a6a3d7d8ce5115da",
+      "asset": "kmod-xt-quota-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_recent",
+      "sha256": "224f169ff9fb96e533938909a5394ef80ff1932c1de4c7d666a1f7a76cf43979",
+      "asset": "kmod-xt-recent-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_set",
+      "sha256": "3193eb7ab945201d7b36c82bf2503aad955e42ba6ea3608b8daafc0cb6fd3166",
+      "asset": "kmod-xt-set-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "not_tested",
+      "level": "build-only"
+    },
+    {
+      "name": "xt_socket",
+      "sha256": "1761157d2c6527b730df6e6cbf6f1f836b5ff66b849a507cd9a9d2ec9c1b5382",
+      "asset": "kmod-xt-socket-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-namespace",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_state",
+      "sha256": "e30bb49969c97c7fdca3ef7815f8ba655df002297e03640061f7728b85e88ce3",
+      "asset": "kmod-xt-state-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_statistic",
+      "sha256": "3acf08054e530940670e7b3770bec2066f144bd70d6cf26e74d38860f1a976c1",
+      "asset": "kmod-xt-statistic-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_string",
+      "sha256": "a9abefa039b9d3d9c31ae899430bbfab43306305b02baf4fc9f57006b6c06fe6",
+      "asset": "kmod-xt-string-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_tcpmss",
+      "sha256": "4c9cc3e5baa3ad5a849997c592d8494ff2f80585f055e9b5332a1c59a899a458",
+      "asset": "kmod-xt-tcpmss-match-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    },
+    {
+      "name": "xt_time",
+      "sha256": "7a8413d79685849ed1223be188f2f0f09810e2ba2872da2f62002ff7ed98baec",
+      "asset": "kmod-xt-time-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk",
+      "status": "passed",
+      "level": "load-unload-functional",
+      "load_exit": 0,
+      "functional_exit": 0,
+      "restore_exit": 0,
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3"
+    }
+  ]
+}

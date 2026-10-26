@@ -30,3 +30,26 @@ the expanded build checks its bytes before producing its tested manual IPK.
 Dispatching `expanded` with `publish_candidates=true` also uploads the staged
 IPKs, raw modules and build diagnostics to a separate public prerelease. It
 does not add unvalidated candidates to the normal OPKG feed.
+
+Per-payload results are in [validation/results.json](validation/results.json)
+and the [public validation page](https://francyesco.github.io/GUI_ipk/validation/4.1.38/).
+Functional tests and load/unload/namespace smoke tests are separate levels.
+They apply to the exact SHA-256 payloads and firmware ABI recorded there.
+Stock busy conntrack core is not replaced on the live router.
+
+`xt_nat` payload `340112b7526852684bf03b922da156c524ac436a663b101c0eaff23892563120`
+is quarantined: a previous session emitted its test-start record, then a kernel
+NULL dereference and reboot before a result. The cause is unresolved. Its IPK
+is withheld and the probe refuses to test it. Raw diagnostic archives can still
+contain this module.
+
+The helpers in `validation/` are temporary, manual tools. The probe verifies the
+payload hash, checks module references, records existing parameters and restores
+original modules. It stops on restore failures or new kernel warning taints.
+The functional tests use disposable namespaces. `BUILD_VALIDATION_KAT=1` builds
+a crypto/compression/NLS known-answer helper; never install it or load it at boot.
+Retain an external kernel log while probing.
+
+Netfilter target/match pairs such as `xt_DSCP`/`xt_dscp` have distinct `-target`
+and `-match` candidate package names. When repackaging on a case-insensitive host,
+use `--module-archive` to read exact-case paths directly from the original tar.

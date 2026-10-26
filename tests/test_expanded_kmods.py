@@ -6,6 +6,7 @@ import subprocess
 import tarfile
 import tempfile
 import unittest
+import importlib.util
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'scripts/package-expanded-kmods.py'
@@ -51,6 +52,57 @@ class ExpandedModulePackages(unittest.TestCase):
     def test_conflicting_module_names_are_rejected(self):
         other = dict(self.module, sha256='0' * 64)
         self.assertNotEqual(self.package([self.module, other]).returncode, 0)
+
+    def test_quarantined_payload_is_not_distributed(self):
+        spec = importlib.util.spec_from_file_location('packager', SCRIPT)
+        packager = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(packager)
+        packager.QUARANTINED[self.module['sha256']] = 'test quarantine'
+        (self.root / 'modules.json').write_text(json.dumps(dict(modules=[self.module])))
+        import sys
+        from unittest.mock import patch
+        with patch.object(sys, 'argv', [str(SCRIPT), str(self.root)]):
+            packager.main()
+        self.assertEqual(list((self.root / 'ipks').glob('*.ipk')), [])
+        self.assertIn('test quarantine', (self.root / 'ipks/QUARANTINED.txt').read_text())
+
+    def test_netfilter_target_and_match_keep_distinct_package_names(self):
+        modules = []
+        for name, payload_file, payload in [('xt_DSCP', 'target.ko', b'target'),
+                                            ('xt_dscp', 'match.ko', b'match')]:
+            (self.root / 'modules' / payload_file).write_bytes(payload)
+            modules.append(dict(name=name, path='modules/' + payload_file,
+                                sha256=hashlib.sha256(payload).hexdigest()))
+        result = self.package(modules)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        names = {path.name for path in (self.root / 'ipks').glob('*.ipk')}
+        self.assertEqual(names, {
+            'kmod-xt-dscp-target-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk',
+            'kmod-xt-dscp-match-4.1.38-candidate_4.1.38-1_arm_cortex-a9.ipk'})
+        checksums = (self.root / 'ipks/SHA256SUMS').read_text().splitlines()
+        self.assertEqual(len(checksums), len(names))
+
+    def test_archive_preserves_case_sensitive_payloads(self):
+        modules = []
+        source = self.root / 'original.tar.gz'
+        with tarfile.open(source, 'w:gz') as archive:
+            for name in ('xt_DSCP', 'xt_dscp'):
+                payload = name.encode()
+                path = 'modules/' + name + '.ko'
+                member = tarfile.TarInfo(path)
+                member.size = len(payload)
+                archive.addfile(member, io.BytesIO(payload))
+                modules.append(dict(name=name, path=path,
+                                    sha256=hashlib.sha256(payload).hexdigest()))
+        (self.root / 'modules.json').write_text(json.dumps(dict(modules=modules)))
+        subprocess.run(['python3', str(SCRIPT), str(self.root), '--module-archive', str(source)],
+                       check=True, capture_output=True)
+        payloads = set()
+        for ipk in (self.root / 'ipks').glob('*.ipk'):
+            with tarfile.open(ipk, 'r:gz') as outer:
+                with tarfile.open(fileobj=io.BytesIO(outer.extractfile('./data.tar.gz').read()), mode='r:gz') as data:
+                    payloads.add(data.extractfile(data.getmembers()[0]).read())
+        self.assertEqual(payloads, {b'xt_DSCP', b'xt_dscp'})
 
 
 if __name__ == '__main__':
