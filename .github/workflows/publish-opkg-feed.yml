@@ -14,10 +14,12 @@ on:
       - "artifacts/openvpn-2.6.23/**"
       - "scripts/overlay-openvpn-feed.py"
       - "tests/test_openvpn_feed.py"
+      - "scripts/select-userspace-feed-run.py"
+      - "tests/test_userspace_feed_selection.py"
   workflow_dispatch:
     inputs:
       reuse_userspace_run_id:
-        description: "Optional userspace run whose assembled feed should be preserved"
+        description: "Optional complete userspace run; defaults to the latest successful available feed"
         required: false
         type: string
   workflow_run:
@@ -53,6 +55,8 @@ on:
       - "scripts/verify-kmod-spu.py"
       - "artifacts/openvpn-2.6.23/**"
       - "scripts/overlay-openvpn-feed.py"
+      - "scripts/select-userspace-feed-run.py"
+      - "tests/test_userspace_feed_selection.py"
 
 concurrency:
   group: github-pages
@@ -65,27 +69,34 @@ permissions:
 jobs:
   verify:
     name: Verify versioned OPKG feeds
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
 
-      - name: Download completed userspace feed
-        if: github.event_name == 'workflow_run' || inputs.reuse_userspace_run_id != ''
+      - name: Select complete userspace baseline
+        id: userspace
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_RUN_ID: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.id || inputs.reuse_userspace_run_id }}
+        run: |
+          python3 -m unittest discover -s tests -p test_userspace_feed_selection.py
+          run_args=()
+          if [[ -n "$REQUESTED_RUN_ID" ]]; then
+            run_args+=(--run-id "$REQUESTED_RUN_ID")
+          fi
+          run_id="$(python3 scripts/select-userspace-feed-run.py "$GITHUB_REPOSITORY" "${run_args[@]}")"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          echo "Preserving complete userspace feed from run $run_id" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Download complete userspace baseline
         uses: actions/download-artifact@v7
         with:
           github-token: ${{ github.token }}
-          run-id: ${{ github.event.workflow_run.id || inputs.reuse_userspace_run_id }}
+          run-id: ${{ steps.userspace.outputs.run_id }}
           pattern: userspace-opkg-feed-*
           merge-multiple: true
           path: dist/
-
-      - name: Assemble userspace-only feed
-        if: github.event_name != 'workflow_run' && inputs.reuse_userspace_run_id == ''
-        run: |
-          mkdir -p dist/target
-          cp -a base luci packages routing telephony dist/
-          cp -a target/packages dist/target/
-          touch dist/.nojekyll
 
       - name: Apply verified OpenVPN update
         run: |

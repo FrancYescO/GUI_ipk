@@ -51,7 +51,12 @@ Every run verifies the input archives by SHA-256, builds in Ubuntu 18.04 for
 compatibility with the legacy toolchain, validates the generated package
 indexes, and uploads the feed as a workflow artifact. A manual full build also
 publishes the result to GitHub Pages by default; clear `publish_pages` to keep
-that run artifact-only.
+the build as artifacts only.
+
+Kernel and package-overlay publications preserve the latest successful complete
+userspace feed artifact. If no valid complete artifact is available, publication
+stops and keeps the live site intact. The `reuse_userspace_run_id` input can
+select a specific successful baseline.
 
 Pull requests and pushes that change the build infrastructure run the full
 userspace build. It can take several hours.
