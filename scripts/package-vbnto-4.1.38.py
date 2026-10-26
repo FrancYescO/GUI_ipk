@@ -29,7 +29,10 @@ def archive(files):
                 member.uname = member.gname = "root"
                 member.mtime = 0
                 tar.addfile(member, io.BytesIO(data))
-    return raw.getvalue()
+    # zlib may write a host-specific OS byte; normalize the gzip header.
+    result = bytearray(raw.getvalue())
+    result[9] = 255
+    return bytes(result)
 
 
 def main():

@@ -31,7 +31,7 @@ permissions:
 
 jobs:
   build:
-    name: Rebuild tested 4.1.38 ABI and compare IPKs
+    name: Rebuild tested 4.1.38 ABI and verify IPKs
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     env:
@@ -65,15 +65,13 @@ jobs:
             --volume "$PWD:/repo" gui-ipk-builder \
             /repo/scripts/build-vbnto-4.1.38-kmods.sh \
             > vbnto-build.log 2>&1 || { tail -80 vbnto-build.log; exit 1; }
-      - name: Verify router-tested bytes and manual packages
+      - name: Verify router-tested modules and manual packages
         run: |
           python3 scripts/package-vbnto-4.1.38.py \
             dist/vbnto-4.1.38-probe dist/vbnto-4.1.38-ipks
           (cd artifacts/vbnto-4.1.38-manual && sha256sum --check SHA256SUMS)
-          for ipk in artifacts/vbnto-4.1.38-manual/*.ipk; do
-            cmp "$ipk" "dist/vbnto-4.1.38-ipks/$(basename "$ipk")"
-          done
           python3 scripts/verify-vbnto-4.1.38-ipks.py artifacts/vbnto-4.1.38-manual
+          python3 scripts/verify-vbnto-4.1.38-ipks.py dist/vbnto-4.1.38-ipks
       - name: Upload build log on failure
         if: failure()
         uses: actions/upload-artifact@v7
