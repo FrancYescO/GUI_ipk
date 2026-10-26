@@ -12,7 +12,7 @@ It rebuilt SPU, the test module and ABI canary remotely using the preserved
 kernel compiler seed, verified the module vermagic, checked all checksums
 and validated the manual-only IPK contents.
 
-Package: `kmod-bcmspu-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk`
+Package: `kmod-bcmspu-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk`
 
 SHA-256: `a082030e1d2f93cb17bb9f61eb7b550895d38bdc2087560d6ae677a7b7796cda`
 

@@ -1,5 +1,7 @@
 # Damson 4.1.52 RNDIS compatibility modules
 
+Package names omit `damson-`. Only package metadata and filenames were renamed; the module payloads are unchanged. Each new package replaces and conflicts with its former package name.
+
 This manual-only artifact set adds recognition of USB miscellaneous-class
 RNDIS (`ef/04/01`) to `rndis_host` and the CDC descriptor parser. The CDC module
 also omits Zyxel-specific LED callbacks that Damson does not export. The native

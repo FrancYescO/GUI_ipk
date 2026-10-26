@@ -1,4 +1,4 @@
 0b743d61ae454e20d2a9a9a3099c9be5f85c7e495773aad4d1d137ab9ac42cd7  ./bcmspu.ko
 766e2f17ee4c1379187594ff3f38254cf56a6d1ec8ad8b9edf896c12a9c3fd91  ./damson_spu_test.ko
 73b176e4698b811e2c6cf585aac01efaf6269ce25b9d300495d485506f2fb2bb  ./vbntj_abi_canary.ko
-a082030e1d2f93cb17bb9f61eb7b550895d38bdc2087560d6ae677a7b7796cda  ./kmod-bcmspu-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
+449c02648d95795f4afdabb29fa2b918c833a2e4892848da651c3b4c5ee3c2ce  ./kmod-bcmspu-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk

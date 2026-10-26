@@ -337,11 +337,12 @@ fi
 
 build_manual_ipk() {
   local module="$1"
-  local module_stem package_name package_version package_arch package_file
+  local module_stem package_name package_version package_arch package_file legacy_package_name
   local package_root control_root data_root
 
   module_stem="$(basename "$module" .ko)"
-  package_name="kmod-$(printf '%s' "${module_stem//_/-}" | tr '[:upper:]' '[:lower:]')-damson-4.1.52-manual"
+  package_name="kmod-$(printf '%s' "${module_stem//_/-}" | tr '[:upper:]' '[:lower:]')-4.1.52-manual"
+  legacy_package_name="${package_name/-4.1.52-manual/-damson-4.1.52-manual}"
   package_version="4.1.52-1"
   package_arch="brcm963xx"
   if [[ "$module_stem" == bcmspu ]]; then
@@ -367,6 +368,8 @@ X-Damson-Firmware: 19.4.0866-3401052
 X-Damson-Target: VBNTJ_502L07p1
 X-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7
 X-Manual-Install-Only: yes
+Conflicts: $legacy_package_name
+Replaces: $legacy_package_name
 EOF
 
   (

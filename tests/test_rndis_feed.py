@@ -71,7 +71,7 @@ class RndisFeedTests(unittest.TestCase):
         for changes in (
             {"X-Damson-Target": "another-board"},
             {"X-Damson-Firmware": "another-firmware"},
-            {"Package": "kmod-untested-damson-4.1.52-manual"},
+            {"Package": "kmod-untested-4.1.52-manual"},
         ):
             with self.subTest(changes=changes):
                 fields = dict(original, **changes)

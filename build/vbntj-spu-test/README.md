@@ -9,7 +9,7 @@ Run `build-vbntj-kmods.yml` with `module_set=spu-probe`. This profile can use
 the [checksum-pinned kernel compiler seed](../vbntj/KERNEL-TOOLCHAIN.md); it
 rebuilds SPU and its tests on Actions, without rebuilding a userspace libc. Its output includes
 `bcmspu.ko`, `damson_spu_test.ko`, the ABI canary, undefined-symbol lists,
-checksums and a manual-only `kmod-bcmspu-damson-4.1.52-manual` IPK. The IPK
+checksums and a manual-only `kmod-bcmspu-4.1.52-manual` IPK. The IPK
 uses `Architecture: arm_cortex-a9`, accepted by OPKG on the tested router;
 the GPL target name `brcm963xx` is not an enabled OPKG architecture there. It
 has no installation scripts or boot autoload file and is excluded from the

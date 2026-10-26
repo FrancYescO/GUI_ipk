@@ -38,9 +38,9 @@ def write_feed(version, ipks, feed_root):
             and fields.get("Package", "").startswith("kmod-")
             and (fields.get("Architecture") == "brcm963xx" or (
                 fields.get("Package") in {
-                    "kmod-bcmspu-damson-4.1.52-manual",
-                    "kmod-cdc-ether-damson-4.1.52-manual",
-                    "kmod-rndis-host-damson-4.1.52-manual",
+                    "kmod-bcmspu-4.1.52-manual",
+                    "kmod-cdc-ether-4.1.52-manual",
+                    "kmod-rndis-host-4.1.52-manual",
                 }
                 and fields.get("Architecture") == "arm_cortex-a9"
                 and fields.get("X-Damson-Target") == "VBNTJ_502L07p1"
@@ -137,8 +137,8 @@ def main():
                         str(args.damson_rndis_dir)], check=True)
         rndis_ipks = list(args.damson_rndis_dir.glob("*.ipk"))
         expected = {
-            "kmod-cdc-ether-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
-            "kmod-rndis-host-damson-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
+            "kmod-cdc-ether-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
+            "kmod-rndis-host-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
         }
         if {ipk.name for ipk in rndis_ipks} != expected:
             raise ValueError("Expected exactly the router-tested CDC Ethernet/RNDIS package pair")

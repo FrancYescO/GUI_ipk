@@ -85,3 +85,7 @@ grep -Fq '4.1.38 SMP preempt mod_unload ARMv7' "$probe_dir/tun.modinfo.txt"
   fi
 )
 echo "Built router-configured TUN probe in $probe_dir"
+if [[ "${MODULE_SET:-tested}" == expanded ]]; then
+  "$repo_root/scripts/build-vbnto-4.1.38-expanded.sh" \
+    "$kernel_dir" "$cross" "$output_dir/vbnto-4.1.38-expanded"
+fi

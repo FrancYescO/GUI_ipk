@@ -37,7 +37,7 @@ vermagic="$(strings "$module" | sed -n 's/^vermagic=//p' | head -n 1 | sed 's/[[
 }
 dependencies="$(strings "$module" | sed -n 's/^depends=//p' | head -n 1)"
 if [[ -z "$dependencies" && "$kernel_version" == 4.1.52 &&
-      "$(basename "$package_path")" == kmod-wireguard-damson-4.1.52-manual_* ]]; then
+      "$(basename "$package_path")" == kmod-wireguard-4.1.52-manual_* ]]; then
   # The standalone Damson build does not have a full kernel Module.symvers.
   # Its manual-only package requires the stock UDP modules to be loaded first.
   # Accept this case only after validating the package guards and actual

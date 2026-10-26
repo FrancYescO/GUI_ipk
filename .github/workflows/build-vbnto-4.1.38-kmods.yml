@@ -1,7 +1,13 @@
-name: DGA4131FWB 4.1.38 TUN and SPU
+name: Linux 4.1.38 stock ABI kernel modules
 
 on:
   workflow_dispatch:
+    inputs:
+      module_set:
+        description: "Tested modules or all available firmware modules plus WireGuard"
+        type: choice
+        default: tested
+        options: [tested, expanded]
   pull_request:
     paths:
       - .github/workflows/build-vbnto-4.1.38-kmods.yml
@@ -10,6 +16,10 @@ on:
       - patches/vbntj-spu/**
       - patches/vbnts-spu/**
       - scripts/build-vbnto-4.1.38-kmods.sh
+      - scripts/build-vbnto-4.1.38-expanded.sh
+      - scripts/report-expanded-kmods.py
+      - scripts/package-expanded-kmods.py
+      - tests/test_expanded_kmods.py
       - scripts/build-damson-spu.sh
       - scripts/build-packages.sh
       - scripts/package-vbnto-4.1.38.py
@@ -17,11 +27,14 @@ on:
       - artifacts/vbnto-4.1.38-manual/**
   push:
     branches:
-      - kmods-4.1.38-vbnto
+      - main
     paths:
       - .github/workflows/build-vbnto-4.1.38-kmods.yml
       - build/vbnto-4.1.38/**
       - scripts/build-vbnto-4.1.38-kmods.sh
+      - scripts/build-vbnto-4.1.38-expanded.sh
+      - scripts/report-expanded-kmods.py
+      - scripts/package-expanded-kmods.py
       - scripts/package-vbnto-4.1.38.py
       - scripts/verify-vbnto-4.1.38-ipks.py
       - artifacts/vbnto-4.1.38-manual/**
@@ -31,12 +44,13 @@ permissions:
 
 jobs:
   build:
-    name: Rebuild tested 4.1.38 ABI and verify IPKs
+    name: Build 4.1.38 ${{ inputs.module_set || 'tested' }} modules
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     env:
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
+      MODULE_SET: ${{ inputs.module_set || 'tested' }}
     steps:
       - uses: actions/checkout@v7
       - name: Restore pinned source archives
@@ -60,11 +74,19 @@ jobs:
             --user "$(id -u):$(id -g)" \
             --entrypoint /bin/bash --workdir /build \
             --env HOME=/tmp --env JOBS=2 --env BUILD_SPU=1 \
+            --env MODULE_SET \
             --env WORK_DIR=/build/openwrt \
             --volume "$RUNNER_TEMP/vbnto-build:/build" \
             --volume "$PWD:/repo" gui-ipk-builder \
             /repo/scripts/build-vbnto-4.1.38-kmods.sh \
             > vbnto-build.log 2>&1 || { tail -80 vbnto-build.log; exit 1; }
+      - name: Package expanded modules outside the boot module path
+        if: always() && inputs.module_set == 'expanded'
+        run: |
+          python3 -m unittest discover -s tests -p test_expanded_kmods.py
+          if [[ -f dist/vbnto-4.1.38-expanded/modules.json ]]; then
+            python3 scripts/package-expanded-kmods.py dist/vbnto-4.1.38-expanded
+          fi
       - name: Verify router-tested modules and manual packages
         run: |
           python3 scripts/package-vbnto-4.1.38.py \
@@ -81,11 +103,12 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
       - name: Upload tested kernel modules and IPKs
-        if: success()
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: vbnto-4.1.38-kmods-${{ github.sha }}
           path: |
             dist/vbnto-4.1.38-probe/
             dist/vbnto-4.1.38-ipks/
+            dist/vbnto-4.1.38-expanded/
           retention-days: 30

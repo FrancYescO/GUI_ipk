@@ -20,9 +20,9 @@ while IFS= read -r -d '' ipk; do
   ipk_count=$((ipk_count + 1))
   filename="$(basename "$ipk")"
   package_arch=brcm963xx
-  if [[ "$filename" =~ ^kmod-(bcmspu|cdc-ether|rndis-host)-damson-4\.1\.52-manual_4\.1\.52-1_arm_cortex-a9\.ipk$ ]]; then
+  if [[ "$filename" =~ ^kmod-(bcmspu|cdc-ether|rndis-host)-4\.1\.52-manual_4\.1\.52-1_arm_cortex-a9\.ipk$ ]]; then
     package_arch=arm_cortex-a9
-  elif [[ ! "$filename" =~ ^kmod-[a-z0-9.-]+-damson-4\.1\.52-manual_4\.1\.52-1_brcm963xx\.ipk$ ]]; then
+  elif [[ ! "$filename" =~ ^kmod-[a-z0-9.-]+-4\.1\.52-manual_4\.1\.52-1_brcm963xx\.ipk$ ]]; then
     echo "Unexpected manual IPK filename: $filename" >&2
     exit 1
   fi
@@ -43,7 +43,12 @@ while IFS= read -r -d '' ipk; do
   fi
 
   control="$(tar -xOzf "$ipk" ./control.tar.gz | tar -xOzf - ./control)"
+  package_name="${filename%%_*}"
+  legacy_package_name="${package_name/-4.1.52-manual/-damson-4.1.52-manual}"
   for required in \
+    "Package: $package_name" \
+    "Conflicts: $legacy_package_name" \
+    "Replaces: $legacy_package_name" \
     "Architecture: $package_arch" \
     'X-Damson-Firmware: 19.4.0866-3401052' \
     'X-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7' \
