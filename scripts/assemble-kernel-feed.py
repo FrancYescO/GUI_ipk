@@ -60,13 +60,26 @@ def write_feed(version, ipks, feed_root):
             and fields.get("Package", "").startswith("kmod-")
             and fields.get("Architecture") == "arm_cortex-a9_neon"
         )
+        vbnto_module = (
+            version == "4.1.38-vbnto"
+            and fields.get("Package") in {
+                "kmod-tun-vbnto-4.1.38-manual",
+                "kmod-bcmspu-vbnto-4.1.38-manual",
+            }
+            and fields.get("Architecture") == "arm_cortex-a9"
+            and fields.get("Depends") ==
+                "kernel (= 4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)"
+            and fields.get("X-Firmware") == "18.3.n.0439"
+            and fields.get("X-Manual-Install-Only") == "yes"
+            and fields.get("X-Kernel-Vermagic", "").startswith("4.1.38 ")
+        )
         wireguard_backport_version = (
             buildroot_module
             and fields.get("Package") == "kmod-wireguard"
             and fields.get("Version") == "4.1.38+1.0.20220627-1"
         )
-        if not ((manual_module or virtual_kernel or buildroot_module)
-                and (fields.get("Version", "").startswith(version + "-")
+        if not ((manual_module or virtual_kernel or buildroot_module or vbnto_module)
+                and (fields.get("Version", "").startswith(version.split("-vbnto")[0] + "-")
                      or wireguard_backport_version)):
             raise ValueError(f"Unexpected kernel package metadata: {ipk}")
         if virtual_kernel:
@@ -101,6 +114,7 @@ def main():
     parser.add_argument("feed_root", type=Path)
     parser.add_argument("--legacy-kernel-dir", type=Path, help="directory with the 4.1.38 virtual kernel IPK")
     parser.add_argument("--buildroot-kernel-dir", type=Path, help="directory with verified 4.1.38 kernel and kmod IPKs")
+    parser.add_argument("--vbnto-kernel-dir", type=Path, help="router-tested DGA4131FWB 4.1.38 IPKs")
     parser.add_argument("--damson-extra-dir", type=Path, help="directory with additional verified manual-only Damson IPKs")
     parser.add_argument("--damson-spu-dir", type=Path, help="directory with the verified manual-only SPU IPK")
     parser.add_argument("--damson-rndis-dir", type=Path, help="directory with the router-tested CDC Ethernet/RNDIS pair")
@@ -150,6 +164,10 @@ def main():
         if len(candidates) != 1:
             raise ValueError(f"Expected one 4.1.38 kernel IPK, found {len(candidates)}")
         write_feed("4.1.38", candidates, args.feed_root)
+    if args.vbnto_kernel_dir:
+        subprocess.run(["python3", str(Path(__file__).resolve().with_name(
+            "verify-vbnto-4.1.38-ipks.py")), str(args.vbnto_kernel_dir)], check=True)
+        write_feed("4.1.38-vbnto", list(args.vbnto_kernel_dir.glob("*.ipk")), args.feed_root)
 
 
 if __name__ == "__main__":

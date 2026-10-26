@@ -9,7 +9,10 @@ test -f "$sdk/bcmdrivers/opensource/char/spudd/impl3/spu.c"
 grep -qx 'CONFIG_BCM_SPU_IMPL=3' "$kernel/.config"
 mkdir -p "$module_dir"
 cp "$sdk/bcmdrivers/opensource/char/spudd/impl3/"*.[ch] "$module_dir/"
-for spu_patch in "$repo_root"/patches/vbntj-spu/*.patch; do
+for spu_patch in \
+  "$repo_root/patches/vbntj-spu/001-authsize-software-fallback.patch" \
+  "${SPU_OFFLOAD_PATCH:-$repo_root/patches/vbntj-spu/002-opt-in-esp-flow-offload.patch}" \
+  "$repo_root/patches/vbntj-spu/003-idempotent-ipsec-object-destroy.patch"; do
   patch --batch --forward -d "$module_dir" -p1 < "$spu_patch"
 done
 cat > "$module_dir/Makefile" <<'EOF'
