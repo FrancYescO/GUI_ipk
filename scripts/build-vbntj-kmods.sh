@@ -205,6 +205,8 @@ fi
 
 patch --batch --forward --directory "$kernel_dir" -p1 \
   < "$repo_root/patches/vbntj-4.1.52/001-damson-network-abi.patch"
+patch --batch --forward --directory "$kernel_dir" -p1 \
+  < "$repo_root/patches/vbntj-4.1.52/002-damson-qos-nat-abi.patch"
 
 cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
 "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
@@ -343,12 +345,19 @@ build_manual_ipk() {
   module_stem="$(basename "$module" .ko)"
   package_name="kmod-$(printf '%s' "${module_stem//_/-}" | tr '[:upper:]' '[:lower:]')-4.1.52-manual"
   legacy_package_name="${package_name/-4.1.52-manual/-damson-4.1.52-manual}"
+  if [[ "$module_stem" == xt_nat ]]; then
+    rm -f "$output_dir/${package_name}"_*.ipk
+    echo "Withheld xt_nat IPK: stock-module removal rebooted before candidate validation"
+    return 0
+  fi
   package_version="4.1.52-1"
+
   package_arch="brcm963xx"
   if [[ "$module_stem" == bcmspu ]]; then
     package_arch="arm_cortex-a9"
   fi
   package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"
+  rm -f "$output_dir/${package_name}"_*.ipk
   package_root="$output_dir/.ipk-build/$package_name"
   control_root="$package_root/control"
   data_root="$package_root/data"
@@ -409,7 +418,8 @@ compiler=OpenWrt GCC $compiler_version
 module_set=$module_set
 wireguard_compat=$([[ "$build_wireguard" -eq 1 ]] && echo 1.0.20220627 || echo none)
 abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
+qos_nat_abi_patch=patches/vbntj-4.1.52/002-damson-qos-nat-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
 EOF
 
-echo "Built validated Damson modules and manual-only IPKs in $output_dir"
+echo "Built ABI-checked Damson modules and manual-only IPKs in $output_dir"

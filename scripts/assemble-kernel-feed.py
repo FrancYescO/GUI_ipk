@@ -4,8 +4,11 @@
 import argparse
 import gzip
 import hashlib
+import io
+import json
 import shutil
 import subprocess
+import tarfile
 from pathlib import Path
 
 
@@ -28,8 +31,29 @@ def write_feed(version, ipks, feed_root):
     destination.mkdir(parents=True, exist_ok=True)
     entries = []
     package_names = set()
+    records = {}
+    if version == "4.1.52":
+        source = Path(__file__).resolve().parents[1] / "build/vbntj/validation/results.json"
+        records = {row["package"]: row for row in json.loads(source.read_text())["modules"]}
     for ipk in sorted(ipks):
         fields = control_fields(ipk)
+        if version == "4.1.52":
+            record = records.get(fields.get("Package"))
+            if record is None:
+                raise ValueError(f"Unexpected kernel package metadata (missing validation record): {ipk}")
+            if record["status"].startswith("blocked"):
+                raise ValueError(f"Quarantined 4.1.52 module: {ipk}")
+            if record["asset"] != ipk.name:
+                raise ValueError(f"Package differs from 4.1.52 validation record: {ipk}")
+            with tarfile.open(ipk, "r:gz") as outer:
+                data = outer.extractfile("./data.tar.gz").read()
+            with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as archive:
+                modules = [member for member in archive if member.isfile() and member.name.endswith(".ko")]
+                if len(modules) != 1:
+                    raise ValueError(f"Expected one module in {ipk}")
+                digest = hashlib.sha256(archive.extractfile(modules[0]).read()).hexdigest()
+            if digest != record["sha256"]:
+                raise ValueError(f"Payload differs from 4.1.52 validation record: {ipk}")
         if fields.get("Package") in package_names:
             raise ValueError(f"Duplicate kernel package: {fields['Package']}")
         package_names.add(fields.get("Package"))
@@ -101,6 +125,10 @@ def write_feed(version, ipks, feed_root):
         entries.append("\n".join(f"{key}: {value}" for key, value in fields.items()))
     if not entries:
         raise ValueError(f"No kernel IPKs found for {version}")
+    current_files = {ipk.name for ipk in ipks}
+    for previous in destination.glob("*.ipk"):
+        if previous.name not in current_files:
+            previous.unlink()
     index = ("\n\n".join(entries) + "\n").encode("utf-8")
     (destination / "Packages").write_bytes(index)
     with (destination / "Packages.gz").open("wb") as output:
