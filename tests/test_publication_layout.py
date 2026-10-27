@@ -40,6 +40,7 @@ class PublicationTests(unittest.TestCase):
         spec.loader.exec_module(renderer)
         catalog = fetch.read_catalog(ROOT / 'build/publication/bootstrap.json.gz', live=False)
         manifest = renderer.kernel_manifest(catalog['records'])
+        self.assertEqual({r['url'].rsplit('/', 1)[1]: r['profile'] for r in manifest['aliases']}, layout.KERNEL_ALIASES)
         self.assertNotIn('url', manifest)  # No misleading combined OPKG source.
         self.assertEqual([(r['profile'], r['count']) for r in manifest['profiles']],
                          [('4.1.38-vbnto', 49), ('4.1.38-vbnts', 49), ('4.1.52-vbntk', 49)])
@@ -59,6 +60,26 @@ class PublicationTests(unittest.TestCase):
             for row in manifest['profiles'] + manifest['candidates']:
                 self.assertIn(row['source'], page)
             self.assertIn('no compatible runtime firmware', page)
+
+    def test_device_alias_indexes_resolve_to_canonical_packages(self):
+        catalog = fetch.read_catalog(ROOT / 'build/publication/bootstrap.json.gz', live=False)
+        with tempfile.TemporaryDirectory() as temp:
+            site = Path(temp)
+            layout.write_kernel_aliases(site, catalog['records'])
+            for alias, profile in layout.KERNEL_ALIASES.items():
+                directory = site / 'kernel' / alias
+                data = (directory / 'Packages').read_bytes()
+                self.assertEqual(gzip.decompress((directory / 'Packages.gz').read_bytes()), data)
+                actual = [layout.parse(stanza) for stanza in data.decode().strip().split('\n\n')]
+                expected = [r for r in catalog['records'] if r['section'] == 'kernel/' + profile]
+                self.assertEqual(len(actual), 49)
+                by_name = {r['package']: r for r in expected}
+                for fields in actual:
+                    row = by_name[fields['Package']]
+                    self.assertEqual(fields['Filename'], '../' + profile + '/' + row['filename'])
+                    self.assertEqual(fields['SHA256sum'], row['sha256'])
+                    self.assertEqual(fields['Depends'], layout.parse(row['control'])['Depends'])
+                self.assertEqual(sorted(p.name for p in directory.iterdir()), ['Packages', 'Packages.gz'])
 
     def test_cached_bytes_are_verified_and_remote_urls_are_restricted(self):
         with tempfile.TemporaryDirectory() as temp:

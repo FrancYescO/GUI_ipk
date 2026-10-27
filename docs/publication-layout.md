@@ -79,3 +79,8 @@ inputs, 4.1.52 GPL inputs and the GCC compiler seed. They are not user-installab
 package feeds. Their historical tags remain stable for reproducibility. After
 retiring duplicate kernel and Asterisk binary releases, FreeSWITCH sounds is the
 only binary package Release; the three CI input releases remain separate.
+
+Device aliases `kernel/vbnts` → `kernel/4.1.38-vbnts` and `kernel/vbntk` →
+`kernel/4.1.52-vbntk` provide OPKG indexes without duplicating IPKs. Use either
+the alias or its canonical feed. Exact kernel ABI dependencies remain unchanged;
+the device name does not imply compatibility with every firmware.

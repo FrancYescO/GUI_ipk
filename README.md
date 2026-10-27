@@ -151,3 +151,8 @@ such as BusyBox, `procd`, OpenSSL or the package manager itself.
 The public catalog uses a [mixed Pages/Release layout](docs/publication-layout.md):
 userspace, kernel modules and Asterisk 20 stay on Pages. Only the large FreeSWITCH
 sound packages use a binary Release feed. See the [kernel feed overview](https://francyesco.github.io/GUI_ipk/kernel/) for exact ABI selection and separate candidate sources. All verified application updates are retained.
+
+Device aliases `kernel/vbnts` → `kernel/4.1.38-vbnts` and `kernel/vbntk` →
+`kernel/4.1.52-vbntk` provide OPKG indexes without duplicating IPKs. Use either
+the alias or its canonical feed. Exact kernel ABI dependencies remain unchanged;
+the device name does not imply compatibility with every firmware.

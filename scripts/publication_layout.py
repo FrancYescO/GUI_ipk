@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = 'https://francyesco.github.io/GUI_ipk'
 REPOSITORY = 'FrancYescO/GUI_ipk'
 SECTIONS = ('base', 'luci', 'packages', 'routing', 'telephony', 'target/packages', 'telephony/asterisk-20')
+KERNEL_ALIASES = {'4.1.52': '4.1.52-vbntk', 'vbnts': '4.1.38-vbnts', 'vbntk': '4.1.52-vbntk'}
 TRANSPORT = {'Filename', 'Size', 'SHA256sum', 'MD5Sum'}
 
 
@@ -209,15 +210,20 @@ def prepare(userspace, applications, output):
     legacy.mkdir(parents=True, exist_ok=True)
     write_archive(legacy / 'legacy-buildroot.tar.gz',
                   {p.name: p.read_bytes() for p in (ROOT / 'artifacts/buildroot-4.1.38').iterdir() if p.is_file()})
-    # Keep the historical 4.1.52 URL as an OPKG alias without a second IPK copy.
-    aliases = [dict(r, filename='../4.1.52-vbntk/' + r['filename']) for r in rows
-               if r['section'] == 'kernel/4.1.52-vbntk']
-    write_index(pages / 'kernel/4.1.52', aliases)
+    write_kernel_aliases(pages, rows)
     catalog = {'format_version': 1, 'repository': REPOSITORY, 'site': SITE, 'releases': release_info,
                'records': [safe_record(r) for r in rows]}
     (output / 'catalog.json').write_text(json.dumps(catalog, indent=2, sort_keys=True) + '\n')
     write_snapshot(output / 'catalog.json.gz', catalog)
     return catalog
+
+
+def write_kernel_aliases(pages, rows):
+    # Alias indexes resolve downloads to the canonical ABI-specific directory.
+    for alias, profile in KERNEL_ALIASES.items():
+        records = [dict(r, filename='../' + profile + '/' + r['filename']) for r in rows
+                   if r['section'] == 'kernel/' + profile]
+        write_index(pages / 'kernel' / alias, records)
 
 
 def write_snapshot(path, catalog):
