@@ -187,8 +187,9 @@ The seven former `extras-*` Releases and the duplicate consolidated application
 release are superseded by these main feeds.
 
 See [publication layout](publication-layout.md) for current source URLs and
-verified TLS downloader instructions. Moving kernel modules, Asterisk 20 and
-FreeSWITCH sounds to Releases leaves room for all application updates on Pages.
+verified TLS downloader instructions. Keeping only the large
+FreeSWITCH sound packages in a binary Release leaves room for all application
+updates, kernel profiles and Asterisk 20 on Pages (about 700 MiB).
 The preparation workflow retains targeted build artifacts for review; future
 promotions update the pinned package registry and the main feeds.
 

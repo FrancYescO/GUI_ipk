@@ -23,9 +23,9 @@ Use the main `base` and `packages` sources listed in
 No separate optional application source is required. Remove retired
 `extras-*` and `application-packages-v1` sources when adopting the new sources.
 
-Kernel modules, Asterisk 20 and FreeSWITCH sounds are stored in coherent
-Releases, leaving the six main Pages feeds at about 693 MiB including all
-application updates. CI fetches each versioned application URL from Pages and
+All kernel profiles and Asterisk 20 are hosted on Pages with the six main
+userspace feeds, about 700 MiB including all application updates. Only the
+large FreeSWITCH sound packages use a binary Release. CI fetches each versioned application URL from Pages and
 checks its pinned size and SHA256, independently of the duplicate application
 archive. Targeted modern application source recipes remain available for
 rebuilds. See [the publication layout](publication-layout.md) for feed selection
