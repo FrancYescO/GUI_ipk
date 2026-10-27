@@ -73,7 +73,10 @@ class ApplicationConsolidationTests(unittest.TestCase):
         self.assertEqual(len(manifest['packages']), 13)
         self.assertEqual(len(manifest['groups']), 7)
         self.assertEqual(len({p['package'] for p in manifest['packages']}), 13)
-        self.assertTrue(manifest['url'].endswith('/application-packages-v1'))
+        self.assertNotIn('tag', manifest)
+        for pin in manifest['packages']:
+            self.assertTrue(pin['url'].startswith('https://francyesco.github.io/GUI_ipk/'))
+            self.assertTrue(pin['url'].endswith('/' + pin['filename']))
 
 
 if __name__ == '__main__':

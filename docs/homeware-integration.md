@@ -178,31 +178,19 @@ router's OPKG comparator: `dovecot` 2.2.36.4-1 satisfies the required
 `>= 2.2.36.4`. The automatic reporter intentionally retains its conservative
 version-check classification.
 
-## Consolidated application archive
+## Published application inputs
 
-Verified optional application packages are now published in one
-[application archive](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1), replacing seven `extras-*` Releases.
-The archive has a relative-path OPKG index and preserves all 13 original IPKs,
-SHA256 checksums and original build manifests. The source and checksum registry
-is `build/application-archive/manifest.json`.
+All thirteen verified application updates are included in the main Pages
+`base` and `packages` feeds. Their original build provenance, versioned Pages
+URLs and SHA256 pins remain in `build/application-archive/manifest.json`.
+The seven former `extras-*` Releases and the duplicate consolidated application
+release are superseded by these main feeds.
 
-```text
-src/gz gui_applications https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1
-```
-
-The shared Pages feed already contains about 1.05 GB of IPKs, so adding the
-83 MB optional application set would exceed the 1 GiB hosting limit. A single
-consolidated archive retains the packages while reducing release clutter.
-
-The preparation workflow now uploads verified workflow artifacts and does not
-create additional `extras-*` Releases. Future promotions should update the
-consolidated archive deliberately and retire superseded archives after verification.
-
-The original libgomp snapshot passed isolated OPKG update/download on the
-4.1.52 router with a temporary curl downloader and current CA bundle. The
-firmware wget could not download GitHub assets, and the default curl trust
-store rejected the chain. Those downloader requirements still apply. No router
-source, package installation or TLS configuration is changed by this cleanup.
+See [publication layout](publication-layout.md) for current source URLs and
+verified TLS downloader instructions. Moving kernel modules, Asterisk 20 and
+FreeSWITCH sounds to Releases leaves room for all application updates on Pages.
+The preparation workflow retains targeted build artifacts for review; future
+promotions update the pinned package registry and the main feeds.
 
 ## Published optional Rclone feed
 
@@ -235,33 +223,27 @@ disabled and requires credentials before enabling its loopback-only listener.
 
 Run
 [40174844214](https://github.com/FrancYescO/GUI_ipk/actions/runs/40174844214)
-originally published the four packages, now retained in the consolidated
-[application archive](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1).
+originally published the four packages, now retained in the main
+[Pages packages feed](https://francyesco.github.io/GUI_ipk/packages/).
 All four public IPKs were downloaded independently and matched the verified
 build hashes. The plain and compressed indexes agree, and all index entries,
 sizes and SHA256 values match the published package manifest. The package
 assets total 36,477,076 bytes.
 
-Optional OPKG source:
+OPKG source:
 
 ```text
-src/gz gui_extras https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1
+src/gz modgui_packages https://francyesco.github.io/GUI_ipk/packages
 ```
 
 Use a working TLS downloader and current certificates as described above.
 Adding the source or installing packages is a separate device administration
 step; publication did not change any router configuration.
 
-Combining this optional index with the published shared indexes yields 5,540
-distinct names and generation-19 coverage of 380/494 (114 missing). The current
-Pages coverage remains 376/494. Dependency audits with the optional feed add no
-unresolved userspace groups for either kernel profile; existing unresolved
-kernel groups remain 148 for 4.1.38 and 192 for 4.1.52. The scripts register these
-large recipes only for explicit targeted builds, keeping them out of the shared
-Pages build.
-
-Further published optional feeds provide Transmission 4.1.4, aria2 1.37.0,
-aMule 3.0.0, Android Debug Bridge 37.0.0p1 and Tailscale 1.104.2. See
-[application updates](application-updates.md#published-optional-feeds) for the
-verified snapshots, individual OPKG source labels and runtime validation limits.
-The Rclone-only coverage figures above do not include these additional feeds.
+The Rclone-only coverage audit originally reported 5,540 distinct package
+names and generation-19 coverage of 380/494 (114 missing). These are historical
+measurements. Rclone and the other verified updates now belong to the main
+feeds. Their recipes still use explicit targeted builds; the centralized
+publisher preserves the verified updates over complete legacy userspace builds.
+See [application updates](application-updates.md#published-application-updates)
+for the preserved versions and runtime validation limits.

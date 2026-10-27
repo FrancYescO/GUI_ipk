@@ -80,6 +80,7 @@
       "package": "adb",
       "sha256": "bafd0bf1ab9a553186a312da34af93e6ae46c2d41e6f37a21536e91b5dae03dd",
       "size": 2735287,
+      "url": "https://francyesco.github.io/GUI_ipk/base/adb_android.37.0.0p1-1_arm_cortex-a9_neon.ipk",
       "version": "android.37.0.0p1-1"
     },
     {
@@ -89,6 +90,7 @@
       "package": "amule",
       "sha256": "185d835d3ec42a0c4160baf7e530461b056f5534bd3f6cfec54fcc034220aaf7",
       "size": 8717350,
+      "url": "https://francyesco.github.io/GUI_ipk/base/amule_3.0.0-1_arm_cortex-a9_neon.ipk",
       "version": "3.0.0-1"
     },
     {
@@ -98,6 +100,7 @@
       "package": "aria2",
       "sha256": "144405b88e45e1697580564c3cb3a76ff654f54bd638a82610d4ad9451babecc",
       "size": 2667500,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/aria2_1.37.0-2_arm_cortex-a9_neon.ipk",
       "version": "1.37.0-2"
     },
     {
@@ -107,6 +110,7 @@
       "package": "libgomp",
       "sha256": "47e6b9e061c39c59320a7cd2897f28be588ebad4c152411ad8a6cb16053ddb4a",
       "size": 26014,
+      "url": "https://francyesco.github.io/GUI_ipk/base/libgomp_4.8.3-1_arm_cortex-a9_neon.ipk",
       "version": "4.8.3-1"
     },
     {
@@ -116,6 +120,7 @@
       "package": "rclone",
       "sha256": "2cfc440aa7b16085d1aaa53f05d7c251ed0a3a8f3bf8fbdab242b4f135985b8d",
       "size": 27378219,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/rclone_1.75.2-1_arm_cortex-a9_neon.ipk",
       "version": "1.75.2-1"
     },
     {
@@ -125,6 +130,7 @@
       "package": "rclone-config",
       "sha256": "4c2001cb6a1bafb5e46da33a675cbd3efc013548338b0b97084ac9c603b9105f",
       "size": 1780,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/rclone-config_1.75.2-1_arm_cortex-a9_neon.ipk",
       "version": "1.75.2-1"
     },
     {
@@ -134,6 +140,7 @@
       "package": "rclone-ng",
       "sha256": "f8dc326b988c9375b02e52f005b9562182bf5d406f99217a761a762fdadf320f",
       "size": 4631767,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/rclone-ng_0.5.0-1_all.ipk",
       "version": "0.5.0-1"
     },
     {
@@ -143,6 +150,7 @@
       "package": "rclone-webui-react",
       "sha256": "ad6a0790692332a094fa15d3baca41edec6758b767667f0329e2fbe1006251f6",
       "size": 4465310,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/rclone-webui-react_2.0.5-1_all.ipk",
       "version": "2.0.5-1"
     },
     {
@@ -152,6 +160,7 @@
       "package": "tailscale",
       "sha256": "a6c9bee935df7b258e14a3f9452f2f88886addcd8f4a8fa3aa4a823ac3c3ae4b",
       "size": 13691164,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/tailscale_1.104.2-1_arm_cortex-a9_neon.ipk",
       "version": "1.104.2-1"
     },
     {
@@ -161,6 +170,7 @@
       "package": "transmission-cli-openssl",
       "sha256": "acfccd7a3904b9990044b394673f93ef98d5d8d28aee79179098e3843d528036",
       "size": 12435295,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/transmission-cli-openssl_4.1.4-1_arm_cortex-a9_neon.ipk",
       "version": "4.1.4-1"
     },
     {
@@ -170,6 +180,7 @@
       "package": "transmission-daemon-openssl",
       "sha256": "7d19ae93cda669c058656d9f9826bd4877b986def56ecebf96cac896e5f408cc",
       "size": 3132668,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/transmission-daemon-openssl_4.1.4-1_arm_cortex-a9_neon.ipk",
       "version": "4.1.4-1"
     },
     {
@@ -179,6 +190,7 @@
       "package": "transmission-remote-openssl",
       "sha256": "37429110454eb8e88efc82fc393a56638421e8c1bee224d1eab56a55ec9249d5",
       "size": 3137698,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/transmission-remote-openssl_4.1.4-1_arm_cortex-a9_neon.ipk",
       "version": "4.1.4-1"
     },
     {
@@ -188,10 +200,9 @@
       "package": "transmission-web",
       "sha256": "251d30a72d44c9f1a4be6ff60b201219cbcbef2404fdf30b1d4715b857c17e14",
       "size": 64543,
+      "url": "https://francyesco.github.io/GUI_ipk/packages/transmission-web_4.1.4-1_all.ipk",
       "version": "4.1.4-1"
     }
   ],
-  "repository": "FrancYescO/GUI_ipk",
-  "tag": "application-packages-v1",
-  "url": "https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1"
+  "repository": "FrancYescO/GUI_ipk"
 }

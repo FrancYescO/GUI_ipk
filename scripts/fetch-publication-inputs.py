@@ -82,7 +82,7 @@ def stage(catalog, output, cache, applications):
     pins = json.loads((ROOT / 'build/application-archive/manifest.json').read_text())
     applications.mkdir(parents=True, exist_ok=True)
     for pin in pins['packages']:
-        path = retrieve(pin, cache, [pins['url'] + '/' + pin['filename']])
+        path = retrieve(pin, cache, [pin['url']])
         shutil.copyfile(path, applications / pin['filename'])
     print('Reconstructed', len(records), 'verified userspace IPKs and all promoted updates')
 

@@ -61,8 +61,9 @@ and all pinned application updates are overlaid before publication.
 `prepare-publication.py` rebuilds kernel feeds from committed artifacts and
 candidate bundles, running their strict validators. Original source recipes,
 toolchains and build-input releases remain available. Historical internal input
-tags are preserved to avoid breaking pinned builds. `application-packages-v1`
-is retained as a verified update input, rather than advertised as an extra feed.
+tags are preserved to avoid breaking pinned builds. The thirteen promoted application inputs are pinned to their versioned Pages
+URLs and SHA256 values. The duplicate `application-packages-v1` release can be
+removed after this CI configuration is deployed.
 
 The uploader verifies every local size/SHA256, creates drafts, resumes missing
 uploads, rejects conflicting assets, then publishes complete releases before
