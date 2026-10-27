@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 import shutil
 import tempfile
-from publication_layout import ROOT, SITE, parse, write_snapshot
+from publication_layout import ROOT, SITE, KERNEL_ALIASES, parse, write_snapshot
 from kernel_compatibility_page import write_compatibility
 from kernel_validation_page import write_report
 from kernel_runtime_validation import write_runtime_report
@@ -69,7 +69,8 @@ def kernel_manifest(records):
                    'validation_url': SITE + '/validation/' + ('4.1.52' if profile == '4.1.52-vbntk' else profile) + '/'}
             (candidates if staging else profiles).append(row)
     return {'index_url': SITE + '/kernel/', 'profiles': profiles, 'candidates': candidates,
-            'aliases': [{'url': SITE + '/kernel/4.1.52', 'profile': '4.1.52-vbntk'}],
+            'aliases': [{'url': SITE + '/kernel/' + alias, 'profile': profile}
+                        for alias, profile in KERNEL_ALIASES.items()],
             'legacy': {'url': SITE + '/kernel/4.1.38/', 'status': 'Archive only; no compatible firmware identified'}}
 
 
@@ -104,6 +105,9 @@ See the linked reports for exact payloads and test limits; USB tethering traffic
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
 These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
 They stage modules outside boot paths; a successful build does not prove runtime compatibility. xt_nat remains withheld.</p>''' + candidates + '''
+<h2>Device aliases</h2><p><a href="vbnts/">kernel/vbnts</a> points to 4.1.38-vbnts;
+<a href="vbntk/">kernel/vbntk</a> points to 4.1.52-vbntk. These are alternative OPKG URLs for the same packages, with the same exact kernel dependency.
+Enable either an alias or its canonical feed, once. Device name alone does not establish firmware compatibility.</p>
 <h2>Historical paths</h2><p><a href="4.1.52/">kernel/4.1.52</a> is an OPKG-compatible alias of 4.1.52-vbntk.
 <a href="4.1.38/">kernel/4.1.38</a> contains the generic buildroot archive only; no compatible runtime firmware is identified and it has no active OPKG feed.</p></body></html>'''
     (site / 'kernel/index.html').write_text(content)
@@ -127,8 +131,13 @@ def render(publication):
     write_kernel_overview(site, kernels)
     for row in kernels['profiles'] + kernels['candidates']:
         (site / 'kernel' / row['profile'] / 'opkg.conf').write_text(row['source'] + '\n')
-    alias = site / 'kernel/4.1.52/index.html'
-    alias.write_text('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=../4.1.52-vbntk/"><a href="../4.1.52-vbntk/">VBNT-K 4.1.52 runtime feed</a>')
+    for alias in kernels['aliases']:
+        directory = site / 'kernel' / alias['url'].rsplit('/', 1)[1]
+        directory.mkdir(parents=True, exist_ok=True)
+        target = '../' + alias['profile'] + '/'
+        (directory / 'index.html').write_text('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=' + target + '"><a href="' + target + '">' + alias['profile'] + ' runtime feed</a>')
+        name = 'modgui_kernel_' + directory.name.replace('.', '_')
+        (directory / 'opkg.conf').write_text('src/gz ' + name + ' ' + alias['url'] + '\n')
     legacy = site / 'kernel/4.1.38'
     (legacy / 'index.html').write_text('<!doctype html><h1>Legacy 4.1.38 buildroot archive</h1><p>No compatible runtime firmware has been identified. No active OPKG source.</p><a href="legacy-buildroot.tar.gz">Historical artifacts</a><p><a href="../">Available kernel feeds</a></p>')
     write_compatibility(site, pages.STYLE, pages.SCRIPT)
