@@ -1,0 +1,38 @@
+Subject: [PATCH] cdc_ether: omit Zyxel USB LED hooks on Damson
+
+The GPL source enables Zyxel-specific USB_LED_Control calls. Damson does
+not export that callback and its original cdc_ether module does not import
+it. Leave LED management to the firmware and retain the native USB ABI.
+
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -30,9 +30,6 @@
+ #include <linux/usb/cdc.h>
+ #include <linux/usb/usbnet.h>
+ 
+-#if defined(ZYXEL) && (ZYXEL==1)
+-extern void USB_LED_Control( int USBId, int status );
+-#endif
+ 
+ #if IS_ENABLED(CONFIG_USB_NET_RNDIS_HOST)
+ 
+@@ -425,9 +422,6 @@
+ 		info->control = NULL;
+ 	}
+ 
+-#if defined(ZYXEL) && (ZYXEL==1)
+-	USB_LED_Control(dev->udev->portnum, 0x00);
+-#endif
+ 
+ }
+ EXPORT_SYMBOL_GPL(usbnet_cdc_unbind);
+@@ -508,9 +502,6 @@
+ 		return status;
+ 	}
+ 
+-#if defined(ZYXEL) && (ZYXEL==1)
+-	USB_LED_Control(dev->udev->portnum, 0x01);
+-#endif
+ 
+ 	return 0;
+ }

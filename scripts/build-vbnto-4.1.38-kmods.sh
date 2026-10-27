@@ -24,6 +24,7 @@ probe_dir="$output_dir/$profile-4.1.38-probe"
 
 test -f "$kernel_dir/Makefile"
 test -x "${cross}gcc"
+bash "$repo_root/scripts/apply-usb-rndis-compat.sh" "$kernel_dir"
 mkdir -p "$probe_dir"
 gzip -dc "$runtime_config" > "$kernel_dir/.config"
 "$kernel_dir/scripts/config" --file "$kernel_dir/.config" --module TUN
@@ -92,6 +93,11 @@ grep -Fq '4.1.38 SMP preempt mod_unload ARMv7' "$probe_dir/tun.modinfo.txt"
   fi
 )
 echo "Built router-configured TUN probe in $probe_dir"
+
+if [[ "${BUILD_USB_RNDIS:-0}" == 1 ]]; then
+  bash "$repo_root/scripts/build-usb-rndis-4.1.38.sh" "$kernel_dir" "$cross" \
+    "$output_dir/$profile-4.1.38-usb-rndis"
+fi
 if [[ "${MODULE_SET:-tested}" == expanded ]]; then
   "$repo_root/scripts/build-vbnto-4.1.38-expanded.sh" \
     "$kernel_dir" "$cross" "$output_dir/$profile-4.1.38-expanded"

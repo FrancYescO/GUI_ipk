@@ -1,0 +1,40 @@
+
+String dump of section '.modinfo':
+  [     0]  license=GPL
+  [     c]  description=USB CDC Ethernet devices
+  [    31]  author=David Brownell
+  [    48]  alias=usb:v12D1p*d*dc*dsc*dp*ic02isc06ipFFin*
+  [    76]  alias=usb:v*p*d*dc*dsc*dp*ic02isc0Aip00in*
+  [    a1]  alias=usb:v*p*d*dc*dsc*dp*ic02isc06ip00in*
+  [    cc]  alias=usb:v1BC7p*d*dc*dsc*dp*ic02isc06ip00in*
+  [    fa]  alias=usb:v19D2p1181d*dc*dsc*dp*ic02isc06ip00in*
+  [   12b]  alias=usb:v19D2p1177d*dc*dsc*dp*ic02isc06ip00in*
+  [   15c]  alias=usb:v19D2p1173d*dc*dsc*dp*ic02isc06ip00in*
+  [   18d]  alias=usb:v19D2p1015d*dc*dsc*dp*ic02isc06ip00in*
+  [   1be]  alias=usb:v19D2p1003d*dc*dsc*dp*ic02isc06ip00in*
+  [   1ef]  alias=usb:v17EFp7205d*dc*dsc*dp*ic02isc06ip00in*
+  [   220]  alias=usb:v04E8pA101d*dc*dsc*dp*ic02isc06ip00in*
+  [   251]  alias=usb:v0BDAp8153d*dc*dsc*dp*ic02isc06ip00in*
+  [   282]  alias=usb:v0BDAp8152d*dc*dsc*dp*ic02isc06ip00in*
+  [   2b3]  alias=usb:v12D1p14ACd*dc*dsc*dp*ic*isc*ip*in01*
+  [   2e3]  alias=usb:v16D5p650Ad*dc*dsc*dp*ic02isc06ip00in*
+  [   314]  alias=usb:v1410p9011d*dc*dsc*dp*ic02isc06ip00in*
+  [   345]  alias=usb:v413Cp819Bd*dc*dsc*dp*ic02isc06ip00in*
+  [   376]  alias=usb:v413Cp8196d*dc*dsc*dp*ic02isc06ip00in*
+  [   3a7]  alias=usb:v413Cp8195d*dc*dsc*dp*ic02isc06ip00in*
+  [   3d8]  alias=usb:v1410p9010d*dc*dsc*dp*ic02isc06ip00in*
+  [   409]  alias=usb:v1410pB001d*dc*dsc*dp*ic02isc06ip00in*
+  [   43a]  alias=usb:v046DpC11Fd*dc*dsc*dp*ic02isc0Aip00in*
+  [   46b]  alias=usb:v1004p61AAd*dc*dsc*dp*ic02isc06ip00in*
+  [   49c]  alias=usb:v07B4p0F02d*dc*dsc*dp*ic02isc06ip00in*
+  [   4cd]  alias=usb:v04DDp9050d*dc*dsc*dp*ic02isc06ip00in*
+  [   4fe]  alias=usb:v04DDp9032d*dc*dsc*dp*ic02isc06ip00in*
+  [   52f]  alias=usb:v04DDp9031d*dc*dsc*dp*ic02isc06ip00in*
+  [   560]  alias=usb:v04DDp8007d*dc*dsc*dp*ic02isc06ip00in*
+  [   591]  alias=usb:v04DDp8006d*dc*dsc*dp*ic02isc06ip00in*
+  [   5c2]  alias=usb:v04DDp8005d*dc*dsc*dp*ic02isc06ip00in*
+  [   5f3]  alias=usb:v04DDp8004d*dc*dsc*dp*ic02isc06ip00in*
+  [   624]  depends=usbnet
+  [   633]  intree=Y
+  [   63c]  vermagic=4.1.38 SMP preempt mod_unload ARMv7 
+

@@ -1,0 +1,5 @@
+runtime_profile=vbnts
+compiler=arm-openwrt-linux-gnueabi-gcc (OpenWrt/Linaro GCC 4.8-2014.04 r0-b7e7d22) 4.8.3
+native_usbnet=retained; compiled only to supply modpost dependencies
+d806795622dc638b7e9bcea70219b5fc0f11309b42e72c7bc4072b52677a3e04  patches/usb-rndis/001-misc-class.patch
+8f8031521bcdcffeb54c66a00546736edf893369f26253f1077c418c46cd3fc2  kernel.config

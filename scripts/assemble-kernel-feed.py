@@ -90,6 +90,8 @@ def write_feed(version, ipks, feed_root):
                 "kmod-tun-vbnto-4.1.38-manual",
                 "kmod-bcmspu-vbnto-4.1.38-manual",
                 "kmod-wireguard-vbnto-4.1.38-manual",
+                "kmod-cdc-ether-vbnto-4.1.38-manual",
+                "kmod-rndis-host-vbnto-4.1.38-manual",
             }
             and fields.get("Architecture") == "arm_cortex-a9"
             and fields.get("Depends") ==
@@ -104,6 +106,8 @@ def write_feed(version, ipks, feed_root):
                 "kmod-tun-vbnts-4.1.38-manual",
                 "kmod-bcmspu-vbnts-4.1.38-manual",
                 "kmod-wireguard-vbnts-4.1.38-manual",
+                "kmod-cdc-ether-vbnts-4.1.38-manual",
+                "kmod-rndis-host-vbnts-4.1.38-manual",
             }
             and fields.get("Architecture") == "arm_cortex-a9"
             and fields.get("Depends") ==

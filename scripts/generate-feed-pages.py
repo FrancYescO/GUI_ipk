@@ -75,6 +75,7 @@ def packages(index):
 def page(title, selected, groups, prefix, partial=False):
     nav = [f'<a href="{prefix}index.html">All packages</a>']
     nav.append(f'<a href="{prefix}compatibility/index.html">Firmware compatibility and feed setup</a>')
+    nav.append(f'<a href="{prefix}validation/usb-4.1.38/index.html">USB RNDIS 4.1.38 tests</a>')
     nav.append(f'<a href="{prefix}validation/4.1.38/index.html">4.1.38 validation results</a>')
     nav.append(f'<a href="{prefix}validation/4.1.52/index.html">4.1.52 validation results</a>')
     nav.extend(
@@ -97,7 +98,10 @@ def page(title, selected, groups, prefix, partial=False):
                 f'<td>{description}</td><td><a href="{html.escape(url, quote=True)}">Download IPK</a></td></tr>'
             )
     notice = (
-        "<p><strong>Linux 4.1.38 modules were built for the VBNTS buildroot.</strong> "
+        "<p><strong>Legacy buildroot artifacts: no runtime-compatible firmware has been identified.</strong> "
+        "None of the 279 inventoried firmware branches has this complete kernel package identifier "
+        "(e5d0b8e85af0ba3d06a2ba17859e868a). These are retained as historical build outputs. "
+        "Use the exact VBNT-O or VBNT-S runtime profile when available. "
         "The kernel IPK records the build ABI but contains no kernel image. "
         "These packages do not include the Damson 4.1.52 ABI adaptation and "
         "must not be used on VBNT-K Damson. Check the exact VBNTS firmware "
@@ -132,6 +136,9 @@ def page(title, selected, groups, prefix, partial=False):
         if selected.endswith('vbnts'):
             profile = 'DGA4132 18.3.k.0451 (8dd69363…)'
         notice = ('<p><strong>Router-tested TUN, WireGuard and SPU for ' + profile + '.</strong> '
+                  'The cdc_ether/rndis_host compatibility pair also passed loading, USB driver '
+                  'registration and unloading, retaining native usbnet. USB device traffic has '
+                  'not been tested. Both replacement drivers must be used together. '
                   'These IPKs require the matching exact kernel ABI. Other firmware versions '
                   'and operator variants require a separate compatibility check.</p>')
     elif selected == "kernel/4.1.52":

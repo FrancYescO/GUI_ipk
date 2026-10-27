@@ -21,10 +21,18 @@ MODULES = {
 
 def profile_config(profile):
     if profile == "vbnts":
-        return json.loads((Path(__file__).resolve().parents[1] /
-                           "build/vbnts-4.1.38/profile.json").read_text())
-    return dict(KERNEL=KERNEL, VERMAGIC=VERMAGIC, MODULES=MODULES,
-                TARGET="DGA4131FWB/VBNT-O", FIRMWARE="18.3.n.0439")
+        config = json.loads((Path(__file__).resolve().parents[1] /
+                             "build/vbnts-4.1.38/profile.json").read_text())
+    else:
+        config = dict(KERNEL=KERNEL, VERMAGIC=VERMAGIC, MODULES=MODULES,
+                      TARGET="DGA4131FWB/VBNT-O", FIRMWARE="18.3.n.0439")
+    usb = Path(__file__).resolve().parents[1] / 'build/usb-rndis/validation.json'
+    if usb.is_file():
+        record = json.loads(usb.read_text())['profiles'][profile]
+        if record['kernel_package'] != config['KERNEL']:
+            raise ValueError('USB validation profile has the wrong kernel package')
+        config['USB_MODULES'] = record['modules']
+    return config
 
 
 def archive(files):

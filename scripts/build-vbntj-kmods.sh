@@ -15,6 +15,9 @@ case "$module_set" in
   tun)
     module_targets=(drivers/net/tun.ko)
     ;;
+  rndis-compat)
+    module_targets=(drivers/net/usb/cdc_ether.ko drivers/net/usb/rndis_host.ko)
+    ;;
   network-smoke)
     module_targets=(drivers/net/tun.ko drivers/net/usb/usbnet.ko drivers/net/usb/cdc_ether.ko)
     ;;
@@ -208,6 +211,12 @@ patch --batch --forward --directory "$kernel_dir" -p1 \
 patch --batch --forward --directory "$kernel_dir" -p1 \
   < "$repo_root/patches/vbntj-4.1.52/002-damson-qos-nat-abi.patch"
 
+if [[ "$module_set" == rndis-compat ]]; then
+  bash "$repo_root/scripts/apply-usb-rndis-compat.sh" "$kernel_dir"
+  patch --batch --forward --directory "$kernel_dir" -p1 \
+    < "$repo_root/patches/vbntj-4.1.52/003-cdc-ether-damson-led-abi.patch"
+fi
+
 cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
 "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
   --enable WIRELESS_EXT \
@@ -219,6 +228,9 @@ cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
   --module TUN \
   --module USB_USBNET \
   --module USB_NET_CDCETHER
+if [[ "$module_set" == rndis-compat ]]; then
+  "$kernel_dir/scripts/config" --file "$kernel_dir/.config" --module USB_NET_RNDIS_HOST
+fi
 if [[ "$build_connmark" -eq 1 ]]; then
   "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
     --module NET_ACT_CONNMARK
@@ -265,6 +277,9 @@ if [[ "$build_connmark" -eq 1 ]]; then
 fi
 
 if [[ ${#module_targets[@]} -gt 0 ]]; then
+  if [[ "$module_set" == rndis-compat ]]; then
+    "${kernel_make[@]}" drivers/net/usb/usbnet.ko
+  fi
   "${kernel_make[@]}" "${module_targets[@]}"
 fi
 
@@ -335,6 +350,18 @@ if [[ -f "$output_dir/tun.ko" ]] && \
   echo "tun.ko undefined-symbol ABI differs from the router-validated baseline" >&2
   diff -u "$repo_root/build/vbntj/tun.undefined-symbols" "$output_dir/tun.undefined-symbols" || true
   exit 1
+fi
+
+if [[ "$module_set" == rndis-compat ]]; then
+  for module in cdc_ether rndis_host; do
+    cmp "$repo_root/artifacts/damson-4.1.52-rndis-compat/$module.undefined-symbols" \
+      "$output_dir/$module.undefined-symbols"
+    expected=usbnet
+    [[ "$module" != rndis_host ]] || expected=cdc_ether,usbnet
+    dependencies="$("$cross_readelf" -p .modinfo "$output_dir/$module.ko" | sed -n 's/.*depends=//p' | tr ',' '\n' | LC_ALL=C sort | paste -sd, -)"
+    [[ "$dependencies" == "$expected" ]] || { echo "Unexpected $module dependencies: $dependencies" >&2; exit 1; }
+  done
+  "$cross_readelf" -p .modinfo "$output_dir/rndis_host.ko" | grep -qi 'alias=.*icEFisc04ip01'
 fi
 
 build_manual_ipk() {
@@ -420,6 +447,8 @@ wireguard_compat=$([[ "$build_wireguard" -eq 1 ]] && echo 1.0.20220627 || echo n
 abi_patch=patches/vbntj-4.1.52/001-damson-network-abi.patch
 qos_nat_abi_patch=patches/vbntj-4.1.52/002-damson-qos-nat-abi.patch
 kernel_config=build/vbntj/kernel-4.1.52-damson.config
+usb_rndis_patch=patches/usb-rndis/001-misc-class.patch (rndis-compat only)
+usb_led_abi_patch=patches/vbntj-4.1.52/003-cdc-ether-damson-led-abi.patch (rndis-compat only)
 EOF
 
 echo "Built ABI-checked Damson modules and manual-only IPKs in $output_dir"
