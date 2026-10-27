@@ -1,0 +1,402 @@
+=== act_connmark | 749c6670032e413ca0f1e0cd925e5134dbeddfe731e6099fd911e13055e3bd21 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.248 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.248/0.248/0.248 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.351 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.188 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.188/0.269/0.351 ms
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            mark match 0x38
+filter protocol ip pref 1 u32 
+filter protocol ip pref 1 u32 fh 800: ht divisor 1 
+filter protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 terminal flowid ??? 
+  match 00000000/00000000 at 0
+	action order 1: connmark zone 0 pipe
+	 index 1 ref 1 bind 1 installed 1 sec used 0 sec
+	Action statistics:
+	Sent 168 bytes 2 pkt (dropped 0, overlimits 2 requeues 0) 
+	backlog 0b 0p requeues 0
+
+FUNCTIONAL_TC_PASS
+
+=== act_skbedit | 6f7c40aabb7c8c61b24694c249dfd83738e43cca6d45d31e3a7f0d7054437aed ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.256 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.256/0.256/0.256 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.374 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.188 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.188/0.281/0.374 ms
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            mark match 0x38
+filter protocol ip pref 1 u32 
+filter protocol ip pref 1 u32 fh 800: ht divisor 1 
+filter protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 terminal flowid ??? 
+  match 00000000/00000000 at 0
+	action order 1: skbedit  mark 56 pipe
+	 index 1 ref 1 bind 1 installed 1 sec used 0 sec
+	Action statistics:
+	Sent 168 bytes 2 pkt (dropped 0, overlimits 0 requeues 0) 
+	backlog 0b 0p requeues 0
+
+FUNCTIONAL_TC_PASS
+
+=== bcmspu | 0b743d61ae454e20d2a9a9a3099c9be5f85c7e495773aad4d1d137ab9ac42cd7 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.194 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.194/0.194/0.194 ms
+ERR: bdmf_attrelem_add_as_num#4285: system: status:No resources. attribute:ipv4_host_address_table  index:0 value:184370433
+ERR: bdmf_attrelem_add_as_num#4285: system: status:No resources. attribute:ipv4_host_address_table  index:0 value:184370434
+IPsec AES128/sha1-96
+PING 10.253.69.2 (10.253.69.2): 1000 data bytes
+1008 bytes from 10.253.69.2: seq=0 ttl=64 time=2.311 ms
+1008 bytes from 10.253.69.2: seq=1 ttl=64 time=2.043 ms
+1008 bytes from 10.253.69.2: seq=2 ttl=64 time=1.896 ms
+1008 bytes from 10.253.69.2: seq=3 ttl=64 time=1.748 ms
+1008 bytes from 10.253.69.2: seq=4 ttl=64 time=1.587 ms
+
+--- 10.253.69.2 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 1.587/1.917/2.311 ms
+PING 10.253.69.1 (10.253.69.1): 1000 data bytes
+1008 bytes from 10.253.69.1: seq=0 ttl=64 time=2.156 ms
+1008 bytes from 10.253.69.1: seq=1 ttl=64 time=1.889 ms
+1008 bytes from 10.253.69.1: seq=2 ttl=64 time=1.737 ms
+1008 bytes from 10.253.69.1: seq=3 ttl=64 time=1.592 ms
+1008 bytes from 10.253.69.1: seq=4 ttl=64 time=1.435 ms
+
+--- 10.253.69.1 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 1.435/1.761/2.156 ms
+Connecting to host 10.253.69.2, port 5201
+[  4] local 10.253.69.1 port 34182 connected to 10.253.69.2 port 5201
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec  10.7 MBytes  89.6 Mbits/sec    4    104 KBytes       
+[  4]   1.00-2.00   sec  8.55 MBytes  71.7 Mbits/sec    5   81.2 KBytes       
+[  4]   2.00-3.00   sec  7.83 MBytes  65.7 Mbits/sec    6   73.1 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-3.00   sec  27.1 MBytes  75.7 Mbits/sec   15             sender
+[  4]   0.00-3.00   sec  26.9 MBytes  75.2 Mbits/sec                  receiver
+
+iperf Done.
+Encryption stats
+     Ingress 31327
+     Fallback 0
+     Egress 31316
+     Error 0
+     Dropped 11
+Decryption stats
+     Ingress 31320
+     Fallback 1
+     Egress 31272
+     Error 1
+     Dropped 47
+ERR: bdmf_attrelem_add_as_num#4285: system: status:No resources. attribute:ipv4_host_address_table  index:0 value:184370433
+ERR: bdmf_attrelem_add_as_num#4285: system: status:No resources. attribute:ipv4_host_address_table  index:0 value:184370434
+IPsec AES128/sha256-128
+PING 10.253.69.2 (10.253.69.2): 1000 data bytes
+1008 bytes from 10.253.69.2: seq=0 ttl=64 time=0.999 ms
+1008 bytes from 10.253.69.2: seq=1 ttl=64 time=0.710 ms
+1008 bytes from 10.253.69.2: seq=2 ttl=64 time=0.673 ms
+1008 bytes from 10.253.69.2: seq=3 ttl=64 time=0.673 ms
+1008 bytes from 10.253.69.2: seq=4 ttl=64 time=0.714 ms
+
+--- 10.253.69.2 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.673/0.753/0.999 ms
+PING 10.253.69.1 (10.253.69.1): 1000 data bytes
+1008 bytes from 10.253.69.1: seq=0 ttl=64 time=0.801 ms
+1008 bytes from 10.253.69.1: seq=1 ttl=64 time=0.701 ms
+1008 bytes from 10.253.69.1: seq=2 ttl=64 time=0.710 ms
+1008 bytes from 10.253.69.1: seq=3 ttl=64 time=0.673 ms
+1008 bytes from 10.253.69.1: seq=4 ttl=64 time=0.699 ms
+
+--- 10.253.69.1 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.673/0.716/0.801 ms
+Connecting to host 10.253.69.2, port 5201
+[  4] local 10.253.69.1 port 35503 connected to 10.253.69.2 port 5201
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.17   sec  5.00 MBytes  35.9 Mbits/sec    0   27.1 KBytes       
+[  4]   1.17-2.00   sec  3.75 MBytes  37.7 Mbits/sec    0   29.8 KBytes       
+[  4]   2.00-3.18   sec  5.17 MBytes  36.8 Mbits/sec    0   36.5 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-3.18   sec  13.9 MBytes  36.7 Mbits/sec    0             sender
+[  4]   0.00-3.18   sec  13.9 MBytes  36.7 Mbits/sec                  receiver
+
+iperf Done.
+Encryption stats
+     Ingress 46055
+     Fallback 14729
+     Egress 46045
+     Error 0
+     Dropped 11
+Decryption stats
+     Ingress 46049
+     Fallback 14729
+     Egress 46000
+     Error 1
+     Dropped 47
+FUNCTIONAL_SPU_IPSEC_PASS
+
+=== cls_flow | 5cdfda5f934fd31a0e1352c2eaae4a752f9e0ef9a9937334413a2b7b08ffd2d1 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.195 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.195/0.195/0.195 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.344 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.189 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.189/0.266/0.344 ms
+filter protocol ip pref 1 flow 
+filter protocol ip pref 1 flow handle 0x1 hash keys dst divisor 1 baseclass 1:1 
+
+	action order 1: gact action pass
+	 random type none pass val 0
+	 index 1 ref 1 bind 1 installed 1 sec used 0 sec
+	Action statistics:
+	Sent 168 bytes 2 pkt (dropped 0, overlimits 0 requeues 0) 
+	backlog 0b 0p requeues 0
+
+FUNCTIONAL_CLASSIFIER_PASS
+
+=== em_u32 | bfff4029bb01fc48baa538b2befb81474b3fcc3c598e45989f63cf720a61a735 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.248 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.248/0.248/0.248 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.372 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.199 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.199/0.285/0.372 ms
+filter protocol ip pref 1 basic 
+filter protocol ip pref 1 basic handle 0x1 
+  u32(45000000/ff000000 at 0)
+
+	action order 1: gact action pass
+	 random type none pass val 0
+	 index 2 ref 1 bind 1 installed 1 sec used 0 sec
+	Action statistics:
+	Sent 168 bytes 2 pkt (dropped 0, overlimits 0 requeues 0) 
+	backlog 0b 0p requeues 0
+
+FUNCTIONAL_CLASSIFIER_PASS
+
+=== rndis_host | 56517d64a7d159602730d25c14637d17a51b33910a6fea3ff9f35681b085161e ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.262 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.262/0.262/0.262 ms
+
+=== sch_hfsc | 351b23130238d71053f748cdca6455f96896cbddef1ce187c9fb0db315169ad8 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.235 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.235/0.235/0.235 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.377 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.200 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.200/0.288/0.377 ms
+qdisc hfsc 1: root refcnt 2 default 1 
+ Sent 406 bytes 5 pkt (dropped 0, overlimits 0 requeues 0) 
+ backlog 0b 0p requeues 0
+FUNCTIONAL_QDISC_PASS
+
+=== tun | 374b8399951a4fa75a0b9c68b6eced9d064cc442d3150d2210d75623c275354e ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.251 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.251/0.251/0.251 ms
+8: ktun52: <NO-CARRIER,POINTOPOINT,MULTICAST,NOARP,UP> mtu 1500 qdisc fq_codel state DOWN mode DEFAULT group default qlen 500
+    link/none  promiscuity 0 
+    tun addrgenmode eui64 numtxqueues 1 numrxqueues 1 
+TUN_PACKET_IO_PASS
+FUNCTIONAL_TUN_INTERFACE_PASS
+
+=== wireguard | 98e392edb92a574444c0555c9576f6ded0041421c938d0a4921789836c46e6e5 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.191 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.191/0.191/0.191 ms
+ERR: bdmf_attrelem_add_as_num#4285: system: status:No resources. attribute:ipv4_host_address_table  index:0 value:184391681
+ERR: bdmf_attrelem_add_as_num#4285: system: status:No resources. attribute:ipv4_host_address_table  index:0 value:184391682
+PING 10.253.152.2 (10.253.152.2): 1000 data bytes
+1008 bytes from 10.253.152.2: seq=0 ttl=64 time=14.465 ms
+1008 bytes from 10.253.152.2: seq=1 ttl=64 time=0.488 ms
+1008 bytes from 10.253.152.2: seq=2 ttl=64 time=0.670 ms
+1008 bytes from 10.253.152.2: seq=3 ttl=64 time=0.512 ms
+1008 bytes from 10.253.152.2: seq=4 ttl=64 time=0.520 ms
+
+--- 10.253.152.2 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.488/3.331/14.465 ms
+PING 10.253.152.1 (10.253.152.1): 1000 data bytes
+1008 bytes from 10.253.152.1: seq=0 ttl=64 time=0.596 ms
+1008 bytes from 10.253.152.1: seq=1 ttl=64 time=0.520 ms
+1008 bytes from 10.253.152.1: seq=2 ttl=64 time=0.493 ms
+1008 bytes from 10.253.152.1: seq=3 ttl=64 time=0.496 ms
+1008 bytes from 10.253.152.1: seq=4 ttl=64 time=0.485 ms
+
+--- 10.253.152.1 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.485/0.518/0.596 ms
+WireGuard received=10812 sent=10868
+WireGuard received=10868 sent=10812
+WIREGUARD_NETNS_PASS
+
+=== xt_REDIRECT | 415969570ac982f6c795d9272f5a516f82d52f1a9b30b7e8008aab18a237b29b ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.313 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.313/0.313/0.313 ms
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       1       60 REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4242 redir ports 4243
+FUNCTIONAL_REDIRECT_TRAFFIC_PASS
+
+=== xt_connbytes | 61cfaf8670d969806fee319a51e8e5cdc1a463b68b808aa1c709a830d4014d8c ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.261 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.261/0.261/0.261 ms
+net.netfilter.nf_conntrack_acct = 1
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.295 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.192 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.192/0.243/0.295 ms
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            connbytes 0 connbytes mode bytes connbytes direction both
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_connlimit | 47940f8dc6ca232e6fb0ee3b0d8cbf97150a9874e96a7ac92a3d15d68891bf4d ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.295 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.295/0.295/0.295 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.358 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.174 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.174/0.266/0.358 ms
+Chain OUTPUT (policy ACCEPT 2 packets, 168 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       1       60 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 #conn src/32 > 0
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_mac | b6adac404212a07e17b7ce49efcb87306469f1e9b0613a27f7bf79ad4f555514 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.265 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.265/0.265/0.265 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.291 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.184 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.184/0.237/0.291 ms
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            MAC ! 00:00:00:00:00:00
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_recent | 05920fe02816c5a0cd6a73c3bc0974e2d8d4fec50faf0764f2267a0c55499c9b ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.290 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.290/0.290/0.290 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.363 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.189 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.189/0.276/0.363 ms
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            recent: SET name: KMOD52 side: source mask: 255.255.255.255
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_state | a3da8256b4715cc308f05d3796da81804680c8845ffc04ee7e8a448d40ff38a4 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.257 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.257/0.257/0.257 ms
+
+=== xt_time | ccb593576f9bb609172cf63656b5b57fc5108008c2845e437d742f860fc27d38 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.244 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.244/0.244/0.244 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.364 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.180 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.180/0.272/0.364 ms
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            TIME UTC
+FUNCTIONAL_NETFILTER_PASS

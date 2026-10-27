@@ -1,6 +1,10 @@
 # Damson 4.1.52 manual kernel packages
 
-The modules originate from [GitHub Actions run 35757010241](https://github.com/FrancYescO/GUI_ipk/actions/runs/35757010241). The packaged `tun.ko` and `act_connmark.ko` match the modules tested on the VBNT-K router, byte for byte. Package names now omit `damson-`; only control metadata was changed, with `Conflicts` and `Replaces` for each previous name. The IPK installation itself has not been tested on the router.
+The original modules came from [Actions run 35757010241](https://github.com/FrancYescO/GUI_ipk/actions/runs/35757010241).
+The current TUN and connmark payloads match the exact modules tested on VBNT-K.
+The updated connmark includes the shared QoS/NAT ABI correction described below;
+TUN retains its original bytes. Names omit `damson-`, with `Conflicts` and
+`Replaces` for the former names. Persistent IPK installation was not tested.
 
 The current names are available in this directory and the versioned feed:
 
@@ -18,3 +22,9 @@ No routed VPN or prolonged-operation test was performed. The IPK is
 manual-only, has no install scripts/autoload, and requires stock udp_tunnel
 and ip6_udp_tunnel already loaded. See docs/wireguard-updates.md. The package
 is published in the kernel/4.1.52 feed together with TUN and connmark.
+
+The 27 October 2026 validation on firmware 19.4.1051-3401200 revalidated
+TUN packet read/write, connmark traffic, and WireGuard two-peer encrypted
+traffic. The updated connmark includes the shared QoS/NAT ABI correction;
+TUN and WireGuard retain their byte-identical original payloads. See the
+[per-module report](https://francyesco.github.io/GUI_ipk/validation/4.1.52/).

@@ -11,6 +11,9 @@ on:
       - "scripts/assemble-kernel-feed.py"
       - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/report-feed-dependencies.py"
+      - "scripts/kernel_validation_page.py"
+      - "tests/test_kernel_validation.py"
+      - "build/vbntj/validation/**"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "tests/test_rndis_feed.py"
       - "artifacts/openvpn-2.6.23/**"
@@ -53,6 +56,9 @@ on:
       - "scripts/assemble-kernel-feed.py"
       - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/report-feed-dependencies.py"
+      - "scripts/kernel_validation_page.py"
+      - "tests/test_kernel_validation.py"
+      - "build/vbntj/validation/**"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "scripts/verify-wireguard-kmod.sh"
       - "scripts/verify-kmod-tun.sh"
@@ -120,7 +126,7 @@ jobs:
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
           (cd artifacts/damson-4.1.52-network && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-network
-          test "$(find artifacts/damson-4.1.52-network -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 44
+          test "$(find artifacts/damson-4.1.52-network -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 43
 
       - name: Verify built Linux 4.1.38 IPKs
         run: |

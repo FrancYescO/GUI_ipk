@@ -1,0 +1,104 @@
+--- a/include/uapi/linux/gen_stats.h
++++ b/include/uapi/linux/gen_stats.h
+@@ -26,7 +26,7 @@
+ struct gnet_stats_basic_packed {
+ 	__u64	bytes;
+ 	__u32	packets;
+-#if 1 /* ZyXEL QoS, porting from MSTC */
++#if 0 /* Damson ABI: no Zyxel drop-statistic fields. */
+ 	__u64	dropbytes;
+ #endif
+ } __attribute__ ((packed));
+@@ -39,7 +39,7 @@
+ struct gnet_stats_rate_est {
+ 	__u32	bps;
+ 	__u32	pps;
+-#if 1 /* ZyXEL QoS, porting from MSTC */
++#if 0 /* Damson ABI: no Zyxel drop-statistic fields. */
+ 	__u32	dropbps;
+ #endif
+ };
+@@ -52,7 +52,7 @@
+ struct gnet_stats_rate_est64 {
+ 	__u64	bps;
+ 	__u64	pps;
+-#if 1 /* ZyXEL QoS, porting from MSTC */
++#if 0 /* Damson ABI: no Zyxel drop-statistic fields. */
+ 	__u64	dropbps;
+ #endif
+ };
+--- a/include/uapi/linux/netfilter/nf_nat.h
++++ b/include/uapi/linux/netfilter/nf_nat.h
+@@ -25,7 +25,7 @@
+ 	union nf_conntrack_man_proto	min;
+ 	union nf_conntrack_man_proto	max;
+ 
+-#if 1 /* Support one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120307. */
++#if 0 /* Damson ABI excludes Zyxel one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120307. */
+ 	/* mappingFlag is 1, if it needs to do one-to-one port mapping. */
+ 	unsigned int mappingFlag;
+ 
+@@ -45,7 +45,7 @@
+ 	union nf_inet_addr		max_addr;
+ 	union nf_conntrack_man_proto	min_proto;
+ 	union nf_conntrack_man_proto	max_proto;
+-#if 1 /* Support one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120307. */
++#if 0 /* Damson ABI excludes Zyxel one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120307. */
+     /* mappingFlag is 1, if it needs to do one-to-one port mapping. */
+     unsigned int mappingFlag;
+ 
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -342,7 +342,7 @@
+ 	/* Only bother mapping if it's not already in range and unique */
+ 	if (!(range->flags & NF_NAT_RANGE_PROTO_RANDOM_ALL)) {
+ 		if (range->flags & NF_NAT_RANGE_PROTO_SPECIFIED) {
+-#if 1 /* Support one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
++#if 0 /* Damson ABI excludes Zyxel one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
+ 	     /* If external port range is 1000-2000, and internal port range is 1500-2500. */
+ 	     /* In this case, in_range() will return trun when the incoming traffic uses port 1555. */
+ 	     /* Therefore, only check in_range() when mappingFlag is false. */
+--- a/net/netfilter/nf_nat_proto_common.c
++++ b/net/netfilter/nf_nat_proto_common.c
+@@ -44,7 +44,7 @@
+ 	unsigned int range_size, min, max, i;
+ 	__be16 *portptr;
+ 	u_int16_t off;
+-#if 1 /* Support one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
++#if 0 /* Damson ABI excludes Zyxel one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
+ 	u_int16_t mappingOffset = 0;
+ #endif
+ 
+@@ -90,13 +90,13 @@
+ 		off = *rover;
+ 	}
+ 
+-#if 1 /* Support one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
++#if 0 /* Damson ABI excludes Zyxel one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
+ 	mappingOffset = ntohs(tuple->dst.u.all) - ntohs(range->mappingMin.all);
+ 	for (i = 0; ; ++off, mappingOffset++) {
+ #else
+ 	for (i = 0; ; ++off) {
+ #endif
+-#if 1 /* Support one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
++#if 0 /* Damson ABI excludes Zyxel one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120308. */
+ 		/* if range->flags & IP_NAT_RANGE_PROTO_RANDOM is true, portprt should be counted by off. */
+ 		if (range->mappingFlag == 1 && !(range->flags & NF_NAT_RANGE_PROTO_RANDOM))
+ 		{
+--- a/net/netfilter/xt_nat.c
++++ b/net/netfilter/xt_nat.c
+@@ -38,13 +38,7 @@
+ 	dst->min_proto	 = src->min;
+ 	dst->max_proto	 = src->max;
+ 
+-    /*+++ Kide@zyxel:
+-     * Support one-to-one port mapping. __TELEFONICA__, ZyXEL Stan Su, 20120307.
+-     */
+-    dst->mappingFlag = src->mappingFlag;
+-    dst->mappingMin = src->mappingMin;
+-    dst->mappingMax = src->mappingMax;
+-    /*---*/
++    /* Damson uses the upstream NAT range layout. */
+ }
+ 
+ static unsigned int

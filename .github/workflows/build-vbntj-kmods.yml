@@ -118,8 +118,7 @@ jobs:
       - name: Build Ubuntu 12.04 compatibility image
         run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
 
-      - name: Stage preserved kernel compiler for SPU
-        if: inputs.module_set == 'spu-probe'
+      - name: Stage verified kernel compiler when cache is empty
         run: |
           if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
             scripts/fetch-damson-kernel-toolchain.sh
@@ -173,6 +172,9 @@ jobs:
 
       - name: Verify manual-only IPK safety
         run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
+
+      - name: Match rebuilt modules to the exact validation registry
+        run: python3 scripts/verify-runtime-payloads.py dist/vbntj-kmods build/vbntj/validation/results.json
 
       - name: Upload Damson modules and manual-only IPKs
         if: always()

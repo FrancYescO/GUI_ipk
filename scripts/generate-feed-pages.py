@@ -8,6 +8,7 @@ import shutil
 from collections import Counter
 from pathlib import Path
 from urllib.parse import quote
+from kernel_validation_page import write_report
 
 
 USERSPACE_FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
@@ -72,6 +73,7 @@ def packages(index):
 def page(title, selected, groups, prefix, partial=False):
     nav = [f'<a href="{prefix}index.html">All packages</a>']
     nav.append(f'<a href="{prefix}validation/4.1.38/index.html">4.1.38 validation results</a>')
+    nav.append(f'<a href="{prefix}validation/4.1.52/index.html">4.1.52 validation results</a>')
     nav.extend(
         f'<a href="{prefix}{feed}/index.html">{html.escape(feed)} ({len(groups[feed])})</a>'
         for feed in groups
@@ -110,6 +112,16 @@ def page(title, selected, groups, prefix, partial=False):
         "before downloading or installing a module.</p>"
         if selected is None else ""
     )
+    if selected == "kernel/4.1.52":
+        notice = (
+            '<p><strong>Linux 4.1.52 requires the matching firmware ABI.</strong> '
+            'Runtime tests on VBNT-K Damson 19.4.1051 distinguish functional '
+            'passes from smoke tests and busy stock modules that were not replaced. '
+            'Corrected QoS statistic and NAT range layouts retain version 4.1.52-1. '
+            'xt_nat is withheld pending safe validation. '
+            f'<a href="{prefix}validation/4.1.52/index.html">Read exact-payload validation results</a>. '
+            'IPKs are manual-only; raw-module tests do not validate persistent installation.</p>'
+        )
     if partial:
         notice += (
             '<p><strong>Some packages did not build.</strong> This feed contains the '
@@ -224,6 +236,8 @@ def main():
         raise ValueError(f"Missing userspace feeds: {sorted(missing_userspace)}")
     (root / ".nojekyll").touch()
     write_validation_page(root)
+    write_report(Path(__file__).resolve().parents[1] / "build/vbntj/validation",
+                 root / "validation/4.1.52", STYLE, SCRIPT)
     report = root / "shard-report.md"
     report_text = report.read_text() if report.is_file() else ""
     partial = "## Shard " in report_text or "## Skipped malformed IPKs" in report_text
