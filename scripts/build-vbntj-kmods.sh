@@ -362,6 +362,8 @@ if [[ "$module_set" == rndis-compat ]]; then
     [[ "$dependencies" == "$expected" ]] || { echo "Unexpected $module dependencies: $dependencies" >&2; exit 1; }
   done
   "$cross_readelf" -p .modinfo "$output_dir/rndis_host.ko" | grep -qi 'alias=.*icEFisc04ip01'
+  python "$repo_root/scripts/normalize-usb-build-id.py" "$output_dir" \
+    "$repo_root/artifacts/damson-4.1.52-rndis-compat" "$repo_root/build/vbntj/validation/results.json"
 fi
 
 build_manual_ipk() {
@@ -380,7 +382,7 @@ build_manual_ipk() {
   package_version="4.1.52-1"
 
   package_arch="brcm963xx"
-  if [[ "$module_stem" == bcmspu ]]; then
+  if [[ "$module_stem" == bcmspu || "$module_set" == rndis-compat ]]; then
     package_arch="arm_cortex-a9"
   fi
   package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"

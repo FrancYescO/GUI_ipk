@@ -47,3 +47,11 @@ It prepares each pinned runtime profile and calls
 `scripts/build-usb-rndis-4.1.38.sh`. Rebuild the 4.1.52 pair using
 `module_set=rndis-compat` in the Damson workflow. Both use the shared patch;
 the 4.1.52 build retains its GCC 5.5.0 toolchain and Damson layout canary.
+
+The restored 4.1.52 build reproduces every byte of the historical driver pair
+except the linker's GNU build-id, which depends on stripped build context.
+For this pair only, the build compares the complete stripped ELF against
+the committed runtime-tested reference and normalizes that note only when
+every other byte is identical. It then verifies the complete SHA-256 against
+the runtime registry. Any code, data, relocation, import or other metadata
+difference rejects normalization. Published 4.1.52 module bytes remain unchanged.

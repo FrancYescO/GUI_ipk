@@ -37,6 +37,7 @@ on:
       - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
       - "scripts/apply-usb-rndis-compat.sh"
+      - "scripts/normalize-usb-build-id.py"
       - "patches/usb-rndis/**"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "scripts/verify-wireguard-kmod.sh"
