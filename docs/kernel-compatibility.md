@@ -15,11 +15,11 @@ source lines, package counts, exact ABIs and reference firmware.
 | Feed | Scope |
 | --- | --- |
 | `kernel/4.1.38-vbnto` | 49 packages aligned with VBNT-K; reference DGA4131FWB, 18.3.n.0439, kernel package ending `08839f3f6145d3a5d2d04be7567e3f9d` |
-| `kernel/4.1.38-vbnts` | 49 packages aligned with VBNT-K; reference DGA4132, 18.3.k.0451, kernel package ending `8dd693635a152c8c7b822a64e6c5c470` |
+| `kernel/4.1.38-vbntk` | 49 packages aligned with VBNT-K; reference DGA4132, 18.3.k.0451, kernel package ending `8dd693635a152c8c7b822a64e6c5c470` |
 | `kernel/4.1.52-vbntk` | VBNT-K at .69, firmware 19.4.1051-3401200; per-module validation levels |
 | `kernel/4.1.52` | Compatibility alias of `4.1.52-vbntk` |
 | `kernel/4.1.38-vbnto-candidates` | 220 staged candidate IPKs for the exact VBNT-O kernel package above |
-| `kernel/4.1.38-vbnts-candidates` | 212 staged candidate IPKs for the exact VBNT-S kernel package above |
+| `kernel/4.1.38-vbntk-candidates` | 212 staged candidate IPKs for the exact VBNT-S kernel package above |
 | `kernel/4.1.38` | Historical archive only; no active OPKG feed or identified compatible firmware |
 
 There are three runtime feeds. Enable only the one whose complete kernel
@@ -27,7 +27,7 @@ package version matches `opkg status kernel`:
 
 ```text
 src/gz modgui_kernel_4_1_38_vbnto https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnto
-src/gz modgui_kernel_4_1_38_vbnts https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnts
+src/gz modgui_kernel_4_1_38_vbntk https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbntk
 src/gz modgui_kernel_4_1_52_vbntk https://francyesco.github.io/GUI_ipk/kernel/4.1.52-vbntk
 ```
 
@@ -41,7 +41,7 @@ The two candidate feeds are separate and are not enabled by the helper. Add
 one only for manual validation, matching the firmware's installed `kernel` package, for example:
 
 ```text
-src/gz gui_kernel_vbnts_candidates https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnts-candidates
+src/gz gui_kernel_vbntk_candidates https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbntk-candidates
 ```
 
 Check the installed kernel package with `opkg status kernel`. These IPKs retain

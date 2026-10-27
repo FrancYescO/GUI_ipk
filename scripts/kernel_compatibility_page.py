@@ -45,7 +45,7 @@ Optional candidate feeds install modules in a staging directory and require manu
 They do not replace stock modules or configure autoload. xt_nat remains withheld.</p>
 <nav><a href="../index.html">All packages</a>
 <a href="../kernel/4.1.38-vbnto-candidates/index.html">VBNT-O candidates</a>
-<a href="../kernel/4.1.38-vbnts-candidates/index.html">VBNT-S candidates</a>
+<a href="../kernel/4.1.38-vbntk-candidates/index.html">VBNT-K 4.1.38 candidates</a>
 <a href="kernel-compatibility.md">Feed setup and scope</a>
 <a href="firmware-compatibility.json">JSON inventory</a>
 <a href="firmware-compatibility.csv">CSV inventory</a>
@@ -75,7 +75,7 @@ def write_usb_report(root, style):
         shutil.copytree(source / profile, destination / profile, dirs_exist_ok=True)
         rows.append('<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td><a href="{}/router-test.log">Probe log</a> · <a href="{}/BUILD-METADATA.txt">Build inputs</a> · <a href="../../kernel/4.1.38-{}/index.html">IPKs</a></td></tr>'.format(
             profile, html.escape(record['firmware']), html.escape(record['status']),
-            html.escape(record['traffic']), profile, profile, profile))
+            html.escape(record['traffic']), profile, profile, 'vbntk' if profile == 'vbnts' else profile))
     page = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>USB RNDIS 4.1.38 validation</title><style>' + style + '</style></head><body>'
     page += '<h1>USB RNDIS 4.1.38 validation</h1><p>Both profiles produced identical cdc_ether and rndis_host payloads. They use the same miscellaneous-class RNDIS patch as the VBNT-K 4.1.52 pair, while retaining native usbnet.</p>'
     page += '<p>Loading, USB driver registration, unloading and stock restoration passed on both modems. Boot IDs, kernel taint and default routes were unchanged. No USB network device was attached: enumeration, DHCP and traffic remain untested.</p>'

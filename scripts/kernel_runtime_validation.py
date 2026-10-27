@@ -9,9 +9,12 @@ from urllib.parse import quote
 
 def write_runtime_report(source, destination, style):
     report = json.loads((source / 'results.json').read_text())
+    # Publish downloads from the canonical feed while retaining source evidence.
+    report['asset_base'] = report['asset_base'].replace('/kernel/4.1.38-vbnts/', '/kernel/4.1.38-vbntk/')
     destination.mkdir(parents=True, exist_ok=True)
     for name in ('results.json', 'results.tsv', 'functional-results.txt', 'run.log'):
         shutil.copyfile(source / name, destination / name)
+    (destination / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
     counts = Counter((r['status'], r['level']) for r in report['modules'])
     fresh = sum(n for (status, level), n in counts.items() if status == 'passed' and not level.startswith('previous-'))
     previous = sum(n for (status, level), n in counts.items() if status == 'passed' and level.startswith('previous-'))
