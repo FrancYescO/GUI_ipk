@@ -120,6 +120,18 @@ class KernelCandidateTests(unittest.TestCase):
         self.assertTrue((self.root / 'compatibility/firmware-compatibility.csv').is_file())
         self.assertTrue((self.root / 'compatibility/kernel-compatibility.md').is_file())
 
+    def test_both_pages_publishers_preserve_runtime_and_candidate_feeds(self):
+        for workflow in ('build-packages.yml', 'publish-opkg-feed.yml'):
+            text = (ROOT / '.github/workflows' / workflow).read_text()
+            with self.subTest(workflow=workflow):
+                for profile in ('vbnto', 'vbnts'):
+                    self.assertIn('--' + profile + '-kernel-dir artifacts/' + profile + '-4.1.38-manual', text)
+                self.assertIn('--damson-spu-dir artifacts/damson-4.1.52-spu', text)
+                self.assertIn('--damson-rndis-dir artifacts/damson-4.1.52-rndis-compat', text)
+                self.assertIn('scripts/fetch-kernel-candidates.py', text)
+                self.assertIn('scripts/assemble-kernel-candidates.py', text)
+                self.assertNotIn(')" -eq 44', text)
+
 
 if __name__ == '__main__':
     unittest.main()

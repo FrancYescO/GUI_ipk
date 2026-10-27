@@ -10,6 +10,7 @@ on:
       - "build/vbnts-4.1.38/profile.json"
       - "scripts/assemble-kernel-feed.py"
       - "scripts/assemble-kernel-candidates.py"
+      - "scripts/fetch-kernel-candidates.py"
       - "scripts/kernel_compatibility_page.py"
       - "scripts/generate-feed-pages.py"
       - "build/kernel-candidates/**"
@@ -61,6 +62,7 @@ on:
       - "build/vbnto-4.1.38/validation/**"
       - "scripts/assemble-kernel-feed.py"
       - "scripts/assemble-kernel-candidates.py"
+      - "scripts/fetch-kernel-candidates.py"
       - "scripts/kernel_compatibility_page.py"
       - "build/kernel-candidates/**"
       - "docs/kernel-compatibility.md"
@@ -169,19 +171,7 @@ jobs:
       - name: Download pinned staged kernel candidates
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          python3 - <<'PY'
-          import json, os, pathlib, subprocess
-          sources = json.loads(pathlib.Path('build/kernel-candidates/sources.json').read_text())
-          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'kernel-candidate-downloads'
-          for profile, source in sources.items():
-              destination = root / profile
-              destination.mkdir(parents=True, exist_ok=True)
-              subprocess.run(['gh', 'release', 'download', source['tag'], '--repo', os.environ['GITHUB_REPOSITORY'],
-                              '--pattern', source['archive'], '--dir', str(destination)], check=True)
-              subprocess.run(['gh', 'release', 'download', source['tag'], '--repo', os.environ['GITHUB_REPOSITORY'],
-                              '--pattern', '*.ipk', '--dir', str(destination / 'ipks')], check=True)
-          PY
+        run: python3 scripts/fetch-kernel-candidates.py "$RUNNER_TEMP/kernel-candidate-downloads" --repository "$GITHUB_REPOSITORY"
 
       - name: Verify and index optional candidate feeds
         run: |
