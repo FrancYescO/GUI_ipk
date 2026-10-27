@@ -8,20 +8,37 @@ hardware and firmware integration.
 
 ## Public OPKG feeds
 
-Base URL: `https://francyesco.github.io/GUI_ipk/`.
+Base URL: `https://francyesco.github.io/GUI_ipk/`. All kernel IPKs are on Pages.
+The [kernel feed overview](https://francyesco.github.io/GUI_ipk/kernel/) lists
+source lines, package counts, exact ABIs and reference firmware.
 
 | Feed | Scope |
 | --- | --- |
-| `kernel/4.1.38-vbnto` | TUN, WireGuard and SPU tested on DGA4131FWB, 18.3.n.0439, kernel package ending `08839f3f6145d3a5d2d04be7567e3f9d` |
-| `kernel/4.1.38-vbnts` | TUN, WireGuard and SPU tested on DGA4132, 18.3.k.0451, kernel package ending `8dd693635a152c8c7b822a64e6c5c470` |
+| `kernel/4.1.38-vbnto` | 49 packages aligned with VBNT-K; reference DGA4131FWB, 18.3.n.0439, kernel package ending `08839f3f6145d3a5d2d04be7567e3f9d` |
+| `kernel/4.1.38-vbnts` | 49 packages aligned with VBNT-K; reference DGA4132, 18.3.k.0451, kernel package ending `8dd693635a152c8c7b822a64e6c5c470` |
 | `kernel/4.1.52-vbntk` | VBNT-K at .69, firmware 19.4.1051-3401200; per-module validation levels |
 | `kernel/4.1.52` | Compatibility alias of `4.1.52-vbntk` |
 | `kernel/4.1.38-vbnto-candidates` | 220 staged candidate IPKs for the exact VBNT-O kernel package above |
 | `kernel/4.1.38-vbnts-candidates` | 212 staged candidate IPKs for the exact VBNT-S kernel package above |
-| `kernel/4.1.38` | Historical generic buildroot ABI; separate from the two runtime profiles |
+| `kernel/4.1.38` | Historical archive only; no active OPKG feed or identified compatible firmware |
 
-The optional candidate feeds are public and indexed for OPKG. Add only the
-feed matching the firmware's installed `kernel` package, for example:
+There are three runtime feeds. Enable only the one whose complete kernel
+package version matches `opkg status kernel`:
+
+```text
+src/gz modgui_kernel_4_1_38_vbnto https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnto
+src/gz modgui_kernel_4_1_38_vbnts https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnts
+src/gz modgui_kernel_4_1_52_vbntk https://francyesco.github.io/GUI_ipk/kernel/4.1.52-vbntk
+```
+
+These lines are alternatives, not a combined configuration. The source-selection
+helper chooses exactly one matching ABI. See the per-module reports for test
+levels; matching firmware metadata alone is not runtime validation.
+
+### Optional staging-only candidates
+
+The two candidate feeds are separate and are not enabled by the helper. Add
+one only for manual validation, matching the firmware's installed `kernel` package, for example:
 
 ```text
 src/gz gui_kernel_vbnts_candidates https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnts-candidates
@@ -110,11 +127,43 @@ remain untested. See [USB build and runtime evidence](https://francyesco.github.
 
 Candidate publisher inputs are preserved in checksum-pinned repository bundles,
 so duplicate candidate Releases can be removed without affecting future builds.
-The seven optional application Releases and immutable compiler/build inputs
-remain necessary and are retained.
+All promoted application packages are retained in the main Pages feeds. Only
+FreeSWITCH sounds uses a binary package Release. The three immutable
+compiler/build-input releases remain necessary for CI.
 
 The VBNT-K 4.1.52 packages declare `arm_cortex-a9`, confirmed in OPKG on
 .69. The former `brcm963xx` package architecture is not accepted by that modem.
 Package names and version `4.1.52-1` are retained; container metadata and
 filenames change, while every module payload remains identical to the registry.
 Run `opkg update` to obtain the refreshed indexes.
+
+## Aligned 49-package runtime sets
+
+All three runtime profiles expose the same 49 module names, with exact distinct
+kernel dependencies. The 4.1.38 additions reuse unchanged payloads from their
+checksum-pinned profile candidate bundles and are repackaged reproducibly as
+manual runtime IPKs. No 4.1.52 binary is reused on 4.1.38. The original vendor
+4.1.38 source/configuration builds remain the source path for recompilation.
+
+On 2026-10-27, 44 network-module probes completed on each modem. VBNT-O (.45)
+passed 14 functional tests and left 30 busy stock modules unchanged. VBNT-S
+(.204) passed 15 functional tests plus one load/unload and namespace smoke test,
+and left 28 busy stock modules unchanged. The five existing TUN, WireGuard,
+SPU, CDC Ethernet and RNDIS payloads retain their prior exact-payload evidence.
+
+The VBNT-S em_u32 test is limited to smoke validation because cls_basic is
+absent from both native firmware and its exact-profile candidate bundle. The
+VBNT-O em_u32 test passed actual classifier traffic after supplying the missing
+userspace ematch map in /tmp. tc and libmnl were extracted privately; no userspace
+package was installed. Boot IDs, taint (4097), loaded module names, routes and
+checked network/firewall/OPKG configurations were restored unchanged. xt_nat's
+known crash was not retried. USB tethering traffic remains untested.
+
+Evidence and lifecycle logs are in the profile-specific `runtime-validation`
+directories and the public [VBNT-O report](https://francyesco.github.io/GUI_ipk/validation/4.1.38-vbnto/)
+and [VBNT-S report](https://francyesco.github.io/GUI_ipk/validation/4.1.38-vbnts/).
+`network_kmods_4138.py` deterministically reconstructs and verifies the 44 new
+manual IPKs per profile from the committed bundles and reports.
+`prepare-kernel-runtime-probe.py` prepares a private repeat-test directory with
+the exact payloads and pinned temporary tc/libmnl tooling; it does not connect
+to a modem or install packages.

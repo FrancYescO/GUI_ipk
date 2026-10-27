@@ -117,6 +117,12 @@ def write_feed(profile, source, work, manifest, destination):
     if profile == 'vbnto':
         report = json.loads((ROOT / 'build/vbnto-4.1.38/validation/results.json').read_text())
         validated = {(m['name'], m['sha256']): m for m in report['modules']}
+    runtime_report = ROOT / 'build' / (profile + '-4.1.38/runtime-validation/results.json')
+    if runtime_report.is_file():
+        runtime = json.loads(runtime_report.read_text())
+        if runtime['kernel_package'] != source['kernel_package']:
+            raise ValueError('Runtime validation ABI mismatch')
+        validated.update({(m['name'], m['sha256']): m for m in runtime['modules']})
     entries, files = [], []
     for filename, sha in sorted(expected.items()):
         ipk = work / 'ipks' / filename

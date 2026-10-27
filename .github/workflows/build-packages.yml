@@ -219,7 +219,7 @@ jobs:
 
   aggregate:
     name: Merge and verify userspace feed
-    if: ${{ always() && (github.event_name != 'pull_request' || !github.event.pull_request.draft) && needs.homeware-checks.result == 'success' && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
+    if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || !github.event.pull_request.draft) && needs.homeware-checks.result == 'success' && inputs.build_profile != 'asterisk20' && inputs.package_targets == '' && inputs.shard_index == '' }}
     needs: [build, asterisk20, homeware-checks]
     runs-on: ubuntu-24.04
     permissions:

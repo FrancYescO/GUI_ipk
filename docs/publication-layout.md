@@ -1,74 +1,81 @@
 # Public OPKG publication
 
 Pages hosts the six main userspace feeds (`base`, `luci`, `packages`, `routing`,
-`telephony`, `target/packages`) and a unified searchable catalog. All thirteen
-verified application updates, including ADB, Tailscale and rclone, are promoted
-into those feeds without changing the IPK bytes.
+`telephony`, `target/packages`), Asterisk 20, all three runtime kernel profiles
+and two separate candidate feeds. Only the eight large FreeSWITCH sound
+packages use a binary Release feed (about 387 MiB).
 
-Three coherent components use GitHub Releases: kernel modules, Asterisk 20,
-and FreeSWITCH sound packages. Releases are never divided into numbered asset
-batches. The initial inventory retains 6,057 catalog records: 5,533 IPKs on
-Pages (about 693 MiB), 491 kernel IPKs, 25 Asterisk IPKs and 8 sound IPKs.
-FreeSWITCH sounds alone account for about 387 MiB. `feeds.json` and
-`opkg-userspace.conf` expose the current source URLs; the catalog links directly
-to the correct storage location.
+All 6,145 catalog records are retained: 6,137 IPKs are on Pages, about 700 MiB,
+including all thirteen promoted application updates and all 579 kernel IPKs.
+Package bytes and SHA256 values are unchanged. `feeds.json` lists every source;
+the catalog links directly to Pages or the FreeSWITCH sound release.
 
-## Kernel selection and existing clients
+## Kernel feeds and ABI selection
 
-The kernel release contains all three runtime ABI profiles. `Packages.gz`
-exposes only the 59 runtime packages. The 432 staging-only candidates remain
-available as individual assets, in `Candidates` and in the web catalog, but are
-excluded from automatic OPKG selection. Matching a kernel version alone is not
-sufficient: use the complete `kernel` package version in `profiles.json`.
-Firmware with the same ABI still requires runtime validation. No USB traffic
-claim is made: CDC/RNDIS load, registration, unload and restoration were tested;
-no tethering device was available.
+The [kernel overview](https://francyesco.github.io/GUI_ipk/kernel/) shows each
+source, required kernel-package version, reference firmware and validation
+status. Kernel release alone, such as `uname -r`, does not identify the ABI.
 
-The historical generic `kernel/4.1.38` buildroot has no identified compatible
-firmware. Its 24 packages remain in `legacy-buildroot.tar.gz` for reproducibility,
-without an active OPKG source. Existing Pages kernel and Asterisk source URLs
-must be replaced with the URLs in `feeds.json`; HTML catalog pages cannot
-redirect OPKG downloads. Existing GUI versions that generate the old sources
-need their source configuration updated; publication does not patch the GUI.
+| Pages path | Reference device / firmware | IPKs | Use |
+|---|---|---:|---|
+| `kernel/4.1.38-vbnto` | DGA4131FWB / VBNT-O, 18.3.n.0439 (.45) | 49 | Runtime packages; per-module test levels differ |
+| `kernel/4.1.38-vbnts` | DGA4132 / VBNT-S, 18.3.k.0451 (.204) | 49 | Runtime packages; per-module test levels differ |
+| `kernel/4.1.52-vbntk` | DGA4130 / VBNT-K, 19.4.1051-3401200 (.69) | 49 | Runtime packages; per-module test levels differ |
+| `kernel/4.1.38-vbnto-candidates` | VBNT-O ABI above | 220 | Optional staging only; manual validation |
+| `kernel/4.1.38-vbnts-candidates` | VBNT-S ABI above | 212 | Optional staging only; manual validation |
 
-Download `feeds.json` and `print-opkg-sources.sh` from Pages using a TLS-capable
-client, then run `sh print-opkg-sources.sh feeds.json` on the router to print the
-proposed sources. `--asterisk20` adds the optional Asterisk source. The helper
-adds the kernel source only on an exact installed kernel-package match and
-never writes configuration. Review its output and replace obsolete GUI source
-entries before running `opkg update`.
+Enable one runtime source only after matching the complete installed `kernel`
+package version. Firmware sharing an ABI still needs runtime validation. The
+source-selection helper never enables candidate sources. Their packages stage
+modules outside boot paths; xt_nat remains withheld. All three runtime profiles publish the same 49 module names. VBNT-O has 14
+new functional passes and 30 busy stock modules left unchanged; VBNT-S has 15
+new functional passes, one namespace smoke pass and 28 busy stock modules left
+unchanged. Both also retain the five previously validated core payloads. See
+the per-profile reports for hashes, exact test levels and reused evidence. CDC/RNDIS load, registration, unload and
+restoration were tested; USB tethering traffic was not tested.
 
-Legacy firmware wget may fail on GitHub Release downloads. Put
-`opkg-release-wget.sh` in a private directory under the name `wget`, mark it
-executable, and invoke OPKG with `PATH=/path/to/private-bin:$PATH`. The wrapper
-uses `/usr/bin/curl` with normal certificate verification. If the router's CA
-store is obsolete, transfer a current trusted CA bundle and set
-`CURL_CA_BUNDLE=/path/to/cacert.pem`; do not disable TLS verification. This does
-not replace the global wget. A private-root OPKG update/download test on `.69`
-verified Release transport and the downloaded SHA256 without installing a
-package or changing system OPKG sources.
+`kernel/4.1.52` remains an OPKG-compatible alias of `4.1.52-vbntk`, using relative
+filenames without duplicating IPKs. The generic `kernel/4.1.38` has no identified
+compatible firmware. Its 24 historical packages remain in the Pages
+`legacy-buildroot.tar.gz`; it has no active OPKG source.
 
-## Reproducibility and publication order
+Kernel and Asterisk sources temporarily pointing at Releases must be replaced
+with the Pages URLs in `feeds.json`. The kernel and Asterisk binary Releases can
+be removed after the Pages deployment is verified. Existing profile-specific
+Pages paths work again; no HTML redirect is required for package downloads.
 
-`publish-opkg-feed.yml` is the only Pages publisher. It restores userspace from
-`publication.json.gz`, using a hash-verified content-addressed cache. On the
-first migration only, a missing live manifest falls back to the committed
-`build/publication/bootstrap.json.gz`. It preserves live versions rather than
-requiring expiring Actions artifacts. Explicit complete userspace builds can
-replace the baseline after successful-run provenance checks. OpenVPN snapshots
-and all pinned application updates are overlaid before publication.
+Download `feeds.json` and `print-opkg-sources.sh` from Pages, then run
+`sh print-opkg-sources.sh feeds.json` on the router. It prints userspace sources
+and adds exactly the runtime kernel source matching the installed kernel-package
+version. `--asterisk20` adds the optional Pages Asterisk source. The helper never
+writes configuration. Each profile also has an `opkg.conf`; the root
+`opkg-kernel.conf` is an annotated list with sources commented out for selection.
 
-`prepare-publication.py` rebuilds kernel feeds from committed artifacts and
-candidate bundles, running their strict validators. Original source recipes,
-toolchains and build-input releases remain available. Historical internal input
-tags are preserved to avoid breaking pinned builds. The thirteen promoted application inputs are pinned to their versioned Pages
-URLs and SHA256 values. The duplicate `application-packages-v1` release can be
-removed after this CI configuration is deployed.
+Legacy firmware wget may fail on GitHub downloads, including FreeSWITCH sounds.
+Use the private `opkg-release-wget.sh` curl wrapper and a current trusted CA
+bundle if needed. Set `CURL_CA_BUNDLE` to the transferred bundle; do not disable
+certificate verification or replace global wget. Isolated tests on `.69` used
+private OPKG roots, without installing packages or changing system sources.
 
-The uploader verifies every local size/SHA256, creates drafts, resumes missing
-uploads, rejects conflicting assets, then publishes complete releases before
-Pages deployment. Existing published component releases are immutable. PR runs
-prepare and validate without publishing. Full userspace builds retain complete
-inputs and trigger this publisher; they cannot independently deploy the old
-oversized layout. `publication.json.gz`, provenance, checksums and compatibility
-reports make the chosen storage and package bytes auditable.
+## Reproducibility and release retention
+
+`publish-opkg-feed.yml` is the only Pages publisher. It restores complete
+userspace from `publication.json.gz`, using a hash-verified content-addressed
+cache. A missing live manifest falls back to the committed bootstrap. Explicit
+complete userspace builds are accepted after successful-run provenance checks.
+OpenVPN snapshots and all pinned application updates are overlaid before
+publication. Application inputs use versioned Pages URLs and pinned hashes.
+
+`prepare-publication.py` rebuilds all kernel indexes from committed verified
+artifacts and candidate bundles. Candidate diagnostics, compatibility reports
+and the historical buildroot archive are hosted on Pages beside the feeds.
+Full userspace builds produce inputs for this single publisher and cannot
+independently deploy an obsolete layout. PR runs prepare and validate without
+publishing. The FreeSWITCH release uploader verifies all hashes, resumes drafts
+and rejects conflicting assets before Pages deployment.
+
+Three source/SDK/toolchain releases remain required by CI: legacy kernel build
+inputs, 4.1.52 GPL inputs and the GCC compiler seed. They are not user-installable
+package feeds. Their historical tags remain stable for reproducibility. After
+retiring duplicate kernel and Asterisk binary releases, FreeSWITCH sounds is the
+only binary package Release; the three CI input releases remain separate.
