@@ -21,9 +21,15 @@ build inputs, the 4.1.52 GPL inputs, and the GCC 5.5.0 compiler seed. Their
 historical tag names remain stable for reproducibility; their visible titles
 use the kernel version. They are required by rebuild workflows.
 
-The seven former optional application feed Releases were subsequently
-consolidated into `application-packages-v1`. It preserves all 13 original IPKs,
-original source manifests and a common OPKG index. The seven `extras-*`
-Releases can therefore be removed after independent archive verification.
-There are four retained Releases: three immutable build inputs/toolchains and
-one consolidated application package archive.
+The seven former optional application feed Releases were first consolidated
+into `application-packages-v1`. All thirteen packages have since been promoted
+into the main Pages feeds and independently downloaded with matching SHA256
+values. CI now pins their versioned Pages URLs; the duplicate application
+release can be deleted after deploying that configuration.
+
+The retained public inventory has six Releases: three immutable build input
+or toolchain releases, plus one each for kernel modules, Asterisk 20 and
+FreeSWITCH sounds. Main userspace packages remain on Pages. Original
+application build provenance and hashes remain committed in
+`build/application-archive/manifest.json`; the original consolidated provenance
+is retained in `build/application-archive/source.json`.

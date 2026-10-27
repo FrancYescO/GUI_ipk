@@ -11,38 +11,25 @@ Baseline and upstream releases inspected on 2026-10-25:
 | Tailscale | Not in the shared feed | 1.104.2 | Static IPK and private userspace daemon tested on router |
 | WireGuard tools | 1.0.20260223-2 | Already at inspected upstream release | No tool update needed |
 
-The application overlay is enabled only by explicit targeted builds. The verified
-IPKs are retained in one consolidated application archive. The shared Pages
-build continues using its archived recipes.
+All thirteen verified application packages are now promoted into the main
+Pages feeds: Transmission (4), aria2, aMule, ADB, Tailscale, rclone (4) and
+libgomp. Their original versions, package bytes, source build provenance and
+SHA256 pins are preserved in `build/application-archive/manifest.json`.
 
-## Published application archive
+## Published application updates
 
-The seven former `Optional OPKG feed extras-*` Releases have been consolidated
-into [Application package archive v1](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1). It contains all 13 original
-IPKs: Transmission (4), aria2, aMule, ADB, Tailscale, rclone (4) and libgomp.
-Their versions and package bytes are unchanged. Original build provenance is
-preserved inside `source.json`, and every package is SHA256-pinned in the repository.
+Use the main `base` and `packages` sources listed in
+[the public feed manifest](https://francyesco.github.io/GUI_ipk/feeds.json).
+No separate optional application source is required. Remove retired
+`extras-*` and `application-packages-v1` sources when adopting the new sources.
 
-Use one optional OPKG source, replacing the retired per-application sources:
-
-```text
-src/gz gui_applications https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1
-```
-
-Install only the applications you need; do not perform a blanket upgrade.
-The aggregate index uses relative `Filename` paths compatible with the legacy
-OPKG downloader. No router configuration is changed by publication.
-
-The shared feed already contains about 1.05 GB of IPKs, close to the 1 GiB
-Pages limit. These optional applications require about 83 MB more, so their
-assets remain in one archive rather than duplicating seven Releases or
-exceeding Pages hosting capacity. The main package website links to this archive.
-
-All 13 source IPKs and their original release assets were downloaded and
-verified before consolidation. The archive is reconstructible using its own
-packages and preserved original manifests, without the retired Releases.
-Use a working TLS downloader and current certificates; see the
-[downloader checks](homeware-integration.md#consolidated-application-archive).
+Kernel modules, Asterisk 20 and FreeSWITCH sounds are stored in coherent
+Releases, leaving the six main Pages feeds at about 693 MiB including all
+application updates. CI fetches each versioned application URL from Pages and
+checks its pinned size and SHA256, independently of the duplicate application
+archive. Targeted modern application source recipes remain available for
+rebuilds. See [the publication layout](publication-layout.md) for feed selection
+and the TLS downloader required by legacy firmware.
 
 ## Compatibility boundary
 

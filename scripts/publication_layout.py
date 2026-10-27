@@ -105,7 +105,7 @@ def promoted_applications(records, source):
         section = matches[0]['section'] if matches else 'packages'
         records = [r for r in records if r not in matches]
         stanza = text + '\nFilename: ' + path.name + '\nSize: ' + str(path.stat().st_size) + '\nSHA256sum: ' + pin['sha256']
-        records.append(record(path, stanza, section, origin=manifest['url'] + '/' + path.name))
+        records.append(record(path, stanza, section, origin=pin['url']))
     return records
 
 

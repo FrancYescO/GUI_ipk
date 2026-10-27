@@ -44,7 +44,7 @@ The verified IPKs and provenance are in
 applies these four packages over the assembled userspace feed, preserving
 other packages and retiring the old plaintext variant.
 
-Optional application updates are available in one [consolidated archive](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1), containing 13 verified IPKs and an OPKG index.
+All 13 verified application updates are included in the main [Pages feeds](https://francyesco.github.io/GUI_ipk/). CI restores these versioned files using pinned SHA256 values; no separate application archive release is required.
 
 ## Building packages
 
