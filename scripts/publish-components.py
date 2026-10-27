@@ -43,10 +43,11 @@ def publish(directory, info, repository, revision):
             raise ValueError('Prepared asset changed: ' + name)
     state = release(repository, info['tag'])
     if state is None:
-        gh('release', 'create', info['tag'], '--repo', repository, '--target', revision, '--draft', '--title', info['title'],
-           '--notes', 'Verified OPKG component feed. Source: src/gz gui_component ' + info['url'] +
-           '\nChecksums and provenance are included. Package bytes are not modified by publication.')
-        state = release(repository, info['tag'])
+        state = json.loads(gh('api', '--method', 'POST', 'repos/' + repository + '/releases',
+            '-f', 'tag_name=' + info['tag'], '-f', 'target_commitish=' + revision,
+            '-F', 'draft=true', '-f', 'name=' + info['title'],
+            '-f', 'body=Verified OPKG component feed. Source: src/gz gui_component ' + info['url'] +
+            '\nChecksums and provenance are included. Package bytes are not modified by publication.'))
     while True:
         current = assets(repository, state['id'])
         if set(current) - set(expected):

@@ -171,10 +171,13 @@ def prepare(userspace, applications, output):
     for group, records in releases.items():
         if len(records) + 8 > 1000 or len({r['filename'] for r in records}) != len(records):
             raise ValueError('Release asset limit or duplicate filename')
-        digest = sha(index(records))
+        digest = sha(b'publication-layout-v2\n' + index(records)) if group == 'kernel' else sha(index(records))
         tag = ('kernel-modules' if group == 'kernel' else group) + '-' + digest[:16]
         directory = output / 'releases' / tag
-        write_index(directory, records)
+        write_index(directory, [r for r in records if parse(r['control']).get('X-Module-Staging-Only') != 'yes'])
+        candidates = [r for r in records if parse(r['control']).get('X-Module-Staging-Only') == 'yes']
+        if candidates:
+            (directory / 'Candidates').write_bytes(index(candidates))
         url = 'https://github.com/' + REPOSITORY + '/releases/download/' + tag
         release_info[group] = {'tag': tag, 'url': url, 'count': len(records), 'sha256': digest}
         for row in records:

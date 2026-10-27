@@ -120,17 +120,17 @@ class KernelCandidateTests(unittest.TestCase):
         self.assertTrue((self.root / 'compatibility/firmware-compatibility.csv').is_file())
         self.assertTrue((self.root / 'compatibility/kernel-compatibility.md').is_file())
 
-    def test_both_pages_publishers_preserve_runtime_and_candidate_feeds(self):
-        for workflow in ('build-packages.yml', 'publish-opkg-feed.yml'):
-            text = (ROOT / '.github/workflows' / workflow).read_text()
-            with self.subTest(workflow=workflow):
-                for profile in ('vbnto', 'vbnts'):
-                    self.assertIn('--' + profile + '-kernel-dir artifacts/' + profile + '-4.1.38-manual', text)
-                self.assertIn('--damson-spu-dir artifacts/damson-4.1.52-spu', text)
-                self.assertIn('--damson-rndis-dir artifacts/damson-4.1.52-rndis-compat', text)
-                self.assertIn('scripts/fetch-kernel-candidates.py', text)
-                self.assertIn('scripts/assemble-kernel-candidates.py', text)
-                self.assertNotIn(')" -eq 44', text)
+    def test_publication_is_centralized_and_preserves_candidate_reconstruction(self):
+        publisher = (ROOT / '.github/workflows/publish-opkg-feed.yml').read_text()
+        builder = (ROOT / '.github/workflows/build-packages.yml').read_text()
+        layout = (ROOT / 'scripts/publication_layout.py').read_text()
+        self.assertIn('scripts/prepare-publication.py', publisher)
+        self.assertIn('scripts/fetch-publication-inputs.py', publisher)
+        self.assertNotIn('actions/deploy-pages', builder)
+        self.assertIn('userspace-opkg-feed-${{ github.sha }}', builder)
+        self.assertIn("load_script('fetch-kernel-candidates')", layout)
+        self.assertIn("load_script('assemble-kernel-candidates')", layout)
+        self.assertIn("'X-Module-Staging-Only'", layout)
 
 
 if __name__ == '__main__':
