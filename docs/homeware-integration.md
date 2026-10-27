@@ -178,39 +178,31 @@ router's OPKG comparator: `dovecot` 2.2.36.4-1 satisfies the required
 `>= 2.2.36.4`. The automatic reporter intentionally retains its conservative
 version-check classification.
 
-## Optional release snapshots
+## Consolidated application archive
 
-The shared Pages site has little space left below its deployment limit. The
-`Publish optional release OPKG snapshot` workflow provides additional capacity
-for individually reviewed userspace packages. It accepts exact package names
-from a successful targeted userspace build whose source revision is already
-merged into the workflow revision. It checks package metadata, architecture,
-payloads and hashes before publication. Native GCC and kernel packages are
-excluded; package compatibility and dependencies still require their own review.
+Verified optional application packages are now published in one
+[application archive](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1), replacing seven `extras-*` Releases.
+The archive has a relative-path OPKG index and preserves all 13 original IPKs,
+SHA256 checksums and original build manifests. The source and checksum registry
+is `build/application-archive/manifest.json`.
 
-Each snapshot has an immutable release tag derived from its source build and
-package manifest and exact index hashes. Python/zlib versions can emit different
-compressed bytes for equivalent indexes; those outputs receive distinct tags.
-Packages and indexes are uploaded to a draft before the
-release becomes visible. Retries compare existing asset bytes and refuse any
-replacement. A published snapshot cannot gain or lose packages. Existing
-snapshots remain available to clients with cached indexes.
+```text
+src/gz gui_applications https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1
+```
 
-The workflow summary gives an optional `src/gz gui_extras` source line. Its URL
-ends at `releases/download/<snapshot-tag>` and each index uses relative package
-filenames, as required by the legacy OPKG downloader. Adding an absolute URL to
-`Filename` would still prepend the configured feed root and fail. Updating to a
-new snapshot requires changing the optional source URL explicitly; existing
-Pages source lines continue to work. No router source is changed automatically.
+The shared Pages feed already contains about 1.05 GB of IPKs, so adding the
+83 MB optional application set would exceed the 1 GiB hosting limit. A single
+consolidated archive retains the packages while reducing release clutter.
 
-The first snapshot, `extras-40086518503-d97cb2260f311fed`, contains the existing
-verified `libgomp` IPK. The inspected VBNTJ successfully ran OPKG `update` and
-`download` against it using an isolated root, a temporary curl downloader and
-an updated CA bundle. The downloaded SHA256 matched the build artifact. Its
-firmware wget timed out with GitHub even with the updated bundle; the default
-curl trust store also rejected the server chain. This device therefore needs a
-working TLS downloader and current certificates before using release sources
-normally. The test installed no packages and left no source or TLS settings.
+The preparation workflow now uploads verified workflow artifacts and does not
+create additional `extras-*` Releases. Future promotions should update the
+consolidated archive deliberately and retire superseded archives after verification.
+
+The original libgomp snapshot passed isolated OPKG update/download on the
+4.1.52 router with a temporary curl downloader and current CA bundle. The
+firmware wget could not download GitHub assets, and the default curl trust
+store rejected the chain. Those downloader requirements still apply. No router
+source, package installation or TLS configuration is changed by this cleanup.
 
 ## Published optional Rclone feed
 
@@ -243,8 +235,8 @@ disabled and requires credentials before enabling its loopback-only listener.
 
 Run
 [40174844214](https://github.com/FrancYescO/GUI_ipk/actions/runs/40174844214)
-published the four packages in the immutable
-[release snapshot](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40138032911-876d3f994e42dec4).
+originally published the four packages, now retained in the consolidated
+[application archive](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1).
 All four public IPKs were downloaded independently and matched the verified
 build hashes. The plain and compressed indexes agree, and all index entries,
 sizes and SHA256 values match the published package manifest. The package
@@ -253,7 +245,7 @@ assets total 36,477,076 bytes.
 Optional OPKG source:
 
 ```text
-src/gz gui_extras https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40138032911-876d3f994e42dec4
+src/gz gui_extras https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1
 ```
 
 Use a working TLS downloader and current certificates as described above.

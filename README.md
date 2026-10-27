@@ -44,6 +44,8 @@ The verified IPKs and provenance are in
 applies these four packages over the assembled userspace feed, preserving
 other packages and retiring the old plaintext variant.
 
+Optional application updates are available in one [consolidated archive](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1), containing 13 verified IPKs and an OPKG index.
+
 ## Building packages
 
 Use **Actions → Build OpenWrt packages → Run workflow**. Leave

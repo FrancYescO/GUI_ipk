@@ -1,0 +1,197 @@
+{
+  "format_version": 1,
+  "groups": {
+    "adb": {
+      "former_tag": "extras-40182356876-091de5949fa6266c",
+      "source": {
+        "revision": "509f2e049565fe6449d1457b59868d59b9b5db39",
+        "run_id": "40182356876",
+        "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40182356876",
+        "workflow": ".github/workflows/build-packages.yml"
+      },
+      "source_manifest_sha256": "091de5949fa6266cebad116b43cfd5af69524762cfe4e1cc73094b064005282d"
+    },
+    "amule": {
+      "former_tag": "extras-40180412146-a4c51066b9401856",
+      "source": {
+        "revision": "df6890bba2da3d89bed35f42bed43df0173d68d1",
+        "run_id": "40180412146",
+        "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40180412146",
+        "workflow": ".github/workflows/build-packages.yml"
+      },
+      "source_manifest_sha256": "a4c51066b9401856381a0ab5c71f7a5f61bcc5a7c619c21eff9ab8e68f0595f1"
+    },
+    "aria2": {
+      "former_tag": "extras-40181376755-dfb5865d9912a3c7",
+      "source": {
+        "revision": "4d282869bbaa71f7318816ec19aa1d30f55557dd",
+        "run_id": "40181376755",
+        "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40181376755",
+        "workflow": ".github/workflows/build-packages.yml"
+      },
+      "source_manifest_sha256": "dfb5865d9912a3c71c48342d165001bf1158c567562547b2aa0e74f4e47c83cb"
+    },
+    "libgomp": {
+      "former_tag": "extras-40086518503-d97cb2260f311fed",
+      "source": {
+        "revision": "ce40871ec4219e2a61a49e8baf68885d2b17f917",
+        "run_id": "40086518503",
+        "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40086518503",
+        "workflow": ".github/workflows/build-packages.yml"
+      },
+      "source_manifest_sha256": "d97cb2260f311fedec8025806caeac297c934feb64ed8b08d5100c29d010ea19"
+    },
+    "rclone": {
+      "former_tag": "extras-40138032911-876d3f994e42dec4",
+      "source": {
+        "revision": "79debd1bda3798374534f843023a2baa3be8269c",
+        "run_id": "40138032911",
+        "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40138032911",
+        "workflow": ".github/workflows/build-packages.yml"
+      },
+      "source_manifest_sha256": "876d3f994e42dec410d6ab1fe2ad8d6a793211aaf5d1211c76ecc5a00207908a"
+    },
+    "tailscale": {
+      "former_tag": "extras-40175326506-01fc237ad21cba54",
+      "source": {
+        "revision": "9881393a5acc880c5d3fe1b89fbbbe4bf9530835",
+        "run_id": "40175326506",
+        "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40175326506",
+        "workflow": ".github/workflows/build-packages.yml"
+      },
+      "source_manifest_sha256": "01fc237ad21cba54833c8ee62eebd9d39c04e792ad634df117c20cda41c25ac7"
+    },
+    "transmission": {
+      "former_tag": "extras-40177095441-bf82a77a324a8fda",
+      "source": {
+        "revision": "469e1deb7c00437223effb7cfa73690f07efbe59",
+        "run_id": "40177095441",
+        "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40177095441",
+        "workflow": ".github/workflows/build-packages.yml"
+      },
+      "source_manifest_sha256": "bf82a77a324a8fda4fff6c12fcd37401222e2945da1a7e90a9a4c38db5ac6683"
+    }
+  },
+  "packages": [
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "adb_android.37.0.0p1-1_arm_cortex-a9_neon.ipk",
+      "group": "adb",
+      "package": "adb",
+      "sha256": "bafd0bf1ab9a553186a312da34af93e6ae46c2d41e6f37a21536e91b5dae03dd",
+      "size": 2735287,
+      "version": "android.37.0.0p1-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "amule_3.0.0-1_arm_cortex-a9_neon.ipk",
+      "group": "amule",
+      "package": "amule",
+      "sha256": "185d835d3ec42a0c4160baf7e530461b056f5534bd3f6cfec54fcc034220aaf7",
+      "size": 8717350,
+      "version": "3.0.0-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "aria2_1.37.0-2_arm_cortex-a9_neon.ipk",
+      "group": "aria2",
+      "package": "aria2",
+      "sha256": "144405b88e45e1697580564c3cb3a76ff654f54bd638a82610d4ad9451babecc",
+      "size": 2667500,
+      "version": "1.37.0-2"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "libgomp_4.8.3-1_arm_cortex-a9_neon.ipk",
+      "group": "libgomp",
+      "package": "libgomp",
+      "sha256": "47e6b9e061c39c59320a7cd2897f28be588ebad4c152411ad8a6cb16053ddb4a",
+      "size": 26014,
+      "version": "4.8.3-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "rclone_1.75.2-1_arm_cortex-a9_neon.ipk",
+      "group": "rclone",
+      "package": "rclone",
+      "sha256": "2cfc440aa7b16085d1aaa53f05d7c251ed0a3a8f3bf8fbdab242b4f135985b8d",
+      "size": 27378219,
+      "version": "1.75.2-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "rclone-config_1.75.2-1_arm_cortex-a9_neon.ipk",
+      "group": "rclone",
+      "package": "rclone-config",
+      "sha256": "4c2001cb6a1bafb5e46da33a675cbd3efc013548338b0b97084ac9c603b9105f",
+      "size": 1780,
+      "version": "1.75.2-1"
+    },
+    {
+      "architecture": "all",
+      "filename": "rclone-ng_0.5.0-1_all.ipk",
+      "group": "rclone",
+      "package": "rclone-ng",
+      "sha256": "f8dc326b988c9375b02e52f005b9562182bf5d406f99217a761a762fdadf320f",
+      "size": 4631767,
+      "version": "0.5.0-1"
+    },
+    {
+      "architecture": "all",
+      "filename": "rclone-webui-react_2.0.5-1_all.ipk",
+      "group": "rclone",
+      "package": "rclone-webui-react",
+      "sha256": "ad6a0790692332a094fa15d3baca41edec6758b767667f0329e2fbe1006251f6",
+      "size": 4465310,
+      "version": "2.0.5-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "tailscale_1.104.2-1_arm_cortex-a9_neon.ipk",
+      "group": "tailscale",
+      "package": "tailscale",
+      "sha256": "a6c9bee935df7b258e14a3f9452f2f88886addcd8f4a8fa3aa4a823ac3c3ae4b",
+      "size": 13691164,
+      "version": "1.104.2-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "transmission-cli-openssl_4.1.4-1_arm_cortex-a9_neon.ipk",
+      "group": "transmission",
+      "package": "transmission-cli-openssl",
+      "sha256": "acfccd7a3904b9990044b394673f93ef98d5d8d28aee79179098e3843d528036",
+      "size": 12435295,
+      "version": "4.1.4-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "transmission-daemon-openssl_4.1.4-1_arm_cortex-a9_neon.ipk",
+      "group": "transmission",
+      "package": "transmission-daemon-openssl",
+      "sha256": "7d19ae93cda669c058656d9f9826bd4877b986def56ecebf96cac896e5f408cc",
+      "size": 3132668,
+      "version": "4.1.4-1"
+    },
+    {
+      "architecture": "arm_cortex-a9_neon",
+      "filename": "transmission-remote-openssl_4.1.4-1_arm_cortex-a9_neon.ipk",
+      "group": "transmission",
+      "package": "transmission-remote-openssl",
+      "sha256": "37429110454eb8e88efc82fc393a56638421e8c1bee224d1eab56a55ec9249d5",
+      "size": 3137698,
+      "version": "4.1.4-1"
+    },
+    {
+      "architecture": "all",
+      "filename": "transmission-web_4.1.4-1_all.ipk",
+      "group": "transmission",
+      "package": "transmission-web",
+      "sha256": "251d30a72d44c9f1a4be6ff60b201219cbcbef2404fdf30b1d4715b857c17e14",
+      "size": 64543,
+      "version": "4.1.4-1"
+    }
+  ],
+  "repository": "FrancYescO/GUI_ipk",
+  "tag": "application-packages-v1",
+  "url": "https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1"
+}
