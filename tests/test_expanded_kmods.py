@@ -45,6 +45,31 @@ class ExpandedModulePackages(unittest.TestCase):
                 './usr/lib/kernel-module-candidates/4.1.38/nf_conntrack.ko'])
             self.assertEqual(archive.extractfile(archive.getmembers()[0]).read(), self.payload)
 
+    def test_vbnts_has_its_own_abi_package_name_and_staging_path(self):
+        (self.root / 'modules.json').write_text(json.dumps(dict(modules=[self.module])))
+        result = subprocess.run(['python3', str(SCRIPT), str(self.root), '--profile', 'vbnts'],
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        ipk = next((self.root / 'ipks').glob('*.ipk'))
+        self.assertIn('-vbnts-4.1.38-candidate_', ipk.name)
+        with tarfile.open(ipk, 'r:gz') as outer:
+            control_blob = outer.extractfile('./control.tar.gz').read()
+            data_blob = outer.extractfile('./data.tar.gz').read()
+        with tarfile.open(fileobj=io.BytesIO(control_blob), mode='r:gz') as archive:
+            control = archive.extractfile('./control').read().decode()
+            self.assertIn('kernel (= 4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)', control)
+            self.assertNotIn('08839f3f', control)
+        with tarfile.open(fileobj=io.BytesIO(data_blob), mode='r:gz') as archive:
+            self.assertEqual(archive.getnames(),
+                             ['./usr/lib/kernel-module-candidates/4.1.38-vbnts/nf_conntrack.ko'])
+
+    def test_vbnts_rejects_wrong_kernel_override(self):
+        result = subprocess.run(['python3', str(SCRIPT), str(self.root), '--profile', 'vbnts',
+                                 '--kernel-version', '4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d'],
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b'does not match', result.stderr)
+
     def test_changed_payload_is_rejected(self):
         (self.root / self.module['path']).write_bytes(b'changed')
         self.assertNotEqual(self.package([self.module]).returncode, 0)

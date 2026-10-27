@@ -1,0 +1,11 @@
+{
+  "KERNEL": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
+  "VERMAGIC": "4.1.38 SMP preempt mod_unload ARMv7",
+  "MODULES": {
+    "tun": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430",
+    "wireguard": "bfa5cbe40da286805416ca421a0d604a5bd32f42573c64060a4106c9ea5d8b42",
+    "bcmspu": "ef7a375495c71c4ff0d484856e1c7dbf9d737b9d5613aca7d2dfff3eb5e3a697"
+  },
+  "TARGET": "DGA4132/VBNT-S",
+  "FIRMWARE": "18.3.k.0451"
+}

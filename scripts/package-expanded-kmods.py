@@ -5,6 +5,7 @@ import gzip
 import hashlib
 import io
 import json
+import runpy
 import tarfile
 from collections import defaultdict
 from pathlib import Path
@@ -33,7 +34,14 @@ def main():
     parser.add_argument('root', type=Path)
     parser.add_argument('--module-archive', type=Path,
                         help='Read exact-case module paths directly from a tar archive')
+    parser.add_argument('--profile', choices=['vbnto', 'vbnts'], default='vbnto')
+    parser.add_argument('--kernel-version', help='Must match the selected runtime profile')
     args = parser.parse_args()
+    config = runpy.run_path(str(Path(__file__).with_name('package-vbnto-4.1.38.py')))
+    kernel_version = config['profile_config'](args.profile)['KERNEL']
+    if args.kernel_version is not None and args.kernel_version != kernel_version:
+        parser.error('Kernel version does not match selected runtime profile')
+    args.kernel_version = kernel_version
     manifest = json.loads((args.root / 'modules.json').read_text())
     by_stem = defaultdict(set)
     for module in manifest['modules']:
@@ -71,15 +79,15 @@ def main():
                 stem += '-match'
             else:
                 stem += '-' + hashlib.sha256(name.encode()).hexdigest()[:8]
-        package = 'kmod-' + stem + '-4.1.38-candidate'
+        package = 'kmod-' + stem + ('-vbnts' if args.profile == 'vbnts' else '') + '-4.1.38-candidate'
         if package in package_owners:
             raise ValueError('Package name collision: ' + package)
         package_owners[package] = name
-        staged = 'usr/lib/kernel-module-candidates/4.1.38/' + name + '.ko'
+        staged = 'usr/lib/kernel-module-candidates/' + ('4.1.38-vbnts' if args.profile == 'vbnts' else '4.1.38') + '/' + name + '.ko'
         control = (
             f'Package: {package}\nVersion: 4.1.38-1\nArchitecture: arm_cortex-a9\n'
             'Section: kernel\nMaintainer: GUI_ipk\n'
-            'Depends: kernel (= 4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)\n'
+            f'Depends: kernel (= {args.kernel_version})\n'
             f'Description: Staged {name} candidate; load manually after validation\n'
             'X-Manual-Install-Only: yes\nX-Runtime-Validated: no\n'
             'X-Module-Staging-Only: yes\n'

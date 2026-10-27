@@ -5,6 +5,7 @@ import argparse
 import gzip
 import hashlib
 import io
+import json
 import tarfile
 from pathlib import Path
 
@@ -16,6 +17,14 @@ MODULES = {
     "bcmspu": "f5280ce13913803daf53ad500b55b478ecd5575fa0014323471223ab329016b1",
     "wireguard": "feb7ac9824f0615fe62a20ae4f1ff4385c0422d9f7892a20da6f4f4f64f97336",
 }
+
+
+def profile_config(profile):
+    if profile == "vbnts":
+        return json.loads((Path(__file__).resolve().parents[1] /
+                           "build/vbnts-4.1.38/profile.json").read_text())
+    return dict(KERNEL=KERNEL, VERMAGIC=VERMAGIC, MODULES=MODULES,
+                TARGET="DGA4131FWB/VBNT-O", FIRMWARE="18.3.n.0439")
 
 
 def archive(files):
@@ -40,29 +49,31 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path, help="directory containing tested .ko files")
     parser.add_argument("output", type=Path, help="directory for manual IPKs")
+    parser.add_argument("--profile", choices=["vbnto", "vbnts"], default="vbnto")
     args = parser.parse_args()
+    config = profile_config(args.profile)
     args.output.mkdir(parents=True, exist_ok=True)
     sums = []
-    for module, expected in MODULES.items():
+    for module, expected in config["MODULES"].items():
         if module == "wireguard" and not (args.source / "wireguard.ko").is_file():
             continue
         payload = (args.source / (module + ".ko")).read_bytes()
         actual = hashlib.sha256(payload).hexdigest()
         if actual != expected:
             raise ValueError(f"{module}.ko differs from router-tested module: {actual}")
-        package = f"kmod-{module}-vbnto-4.1.38-manual"
+        package = f"kmod-{module}-{args.profile}-4.1.38-manual"
         filename = f"{package}_4.1.38-1_arm_cortex-a9.ipk"
         control = (
             f"Package: {package}\n"
             "Version: 4.1.38-1\n"
             "Architecture: arm_cortex-a9\n"
             "Section: kernel\n"
-            f"Depends: kernel (= {KERNEL})\n"
+            f"Depends: kernel (= {config['KERNEL']})\n"
             "Maintainer: GUI_ipk\n"
-            f"Description: Router-tested {module} module for DGA4131FWB 18.3.n.0439\n"
-            "X-Target: DGA4131FWB/VBNT-O\n"
-            "X-Firmware: 18.3.n.0439\n"
-            f"X-Kernel-Vermagic: {VERMAGIC}\n"
+            f"Description: Router-tested {module} module for {config['TARGET']} {config['FIRMWARE']}\n"
+            f"X-Target: {config['TARGET']}\n"
+            f"X-Firmware: {config['FIRMWARE']}\n"
+            f"X-Kernel-Vermagic: {config['VERMAGIC']}\n"
             "X-Manual-Install-Only: yes\n"
         ).encode()
         if module == "wireguard":

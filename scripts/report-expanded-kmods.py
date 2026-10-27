@@ -38,10 +38,12 @@ def main():
     summary = dict(module_count=len(modules), runtime_validated=False,
                    priority_exit=args.priority_exit, wireguard_exit=args.wireguard_exit,
                    full_exit=args.full_exit, missing_priority=missing, modules=modules)
+    summary['runtime_profile'] = os.environ.get('RUNTIME_PROFILE', 'vbnto')
     summary['links_exit'] = args.links_exit
     summary['subtrees_exit'] = args.subtrees_exit
     (args.root / 'modules.json').write_text(json.dumps(summary, indent=2) + '\n')
     lines = ['# Linux 4.1.38 candidate module build', '',
+             'Runtime profile: ' + summary['runtime_profile'], '',
              'Compiled modules: {}'.format(len(modules)),
              'Priority build exit: {}'.format(args.priority_exit),
              'WireGuard build exit: {}'.format(args.wireguard_exit),

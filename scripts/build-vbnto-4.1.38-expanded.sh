@@ -26,6 +26,15 @@ for option in IFB NET_ACT_CONNMARK NET_ACT_SKBEDIT NET_SCH_FQ_CODEL \
     "$kernel_dir/scripts/config" --file "$kernel_dir/.config" --module "$option"
   fi
 done
+# Extra USB tethering options are opt-in for the VBNT-S profile. Never change
+# an option already enabled or built into the running firmware.
+if [[ "${RUNTIME_PROFILE:-vbnto}" == vbnts ]]; then
+  for option in USB_IPHETH USB_NET_CDC_EEM USB_NET_CDC_MBIM; do
+    if ! grep -Eq "^CONFIG_${option}=[ym]$" "$kernel_dir/.config"; then
+      "$kernel_dir/scripts/config" --file "$kernel_dir/.config" --module "$option"
+    fi
+  done
+fi
 kernel_make=(make -C "$kernel_dir" ARCH=arm CROSS_COMPILE="$cross")
 "${kernel_make[@]}" olddefconfig
 cp "$kernel_dir/.config" "$output_dir/build.config"
@@ -58,6 +67,17 @@ priority_targets=(
   net/ipv4/udp_tunnel.ko
   net/ipv6/ip6_udp_tunnel.ko
 )
+if [[ "${RUNTIME_PROFILE:-vbnto}" == vbnts ]]; then
+  priority_targets+=(
+    drivers/net/usb/usbnet.ko drivers/net/usb/cdc_ether.ko
+    drivers/net/usb/rndis_host.ko drivers/net/usb/cdc_ncm.ko
+    drivers/net/usb/cdc_eem.ko drivers/net/usb/cdc_mbim.ko
+    drivers/net/usb/ipheth.ko drivers/net/usb/qmi_wwan.ko
+    drivers/usb/class/cdc-wdm.ko
+    drivers/usb/serial/usbserial.ko drivers/usb/serial/usb_wwan.ko
+    drivers/usb/serial/option.ko
+  )
+fi
 printf '%s\n' "${priority_targets[@]}" > "$output_dir/priority-targets.txt"
 priority_rc=0
 # Individual .ko targets each invoke modpost; concurrent invocations overwrite

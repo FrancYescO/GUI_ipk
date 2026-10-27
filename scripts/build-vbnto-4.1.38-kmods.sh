@@ -4,7 +4,9 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 work_dir="${WORK_DIR:-/build/openwrt}"
 output_dir="${OUTPUT_DIR:-$repo_root/dist}"
-runtime_config="$repo_root/build/vbnto-4.1.38/kernel.config.gz"
+profile="${RUNTIME_PROFILE:-vbnto}"
+case "$profile" in vbnto|vbnts) ;; *) echo "Unknown runtime profile: $profile" >&2; exit 1 ;; esac
+runtime_config="$repo_root/build/$profile-4.1.38/kernel.config.gz"
 
 if [[ ! -f "$runtime_config" ]]; then
   echo "Missing router kernel configuration: $runtime_config" >&2
@@ -18,7 +20,7 @@ BUILD_KMODS=1 BUILD_SPU=0 PREPARE_KERNEL_ONLY=1 \
 kernel_dir="$work_dir/build_dir/target-arm_cortex-a9+neon_glibc_eabi/linux-brcm63xx-tch_VBNTS/linux-4.1.38"
 toolchain_bin="$work_dir/staging_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi/bin"
 cross="$toolchain_bin/arm-openwrt-linux-gnueabi-"
-probe_dir="$output_dir/vbnto-4.1.38-probe"
+probe_dir="$output_dir/$profile-4.1.38-probe"
 
 test -f "$kernel_dir/Makefile"
 test -x "${cross}gcc"
@@ -92,5 +94,5 @@ grep -Fq '4.1.38 SMP preempt mod_unload ARMv7' "$probe_dir/tun.modinfo.txt"
 echo "Built router-configured TUN probe in $probe_dir"
 if [[ "${MODULE_SET:-tested}" == expanded ]]; then
   "$repo_root/scripts/build-vbnto-4.1.38-expanded.sh" \
-    "$kernel_dir" "$cross" "$output_dir/vbnto-4.1.38-expanded"
+    "$kernel_dir" "$cross" "$output_dir/$profile-4.1.38-expanded"
 fi

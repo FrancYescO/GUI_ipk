@@ -1,0 +1,105 @@
+name: VBNT-S Linux 4.1.38 kernel modules
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_candidates:
+        description: "Publish compiled modules as a separate public prerelease"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build VBNT-S 4.1.38 expanded modules
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BUILD_INPUTS_TAG: build-inputs-v1
+      MODULE_SET: expanded
+      RUNTIME_PROFILE: vbnts
+    steps:
+      - uses: actions/checkout@v7
+      - name: Restore pinned source archives
+        uses: actions/cache@v6
+        with:
+          path: |
+            .cache/sources
+            .cache/downloads
+          key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
+      - name: Download and verify source archives
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+          scripts/fetch-build-inputs.sh
+      - name: Build compatibility image
+        run: docker build --platform linux/amd64 --tag gui-ipk-builder --file build/Dockerfile .
+      - name: Compile selected stock-ABI modules and diagnostics
+        run: |
+          mkdir -p "$RUNNER_TEMP/vbnts-build"
+          docker run --rm --platform linux/amd64 \
+            --user "$(id -u):$(id -g)" \
+            --entrypoint /bin/bash --workdir /build \
+            --env HOME=/tmp --env JOBS=2 --env BUILD_SPU=1 \
+            --env BUILD_VALIDATION_KAT=1 \
+            --env MODULE_SET --env RUNTIME_PROFILE \
+            --env WORK_DIR=/build/openwrt \
+            --volume "$RUNNER_TEMP/vbnts-build:/build" \
+            --volume "$PWD:/repo" gui-ipk-builder \
+            /repo/scripts/build-vbnto-4.1.38-kmods.sh \
+            > vbnts-build.log 2>&1 || { tail -80 vbnts-build.log; exit 1; }
+      - name: Package expanded modules outside the boot module path
+        if: always()
+        run: |
+          python3 -m unittest discover -s tests -p test_expanded_kmods.py
+          if [[ -f dist/vbnts-4.1.38-expanded/modules.json ]]; then
+            python3 scripts/package-expanded-kmods.py dist/vbnts-4.1.38-expanded --profile vbnts --kernel-version "$(cat build/vbnts-4.1.38/kernel-version)"
+            python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          summary = json.loads(Path('dist/vbnts-4.1.38-expanded/modules.json').read_text())
+          print('Compiled candidate modules:', summary['module_count'])
+          print('Missing priority modules:', summary['missing_priority'])
+          for module in summary['modules']:
+              if module['name'] in ('wireguard', 'nf_conntrack', 'nf_conntrack_netlink'):
+                  print(module['name'], module['sha256'])
+          PY
+          fi
+      - name: Publish staged candidate IPKs separately
+        if: inputs.publish_candidates
+        run: |
+          tag="kernel-4.1.38-vbnts-candidates-${GITHUB_SHA:0:7}"
+          root=dist/vbnts-4.1.38-expanded
+          tar -czf "$root/modules-4.1.38-vbnts-stock-abi.tar.gz" -C "$root" \
+            modules modules.json build.config BUILD-REPORT.md SHA256SUMS \
+            priority-build.log wireguard-build.log full-build.log subtree-build.log module-links-build.log
+          gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
+              --prerelease --target "$GITHUB_SHA" \
+              --title "VBNT-S Linux 4.1.38 staged module candidates (${GITHUB_SHA:0:7})" \
+              --notes-file "$root/BUILD-REPORT.md"
+          gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber \
+            "$root"/ipks/*.ipk "$root/ipks/SHA256SUMS" "$root/ipks/QUARANTINED.txt" \
+            "$root/modules.json" "$root/BUILD-REPORT.md" "$root/modules-4.1.38-vbnts-stock-abi.tar.gz"
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vbnto-4.1.38-build-log-${{ github.sha }}
+          path: vbnts-build.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Upload tested kernel modules and IPKs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vbnts-4.1.38-kmods-${{ github.sha }}
+          path: |
+            dist/vbnts-4.1.38-probe/
+            dist/vbnts-4.1.38-expanded/
+          retention-days: 30

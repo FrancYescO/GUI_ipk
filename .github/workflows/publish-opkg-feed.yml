@@ -6,6 +6,8 @@ on:
       - ".github/workflows/publish-opkg-feed.yml"
       - "artifacts/damson-4.1.52-rndis-compat/**"
       - "artifacts/vbnto-4.1.38-manual/**"
+      - "artifacts/vbnts-4.1.38-manual/**"
+      - "build/vbnts-4.1.38/profile.json"
       - "scripts/assemble-kernel-feed.py"
       - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/report-feed-dependencies.py"
@@ -42,6 +44,8 @@ on:
       - "artifacts/damson-4.1.52-rndis-compat/**"
       - "artifacts/buildroot-4.1.38/**"
       - "artifacts/vbnto-4.1.38-manual/**"
+      - "artifacts/vbnts-4.1.38-manual/**"
+      - "build/vbnts-4.1.38/profile.json"
       - "scripts/verify-feed.sh"
       - "scripts/sanitize-opkg-feed.sh"
       - "scripts/generate-feed-pages.py"
@@ -143,7 +147,7 @@ jobs:
           python3 scripts/verify-kmod-spu.py artifacts/damson-4.1.52-spu 4.1.52
 
       - name: Assemble versioned kernel feeds
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38 --vbnto-kernel-dir artifacts/vbnto-4.1.38-manual
+        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38 --vbnto-kernel-dir artifacts/vbnto-4.1.38-manual --vbnts-kernel-dir artifacts/vbnts-4.1.38-manual
 
       - name: Verify combined feed
         run: scripts/verify-feed.sh dist --allow-kmods
