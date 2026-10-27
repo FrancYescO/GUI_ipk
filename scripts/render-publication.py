@@ -12,6 +12,7 @@ import tempfile
 from publication_layout import ROOT, SITE, parse, write_snapshot
 from kernel_compatibility_page import write_compatibility
 from kernel_validation_page import write_report
+from kernel_runtime_validation import write_runtime_report
 
 spec = importlib.util.spec_from_file_location('pages', ROOT / 'scripts/generate-feed-pages.py')
 pages = importlib.util.module_from_spec(spec)
@@ -22,7 +23,7 @@ def page(title, selected, groups, feeds, prefix):
     nav = [f'<a href="{prefix}index.html">All packages</a>', f'<a href="{prefix}kernel/index.html">Kernel feeds and ABI selection</a>', f'<a href="{prefix}feeds.json">Feed manifest</a>',
            f'<a href="{prefix}opkg-userspace.conf">Userspace OPKG sources</a>',
            f'<a href="{prefix}compatibility/index.html">Firmware compatibility</a>',
-           f'<a href="{prefix}validation/4.1.38/index.html">4.1.38 tests</a>',
+           f'<a href="{prefix}validation/4.1.38/index.html">4.1.38 candidate history</a>',
            f'<a href="{prefix}validation/4.1.52/index.html">4.1.52 tests</a>']
     nav += [f'<a href="{prefix}{key}/index.html">{html.escape(key)} ({len(rows)})</a>' for key, rows in groups.items()]
     rows = []
@@ -64,7 +65,8 @@ def kernel_manifest(records):
                    'kernel_package': version, 'count': len(selected), 'url': url,
                    'source': 'src/gz ' + name + ' ' + url, 'staging_only': staging,
                    'status': 'Staging only; manual validation required' if staging else
-                             'Runtime packages; see per-module test results'}
+                             'Runtime packages; see per-module test results',
+                   'validation_url': SITE + '/validation/' + ('4.1.52' if profile == '4.1.52-vbntk' else profile) + '/'}
             (candidates if staging else profiles).append(row)
     return {'index_url': SITE + '/kernel/', 'profiles': profiles, 'candidates': candidates,
             'aliases': [{'url': SITE + '/kernel/4.1.52', 'profile': '4.1.52-vbntk'}],
@@ -78,7 +80,7 @@ def write_kernel_overview(site, manifest):
                     '<td>{count}</td><td>{status}</td><td><code>{abi}</code></td></tr>'.format(
                         url=html.escape(row['url']), profile=html.escape(row['profile']),
                         device=html.escape(row['device']), firmware=html.escape(row['firmware']),
-                        router=row['validation_router'], count=row['count'], status=row['status'],
+                        router=row['validation_router'], count=row['count'], status=row['status'] + '<br><a href="' + row['validation_url'] + '">Per-module results</a>',
                         abi=html.escape(row['kernel_package'])))
     sources = ''.join('<h3>' + html.escape(r['profile']) + '</h3><pre>' + html.escape(r['source']) + '</pre>'
                       for r in manifest['profiles'])
@@ -90,11 +92,14 @@ def write_kernel_overview(site, manifest):
 Enable only the runtime feed matching your complete installed <code>kernel</code> package version.
 Linux version or operator branding alone is insufficient. Other firmware sharing the ABI still needs runtime validation.</p>
 <nav><a href="../index.html">All packages</a><a href="../compatibility/">Firmware compatibility</a>
-<a href="../feeds.json">Feed manifest</a><a href="../validation/4.1.38/">4.1.38 tests</a><a href="../validation/4.1.52/">4.1.52 tests</a></nav>
+<a href="../feeds.json">Feed manifest</a><a href="../validation/4.1.38/">4.1.38 candidate history</a><a href="../validation/4.1.52/">4.1.52 tests</a></nav>
 <pre>opkg status kernel</pre><div class="table-wrap"><table><thead><tr><th>Feed</th><th>Reference device / firmware</th><th>IPKs</th><th>Validation</th><th>Required kernel package version</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
 <h2>Runtime OPKG sources — choose one exact ABI</h2>''' + sources + '''
-<p>The two 4.1.38 runtime feeds each contain TUN, WireGuard, SPU, CDC Ethernet and RNDIS host.
-The 4.1.52 feed contains 49 packages: 14 functional passes, 2 smoke passes and 33 busy stock modules left unchanged.
+<p>All three runtime feeds contain the same 49 module names.
+VBNT-O: 14 new functional passes and 30 busy stock modules left unchanged.
+VBNT-S: 15 new functional passes, 1 namespace smoke pass and 28 busy stock modules left unchanged.
+Both 4.1.38 profiles also reuse the exact five previously validated TUN, WireGuard, SPU, CDC Ethernet and RNDIS host payloads.
+VBNT-K: 14 functional passes, 2 smoke passes and 33 busy stock modules left unchanged.
 See the linked reports for exact payloads and test limits; USB tethering traffic has not been tested.</p>
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
 These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
@@ -135,6 +140,9 @@ def render(publication):
         report['asset_base'] = SITE + '/kernel/4.1.52-vbntk/'
         (source / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
         write_report(source, site / 'validation/4.1.52', pages.STYLE, pages.SCRIPT)
+    for profile in ('vbnto', 'vbnts'):
+        write_runtime_report(ROOT / 'build' / (profile + '-4.1.38/runtime-validation'),
+                             site / 'validation' / ('4.1.38-' + profile), pages.STYLE)
     userspace = [{'name': 'modgui_' + key.replace('/', '_').replace('-', '_'), 'url': url,
                   'source': 'src/gz modgui_' + key.replace('/', '_').replace('-', '_') + ' ' + url}
                  for key, url in feeds.items() if not key.startswith('kernel/') and key != 'telephony/asterisk-20']

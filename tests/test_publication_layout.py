@@ -20,8 +20,8 @@ class PublicationTests(unittest.TestCase):
     def test_complete_bootstrap_has_semantic_components_and_all_updates(self):
         catalog = json.loads(gzip.decompress((ROOT / 'build/publication/bootstrap.json.gz').read_bytes()))
         rows = catalog['records']
-        self.assertEqual(len(rows), 6057)
-        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 6049)
+        self.assertEqual(len(rows), 6145)
+        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 6137)
         self.assertEqual(set(catalog['releases']), {'freeswitch-sounds'})
         self.assertLess(sum(r['size'] for r in rows if r['storage'] == 'pages'), 750 * 1024**2)
         pins = json.loads((ROOT / 'build/application-archive/manifest.json').read_text())
@@ -42,7 +42,7 @@ class PublicationTests(unittest.TestCase):
         manifest = renderer.kernel_manifest(catalog['records'])
         self.assertNotIn('url', manifest)  # No misleading combined OPKG source.
         self.assertEqual([(r['profile'], r['count']) for r in manifest['profiles']],
-                         [('4.1.38-vbnto', 5), ('4.1.38-vbnts', 5), ('4.1.52-vbntk', 49)])
+                         [('4.1.38-vbnto', 49), ('4.1.38-vbnts', 49), ('4.1.52-vbntk', 49)])
         self.assertEqual([(r['profile'], r['count']) for r in manifest['candidates']],
                          [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbnts-candidates', 212)])
         for row in manifest['profiles'] + manifest['candidates']:

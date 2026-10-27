@@ -116,12 +116,15 @@ def kernel_inputs(work):
     for suffix in ('manual', 'network', 'spu', 'rndis-compat'):
         ipks.extend((ROOT / ('artifacts/damson-4.1.52-' + suffix)).glob('*.ipk'))
     assembler.write_feed('4.1.52', ipks, feed)
+    stage = load_script('fetch-kernel-candidates')
+    stage.download(work / 'candidates', REPOSITORY)
+    network = load_script('network_kmods_4138')
     for profile in ('vbnto', 'vbnts'):
         directory = ROOT / ('artifacts/' + profile + '-4.1.38-manual')
         subprocess.run([sys.executable, str(ROOT / 'scripts/verify-vbnto-4.1.38-ipks.py'), str(directory), '--profile', profile], check=True)
-        assembler.write_feed('4.1.38-' + profile, list(directory.glob('*.ipk')), feed)
-    stage = load_script('fetch-kernel-candidates')
-    stage.download(work / 'candidates', REPOSITORY)
+        network_dir = ROOT / ('artifacts/' + profile + '-4.1.38-network')
+        network.materialize(profile, work / 'candidates' / profile / 'ipks', network_dir, verify=True)
+        assembler.write_feed('4.1.38-' + profile, list(directory.glob('*.ipk')) + list(network_dir.glob('*.ipk')), feed)
     candidate = load_script('assemble-kernel-candidates')
     for profile, source in json.loads(candidate.SOURCES.read_text()).items():
         build = work / ('candidate-' + profile)
@@ -132,7 +135,7 @@ def kernel_inputs(work):
                              ('kernel/4.1.38-vbnts', '4.1.38-vbnts'), ('kernel/4.1.38-vbnto-candidates', '4.1.38-vbnto'),
                              ('kernel/4.1.38-vbnts-candidates', '4.1.38-vbnts')]:
         rows.extend(read_section(feed, section, 'kernel', profile))
-    if len(rows) != 491 or len({r['package'] for r in rows}) != 491:
+    if len(rows) != 579 or len({r['package'] for r in rows}) != 579:
         raise ValueError('Unexpected kernel package set')
     return rows
 

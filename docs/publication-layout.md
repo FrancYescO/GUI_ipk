@@ -5,8 +5,8 @@ Pages hosts the six main userspace feeds (`base`, `luci`, `packages`, `routing`,
 and two separate candidate feeds. Only the eight large FreeSWITCH sound
 packages use a binary Release feed (about 387 MiB).
 
-All 6,057 catalog records are retained: 6,049 IPKs are on Pages, about 700 MiB,
-including all thirteen promoted application updates and all 491 kernel IPKs.
+All 6,145 catalog records are retained: 6,137 IPKs are on Pages, about 700 MiB,
+including all thirteen promoted application updates and all 579 kernel IPKs.
 Package bytes and SHA256 values are unchanged. `feeds.json` lists every source;
 the catalog links directly to Pages or the FreeSWITCH sound release.
 
@@ -18,8 +18,8 @@ status. Kernel release alone, such as `uname -r`, does not identify the ABI.
 
 | Pages path | Reference device / firmware | IPKs | Use |
 |---|---|---:|---|
-| `kernel/4.1.38-vbnto` | DGA4131FWB / VBNT-O, 18.3.n.0439 (.45) | 5 | Runtime packages |
-| `kernel/4.1.38-vbnts` | DGA4132 / VBNT-S, 18.3.k.0451 (.204) | 5 | Runtime packages |
+| `kernel/4.1.38-vbnto` | DGA4131FWB / VBNT-O, 18.3.n.0439 (.45) | 49 | Runtime packages; per-module test levels differ |
+| `kernel/4.1.38-vbnts` | DGA4132 / VBNT-S, 18.3.k.0451 (.204) | 49 | Runtime packages; per-module test levels differ |
 | `kernel/4.1.52-vbntk` | DGA4130 / VBNT-K, 19.4.1051-3401200 (.69) | 49 | Runtime packages; per-module test levels differ |
 | `kernel/4.1.38-vbnto-candidates` | VBNT-O ABI above | 220 | Optional staging only; manual validation |
 | `kernel/4.1.38-vbnts-candidates` | VBNT-S ABI above | 212 | Optional staging only; manual validation |
@@ -27,8 +27,11 @@ status. Kernel release alone, such as `uname -r`, does not identify the ABI.
 Enable one runtime source only after matching the complete installed `kernel`
 package version. Firmware sharing an ABI still needs runtime validation. The
 source-selection helper never enables candidate sources. Their packages stage
-modules outside boot paths; xt_nat remains withheld. See the validation reports
-for payload hashes and exact results. CDC/RNDIS load, registration, unload and
+modules outside boot paths; xt_nat remains withheld. All three runtime profiles publish the same 49 module names. VBNT-O has 14
+new functional passes and 30 busy stock modules left unchanged; VBNT-S has 15
+new functional passes, one namespace smoke pass and 28 busy stock modules left
+unchanged. Both also retain the five previously validated core payloads. See
+the per-profile reports for hashes, exact test levels and reused evidence. CDC/RNDIS load, registration, unload and
 restoration were tested; USB tethering traffic was not tested.
 
 `kernel/4.1.52` remains an OPKG-compatible alias of `4.1.52-vbntk`, using relative

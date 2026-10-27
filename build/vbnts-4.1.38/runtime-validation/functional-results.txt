@@ -1,0 +1,277 @@
+=== act_connmark ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.217 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.217/0.217/0.217 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.390 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.512 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.390/0.451/0.512 ms
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            mark match 0x38
+filter protocol ip pref 1 u32 
+filter protocol ip pref 1 u32 fh 800: ht divisor 1 
+filter protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 terminal flowid ??? 
+  match 00000000/00000000 at 0
+	action order 1:  connmark zone 0 pipe
+	 index 1 ref 1 bind 1 installed 1 sec used 0 sec
+	Action statistics:
+	Sent 168 bytes 2 pkt (dropped 0, overlimits 2 requeues 0) 
+	backlog 0b 0p requeues 0
+
+FUNCTIONAL_TC_PASS
+
+=== act_skbedit ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.211 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.211/0.211/0.211 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.316 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.626 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.316/0.471/0.626 ms
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            mark match 0x38
+filter protocol ip pref 1 u32 
+filter protocol ip pref 1 u32 fh 800: ht divisor 1 
+filter protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 terminal flowid ??? 
+  match 00000000/00000000 at 0
+	action order 1:  skbedit mark 56 pipe
+	 index 1 ref 1 bind 1 installed 1 sec used 0 sec
+ 	Action statistics:
+	Sent 168 bytes 2 pkt (dropped 0, overlimits 0 requeues 0) 
+	backlog 0b 0p requeues 0
+
+FUNCTIONAL_TC_PASS
+
+=== cls_flow ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.277 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.277/0.277/0.277 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.433 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.514 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.433/0.473/0.514 ms
+filter protocol ip pref 1 flow 
+filter protocol ip pref 1 flow handle 0x1 hash keys dst divisor 1 baseclass 1:1 
+
+	action order 1: gact action pass
+	 random type none pass val 0
+	 index 2 ref 1 bind 1 installed 1 sec used 0 sec
+	Action statistics:
+	Sent 168 bytes 2 pkt (dropped 0, overlimits 0 requeues 0) 
+	backlog 0b 0p requeues 0
+
+FUNCTIONAL_CLASSIFIER_PASS
+
+=== em_u32 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.284 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.284/0.284/0.284 ms
+CLASSIFIER_PREREQUISITE_UNAVAILABLE: cls_basic absent from native firmware and exact-profile candidate bundle
+
+=== nf_log_ipv4 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.316 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.316/0.316/0.316 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.414 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.503 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.414/0.458/0.503 ms
+Chain OUTPUT (policy ACCEPT 2 packets, 168 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "KMOD38_TEST"
+FUNCTIONAL_NETFILTER_PASS
+
+=== nf_log_ipv6 ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.212 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.212/0.212/0.212 ms
+
+=== sch_hfsc ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.221 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.221/0.221/0.221 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.330 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.685 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.330/0.507/0.685 ms
+qdisc hfsc 1: root refcnt 2 default 1 
+ Sent 406 bytes 5 pkt (dropped 0, overlimits 0 requeues 0) 
+ backlog 0b 0p requeues 0
+FUNCTIONAL_QDISC_PASS
+
+=== xt_LOG ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.209 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.209/0.209/0.209 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.382 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.606 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.382/0.494/0.606 ms
+Chain OUTPUT (policy ACCEPT 2 packets, 168 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "KMOD38_TEST"
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_connbytes ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.210 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.210/0.210/0.210 ms
+net.netfilter.nf_conntrack_acct = 1
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.416 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.514 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.416/0.465/0.514 ms
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            connbytes 0 connbytes mode bytes connbytes direction both
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_connlimit ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.210 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.210/0.210/0.210 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.418 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.266 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.266/0.342/0.418 ms
+Chain OUTPUT (policy ACCEPT 2 packets, 168 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       1       60 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 #conn src/32 > 0
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_connmark ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.211 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.211/0.211/0.211 ms
+
+=== xt_helper ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.212 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.212/0.212/0.212 ms
+
+=== xt_mac ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.210 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.210/0.210/0.210 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.417 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.503 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.417/0.460/0.503 ms
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            MAC ! 00:00:00:00:00:00
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_recent ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.213 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.213/0.213/0.213 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.312 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.521 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.312/0.416/0.521 ms
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            recent: SET name: KMOD38 side: source mask: 255.255.255.255
+FUNCTIONAL_NETFILTER_PASS
+
+=== xt_state ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.212 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.212/0.212/0.212 ms
+
+=== xt_time ===
+PING 127.0.0.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.237 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.237/0.237/0.237 ms
+PING 198.18.52.2 (198.18.52.2): 56 data bytes
+64 bytes from 198.18.52.2: seq=0 ttl=64 time=0.357 ms
+64 bytes from 198.18.52.2: seq=1 ttl=64 time=0.604 ms
+
+--- 198.18.52.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.357/0.480/0.604 ms
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       2      168 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            TIME UTC
+FUNCTIONAL_NETFILTER_PASS

@@ -107,6 +107,22 @@ def write_feed(version, ipks, feed_root):
             and fields.get("X-Manual-Install-Only") == "yes"
             and fields.get("X-Kernel-Vermagic", "").startswith("4.1.38 ")
         )
+        network_runtime_module = False
+        runtime_record = None
+        if version in ('4.1.38-vbnto', '4.1.38-vbnts'):
+            profile_name = version.rsplit('-', 1)[1]
+            repo = Path(__file__).resolve().parents[1]
+            report_path = repo / 'build' / (profile_name + '-4.1.38/runtime-validation/results.json')
+            if report_path.is_file():
+                runtime = json.loads(report_path.read_text())
+                runtime_record = next((r for r in runtime['modules'] if r['asset'] == ipk.name), None)
+                canonical = repo / 'artifacts' / (profile_name + '-4.1.38-network') / ipk.name
+                network_runtime_module = bool(runtime_record and canonical.is_file()
+                    and fields.get('Depends') == 'kernel (= ' + runtime['kernel_package'] + ')'
+                    and fields.get('X-Kernel-Profile') == version
+                    and fields.get('X-Manual-Install-Only') == 'yes'
+                    and fields.get('Architecture') == 'arm_cortex-a9'
+                    and ipk.read_bytes() == canonical.read_bytes())
         wireguard_backport_version = (
             buildroot_module
             and fields.get("Package") == "kmod-wireguard"
@@ -119,7 +135,7 @@ def write_feed(version, ipks, feed_root):
                     or fields.get('X-Kernel-Target') != 'VBNT-K'
                     or fields.get('X-Firmware') != profile['firmware']):
                 raise ValueError('Unexpected kernel package metadata (VBNT-K profile): ' + str(ipk))
-        if not ((manual_module or virtual_kernel or buildroot_module or vbnto_module or vbnts_module)
+        if not ((manual_module or virtual_kernel or buildroot_module or vbnto_module or vbnts_module or network_runtime_module)
                 and (fields.get("Version", "").startswith(version.split("-vbnt")[0] + "-")
                      or wireguard_backport_version)):
             raise ValueError(f"Unexpected kernel package metadata: {ipk}")
@@ -141,6 +157,9 @@ def write_feed(version, ipks, feed_root):
         if version == '4.1.52':
             fields['X-Runtime-Test'] = record['level']
             fields['X-Runtime-Test-Status'] = record['status']
+        if runtime_record:
+            fields['X-Runtime-Test'] = runtime_record['level']
+            fields['X-Runtime-Test-Status'] = runtime_record['status']
         entries.append("\n".join(f"{key}: {value}" for key, value in fields.items()))
     if not entries:
         raise ValueError(f"No kernel IPKs found for {version}")
