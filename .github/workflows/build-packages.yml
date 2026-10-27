@@ -324,11 +324,21 @@ jobs:
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
           (cd artifacts/damson-4.1.52-network && sha256sum --check SHA256SUMS)
           scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-network
-          test "$(find artifacts/damson-4.1.52-network -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 44
+          test "$(find artifacts/damson-4.1.52-network -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 43
           (cd artifacts/buildroot-4.1.38 && sha256sum --check SHA256SUMS)
           scripts/verify-kmod-tun.sh artifacts/buildroot-4.1.38
           scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
-          python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --buildroot-kernel-dir artifacts/buildroot-4.1.38
+          python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38 --vbnto-kernel-dir artifacts/vbnto-4.1.38-manual --vbnts-kernel-dir artifacts/vbnts-4.1.38-manual
+          scripts/verify-feed.sh dist --allow-kmods
+
+      - name: Add pinned staged kernel candidate feeds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m unittest discover -s tests -p test_kernel_candidates.py
+          python3 scripts/fetch-kernel-candidates.py "$RUNNER_TEMP/kernel-candidate-downloads" --repository "$GITHUB_REPOSITORY"
+          python3 scripts/assemble-kernel-candidates.py \
+            "$RUNNER_TEMP/kernel-candidate-downloads" "$RUNNER_TEMP/kernel-candidate-work" dist
           scripts/verify-feed.sh dist --allow-kmods
 
       - name: Audit declared dependencies for each kernel profile
