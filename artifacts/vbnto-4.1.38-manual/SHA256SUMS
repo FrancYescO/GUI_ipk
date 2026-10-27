@@ -1,3 +1,5 @@
-62d13f247467871d296432b5493896b80c980a80c387451146bf4059de5933ca  kmod-tun-vbnto-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk
 4b903cd296376f2a31dce97f8b823a3398afbfc9432b662c146b75e91206b3ba  kmod-bcmspu-vbnto-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk
+2b59496e697893422560ea97988773c70f297a541309f9982b19760d665a7ffb  kmod-cdc-ether-vbnto-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk
+8499c9026fd5759bdb113a3d673ee97ae1f40700a0dd0eb6b5d88d1b60d84482  kmod-rndis-host-vbnto-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk
+62d13f247467871d296432b5493896b80c980a80c387451146bf4059de5933ca  kmod-tun-vbnto-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk
 df55c7fc926910c16b58f720e0ec86c5ae30ac86cf749cf240f207511160988c  kmod-wireguard-vbnto-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk

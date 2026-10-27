@@ -23,6 +23,10 @@ def main():
     config = runpy.run_path(str(Path(__file__).with_name("package-vbnto-4.1.38.py")))
     config = config["profile_config"](args.profile)
     expected = dict(config["MODULES"])
+    usb_ipks = list(args.directory.glob(f'kmod-cdc-ether-{args.profile}-4.1.38-manual_*.ipk'))
+    usb_ipks += list(args.directory.glob(f'kmod-rndis-host-{args.profile}-4.1.38-manual_*.ipk'))
+    if usb_ipks:
+        expected.update(config['USB_MODULES'])
     wireguard_ipk = args.directory / f"kmod-wireguard-{args.profile}-4.1.38-manual_4.1.38-1_arm_cortex-a9.ipk"
     if not wireguard_ipk.is_file():
         expected.pop("wireguard")
@@ -31,7 +35,7 @@ def main():
     if len(ipks) != len(expected):
         raise ValueError(f"Expected {len(expected)} packages, got {len(ipks)}")
     for module, digest in expected.items():
-        package = f"kmod-{module}-{args.profile}-4.1.38-manual"
+        package = f"kmod-{module.replace('_', '-')}-{args.profile}-4.1.38-manual"
         filename = f"{package}_4.1.38-1_arm_cortex-a9.ipk"
         outer = members((args.directory / filename).read_bytes())
         if set(outer) != {"./debian-binary", "./control.tar.gz", "./data.tar.gz"}:
@@ -42,6 +46,12 @@ def main():
         if set(control_files) != {"./control"}:
             raise ValueError(f"Unexpected control scripts: {filename}")
         control = control_files["./control"].decode()
+        if module in ('cdc_ether', 'rndis_host'):
+            for field in ('X-Required-Loaded-Modules: usbnet (native firmware module)\n',
+                          'X-Required-Driver-Pair: cdc_ether, rndis_host\n',
+                          'X-USB-Traffic-Tested: no\n'):
+                if field not in control:
+                    raise ValueError('Missing USB compatibility guard: ' + field)
         if module == "wireguard" and "X-Required-Loaded-Modules: udp_tunnel, ip6_udp_tunnel\n" not in control:
             raise ValueError("WireGuard must document its stock UDP tunnel dependencies")
         for field in (
@@ -57,6 +67,8 @@ def main():
         path = f"./lib/modules/4.1.38/{module}.ko"
         if set(data) != {path} or hashlib.sha256(data[path]).hexdigest() != digest:
             raise ValueError(f"Unexpected module payload: {filename}")
+        if module == 'rndis_host' and b'alias=usb:v*p*d*dc*dsc*dp*icEFisc04ip01in*' not in data[path]:
+            raise ValueError('RNDIS miscellaneous class alias missing')
     print(f"Verified {len(expected)} exact-ABI 4.1.38 modules; no install scripts or boot autoload")
 
 

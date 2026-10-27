@@ -1,0 +1,14 @@
+
+String dump of section '.modinfo':
+  [     0]  license=GPL
+  [     c]  description=USB Host side RNDIS driver
+  [    33]  author=David Brownell
+  [    4c]  alias=usb:v*p*d*dc*dsc*dp*icEFisc04ip01in*
+  [    77]  alias=usb:v*p*d*dc*dsc*dp*icE0isc01ip03in*
+  [    a2]  alias=usb:v*p*d*dc*dsc*dp*icEFisc01ip01in*
+  [    cd]  alias=usb:v*p*d*dc*dsc*dp*ic02isc02ipFFin*
+  [    f8]  alias=usb:v1630p0042d*dc*dsc*dp*ic02isc02ipFFin*
+  [   12c]  depends=usbnet,cdc_ether
+  [   145]  intree=Y
+  [   14e]  vermagic=4.1.38 SMP preempt mod_unload ARMv7 
+

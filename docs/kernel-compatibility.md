@@ -84,3 +84,25 @@ there is no installable feed claiming support for these firmwares yet.
 All profiles share the repository and build tooling. Git branches are used
 for development; separate configurations and OPKG feed paths identify runtime
 compatibility.
+
+## Legacy generic 4.1.38 feed
+
+`kernel/4.1.38` is retained as an archive of the historical VBNTS buildroot.
+Its virtual kernel package is `4.1.38-1-e5d0b8e85af0ba3d06a2ba17859e868a`.
+None of the 279 inventoried firmware branches declares that complete package
+identifier. There is no identified runtime target for these modules, and no
+claim that the generic feed works on the .45 or .204. It is useful as a build
+reference; the two exact runtime feeds provide the supported deployment path.
+
+## USB RNDIS compatibility pair
+
+Both exact 4.1.38 runtime feeds include `kmod-cdc-ether-<profile>-4.1.38-manual`
+and `kmod-rndis-host-<profile>-4.1.38-manual`. Use both drivers together with
+the firmware's native `usbnet`. They share the same `ef/04/01` USB miscellaneous
+class backport as the 4.1.52 Damson pair. The two 4.1.38 profiles produce
+identical module payloads but retain separate kernel dependencies and packages.
+
+Loading, USB driver registration, unloading and restoration of stock modules
+passed on both modems. Boot IDs, kernel taint and default routes were unchanged.
+No USB network device was attached: tethering enumeration, DHCP and traffic
+remain untested. See [USB build and runtime evidence](https://francyesco.github.io/GUI_ipk/validation/usb-4.1.38/).

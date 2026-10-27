@@ -1,0 +1,54 @@
+name: Build 4.1.38 USB RNDIS compatibility pair
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/build-usb-rndis-4.1.38.yml'
+      - 'patches/usb-rndis/**'
+      - 'scripts/apply-usb-rndis-compat.sh'
+      - 'scripts/build-usb-rndis-4.1.38.sh'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [vbnto, vbnts]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .cache/sources
+            .cache/downloads
+          key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
+      - name: Restore pinned build inputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUILD_INPUTS_TAG: build-inputs-v1
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+          scripts/fetch-build-inputs.sh
+      - name: Build compatibility image
+        run: docker build --platform linux/amd64 --tag gui-ipk-usb-builder --file build/Dockerfile .
+      - name: Compile exact-profile USB replacement pair
+        run: |
+          mkdir -p "$RUNNER_TEMP/usb-build"
+          docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" \
+            --entrypoint /bin/bash --workdir /build \
+            --env HOME=/tmp --env JOBS=2 --env BUILD_SPU=0 --env BUILD_USB_RNDIS=1 \
+            --env MODULE_SET=usb-rndis --env RUNTIME_PROFILE=${{ matrix.profile }} \
+            --env WORK_DIR=/build/openwrt \
+            --volume "$RUNNER_TEMP/usb-build:/build" --volume "$PWD:/repo" \
+            gui-ipk-usb-builder /repo/scripts/build-vbnto-4.1.38-kmods.sh
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usb-rndis-4.1.38-${{ matrix.profile }}-${{ github.sha }}
+          path: dist/${{ matrix.profile }}-4.1.38-usb-rndis/
+          if-no-files-found: error
+          retention-days: 30

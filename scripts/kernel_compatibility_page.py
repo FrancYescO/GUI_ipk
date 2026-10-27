@@ -56,3 +56,29 @@ They do not replace stock modules or configure autoload. xt_nat remains withheld
 <th>Exact kernel package</th><th>Build profile candidate</th><th>Evidence status</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
 <script>''' + script + '</script></body></html>'
     (destination / 'index.html').write_text(content, encoding='utf-8')
+    write_usb_report(root, style)
+
+
+def write_usb_report(root, style):
+    repo = Path(__file__).resolve().parents[1]
+    source = repo / 'artifacts/usb-rndis-4.1.38'
+    registry = repo / 'build/usb-rndis/validation.json'
+    if not registry.is_file():
+        return
+    report = json.loads(registry.read_text())
+    destination = root / 'validation/usb-4.1.38'
+    destination.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(registry, destination / 'results.json')
+    shutil.copyfile(source / 'README.md', destination / 'README.md')
+    rows = []
+    for profile, record in report['profiles'].items():
+        shutil.copytree(source / profile, destination / profile, dirs_exist_ok=True)
+        rows.append('<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td><a href="{}/router-test.log">Probe log</a> · <a href="{}/BUILD-METADATA.txt">Build inputs</a> · <a href="../../kernel/4.1.38-{}/index.html">IPKs</a></td></tr>'.format(
+            profile, html.escape(record['firmware']), html.escape(record['status']),
+            html.escape(record['traffic']), profile, profile, profile))
+    page = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>USB RNDIS 4.1.38 validation</title><style>' + style + '</style></head><body>'
+    page += '<h1>USB RNDIS 4.1.38 validation</h1><p>Both profiles produced identical cdc_ether and rndis_host payloads. They use the same miscellaneous-class RNDIS patch as the Damson 4.1.52 pair, while retaining native usbnet.</p>'
+    page += '<p>Loading, USB driver registration, unloading and stock restoration passed on both modems. Boot IDs, kernel taint and default routes were unchanged. No USB network device was attached: enumeration, DHCP and traffic remain untested.</p>'
+    page += '<nav><a href="../../index.html">All packages</a><a href="results.json">Exact payload hashes</a><a href="README.md">Build and test details</a></nav><table><thead><tr><th>Profile</th><th>Firmware</th><th>Result</th><th>Device traffic</th><th>Evidence</th></tr></thead><tbody>'
+    page += ''.join(rows) + '</tbody></table></body></html>'
+    (destination / 'index.html').write_text(page, encoding='utf-8')

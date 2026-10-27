@@ -13,6 +13,7 @@ on:
         options:
           - tun
           - network-smoke
+          - rndis-compat
           - qos-probe
           - router-tested
           - network-feed
@@ -35,6 +36,9 @@ on:
       - "patches/vbntj-4.1.52/**"
       - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
+      - "scripts/apply-usb-rndis-compat.sh"
+      - "scripts/normalize-usb-build-id.py"
+      - "patches/usb-rndis/**"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "scripts/verify-wireguard-kmod.sh"
       - "artifacts/damson-4.1.52-manual/**"
@@ -53,6 +57,8 @@ on:
       - "patches/vbntj-4.1.52/**"
       - "patches/wireguard-linux-compat/**"
       - "scripts/build-vbntj-kmods.sh"
+      - "scripts/apply-usb-rndis-compat.sh"
+      - "patches/usb-rndis/**"
       - "scripts/verify-manual-kmod-ipks.sh"
       - "scripts/verify-wireguard-kmod.sh"
       - "artifacts/damson-4.1.52-manual/**"

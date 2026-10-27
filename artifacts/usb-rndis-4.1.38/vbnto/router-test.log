@@ -1,0 +1,13 @@
+LOAD_AND_USB_DRIVER_REGISTRATION=PASS
+7883cd569ee0132f646ef501c67dec02e281dc8d826b9bfbd3814f93cc0e67d2  /tmp/gui-usb-rndis-20261027/cdc_ether.ko
+9bc13ec5f901f6ac7a0d8cdcb286a8bd4c861bb26fa8595bf7553c7299ef20d6  /tmp/gui-usb-rndis-20261027/rndis_host.ko
+cdc_ether               3849  1 rndis_host
+rndis_host              4752  0 
+usbnet                 16985  5 rndis_host,cdc_ether,qmi_wwan,huawei_cdc_ncm,cdc_ncm
+UNLOAD=PASS
+USB_DEVICE_TRAFFIC=NOT_TESTED_NO_DEVICE_ATTACHED
+RESTORE_RESULT=0
+BOOT_ID=6f359ef1-dfa2-4740-bdd7-423ca8ca47e3
+TAINT=4097
+cdc_ether               3445  0 
+usbnet                 16985  4 cdc_ether,qmi_wwan,huawei_cdc_ncm,cdc_ncm

@@ -1,0 +1,36 @@
+{
+  "updated": "2026-10-27",
+  "shared_patch_sha256": "d806795622dc638b7e9bcea70219b5fc0f11309b42e72c7bc4072b52677a3e04",
+  "profiles": {
+    "vbnto": {
+      "kernel_package": "4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d",
+      "firmware": "18.3.n.0439",
+      "status": "load-unload-driver-registration",
+      "traffic": "not-tested-no-device-attached",
+      "boot_id": "6f359ef1-dfa2-4740-bdd7-423ca8ca47e3",
+      "taint_before": 4097,
+      "taint_after": 4097,
+      "route_restored": true,
+      "native_usbnet_sha256": "4be608f8898e405300bf71d8341f3cbf9d471ba85e0dc7d3b09d4d9a575d70b3",
+      "modules": {
+        "cdc_ether": "7883cd569ee0132f646ef501c67dec02e281dc8d826b9bfbd3814f93cc0e67d2",
+        "rndis_host": "9bc13ec5f901f6ac7a0d8cdcb286a8bd4c861bb26fa8595bf7553c7299ef20d6"
+      }
+    },
+    "vbnts": {
+      "kernel_package": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
+      "firmware": "18.3.k.0451",
+      "status": "load-unload-driver-registration",
+      "traffic": "not-tested-no-device-attached",
+      "boot_id": "58086e4b-ba45-4b59-b2eb-c6465a659b8c",
+      "taint_before": 4097,
+      "taint_after": 4097,
+      "route_restored": true,
+      "native_usbnet_sha256": "4be608f8898e405300bf71d8341f3cbf9d471ba85e0dc7d3b09d4d9a575d70b3",
+      "modules": {
+        "cdc_ether": "7883cd569ee0132f646ef501c67dec02e281dc8d826b9bfbd3814f93cc0e67d2",
+        "rndis_host": "9bc13ec5f901f6ac7a0d8cdcb286a8bd4c861bb26fa8595bf7553c7299ef20d6"
+      }
+    }
+  }
+}
