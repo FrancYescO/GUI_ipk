@@ -1,18 +1,18 @@
 {
   "vbnto": {
-    "tag": "kernel-4.1.38-candidates-a94ca43",
-    "archive": "modules-4.1.38-stock-abi.tar.gz",
-    "archive_sha256": "e2c4f8055ff20730134b2ea66e9c4995a28adf1bbb8d4a09ba2bea75b51c809e",
     "kernel_package": "4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d",
     "feed": "kernel/4.1.38-vbnto-candidates",
-    "package_count": 220
+    "package_count": 220,
+    "source_commit": "a94ca439c94a46a5d39866349760a4da6bac9071",
+    "bundle": "artifacts/kernel-candidates/vbnto.tar.gz",
+    "bundle_sha256": "ce305387263eb27c61f58d2c09ad1a827e7174bdc143a890b4ff48644271df93"
   },
   "vbnts": {
-    "tag": "kernel-4.1.38-vbnts-candidates-d399eee",
-    "archive": "modules-4.1.38-vbnts-stock-abi.tar.gz",
-    "archive_sha256": "31885575787efc05e3e79fe23065e4e0b5ea29883da7375587851dfbeecb4696",
     "kernel_package": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
     "feed": "kernel/4.1.38-vbnts-candidates",
-    "package_count": 212
+    "package_count": 212,
+    "source_commit": "d399eee78970f84348ded2ab860db728c9a3487b",
+    "bundle": "artifacts/kernel-candidates/vbnts.tar.gz",
+    "bundle_sha256": "2e33e5f2d8aac3c56fd252b4405f7f55ab967ff8c593999a859182c6b5b9b95a"
   }
 }

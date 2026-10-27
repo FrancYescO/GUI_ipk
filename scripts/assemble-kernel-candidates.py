@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Restore pinned staged-module releases and publish optional OPKG indexes."""
+"""Restore pinned repository bundles and publish optional OPKG indexes."""
 import argparse
 import gzip
 import hashlib
@@ -82,13 +82,17 @@ def verify_ipk(ipk, expected, source, profile, modules):
 
 
 def restore(profile, source, downloads, work):
-    archive = downloads / profile / source['archive']
-    if digest(archive.read_bytes()) != source['archive_sha256']:
+    archive = ROOT / source['bundle']
+    if digest(archive.read_bytes()) != source['bundle_sha256']:
         raise ValueError('Module archive differs from pinned release: ' + profile)
     work.mkdir(parents=True, exist_ok=True)
     with tarfile.open(archive, 'r:gz') as tar:
         manifest = tar.extractfile('modules.json').read()
         report = tar.extractfile('BUILD-REPORT.md').read()
+        for filename in ('build.config', 'priority-build.log', 'full-build.log', 'subtree-build.log',
+                         'module-links-build.log', 'wireguard-build.log', 'QUARANTINED.txt'):
+            if filename in tar.getnames():
+                (work / filename).write_bytes(tar.extractfile(filename).read())
     (work / 'modules.json').write_bytes(manifest)
     (work / 'BUILD-REPORT.md').write_bytes(report)
     packages = downloads / profile / 'ipks'
@@ -142,6 +146,10 @@ def write_feed(profile, source, work, manifest, destination):
     shutil.copyfile(work / 'modules.json', destination / 'modules.json')
     shutil.copyfile(work / 'BUILD-REPORT.md', destination / 'BUILD-REPORT.md')
     shutil.copyfile(ROOT / 'build/kernel-candidates' / (profile + '.sha256'), destination / 'SHA256SUMS')
+    for filename in ('build.config', 'priority-build.log', 'full-build.log', 'subtree-build.log',
+                     'module-links-build.log', 'wireguard-build.log', 'QUARANTINED.txt'):
+        if (work / filename).is_file():
+            shutil.copyfile(work / filename, destination / filename)
     print('Published {} staged candidates in {}'.format(len(files), destination))
 
 

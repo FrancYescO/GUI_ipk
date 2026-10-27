@@ -2,11 +2,6 @@ name: VBNT-S Linux 4.1.38 kernel modules
 
 on:
   workflow_dispatch:
-    inputs:
-      publish_candidates:
-        description: "Publish compiled modules as a separate public prerelease"
-        type: boolean
-        default: true
 
 permissions:
   contents: read
@@ -17,7 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     permissions:
-      contents: write
+      contents: read
     env:
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
@@ -70,22 +65,6 @@ jobs:
                   print(module['name'], module['sha256'])
           PY
           fi
-      - name: Publish staged candidate IPKs separately
-        if: inputs.publish_candidates
-        run: |
-          tag="kernel-4.1.38-vbnts-candidates-${GITHUB_SHA:0:7}"
-          root=dist/vbnts-4.1.38-expanded
-          tar -czf "$root/modules-4.1.38-vbnts-stock-abi.tar.gz" -C "$root" \
-            modules modules.json build.config BUILD-REPORT.md SHA256SUMS \
-            priority-build.log wireguard-build.log full-build.log subtree-build.log module-links-build.log
-          gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
-            gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
-              --prerelease --target "$GITHUB_SHA" \
-              --title "VBNT-S Linux 4.1.38 staged module candidates (${GITHUB_SHA:0:7})" \
-              --notes-file "$root/BUILD-REPORT.md"
-          gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber \
-            "$root"/ipks/*.ipk "$root/ipks/SHA256SUMS" "$root/ipks/QUARANTINED.txt" \
-            "$root/modules.json" "$root/BUILD-REPORT.md" "$root/modules-4.1.38-vbnts-stock-abi.tar.gz"
       - name: Upload build log on failure
         if: failure()
         uses: actions/upload-artifact@v7

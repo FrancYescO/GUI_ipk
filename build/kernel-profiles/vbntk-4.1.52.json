@@ -1,0 +1,14 @@
+{
+  "profile": "4.1.52-vbntk",
+  "device": "DGA4130/VBNT-K",
+  "firmware": "19.4.1051-3401200",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55",
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7",
+  "feed": "kernel/4.1.52-vbntk",
+  "aliases": [
+    "kernel/4.1.52"
+  ],
+  "validation_page": "validation/4.1.52",
+  "validation_device_suffix": ".69",
+  "architecture": "arm_cortex-a9"
+}

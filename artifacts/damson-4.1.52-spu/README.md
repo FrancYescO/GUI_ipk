@@ -1,4 +1,4 @@
-# Router-tested SPU, Damson Linux 4.1.52
+# Router-tested SPU, VBNT-K Linux 4.1.52
 
 Package names omit `damson-`. Only package metadata and filenames were renamed; the module payloads are unchanged. Each new package replaces and conflicts with its former package name.
 

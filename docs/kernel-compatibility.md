@@ -14,7 +14,8 @@ Base URL: `https://francyesco.github.io/GUI_ipk/`.
 | --- | --- |
 | `kernel/4.1.38-vbnto` | TUN, WireGuard and SPU tested on DGA4131FWB, 18.3.n.0439, kernel package ending `08839f3f6145d3a5d2d04be7567e3f9d` |
 | `kernel/4.1.38-vbnts` | TUN, WireGuard and SPU tested on DGA4132, 18.3.k.0451, kernel package ending `8dd693635a152c8c7b822a64e6c5c470` |
-| `kernel/4.1.52` | Damson packages with per-module test records on the validation page; does not cover every 4.1.52 firmware |
+| `kernel/4.1.52-vbntk` | VBNT-K at .69, firmware 19.4.1051-3401200; per-module validation levels |
+| `kernel/4.1.52` | Compatibility alias of `4.1.52-vbntk` |
 | `kernel/4.1.38-vbnto-candidates` | 220 staged candidate IPKs for the exact VBNT-O kernel package above |
 | `kernel/4.1.38-vbnts-candidates` | 212 staged candidate IPKs for the exact VBNT-S kernel package above |
 | `kernel/4.1.38` | Historical generic buildroot ABI; separate from the two runtime profiles |
@@ -67,9 +68,9 @@ sets. No non-TIM/Fastweb branch in this inventory has either tested 4.1.38
 profile's complete kernel package identifier. Other operators therefore need
 their own ABI comparison and, where necessary, a separate build profile.
 
-Damson's runtime-tested firmware is not mapped to other archive branches solely
+VBNT-K's runtime-tested firmware is not mapped to other archive branches solely
 because they report 4.1.52. This includes the 25 AGTHP/AGTEF 2.3.5–2.4.5
-branches with fingerprint `f4e97ee0…`: comparison against the Damson ABI is a
+branches with fingerprint `f4e97ee0…`: comparison against the VBNT-K ABI is a
 separate step.
 
 ## Next build profile
@@ -99,10 +100,21 @@ reference; the two exact runtime feeds provide the supported deployment path.
 Both exact 4.1.38 runtime feeds include `kmod-cdc-ether-<profile>-4.1.38-manual`
 and `kmod-rndis-host-<profile>-4.1.38-manual`. Use both drivers together with
 the firmware's native `usbnet`. They share the same `ef/04/01` USB miscellaneous
-class backport as the 4.1.52 Damson pair. The two 4.1.38 profiles produce
+class backport as the 4.1.52 VBNT-K pair. The two 4.1.38 profiles produce
 identical module payloads but retain separate kernel dependencies and packages.
 
 Loading, USB driver registration, unloading and restoration of stock modules
 passed on both modems. Boot IDs, kernel taint and default routes were unchanged.
 No USB network device was attached: tethering enumeration, DHCP and traffic
 remain untested. See [USB build and runtime evidence](https://francyesco.github.io/GUI_ipk/validation/usb-4.1.38/).
+
+Candidate publisher inputs are preserved in checksum-pinned repository bundles,
+so duplicate candidate Releases can be removed without affecting future builds.
+The seven optional application Releases and immutable compiler/build inputs
+remain necessary and are retained.
+
+The VBNT-K 4.1.52 packages declare `arm_cortex-a9`, confirmed in OPKG on
+.69. The former `brcm963xx` package architecture is not accepted by that modem.
+Package names and version `4.1.52-1` are retained; container metadata and
+filenames change, while every module payload remains identical to the registry.
+Run `opkg update` to obtain the refreshed indexes.

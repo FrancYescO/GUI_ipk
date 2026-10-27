@@ -15,8 +15,9 @@ Router-tested TUN, WireGuard and SPU are in `artifacts/vbnts-4.1.38-manual` and
 published in the separate `kernel/4.1.38-vbnts` OPKG feed. The generic 4.1.38 and
 VBNT-O feeds have different ABIs and are not substitutes for this profile.
 
-Expanded modules are published as a separate public prerelease with staged IPKs,
-raw modules, hashes, build config and diagnostics. Candidate packages use their
+Expanded builds upload workflow artifacts. Public candidate IPKs, hashes, build
+config and diagnostics are preserved in a pinned repository bundle and indexed
+in the optional candidate OPKG feed. Duplicate candidate Releases are not created. Candidate packages use their
 own VBNT-S package names and `/usr/lib/kernel-module-candidates/4.1.38-vbnts/`;
 installing them cannot replace stock boot modules or autoload untested code.
 They have an exact kernel dependency and no maintainer scripts. The xt_nat

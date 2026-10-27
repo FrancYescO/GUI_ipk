@@ -13,7 +13,7 @@ from kernel_compatibility_page import write_compatibility
 
 
 USERSPACE_FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
-KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.38-vbnto", "kernel/4.1.38-vbnts", "kernel/4.1.52",
+KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.38-vbnto", "kernel/4.1.38-vbnts", "kernel/4.1.52", "kernel/4.1.52-vbntk",
                 "kernel/4.1.38-vbnto-candidates", "kernel/4.1.38-vbnts-candidates")
 ASTERISK_FEED = "telephony/asterisk-20"
 FEEDS = USERSPACE_FEEDS + KERNEL_FEEDS + (ASTERISK_FEED,)
@@ -89,7 +89,7 @@ def page(title, selected, groups, prefix, partial=False):
             version = html.escape(item.get("Version", ""))
             arch = html.escape(item.get("Architecture", ""))
             description = html.escape(next(iter(item.get("Description", "").splitlines()), ""))
-            if item.get('X-Module-Staging-Only') == 'yes':
+            if item.get('X-Runtime-Test'):
                 description += '<br>Test status: ' + html.escape(item.get('X-Runtime-Test-Status', 'not_tested'))
                 description += '; ' + html.escape(item.get('X-Runtime-Test', 'build-only'))
             url = prefix + feed + "/" + quote(item["Filename"], safe="")
@@ -103,13 +103,13 @@ def page(title, selected, groups, prefix, partial=False):
         "(e5d0b8e85af0ba3d06a2ba17859e868a). These are retained as historical build outputs. "
         "Use the exact VBNT-O or VBNT-S runtime profile when available. "
         "The kernel IPK records the build ABI but contains no kernel image. "
-        "These packages do not include the Damson 4.1.52 ABI adaptation and "
-        "must not be used on VBNT-K Damson. Check the exact VBNTS firmware "
+        "These packages do not include the VBNT-K 4.1.52 ABI adaptation and "
+        "must not be used on VBNT-K. Check the exact VBNTS firmware "
         "ABI before installation; they have not been tested on a router.</p>"
         if selected == "kernel/4.1.38" else
-        "<p><strong>Damson 4.1.52 modules require the exact firmware ABI.</strong> "
+        "<p><strong>VBNT-K 4.1.52 modules require the exact firmware ABI.</strong> "
         "TUN, act_connmark and the cdc_ether/rndis_host compatibility pair "
-        "were tested on VBNT-K Damson 19.4.0866-3401052. "
+        "were tested on VBNT-K 19.4.0866-3401052. "
         "The RNDIS pair uses the firmware's native usbnet module. "
         "WireGuard passed loading, local handshake and "
         "unloading on VBNT-K 19.4.1051; routed VPN traffic remains untested. "
@@ -141,10 +141,10 @@ def page(title, selected, groups, prefix, partial=False):
                   'not been tested. Both replacement drivers must be used together. '
                   'These IPKs require the matching exact kernel ABI. Other firmware versions '
                   'and operator variants require a separate compatibility check.</p>')
-    elif selected == "kernel/4.1.52":
+    elif selected in ("kernel/4.1.52", "kernel/4.1.52-vbntk"):
         notice = (
             '<p><strong>Linux 4.1.52 requires the matching firmware ABI.</strong> '
-            'Runtime tests on VBNT-K Damson 19.4.1051 distinguish functional '
+            'Runtime tests on VBNT-K 19.4.1051 at .69 distinguish functional '
             'passes from smoke tests and busy stock modules that were not replaced. '
             'Corrected QoS statistic and NAT range layouts retain version 4.1.52-1. '
             'xt_nat is withheld pending safe validation. '
@@ -243,7 +243,7 @@ Tested-feed TUN, SPU and WireGuard are available in the <a href="../../kernel/4.
 These results apply to the listed SHA-256 payloads and firmware ABI, not every Linux 4.1.38 device.</p></header>
 <nav><a href="../../index.html">All packages</a><a href="results.json">Machine-readable results</a>
 <a href="results.tsv">Test history</a><a href="additional-functional-results.txt">Additional functional test output</a>
-<a href="{html.escape(report['release'], quote=True)}">Candidate release and build diagnostics</a></nav>
+<a href="{html.escape(report['release'], quote=True)}">Candidate feed build diagnostics</a></nav>
 <label for="search">Search modules or test results</label><input id="search" type="search" placeholder="Search modules…">
 <p id="count" class="muted"></p><div class="table-wrap"><table><thead><tr><th>Module</th><th>Validation</th><th>Notes</th>
 <th>Module SHA-256</th><th>Download</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
@@ -260,6 +260,10 @@ def main():
         for feed in FEEDS
         if (root / feed / "Packages").is_file()
     }
+    if 'kernel/4.1.52-vbntk' in groups:
+        groups.pop('kernel/4.1.52', None)
+        legacy = root / 'kernel/4.1.52/index.html'
+        legacy.write_text('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=../4.1.52-vbntk/"><a href="../4.1.52-vbntk/">VBNT-K 4.1.52 runtime feed</a>', encoding='utf-8')
     missing_userspace = set(USERSPACE_FEEDS) - groups.keys()
     if missing_userspace:
         raise ValueError(f"Missing userspace feeds: {sorted(missing_userspace)}")

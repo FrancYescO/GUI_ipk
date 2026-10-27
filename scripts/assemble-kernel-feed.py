@@ -60,16 +60,7 @@ def write_feed(version, ipks, feed_root):
         manual_module = (
             version == "4.1.52"
             and fields.get("Package", "").startswith("kmod-")
-            and (fields.get("Architecture") == "brcm963xx" or (
-                fields.get("Package") in {
-                    "kmod-bcmspu-4.1.52-manual",
-                    "kmod-cdc-ether-4.1.52-manual",
-                    "kmod-rndis-host-4.1.52-manual",
-                }
-                and fields.get("Architecture") == "arm_cortex-a9"
-                and fields.get("X-Damson-Target") == "VBNTJ_502L07p1"
-                and fields.get("X-Damson-Firmware") == "19.4.0866-3401052"
-            ))
+            and fields.get("Architecture") == "arm_cortex-a9"
             and fields.get("X-Kernel-Vermagic", "").startswith(version + " ")
             and fields.get("X-Manual-Install-Only") == "yes"
         )
@@ -121,6 +112,13 @@ def write_feed(version, ipks, feed_root):
             and fields.get("Package") == "kmod-wireguard"
             and fields.get("Version") == "4.1.38+1.0.20220627-1"
         )
+        if version == '4.1.52':
+            profile = json.loads((Path(__file__).resolve().parents[1] / 'build/kernel-profiles/vbntk-4.1.52.json').read_text())
+            if (fields.get('Depends') != 'kernel (= ' + profile['kernel_package'] + ')'
+                    or fields.get('X-Kernel-Profile') != profile['profile']
+                    or fields.get('X-Kernel-Target') != 'VBNT-K'
+                    or fields.get('X-Firmware') != profile['firmware']):
+                raise ValueError('Unexpected kernel package metadata (VBNT-K profile): ' + str(ipk))
         if not ((manual_module or virtual_kernel or buildroot_module or vbnto_module or vbnts_module)
                 and (fields.get("Version", "").startswith(version.split("-vbnt")[0] + "-")
                      or wireguard_backport_version)):
@@ -140,6 +138,9 @@ def write_feed(version, ipks, feed_root):
             "Size": str(ipk.stat().st_size),
             "SHA256sum": hashlib.sha256(ipk.read_bytes()).hexdigest(),
         })
+        if version == '4.1.52':
+            fields['X-Runtime-Test'] = record['level']
+            fields['X-Runtime-Test-Status'] = record['status']
         entries.append("\n".join(f"{key}: {value}" for key, value in fields.items()))
     if not entries:
         raise ValueError(f"No kernel IPKs found for {version}")
@@ -163,7 +164,7 @@ def main():
     parser.add_argument("--buildroot-kernel-dir", type=Path, help="directory with verified 4.1.38 kernel and kmod IPKs")
     parser.add_argument("--vbnto-kernel-dir", type=Path, help="router-tested DGA4131FWB 4.1.38 IPKs")
     parser.add_argument("--vbnts-kernel-dir", type=Path, help="router-tested DGA4132 4.1.38 IPKs")
-    parser.add_argument("--damson-extra-dir", type=Path, help="directory with additional verified manual-only Damson IPKs")
+    parser.add_argument("--damson-extra-dir", type=Path, help="directory with additional verified manual-only VBNT-K IPKs")
     parser.add_argument("--damson-spu-dir", type=Path, help="directory with the verified manual-only SPU IPK")
     parser.add_argument("--damson-rndis-dir", type=Path, help="directory with the router-tested CDC Ethernet/RNDIS pair")
     args = parser.parse_args()
@@ -171,7 +172,7 @@ def main():
     if args.damson_extra_dir:
         extra_ipks = list(args.damson_extra_dir.glob("*.ipk"))
         if not extra_ipks:
-            raise ValueError("No additional Damson IPKs found")
+            raise ValueError("No additional VBNT-K IPKs found")
         damson_ipks.extend(extra_ipks)
     if args.damson_spu_dir:
         subprocess.run([str(Path(__file__).resolve().with_name("verify-manual-kmod-ipks.sh")),
@@ -196,6 +197,10 @@ def main():
         if directory and list(directory.glob("kmod-wireguard*.ipk")):
             subprocess.run([str(verifier), str(directory), "4.1.52"], check=True)
     write_feed("4.1.52", damson_ipks, args.feed_root)
+    canonical = args.feed_root / 'kernel/4.1.52-vbntk'
+    if canonical.exists():
+        shutil.rmtree(canonical)
+    shutil.copytree(args.feed_root / 'kernel/4.1.52', canonical)
     if args.buildroot_kernel_dir:
         candidates = list(args.buildroot_kernel_dir.glob("*.ipk"))
         if len(list(args.buildroot_kernel_dir.glob("kernel_4.1.38-*.ipk"))) != 1:

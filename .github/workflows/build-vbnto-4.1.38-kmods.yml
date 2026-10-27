@@ -8,10 +8,6 @@ on:
         type: choice
         default: tested
         options: [tested, expanded]
-      publish_candidates:
-        description: "Publish expanded staged IPKs as a separate public prerelease"
-        type: boolean
-        default: false
   pull_request:
     paths:
       - .github/workflows/build-vbnto-4.1.38-kmods.yml
@@ -52,7 +48,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     permissions:
-      contents: write
+      contents: read
     env:
       GH_TOKEN: ${{ github.token }}
       BUILD_INPUTS_TAG: build-inputs-v1
@@ -114,22 +110,6 @@ jobs:
           (cd artifacts/vbnto-4.1.38-manual && sha256sum --check SHA256SUMS)
           python3 scripts/verify-vbnto-4.1.38-ipks.py artifacts/vbnto-4.1.38-manual
           python3 scripts/verify-vbnto-4.1.38-ipks.py dist/vbnto-4.1.38-ipks
-      - name: Publish staged candidate IPKs separately
-        if: github.event_name == 'workflow_dispatch' && inputs.module_set == 'expanded' && inputs.publish_candidates
-        run: |
-          tag="kernel-4.1.38-candidates-${GITHUB_SHA:0:7}"
-          root=dist/vbnto-4.1.38-expanded
-          tar -czf "$root/modules-4.1.38-stock-abi.tar.gz" -C "$root" \
-            modules modules.json build.config BUILD-REPORT.md SHA256SUMS \
-            priority-build.log wireguard-build.log full-build.log subtree-build.log module-links-build.log
-          gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
-            gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
-              --prerelease --target "$GITHUB_SHA" \
-              --title "Linux 4.1.38 staged module candidates (${GITHUB_SHA:0:7})" \
-              --notes-file "$root/BUILD-REPORT.md"
-          gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber \
-            "$root"/ipks/*.ipk "$root/ipks/SHA256SUMS" "$root/ipks/QUARANTINED.txt" \
-            "$root/modules.json" "$root/BUILD-REPORT.md" "$root/modules-4.1.38-stock-abi.tar.gz"
       - name: Upload build log on failure
         if: failure()
         uses: actions/upload-artifact@v7

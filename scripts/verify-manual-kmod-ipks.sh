@@ -2,6 +2,8 @@
 set -euo pipefail
 
 artifact_dir="${1:-dist/vbntj-kmods}"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+kernel_package="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["kernel_package"])' "$repo_root/build/kernel-profiles/vbntk-4.1.52.json")"
 
 if [[ ! -d "$artifact_dir" ]]; then
   echo "Artifact directory does not exist: $artifact_dir" >&2
@@ -19,10 +21,8 @@ ipk_count=0
 while IFS= read -r -d '' ipk; do
   ipk_count=$((ipk_count + 1))
   filename="$(basename "$ipk")"
-  package_arch=brcm963xx
-  if [[ "$filename" =~ ^kmod-(bcmspu|cdc-ether|rndis-host)-4\.1\.52-manual_4\.1\.52-[0-9]+_arm_cortex-a9\.ipk$ ]]; then
-    package_arch=arm_cortex-a9
-  elif [[ ! "$filename" =~ ^kmod-[a-z0-9.-]+-4\.1\.52-manual_4\.1\.52-[0-9]+_brcm963xx\.ipk$ ]]; then
+  package_arch=arm_cortex-a9
+  if [[ ! "$filename" =~ ^kmod-[a-z0-9.-]+-4\.1\.52-manual_4\.1\.52-[0-9]+_arm_cortex-a9\.ipk$ ]]; then
     echo "Unexpected manual IPK filename: $filename" >&2
     exit 1
   fi
@@ -53,7 +53,10 @@ while IFS= read -r -d '' ipk; do
     "Conflicts: $legacy_package_name" \
     "Replaces: $legacy_package_name" \
     "Architecture: $package_arch" \
-    'X-Damson-Firmware: 19.4.0866-3401052' \
+    'X-Kernel-Target: VBNT-K' \
+    'X-Kernel-Profile: 4.1.52-vbntk' \
+    'X-Firmware: 19.4.1051-3401200' \
+    "Depends: kernel (= $kernel_package)" \
     'X-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7' \
     'X-Manual-Install-Only: yes'; do
     if ! grep -Fxq "$required" <<< "$control"; then
@@ -65,7 +68,7 @@ while IFS= read -r -d '' ipk; do
   data_members="$(tar -xOzf "$ipk" ./data.tar.gz | tar -tzf -)"
   if [[ "$(wc -l <<< "$data_members" | tr -d ' ')" -ne 1 ]] ||
      [[ ! "$data_members" =~ ^\./lib/modules/4\.1\.52/[a-zA-Z0-9_.-]+\.ko$ ]]; then
-    echo "IPK must contain exactly one Damson 4.1.52 module: $filename" >&2
+    echo "IPK must contain exactly one VBNT-K 4.1.52 module: $filename" >&2
     printf '%s\n' "$data_members" >&2
     exit 1
   fi
@@ -84,8 +87,8 @@ while IFS= read -r -d '' ipk; do
 done < <(find "$artifact_dir" -maxdepth 1 -type f -name '*.ipk' -print0)
 
 if [[ "$ipk_count" -eq 0 ]]; then
-  echo "No manual Damson IPKs found in $artifact_dir" >&2
+  echo "No manual VBNT-K IPKs found in $artifact_dir" >&2
   exit 1
 fi
 
-echo "Verified $ipk_count manual-only Damson 4.1.52 IPK artifact(s)"
+echo "Verified $ipk_count manual-only VBNT-K 4.1.52 IPK artifact(s)"

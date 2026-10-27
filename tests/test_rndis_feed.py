@@ -69,8 +69,8 @@ class RndisFeedTests(unittest.TestCase):
         ipk = next(RNDIS.glob("kmod-cdc-ether*.ipk"))
         original = kernel_feed.control_fields(ipk)
         for changes in (
-            {"X-Damson-Target": "another-board"},
-            {"X-Damson-Firmware": "another-firmware"},
+            {"X-Kernel-Target": "another-board"},
+            {"X-Firmware": "another-firmware"},
             {"Package": "kmod-untested-4.1.52-manual"},
         ):
             with self.subTest(changes=changes):

@@ -1,5 +1,5 @@
 5c424ae82a147d9d0d4dc3e569b3dbdf9d92549cc409e7151ce74ff7b82eb3ab  ./cdc_ether.ko
-449ddc424372156a550bca43c74bcd9396f730a651dd3f210402786a5af7aae8  ./kmod-cdc-ether-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
-298681407a0afe9929c92320e4735ef84d7f264fc27a44b4715ac3212248853d  ./kmod-rndis-host-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
+8f06cf3a50e90385d33a7517a15e63bb77b2915967de33da85de313ee0364b92  ./kmod-cdc-ether-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
+c656272b575fc1e59bd4cc8140ea5284cfb469931b7af248c35d097a9b236d52  ./kmod-rndis-host-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 56517d64a7d159602730d25c14637d17a51b33910a6fea3ff9f35681b085161e  ./rndis_host.ko
 c4ad709d211ed9259e488294d68abedee688339dbaa4872a26e392a71143b1c4  ./vbntj_abi_canary.ko

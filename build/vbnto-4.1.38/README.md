@@ -27,9 +27,9 @@ remain separate from the router-tested feed until runtime validation. WireGuard
 has already passed a temporary two-peer handshake and encrypted-traffic test;
 the expanded build checks its bytes before producing its tested manual IPK.
 
-Dispatching `expanded` with `publish_candidates=true` also uploads the staged
-IPKs, raw modules and build diagnostics to a separate public prerelease. It
-does not add unvalidated candidates to the normal OPKG feed.
+Expanded builds upload workflow artifacts. The public candidate feed is assembled
+from the checksum-pinned repository bundle, with its configuration and build logs.
+The build no longer creates duplicate candidate Releases.
 
 Per-payload results are in [validation/results.json](validation/results.json)
 and the [public validation page](https://francyesco.github.io/GUI_ipk/validation/4.1.38/).

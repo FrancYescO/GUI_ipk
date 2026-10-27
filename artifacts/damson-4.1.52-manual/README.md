@@ -1,4 +1,4 @@
-# Damson 4.1.52 manual kernel packages
+# VBNT-K 4.1.52 manual kernel packages
 
 The original modules came from [Actions run 35757010241](https://github.com/FrancYescO/GUI_ipk/actions/runs/35757010241).
 The current TUN and connmark payloads match the exact modules tested on VBNT-K.
@@ -11,7 +11,7 @@ The current names are available in this directory and the versioned feed:
 - [kmod-tun-4.1.52-manual_4.1.52-1_brcm963xx.ipk](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/kmod-tun-4.1.52-manual_4.1.52-1_brcm963xx.ipk)
 - [kmod-act-connmark-4.1.52-manual_4.1.52-1_brcm963xx.ipk](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/kmod-act-connmark-4.1.52-manual_4.1.52-1_brcm963xx.ipk)
 
-Use the versioned feed URLs in installation scripts and check the downloaded file against `SHA256SUMS` before installation. These packages target Damson `19.4.0866-3401052`, kernel `4.1.52`, `brcm963xx`. They contain no autoload configuration or installation scripts. Installing one through OPKG writes the module to persistent storage; loading the sibling `.ko` from `/tmp` remains the reversible first test on a different firmware.
+Use the versioned feed URLs in installation scripts and check the downloaded file against `SHA256SUMS` before installation. These packages target VBNT-K `19.4.0866-3401052`, kernel `4.1.52`, `brcm963xx`. They contain no autoload configuration or installation scripts. Installing one through OPKG writes the module to persistent storage; loading the sibling `.ko` from `/tmp` remains the reversible first test on a different firmware.
 
 They are deliberately outside the shared OPKG feed, which can be configured on routers with other kernels.
 

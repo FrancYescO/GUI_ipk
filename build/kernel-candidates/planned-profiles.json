@@ -16,7 +16,8 @@
   "4.1.52-tim-f4e97ee0": {
     "kernel_package_suffix": "f4e97ee0656c3a247868bb0a3f9c7e55",
     "firmware_count": 25,
-    "status": "compare-against-damson-required",
-    "feed": null
+    "status": "same-kernel-package-runtime-check-required",
+    "feed": null,
+    "existing_profile": "4.1.52-vbntk"
   }
 }
