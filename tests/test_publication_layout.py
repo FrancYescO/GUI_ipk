@@ -43,9 +43,9 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual({r['url'].rsplit('/', 1)[1]: r['profile'] for r in manifest['aliases']}, layout.KERNEL_ALIASES)
         self.assertNotIn('url', manifest)  # No misleading combined OPKG source.
         self.assertEqual([(r['profile'], r['count']) for r in manifest['profiles']],
-                         [('4.1.38-vbnto', 49), ('4.1.38-vbnts', 49), ('4.1.52-vbntk', 49)])
+                         [('4.1.38-vbnto', 49), ('4.1.38-vbntk', 49), ('4.1.52-vbntk', 49)])
         self.assertEqual([(r['profile'], r['count']) for r in manifest['candidates']],
-                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbnts-candidates', 212)])
+                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212)])
         for row in manifest['profiles'] + manifest['candidates']:
             self.assertEqual(row['url'], layout.SITE + '/kernel/' + row['profile'])
             self.assertTrue(row['source'].endswith(' ' + row['url']))
@@ -62,7 +62,9 @@ class PublicationTests(unittest.TestCase):
             self.assertIn('no compatible runtime firmware', page)
 
     def test_device_alias_indexes_resolve_to_canonical_packages(self):
-        self.assertEqual(layout.KERNEL_ALIASES['4.1.38-vbntk'], '4.1.38-vbnts')
+        self.assertEqual(layout.KERNEL_ALIASES['4.1.38-vbnts'], '4.1.38-vbntk')
+        self.assertNotIn('vbnts', layout.KERNEL_ALIASES)
+        self.assertNotIn('vbntk', layout.KERNEL_ALIASES)
         self.assertEqual(layout.KERNEL_ALIASES['4.1.52-vbnts'], '4.1.52-vbntk')
         catalog = fetch.read_catalog(ROOT / 'build/publication/bootstrap.json.gz', live=False)
         with tempfile.TemporaryDirectory() as temp:
@@ -74,7 +76,8 @@ class PublicationTests(unittest.TestCase):
                 self.assertEqual(gzip.decompress((directory / 'Packages.gz').read_bytes()), data)
                 actual = [layout.parse(stanza) for stanza in data.decode().strip().split('\n\n')]
                 expected = [r for r in catalog['records'] if r['section'] == 'kernel/' + profile]
-                self.assertEqual(len(actual), 49)
+                self.assertEqual(len(actual), len(expected))
+                self.assertIn(len(actual), (49, 212))
                 by_name = {r['package']: r for r in expected}
                 for fields in actual:
                     row = by_name[fields['Package']]

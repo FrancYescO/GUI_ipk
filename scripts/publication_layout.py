@@ -16,9 +16,9 @@ REPOSITORY = 'FrancYescO/GUI_ipk'
 SECTIONS = ('base', 'luci', 'packages', 'routing', 'telephony', 'target/packages', 'telephony/asterisk-20')
 KERNEL_ALIASES = {
     '4.1.52': '4.1.52-vbntk',
-    'vbnts': '4.1.38-vbnts', 'vbntk': '4.1.52-vbntk',
-    '4.1.38-vbntk': '4.1.38-vbnts',
+    '4.1.38-vbnts': '4.1.38-vbntk',
     '4.1.52-vbnts': '4.1.52-vbntk',
+    '4.1.38-vbnts-candidates': '4.1.38-vbntk-candidates',
 }
 TRANSPORT = {'Filename', 'Size', 'SHA256sum', 'MD5Sum'}
 
@@ -140,7 +140,8 @@ def kernel_inputs(work):
     for section, profile in [('kernel/4.1.52', '4.1.52-vbntk'), ('kernel/4.1.38-vbnto', '4.1.38-vbnto'),
                              ('kernel/4.1.38-vbnts', '4.1.38-vbnts'), ('kernel/4.1.38-vbnto-candidates', '4.1.38-vbnto'),
                              ('kernel/4.1.38-vbnts-candidates', '4.1.38-vbnts')]:
-        rows.extend(read_section(feed, section, 'kernel', profile))
+        rows.extend(read_section(feed, section, 'kernel',
+                                 '4.1.38-vbntk' if profile == '4.1.38-vbnts' else profile))
     if len(rows) != 579 or len({r['package'] for r in rows}) != 579:
         raise ValueError('Unexpected kernel package set')
     return rows
@@ -207,7 +208,7 @@ def prepare(userspace, applications, output):
     # the generated indexes or duplicating package bytes.
     for profile in ('vbnto', 'vbnts'):
         source = output / 'work/kernel-inputs/kernel' / ('4.1.38-' + profile + '-candidates')
-        destination = pages / 'kernel' / source.name
+        destination = pages / 'kernel' / source.name.replace('vbnts', 'vbntk')
         for path in source.iterdir():
             if path.is_file() and path.suffix != '.ipk' and not path.name.startswith('Packages'):
                 shutil.copyfile(path, destination / path.name)

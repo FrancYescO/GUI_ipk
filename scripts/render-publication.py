@@ -49,7 +49,7 @@ def kernel_manifest(records):
     vbntk = json.loads((ROOT / 'build/kernel-profiles/vbntk-4.1.52.json').read_text())
     definitions = [
         ('4.1.38-vbnto', 'DGA4131FWB / VBNT-O', '18.3.n.0439', '.45', '4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d'),
-        ('4.1.38-vbnts', 'DGA4132 / VBNT-S', '18.3.k.0451', '.204', '4.1.38-1-8dd693635a152c8c7b822a64e6c5c470'),
+        ('4.1.38-vbntk', 'DGA4132 / VBNT-S', '18.3.k.0451', '.204', '4.1.38-1-8dd693635a152c8c7b822a64e6c5c470'),
         ('4.1.52-vbntk', vbntk['device'], vbntk['firmware'], '.69', vbntk['kernel_package']),
     ]
     profiles, candidates = [], []
@@ -66,7 +66,7 @@ def kernel_manifest(records):
                    'source': 'src/gz ' + name + ' ' + url, 'staging_only': staging,
                    'status': 'Staging only; manual validation required' if staging else
                              'Runtime packages; see per-module test results',
-                   'validation_url': SITE + '/validation/' + ('4.1.52' if profile == '4.1.52-vbntk' else profile) + '/'}
+                   'validation_url': SITE + '/validation/' + ('4.1.52' if profile == '4.1.52-vbntk' else profile.replace('vbntk', 'vbnts')) + '/'}
             (candidates if staging else profiles).append(row)
     return {'index_url': SITE + '/kernel/', 'profiles': profiles, 'candidates': candidates,
             'aliases': [{'url': SITE + '/kernel/' + alias, 'profile': profile}
@@ -105,11 +105,12 @@ See the linked reports for exact payloads and test limits; USB tethering traffic
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
 These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
 They stage modules outside boot paths; a successful build does not prove runtime compatibility. xt_nat remains withheld.</p>''' + candidates + '''
-<h2>Device aliases</h2><p><a href="4.1.38-vbntk/Packages.gz">kernel/4.1.38-vbntk/Packages.gz</a> serves the 4.1.38-vbnts OPKG index;
-<a href="4.1.52-vbnts/Packages.gz">kernel/4.1.52-vbnts/Packages.gz</a> serves the 4.1.52-vbntk OPKG index.
-Both URLs serve actual compressed package indexes with canonical IPK paths and exact ABI dependencies.</p><p><a href="vbnts/">kernel/vbnts</a> points to 4.1.38-vbnts;
-<a href="vbntk/">kernel/vbntk</a> points to 4.1.52-vbntk. These are alternative OPKG URLs for the same packages, with the same exact kernel dependency.
-Enable either an alias or its canonical feed, once. Device name alone does not establish firmware compatibility.</p>
+<h2>VBNT-K canonical feeds and VBNT-S aliases</h2><p>VBNT-K is the canonical public feed name for each kernel version.
+<a href="4.1.38-vbnts/Packages.gz">4.1.38-vbnts</a> is an OPKG alias of 4.1.38-vbntk;
+<a href="4.1.52-vbnts/Packages.gz">4.1.52-vbnts</a> is an OPKG alias of 4.1.52-vbntk.
+The VBNT-S candidate URL likewise aliases 4.1.38-vbntk-candidates.
+Aliases serve real package indexes pointing to the canonical IPKs, with unchanged exact ABI dependencies.
+Validation device names and package names retain their original provenance. Enable each ABI feed only once.</p>
 <h2>Historical paths</h2><p><a href="4.1.52/">kernel/4.1.52</a> is an OPKG-compatible alias of 4.1.52-vbntk.
 <a href="4.1.38/">kernel/4.1.38</a> contains the generic buildroot archive only; no compatible runtime firmware is identified and it has no active OPKG feed.</p></body></html>'''
     (site / 'kernel/index.html').write_text(content)
