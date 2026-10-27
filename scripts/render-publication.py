@@ -30,6 +30,8 @@ def page(title, selected, groups, feeds, prefix):
         for record in groups[group]:
             fields = parse(record['control'])
             description = html.escape(fields.get('Description', ''))
+            if fields.get('X-Module-Staging-Only') == 'yes':
+                description += '<br>Staging only: manual validation required; excluded from automatic OPKG index.'
             if fields.get('X-Runtime-Test'):
                 description += '<br>Test: ' + html.escape(fields['X-Runtime-Test']) + '; ' + html.escape(fields.get('X-Runtime-Test-Status', 'see validation'))
             rows.append('<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td><a href="{}">Download IPK</a></td></tr>'.format(
@@ -60,8 +62,8 @@ def render(publication):
                             ('4.1.52-vbntk', '4.1.52-vbntk'), ('4.1.52', '4.1.52-vbntk'),
                             ('4.1.38-vbnto-candidates', '4.1.38-vbnto'), ('4.1.38-vbnts-candidates', '4.1.38-vbnts')]:
         rows = [r for r in catalog['records'] if r['kind'] == 'kernel' and r['profile'] == origin]
-        if profile.endswith('-candidates'):
-            rows = [r for r in rows if parse(r['control']).get('X-Module-Staging-Only') == 'yes']
+        staging = profile.endswith('-candidates')
+        rows = [r for r in rows if (parse(r['control']).get('X-Module-Staging-Only') == 'yes') == staging]
         destination = site / 'kernel' / profile
         destination.mkdir(parents=True, exist_ok=True)
         (destination / 'index.html').write_text(page(profile, profile, {profile: rows}, {profile: kernel_url}, '../../'), encoding='utf-8')
