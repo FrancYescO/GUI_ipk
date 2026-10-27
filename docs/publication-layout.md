@@ -19,10 +19,10 @@ status. Kernel release alone, such as `uname -r`, does not identify the ABI.
 | Pages path | Reference device / firmware | IPKs | Use |
 |---|---|---:|---|
 | `kernel/4.1.38-vbnto` | DGA4131FWB / VBNT-O, 18.3.n.0439 (.45) | 49 | Runtime packages; per-module test levels differ |
-| `kernel/4.1.38-vbnts` | DGA4132 / VBNT-S, 18.3.k.0451 (.204) | 49 | Runtime packages; per-module test levels differ |
+| `kernel/4.1.38-vbntk` | DGA4132 / VBNT-S, 18.3.k.0451 (.204) | 49 | Runtime packages; per-module test levels differ |
 | `kernel/4.1.52-vbntk` | DGA4130 / VBNT-K, 19.4.1051-3401200 (.69) | 49 | Runtime packages; per-module test levels differ |
 | `kernel/4.1.38-vbnto-candidates` | VBNT-O ABI above | 220 | Optional staging only; manual validation |
-| `kernel/4.1.38-vbnts-candidates` | VBNT-S ABI above | 212 | Optional staging only; manual validation |
+| `kernel/4.1.38-vbntk-candidates` | VBNT-S ABI above | 212 | Optional staging only; manual validation |
 
 Enable one runtime source only after matching the complete installed `kernel`
 package version. Firmware sharing an ABI still needs runtime validation. The
@@ -80,13 +80,9 @@ package feeds. Their historical tags remain stable for reproducibility. After
 retiring duplicate kernel and Asterisk binary releases, FreeSWITCH sounds is the
 only binary package Release; the three CI input releases remain separate.
 
-Device aliases `kernel/vbnts` → `kernel/4.1.38-vbnts` and `kernel/vbntk` →
-`kernel/4.1.52-vbntk` provide OPKG indexes without duplicating IPKs. Use either
-the alias or its canonical feed. Exact kernel ABI dependencies remain unchanged;
-the device name does not imply compatibility with every firmware.
-
-Versioned device aliases also serve real OPKG indexes: `kernel/4.1.38-vbntk`
-uses the `4.1.38-vbnts` packages, and `kernel/4.1.52-vbnts` uses the
-`4.1.52-vbntk` packages. `Packages` and `Packages.gz` are generated files,
-not HTML redirects. These aliases retain the canonical feed’s exact kernel ABI
-dependency and do not add runtime validation for another firmware.
+VBNT-K is the canonical public feed name: `kernel/4.1.38-vbntk` and
+`kernel/4.1.52-vbntk`. The corresponding versioned `vbnts` URLs are OPKG aliases
+serving real indexes with relative paths to the canonical IPKs. The 4.1.38
+candidate feed follows the same convention. Unversioned device aliases are removed.
+Package names, payloads, exact ABI dependencies and original validation evidence
+are unchanged; the 4.1.38 reference test device remains VBNT-S.
