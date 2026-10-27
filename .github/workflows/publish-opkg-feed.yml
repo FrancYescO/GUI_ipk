@@ -1,230 +1,95 @@
 name: Publish verified OPKG feeds
-
 on:
   pull_request:
-    paths:
-      - ".github/workflows/publish-opkg-feed.yml"
-      - "artifacts/damson-4.1.52-rndis-compat/**"
-      - "artifacts/vbnto-4.1.38-manual/**"
-      - "artifacts/vbnts-4.1.38-manual/**"
-      - "build/vbnts-4.1.38/profile.json"
-      - "scripts/assemble-kernel-feed.py"
-      - "scripts/assemble-kernel-candidates.py"
-      - "scripts/fetch-kernel-candidates.py"
-      - "scripts/kernel_compatibility_page.py"
-      - "scripts/generate-feed-pages.py"
-      - "build/kernel-candidates/**"
-      - "artifacts/kernel-candidates/**"
-      - "build/kernel-profiles/**"
-      - "scripts/update-vbntk-package-metadata.py"
-      - "docs/kernel-compatibility.md"
-      - "tests/test_kernel_candidates.py"
-      - "tests/test_kernel_release_cleanup.py"
-      - "scripts/verify-vbnto-4.1.38-ipks.py"
-      - "scripts/package-usb-rndis-4.1.38.py"
-      - "build/usb-rndis/**"
-      - "artifacts/usb-rndis-4.1.38/**"
-      - "scripts/report-feed-dependencies.py"
-      - "scripts/kernel_validation_page.py"
-      - "tests/test_kernel_validation.py"
-      - "build/vbntj/validation/**"
-      - "scripts/verify-manual-kmod-ipks.sh"
-      - "tests/test_rndis_feed.py"
-      - "artifacts/openvpn-2.6.23/**"
-      - "scripts/overlay-openvpn-feed.py"
-      - "tests/test_openvpn_feed.py"
-      - "scripts/select-userspace-feed-run.py"
-      - "tests/test_userspace_feed_selection.py"
+    paths: ['scripts/**', 'tests/**', 'build/publication/**', 'build/application-archive/**', 'build/kernel-*/**', 'artifacts/**', '.github/workflows/publish-opkg-feed.yml']
+  push:
+    branches: [main]
+    paths: ['scripts/**', 'tests/**', 'build/publication/**', 'build/application-archive/**', 'build/kernel-*/**', 'artifacts/**', '.github/workflows/publish-opkg-feed.yml']
   workflow_dispatch:
     inputs:
       reuse_userspace_run_id:
-        description: "Optional complete userspace run; defaults to the latest successful available feed"
+        description: Optional complete successful userspace build run
         required: false
         type: string
   workflow_run:
-    workflows: ["Userspace OPKG feed (brcm63xx-tch)"]
+    workflows: ['Userspace OPKG feed (brcm63xx-tch)']
     types: [completed]
     branches: [main]
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/publish-opkg-feed.yml"
-      - "base/**"
-      - "luci/**"
-      - "packages/**"
-      - "routing/**"
-      - "telephony/**"
-      - "target/packages/**"
-      - "artifacts/damson-4.1.52-manual/**"
-      - "artifacts/damson-4.1.52-network/**"
-      - "artifacts/damson-4.1.52-spu/**"
-      - "artifacts/damson-4.1.52-rndis-compat/**"
-      - "artifacts/buildroot-4.1.38/**"
-      - "artifacts/vbnto-4.1.38-manual/**"
-      - "artifacts/vbnts-4.1.38-manual/**"
-      - "build/vbnts-4.1.38/profile.json"
-      - "scripts/verify-feed.sh"
-      - "scripts/sanitize-opkg-feed.sh"
-      - "scripts/generate-feed-pages.py"
-      - "build/vbnto-4.1.38/validation/**"
-      - "scripts/assemble-kernel-feed.py"
-      - "scripts/assemble-kernel-candidates.py"
-      - "scripts/fetch-kernel-candidates.py"
-      - "scripts/kernel_compatibility_page.py"
-      - "build/kernel-candidates/**"
-      - "artifacts/kernel-candidates/**"
-      - "build/kernel-profiles/**"
-      - "scripts/update-vbntk-package-metadata.py"
-      - "docs/kernel-compatibility.md"
-      - "tests/test_kernel_candidates.py"
-      - "tests/test_kernel_release_cleanup.py"
-      - "scripts/verify-vbnto-4.1.38-ipks.py"
-      - "scripts/package-usb-rndis-4.1.38.py"
-      - "build/usb-rndis/**"
-      - "artifacts/usb-rndis-4.1.38/**"
-      - "scripts/report-feed-dependencies.py"
-      - "scripts/kernel_validation_page.py"
-      - "tests/test_kernel_validation.py"
-      - "build/vbntj/validation/**"
-      - "scripts/verify-manual-kmod-ipks.sh"
-      - "scripts/verify-wireguard-kmod.sh"
-      - "scripts/verify-kmod-tun.sh"
-      - "scripts/verify-kmod-connmark.sh"
-      - "scripts/verify-kmod-spu.py"
-      - "artifacts/openvpn-2.6.23/**"
-      - "scripts/overlay-openvpn-feed.py"
-      - "scripts/select-userspace-feed-run.py"
-      - "tests/test_userspace_feed_selection.py"
-
-concurrency:
-  group: github-pages
-  cancel-in-progress: false
-
 permissions:
   contents: read
   actions: read
-
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
 jobs:
   verify:
-    name: Verify versioned OPKG feeds
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_RUN: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.id || inputs.reuse_userspace_run_id }}
     steps:
       - uses: actions/checkout@v7
-
-      - name: Select complete userspace baseline
-        id: userspace
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REQUESTED_RUN_ID: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.id || inputs.reuse_userspace_run_id }}
+      - uses: actions/cache@v4
+        with:
+          path: .publication-cache
+          key: publication-ipks-${{ github.run_id }}
+          restore-keys: publication-ipks-
+      - name: Test publication and kernel validation
+        run: python3 -m unittest discover -s tests
+      - name: Restore durable complete userspace and promoted updates
+        run: python3 scripts/fetch-publication-inputs.py baseline applications .publication-cache
+      - name: Select explicitly requested successful complete build
+        if: env.SOURCE_RUN != ''
         run: |
-          python3 -m unittest discover -s tests -p test_userspace_feed_selection.py
-          run_args=()
-          if [[ -n "$REQUESTED_RUN_ID" ]]; then
-            run_args+=(--run-id "$REQUESTED_RUN_ID")
-          fi
-          run_id="$(python3 scripts/select-userspace-feed-run.py "$GITHUB_REPOSITORY" "${run_args[@]}")"
-          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
-          echo "Preserving complete userspace feed from run $run_id" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Download complete userspace baseline
+          python3 scripts/select-userspace-feed-run.py "$GITHUB_REPOSITORY" --run-id "$SOURCE_RUN"
+      - name: Download selected complete build
+        if: env.SOURCE_RUN != ''
         uses: actions/download-artifact@v7
         with:
           github-token: ${{ github.token }}
-          run-id: ${{ steps.userspace.outputs.run_id }}
+          run-id: ${{ env.SOURCE_RUN }}
           pattern: userspace-opkg-feed-*
           merge-multiple: true
-          path: dist/
-
-      - name: Apply verified OpenVPN update
+          path: fresh
+      - name: Adopt verified complete build
+        if: env.SOURCE_RUN != ''
         run: |
-          python3 -m unittest discover -s tests -p test_openvpn_feed.py
-          python3 scripts/overlay-openvpn-feed.py dist
-
-      - name: Remove kernel packages from shared feeds
-        run: scripts/sanitize-opkg-feed.sh dist
-
-      - name: Reject kernel packages and invalid indexes
-        run: scripts/verify-feed.sh dist
-
-      - name: Verify Damson kernel IPKs
+          # Replace only after provenance and full-feed selection succeeded.
+          rm -rf baseline
+          mv fresh baseline
+      - name: Overlay verified updates and prepare coherent components
         run: |
-          (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
-          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
-          (cd artifacts/damson-4.1.52-network && sha256sum --check SHA256SUMS)
-          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-network
-          test "$(find artifacts/damson-4.1.52-network -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 43
-
-      - name: Verify built Linux 4.1.38 IPKs
-        run: |
-          (cd artifacts/buildroot-4.1.38 && sha256sum --check SHA256SUMS)
-          scripts/verify-kmod-tun.sh artifacts/buildroot-4.1.38
-          scripts/verify-kmod-connmark.sh artifacts/buildroot-4.1.38
-          python3 scripts/verify-kmod-spu.py artifacts/buildroot-4.1.38 4.1.38
-
-      - name: Verify router-tested DGA4131FWB 4.1.38 IPKs
-        run: |
-          (cd artifacts/vbnto-4.1.38-manual && sha256sum --check SHA256SUMS)
-          python3 scripts/verify-vbnto-4.1.38-ipks.py artifacts/vbnto-4.1.38-manual
-
-      - name: Verify router-tested RNDIS packages
-        run: |
-          (cd artifacts/damson-4.1.52-rndis-compat && sha256sum --check SHA256SUMS)
-          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-rndis-compat
-          python3 -m unittest discover -s tests -p test_rndis_feed.py
-
-      - name: Verify tested SPU artifact
-        run: |
-          (cd artifacts/damson-4.1.52-spu && sha256sum --check SHA256SUMS)
-          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-spu
-          python3 scripts/verify-kmod-spu.py artifacts/damson-4.1.52-spu 4.1.52
-
-      - name: Assemble versioned kernel feeds
-        run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38 --vbnto-kernel-dir artifacts/vbnto-4.1.38-manual --vbnts-kernel-dir artifacts/vbnts-4.1.38-manual
-
-      - name: Stage pinned kernel candidates from repository
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/fetch-kernel-candidates.py "$RUNNER_TEMP/kernel-candidate-downloads" --repository "$GITHUB_REPOSITORY"
-
-      - name: Verify and index optional candidate feeds
-        run: |
-          python3 -m unittest discover -s tests -p test_kernel_candidates.py
-          python3 -m unittest discover -s tests -p test_kernel_release_cleanup.py
-          python3 scripts/assemble-kernel-candidates.py \
-            "$RUNNER_TEMP/kernel-candidate-downloads" "$RUNNER_TEMP/kernel-candidate-work" dist
-
-      - name: Verify combined feed
-        run: scripts/verify-feed.sh dist --allow-kmods
-
-      - name: Audit dependencies against final kernel feeds
-        run: |
-          for kernel in 4.1.38 4.1.52; do
-            python3 scripts/report-feed-dependencies.py dist \
-              --extra-feed "kernel/$kernel" --output "dist/dependencies-$kernel"
-            cat "dist/dependencies-$kernel/dependency-report.md" >> "$GITHUB_STEP_SUMMARY"
-          done
-
-      - name: Generate browsable package pages
-        run: python3 scripts/generate-feed-pages.py dist
-
-      - name: Upload GitHub Pages artifact
+          python3 scripts/overlay-openvpn-feed.py baseline
+          python3 scripts/prepare-publication.py baseline applications publication
+          python3 scripts/render-publication.py publication
+          bash scripts/verify-feed.sh publication/site
+      - name: Publish immutable component releases before Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: python3 scripts/publish-components.py publication --revision "$GITHUB_SHA"
+      - name: Retain publication manifest
+        uses: actions/upload-artifact@v7
+        with:
+          name: publication-manifest-${{ github.sha }}
+          path: publication/catalog.json.gz
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: dist/
-
+          path: publication/site
   deploy:
-    name: Publish verified feed to Pages
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: verify
+    runs-on: ubuntu-24.04
     permissions:
       pages: write
       id-token: write
-    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy package feed
+      - name: Deploy verified feed
         id: deployment
         uses: actions/deploy-pages@v5

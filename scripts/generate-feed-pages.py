@@ -197,13 +197,17 @@ def page(title, selected, groups, prefix, partial=False):
 """
 
 
-def write_validation_page(root):
+def write_validation_page(root, asset_base=None):
     source = Path(__file__).resolve().parents[1] / "build/vbnto-4.1.38/validation"
     report = json.loads((source / "results.json").read_text())
+    if asset_base:
+        report['asset_base'] = asset_base
+        report['release'] = asset_base + 'build-diagnostics.tar.gz'
     destination = root / "validation/4.1.38"
     destination.mkdir(parents=True, exist_ok=True)
-    for filename in ("results.json", "results.tsv", "additional-functional-results.txt"):
+    for filename in ("results.tsv", "additional-functional-results.txt"):
         shutil.copyfile(source / filename, destination / filename)
+    (destination / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
     counts = Counter((row["status"], row["level"]) for row in report["modules"])
     functional = counts["passed", "load-unload-functional"]
     smoke = counts["passed", "load-unload-namespace"]

@@ -147,3 +147,7 @@ specific packages needed and review replacements of core components
 such as BusyBox, `procd`, OpenSSL or the package manager itself.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/AnsuelS)
+
+The public catalog uses a [mixed Pages/Release layout](docs/publication-layout.md):
+main userspace feeds stay on Pages; kernel modules, Asterisk 20 and FreeSWITCH
+sounds use coherent Release feeds. All verified application updates are retained.
