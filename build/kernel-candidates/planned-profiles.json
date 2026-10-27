@@ -1,0 +1,22 @@
+{
+  "4.1.38-fastweb-fw261": {
+    "kernel_package": "4.1.38-1-42740ce3f7be0198c1d4501cfd664fa0",
+    "firmwares": [
+      "18.3.n.0462_FW_261_DGA4131",
+      "18.3.n.0482_FW_264_DGA4131"
+    ],
+    "status": "runtime-config-required",
+    "required_inputs": [
+      "/proc/config.gz from FW261 and FW264",
+      "stock module samples and compiler identity",
+      "runtime ABI and module functional validation"
+    ],
+    "feed": null
+  },
+  "4.1.52-tim-f4e97ee0": {
+    "kernel_package_suffix": "f4e97ee0656c3a247868bb0a3f9c7e55",
+    "firmware_count": 25,
+    "status": "compare-against-damson-required",
+    "feed": null
+  }
+}

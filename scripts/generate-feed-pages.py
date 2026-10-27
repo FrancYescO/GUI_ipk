@@ -9,10 +9,12 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import quote
 from kernel_validation_page import write_report
+from kernel_compatibility_page import write_compatibility
 
 
 USERSPACE_FEEDS = ("base", "luci", "packages", "routing", "telephony", "target/packages")
-KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.38-vbnto", "kernel/4.1.38-vbnts", "kernel/4.1.52")
+KERNEL_FEEDS = ("kernel/4.1.38", "kernel/4.1.38-vbnto", "kernel/4.1.38-vbnts", "kernel/4.1.52",
+                "kernel/4.1.38-vbnto-candidates", "kernel/4.1.38-vbnts-candidates")
 ASTERISK_FEED = "telephony/asterisk-20"
 FEEDS = USERSPACE_FEEDS + KERNEL_FEEDS + (ASTERISK_FEED,)
 STYLE = """
@@ -72,6 +74,7 @@ def packages(index):
 
 def page(title, selected, groups, prefix, partial=False):
     nav = [f'<a href="{prefix}index.html">All packages</a>']
+    nav.append(f'<a href="{prefix}compatibility/index.html">Firmware compatibility and feed setup</a>')
     nav.append(f'<a href="{prefix}validation/4.1.38/index.html">4.1.38 validation results</a>')
     nav.append(f'<a href="{prefix}validation/4.1.52/index.html">4.1.52 validation results</a>')
     nav.extend(
@@ -85,6 +88,9 @@ def page(title, selected, groups, prefix, partial=False):
             version = html.escape(item.get("Version", ""))
             arch = html.escape(item.get("Architecture", ""))
             description = html.escape(next(iter(item.get("Description", "").splitlines()), ""))
+            if item.get('X-Module-Staging-Only') == 'yes':
+                description += '<br>Test status: ' + html.escape(item.get('X-Runtime-Test-Status', 'not_tested'))
+                description += '; ' + html.escape(item.get('X-Runtime-Test', 'build-only'))
             url = prefix + feed + "/" + quote(item["Filename"], safe="")
             rows.append(
                 f'<tr><td>{name}</td><td>{version}</td><td>{arch}</td>'
@@ -112,7 +118,23 @@ def page(title, selected, groups, prefix, partial=False):
         "before downloading or installing a module.</p>"
         if selected is None else ""
     )
-    if selected == "kernel/4.1.52":
+    if selected and selected.endswith('-candidates'):
+        notice = (
+            '<p><strong>Optional staged module candidates for one exact kernel ABI.</strong> '
+            'OPKG installs these modules under /usr/lib/kernel-module-candidates/, without '
+            'replacing stock modules or adding autoload. Loading and module dependencies require '
+            'manual verification. Most packages have only been compiled; test status below applies '
+            'to the exact payload and tested firmware. xt_nat is withheld. '
+            f'<a href="{prefix}compatibility/index.html">Check firmware and feed setup</a>.</p>'
+        )
+    elif selected in ('kernel/4.1.38-vbnto', 'kernel/4.1.38-vbnts'):
+        profile = 'DGA4131FWB 18.3.n.0439 (08839f3f…)'
+        if selected.endswith('vbnts'):
+            profile = 'DGA4132 18.3.k.0451 (8dd69363…)'
+        notice = ('<p><strong>Router-tested TUN, WireGuard and SPU for ' + profile + '.</strong> '
+                  'These IPKs require the matching exact kernel ABI. Other firmware versions '
+                  'and operator variants require a separate compatibility check.</p>')
+    elif selected == "kernel/4.1.52":
         notice = (
             '<p><strong>Linux 4.1.52 requires the matching firmware ABI.</strong> '
             'Runtime tests on VBNT-K Damson 19.4.1051 distinguish functional '
@@ -235,6 +257,7 @@ def main():
     if missing_userspace:
         raise ValueError(f"Missing userspace feeds: {sorted(missing_userspace)}")
     (root / ".nojekyll").touch()
+    write_compatibility(root, STYLE, SCRIPT)
     write_validation_page(root)
     write_report(Path(__file__).resolve().parents[1] / "build/vbntj/validation",
                  root / "validation/4.1.52", STYLE, SCRIPT)

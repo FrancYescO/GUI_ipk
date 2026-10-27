@@ -1,5 +1,9 @@
 # GUI_ipk
 
+Kernel modules are published by exact runtime ABI, including optional staged
+candidate OPKG feeds. See [kernel compatibility and feed setup](docs/kernel-compatibility.md)
+and the [public firmware inventory](https://francyesco.github.io/GUI_ipk/compatibility/).
+
 OpenWrt package feed for the `brcm63xx-tch/VBNTS` target
 (`arm_cortex-a9_neon`). Shared packages are compiled by GitHub Actions from the
 archived custom OpenWrt 18.06 buildroot and its matching GCC 4.8/glibc
