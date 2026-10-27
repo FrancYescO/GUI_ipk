@@ -112,3 +112,9 @@ Candidate publisher inputs are preserved in checksum-pinned repository bundles,
 so duplicate candidate Releases can be removed without affecting future builds.
 The seven optional application Releases and immutable compiler/build inputs
 remain necessary and are retained.
+
+The VBNT-K 4.1.52 packages declare `arm_cortex-a9`, confirmed in OPKG on
+.69. The former `brcm963xx` package architecture is not accepted by that modem.
+Package names and version `4.1.52-1` are retained; container metadata and
+filenames change, while every module payload remains identical to the registry.
+Run `opkg update` to obtain the refreshed indexes.

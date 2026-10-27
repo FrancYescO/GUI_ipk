@@ -381,10 +381,7 @@ build_manual_ipk() {
   fi
   package_version="4.1.52-1"
 
-  package_arch="brcm963xx"
-  if [[ "$module_stem" == bcmspu || "$module_set" == rndis-compat ]]; then
-    package_arch="arm_cortex-a9"
-  fi
+  package_arch="arm_cortex-a9"
   package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"
   rm -f "$output_dir/${package_name}"_*.ipk
   package_root="$output_dir/.ipk-build/$package_name"

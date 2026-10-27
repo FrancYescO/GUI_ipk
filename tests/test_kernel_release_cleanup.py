@@ -57,6 +57,7 @@ class KernelReleaseCleanupTests(unittest.TestCase):
                 self.assertIn('Depends: kernel (= ' + profile['kernel_package'] + ')', text)
                 self.assertIn('X-Kernel-Profile: 4.1.52-vbntk', text)
                 self.assertIn('X-Firmware: ' + report['firmware'], text)
+                self.assertIn('Architecture: arm_cortex-a9', text)
                 payloads = files(outer['./data.tar.gz'])
                 self.assertEqual(len(payloads), 1)
                 self.assertEqual(hashlib.sha256(next(iter(payloads.values()))).hexdigest(), records[ipk.name]['sha256'])

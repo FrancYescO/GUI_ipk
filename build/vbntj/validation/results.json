@@ -11,7 +11,7 @@
     {
       "name": "act_connmark",
       "sha256": "749c6670032e413ca0f1e0cd925e5134dbeddfe731e6099fd911e13055e3bd21",
-      "asset": "kmod-act-connmark-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-act-connmark-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-act-connmark-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -25,7 +25,7 @@
     {
       "name": "act_skbedit",
       "sha256": "6f7c40aabb7c8c61b24694c249dfd83738e43cca6d45d31e3a7f0d7054437aed",
-      "asset": "kmod-act-skbedit-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-act-skbedit-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-act-skbedit-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -67,7 +67,7 @@
     {
       "name": "cls_flow",
       "sha256": "5cdfda5f934fd31a0e1352c2eaae4a752f9e0ef9a9937334413a2b7b08ffd2d1",
-      "asset": "kmod-cls-flow-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-cls-flow-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-cls-flow-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -81,7 +81,7 @@
     {
       "name": "em_u32",
       "sha256": "bfff4029bb01fc48baa538b2befb81474b3fcc3c598e45989f63cf720a61a735",
-      "asset": "kmod-em-u32-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-em-u32-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-em-u32-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -95,7 +95,7 @@
     {
       "name": "ip6_tables",
       "sha256": "59deabe2e32a9814bad4f05d95ce022f0949acad6386f62dd0388971a2e90caf",
-      "asset": "kmod-ip6-tables-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-ip6-tables-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-ip6-tables-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -109,7 +109,7 @@
     {
       "name": "ip6t_REJECT",
       "sha256": "bb4a41ab3d4c2d38e2219267b5c825beba93f8c004c3704c49451ff36800e53f",
-      "asset": "kmod-ip6t-reject-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-ip6t-reject-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-ip6t-reject-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -123,7 +123,7 @@
     {
       "name": "ip6table_filter",
       "sha256": "b86df50571fd2c33debcc209a98ae083683b40013dafe830667a1c945b77d7a8",
-      "asset": "kmod-ip6table-filter-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-ip6table-filter-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-ip6table-filter-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -137,7 +137,7 @@
     {
       "name": "ip6table_mangle",
       "sha256": "469dc4a3d37769b910b3725a93e6f78a87447657ea8abb4b9b16efbc972a8a45",
-      "asset": "kmod-ip6table-mangle-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-ip6table-mangle-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-ip6table-mangle-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -151,7 +151,7 @@
     {
       "name": "ip_tables",
       "sha256": "7a42cf979d36585e164840d2b05305c93ec2088432a7e2355eff350bcb527177",
-      "asset": "kmod-ip-tables-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-ip-tables-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-ip-tables-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -165,7 +165,7 @@
     {
       "name": "ipt_MASQUERADE",
       "sha256": "ce6c951398763b9eacbd5b9aea83f426bd4e0aa4db1fcce6ff881801002d6a0a",
-      "asset": "kmod-ipt-masquerade-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-ipt-masquerade-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-ipt-masquerade-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -179,7 +179,7 @@
     {
       "name": "ipt_REJECT",
       "sha256": "6d44501798d2eb99ab5210bc96bd394f28a0adfd9c990861e5357414f8d5f992",
-      "asset": "kmod-ipt-reject-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-ipt-reject-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-ipt-reject-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -193,7 +193,7 @@
     {
       "name": "iptable_filter",
       "sha256": "47df899ad6f2ddedaae5d4b63f540a9100f773b4017c5c3c11e0bddf2464634e",
-      "asset": "kmod-iptable-filter-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-iptable-filter-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-iptable-filter-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -207,7 +207,7 @@
     {
       "name": "iptable_mangle",
       "sha256": "4f0e951b39b1d57cf00ab8879d1199f2ad1138e1a518cce7b133e121ec9415dd",
-      "asset": "kmod-iptable-mangle-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-iptable-mangle-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-iptable-mangle-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -221,7 +221,7 @@
     {
       "name": "iptable_nat",
       "sha256": "44929bfca204fb9295b05be7081b32bfd46c6f2192594a3ab603974fd89914cc",
-      "asset": "kmod-iptable-nat-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-iptable-nat-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-iptable-nat-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -235,7 +235,7 @@
     {
       "name": "nf_conntrack",
       "sha256": "ba0129d922895bb63435e2d93dd8dc06f7853228b2d713175fab24b717afa2fc",
-      "asset": "kmod-nf-conntrack-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-conntrack-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-conntrack-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -249,7 +249,7 @@
     {
       "name": "nf_conntrack_ipv4",
       "sha256": "702ee1fc361231b1705dbe4a30df5b20c3cefed7159a031db2b4344ecc3dac74",
-      "asset": "kmod-nf-conntrack-ipv4-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-conntrack-ipv4-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-conntrack-ipv4-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -263,7 +263,7 @@
     {
       "name": "nf_conntrack_ipv6",
       "sha256": "3730594e815a44e4826e3a8beed605dc4abe9a63b6dd81779ff1125cc96b631a",
-      "asset": "kmod-nf-conntrack-ipv6-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-conntrack-ipv6-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-conntrack-ipv6-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -277,7 +277,7 @@
     {
       "name": "nf_defrag_ipv4",
       "sha256": "20c2933c22e13292fb924b87a7fcf9479e378c561bc5e85684a6e6200cdf57a3",
-      "asset": "kmod-nf-defrag-ipv4-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-defrag-ipv4-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-defrag-ipv4-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -291,7 +291,7 @@
     {
       "name": "nf_defrag_ipv6",
       "sha256": "bc58f3d8cabcb4faa64b1c9bee9eb50be88254c0d5b8c2ee41d4b514b786a126",
-      "asset": "kmod-nf-defrag-ipv6-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-defrag-ipv6-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-defrag-ipv6-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -305,7 +305,7 @@
     {
       "name": "nf_log_common",
       "sha256": "3f10d13463f89cc7beeb3fd6672a56b85d4b21338e82314387f4077b1ef7b749",
-      "asset": "kmod-nf-log-common-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-log-common-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-log-common-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -319,7 +319,7 @@
     {
       "name": "nf_log_ipv4",
       "sha256": "ec984d6564c3d5ecafa89cb8ae372aec9d7f640ece7c48a5ba3d5a42d0a3e860",
-      "asset": "kmod-nf-log-ipv4-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-log-ipv4-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-log-ipv4-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -333,7 +333,7 @@
     {
       "name": "nf_log_ipv6",
       "sha256": "f6b25fa8b8e812e1f7847eb528571aa5a2533f108248c8b1b6d32c2e0aadc447",
-      "asset": "kmod-nf-log-ipv6-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-log-ipv6-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-log-ipv6-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -347,7 +347,7 @@
     {
       "name": "nf_nat",
       "sha256": "abd6c5a11a5fdd54604e405f0195ab5edcdc7695bd8adc92b4734cc86c5c9b3b",
-      "asset": "kmod-nf-nat-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-nat-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-nat-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -361,7 +361,7 @@
     {
       "name": "nf_nat_ipv4",
       "sha256": "3252998a185e8691c39d06d9067e488657f0f82c24b45586052591e55ddb40be",
-      "asset": "kmod-nf-nat-ipv4-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-nat-ipv4-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-nat-ipv4-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -375,7 +375,7 @@
     {
       "name": "nf_nat_masquerade_ipv4",
       "sha256": "1932af330fec75aabf97a9012133954aa7d39e66f7396eb54855ef3a7bcbaa85",
-      "asset": "kmod-nf-nat-masquerade-ipv4-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-nat-masquerade-ipv4-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-nat-masquerade-ipv4-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -389,7 +389,7 @@
     {
       "name": "nf_nat_redirect",
       "sha256": "ec06909ffa087b05c91ae87148681f862b78b5d14736c027660a1fc44a37eb7a",
-      "asset": "kmod-nf-nat-redirect-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-nf-nat-redirect-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-nat-redirect-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -417,7 +417,7 @@
     {
       "name": "sch_hfsc",
       "sha256": "351b23130238d71053f748cdca6455f96896cbddef1ce187c9fb0db315169ad8",
-      "asset": "kmod-sch-hfsc-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-sch-hfsc-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-sch-hfsc-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -431,7 +431,7 @@
     {
       "name": "tun",
       "sha256": "374b8399951a4fa75a0b9c68b6eced9d064cc442d3150d2210d75623c275354e",
-      "asset": "kmod-tun-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-tun-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-tun-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -445,7 +445,7 @@
     {
       "name": "wireguard",
       "sha256": "98e392edb92a574444c0555c9576f6ded0041421c938d0a4921789836c46e6e5",
-      "asset": "kmod-wireguard-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-wireguard-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-wireguard-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -459,7 +459,7 @@
     {
       "name": "xt_CT",
       "sha256": "c5236960ec4a46320e917f953dd5bb45005d8262bccbdaf8eda96df5d7022300",
-      "asset": "kmod-xt-ct-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-ct-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-ct-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -473,7 +473,7 @@
     {
       "name": "xt_LOG",
       "sha256": "86c60326d1beafc5acaf07501e08a94cb769bab24287fac47b7a66ba1b6a7918",
-      "asset": "kmod-xt-log-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-log-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-log-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -487,7 +487,7 @@
     {
       "name": "xt_REDIRECT",
       "sha256": "415969570ac982f6c795d9272f5a516f82d52f1a9b30b7e8008aab18a237b29b",
-      "asset": "kmod-xt-redirect-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-redirect-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-redirect-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -501,7 +501,7 @@
     {
       "name": "xt_TCPMSS",
       "sha256": "dd002c312068c0796d6d86305d181c77310a4e8309ace3af8b1a7c3ec02e391d",
-      "asset": "kmod-xt-tcpmss-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-tcpmss-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-tcpmss-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -515,7 +515,7 @@
     {
       "name": "xt_comment",
       "sha256": "2bdaca681895736b3fbcd79b911d3c2b7a77cb77bcac5f3df87058be4c51a1ed",
-      "asset": "kmod-xt-comment-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-comment-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-comment-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -529,7 +529,7 @@
     {
       "name": "xt_connbytes",
       "sha256": "61cfaf8670d969806fee319a51e8e5cdc1a463b68b808aa1c709a830d4014d8c",
-      "asset": "kmod-xt-connbytes-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-connbytes-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-connbytes-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -543,7 +543,7 @@
     {
       "name": "xt_connlimit",
       "sha256": "47940f8dc6ca232e6fb0ee3b0d8cbf97150a9874e96a7ac92a3d15d68891bf4d",
-      "asset": "kmod-xt-connlimit-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-connlimit-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-connlimit-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -557,7 +557,7 @@
     {
       "name": "xt_connmark",
       "sha256": "3aedc3236f1f91b3d3cfae3cb1f592d8a96b434d17f928bf85a352107baffb0f",
-      "asset": "kmod-xt-connmark-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-connmark-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-connmark-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -571,7 +571,7 @@
     {
       "name": "xt_conntrack",
       "sha256": "decbbe761d5e76f61226fdb58132aba522a6d80cb1000da56a9aace09c3f0f9f",
-      "asset": "kmod-xt-conntrack-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-conntrack-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-conntrack-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -585,7 +585,7 @@
     {
       "name": "xt_helper",
       "sha256": "56da827f712c0d62ce65351002627161e3fce38ec8953bed9bdc57ebfa9fda28",
-      "asset": "kmod-xt-helper-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-helper-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-helper-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -599,7 +599,7 @@
     {
       "name": "xt_limit",
       "sha256": "f4d72f09e581e96fb9c02ece642f13b1479d49b868dbcc57d22cfa097d46b6ea",
-      "asset": "kmod-xt-limit-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-limit-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-limit-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -613,7 +613,7 @@
     {
       "name": "xt_mac",
       "sha256": "b6adac404212a07e17b7ce49efcb87306469f1e9b0613a27f7bf79ad4f555514",
-      "asset": "kmod-xt-mac-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-mac-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-mac-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -627,7 +627,7 @@
     {
       "name": "xt_mark",
       "sha256": "ab296278a554cc565067a7eea14035e760eae4e2cc432eeb940ed0dd2efb3c6b",
-      "asset": "kmod-xt-mark-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-mark-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-mark-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -641,7 +641,7 @@
     {
       "name": "xt_multiport",
       "sha256": "4b823082b8f47dd58640d3c644d56d9bc7ec896a3891483485bc8ee5eaad0b7f",
-      "asset": "kmod-xt-multiport-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-multiport-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-multiport-4.1.52-manual",
       "status": "skip_busy",
       "level": "load-unload",
@@ -669,7 +669,7 @@
     {
       "name": "xt_recent",
       "sha256": "05920fe02816c5a0cd6a73c3bc0974e2d8d4fec50faf0764f2267a0c55499c9b",
-      "asset": "kmod-xt-recent-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-recent-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-recent-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",
@@ -683,7 +683,7 @@
     {
       "name": "xt_state",
       "sha256": "a3da8256b4715cc308f05d3796da81804680c8845ffc04ee7e8a448d40ff38a4",
-      "asset": "kmod-xt-state-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-state-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-state-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-namespace",
@@ -697,7 +697,7 @@
     {
       "name": "xt_time",
       "sha256": "ccb593576f9bb609172cf63656b5b57fc5108008c2845e437d742f860fc27d38",
-      "asset": "kmod-xt-time-4.1.52-manual_4.1.52-1_brcm963xx.ipk",
+      "asset": "kmod-xt-time-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-xt-time-4.1.52-manual",
       "status": "passed",
       "level": "load-unload-functional",

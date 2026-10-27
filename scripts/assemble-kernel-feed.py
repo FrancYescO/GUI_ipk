@@ -60,16 +60,7 @@ def write_feed(version, ipks, feed_root):
         manual_module = (
             version == "4.1.52"
             and fields.get("Package", "").startswith("kmod-")
-            and (fields.get("Architecture") == "brcm963xx" or (
-                fields.get("Package") in {
-                    "kmod-bcmspu-4.1.52-manual",
-                    "kmod-cdc-ether-4.1.52-manual",
-                    "kmod-rndis-host-4.1.52-manual",
-                }
-                and fields.get("Architecture") == "arm_cortex-a9"
-                and fields.get("X-Kernel-Target") == "VBNT-K"
-                and fields.get("X-Firmware") == "19.4.1051-3401200"
-            ))
+            and fields.get("Architecture") == "arm_cortex-a9"
             and fields.get("X-Kernel-Vermagic", "").startswith(version + " ")
             and fields.get("X-Manual-Install-Only") == "yes"
         )

@@ -1,6 +1,6 @@
 749c6670032e413ca0f1e0cd925e5134dbeddfe731e6099fd911e13055e3bd21  act_connmark.ko
-42496d68d332aed115f2ef6475e96d2f53adb9e41e53cefe60c1a5e81cf0f50d  kmod-act-connmark-4.1.52-manual_4.1.52-1_brcm963xx.ipk
-6289bbaacd35a638d7c088ac67cda7327327c7448ccea58cf7177110c6b24d3b  kmod-tun-4.1.52-manual_4.1.52-1_brcm963xx.ipk
-bcb8e83fdc4a4a4b5f643e2aafbd0dae70495709383dc852e8f227de1eec992d  kmod-wireguard-4.1.52-manual_4.1.52-1_brcm963xx.ipk
+b1a71aa875079374b4e40c7aadc9f59e6ca135fcf1ddea13ea23aa6dcadaff06  kmod-act-connmark-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
+df7ccdddb0e9abdecd527af1d12d8d1f0b556b449f290cf0d71f1298398c41bc  kmod-tun-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
+ddee059bae9182b708782da1564ff3fd29d793da73c19794ed9ae50cdcb824b0  kmod-wireguard-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 374b8399951a4fa75a0b9c68b6eced9d064cc442d3150d2210d75623c275354e  tun.ko
 98e392edb92a574444c0555c9576f6ded0041421c938d0a4921789836c46e6e5  wireguard.ko

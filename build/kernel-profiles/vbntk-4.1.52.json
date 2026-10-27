@@ -9,5 +9,6 @@
     "kernel/4.1.52"
   ],
   "validation_page": "validation/4.1.52",
-  "validation_device_suffix": ".69"
+  "validation_device_suffix": ".69",
+  "architecture": "arm_cortex-a9"
 }
