@@ -202,7 +202,7 @@ done
 
 compiler_version="$("$cross_gcc" -dumpfullversion -dumpversion)"
 if [[ "$compiler_version" != 5.5.0 ]]; then
-  echo "Refusing non-Damson compiler version: $compiler_version" >&2
+  echo "Refusing non-VBNT-K compiler version: $compiler_version" >&2
   exit 1
 fi
 
@@ -260,7 +260,7 @@ for symbol in WIRELESS_EXT WEXT_CORE WEXT_PROC WEXT_SPY WEXT_PRIV; do
   fi
 done
 if grep -qx 'CONFIG_MODVERSIONS=y' "$kernel_dir/.config"; then
-  echo "Damson runtime has CONFIG_MODVERSIONS disabled" >&2
+  echo "VBNT-K runtime has CONFIG_MODVERSIONS disabled" >&2
   exit 1
 fi
 if [[ "$build_connmark" -eq 1 ]]; then
@@ -401,9 +401,11 @@ Architecture: $package_arch
 Section: kernel
 Priority: optional
 Maintainer: GUI_ipk reproducible build
-Description: Manual-only Damson 4.1.52 kernel module ($module_stem)
-X-Damson-Firmware: 19.4.0866-3401052
-X-Damson-Target: VBNTJ_502L07p1
+Description: Manual-only VBNT-K 4.1.52 kernel module ($module_stem)
+Depends: kernel (= $(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["kernel_package"])' "$repo_root/build/kernel-profiles/vbntk-4.1.52.json"))
+X-Firmware: 19.4.1051-3401200
+X-Kernel-Target: VBNT-K
+X-Kernel-Profile: 4.1.52-vbntk
 X-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7
 X-Manual-Install-Only: yes
 Conflicts: $legacy_package_name
@@ -441,7 +443,8 @@ cat > "$output_dir/BUILD-METADATA.txt" <<EOF
 source=https://github.com/avwarez/vmg8825_b50b.git
 source_commit=af23960e39003ba7788f5ced0c256b1bc676a712
 target=VBNTJ_502L07p1
-firmware=Damson 19.4.0866-3401052
+firmware=19.4.1051-3401200
+runtime_profile=4.1.52-vbntk
 kernel=4.1.52
 compiler=OpenWrt GCC $compiler_version
 module_set=$module_set
@@ -453,4 +456,4 @@ usb_rndis_patch=patches/usb-rndis/001-misc-class.patch (rndis-compat only)
 usb_led_abi_patch=patches/vbntj-4.1.52/003-cdc-ether-damson-led-abi.patch (rndis-compat only)
 EOF
 
-echo "Built ABI-checked Damson modules and manual-only IPKs in $output_dir"
+echo "Built ABI-checked VBNT-K modules and manual-only IPKs in $output_dir"

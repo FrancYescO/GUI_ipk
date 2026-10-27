@@ -1,6 +1,6 @@
-name: Damson 4.1.52 kernel-module artifacts
+name: VBNT-K 4.1.52 kernel-module artifacts
 
-run-name: Damson 4.1.52 — ${{ inputs.module_set || 'network-feed' }}
+run-name: VBNT-K 4.1.52 — ${{ inputs.module_set || 'network-feed' }}
 
 on:
   workflow_dispatch:
@@ -113,7 +113,7 @@ jobs:
             .work/vbntj-gpl/dl/xz-5.0.4.tar.bz2
           key: vbntj-gpl-inputs-v3-af91860cb80100aa7d21b5118c3b0800319d2c6d5676a321fb1b7a1d65b06b50
 
-      - name: Cache installed Damson toolchain
+      - name: Cache installed VBNT-K toolchain
         uses: actions/cache@v6
         with:
           path: |
@@ -151,7 +151,7 @@ jobs:
           else
             grep -E 'error:|fatal error:|No rule to make target|Error [0-9]|Unexpected|Refusing' damson-build.log \
               | tail -n 20 | while IFS= read -r line; do
-                echo "::error title=Damson module build::$line"
+                echo "::error title=VBNT-K module build::$line"
               done || true
             exit 1
           fi
@@ -182,7 +182,7 @@ jobs:
       - name: Match rebuilt modules to the exact validation registry
         run: python3 scripts/verify-runtime-payloads.py dist/vbntj-kmods build/vbntj/validation/results.json
 
-      - name: Upload Damson modules and manual-only IPKs
+      - name: Upload VBNT-K modules and manual-only IPKs
         if: always()
         uses: actions/upload-artifact@v7
         with:

@@ -1045,8 +1045,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "1e5239548a5a7761c29840e0f6775c87e165be2c",
       "stock_module_set": "3bb346c162b6f1d3c3277a13d7aa0384230548ae6af5255f8c82bcdf07649ffd",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.3.5_001_CLOSED",
@@ -1056,8 +1056,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5b87882627a47e2c29fab288764afb021e2728e3",
       "stock_module_set": "15d43276a459555a6d3aab1131209e23f8b9341350fc561250e3f6f6bf482ef0",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.3.5_002_CLOSED",
@@ -1067,8 +1067,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "1e5239548a5a7761c29840e0f6775c87e165be2c",
       "stock_module_set": "3bb346c162b6f1d3c3277a13d7aa0384230548ae6af5255f8c82bcdf07649ffd",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.3.6_001_CLOSED",
@@ -1078,8 +1078,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.0_CLOSED",
@@ -1089,8 +1089,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.0_001_CLOSED",
@@ -1100,8 +1100,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.0_002_CLOSED",
@@ -1111,8 +1111,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "b046529cdd81c681fb0bd6e3ecff1ac18feb965cdd66c17898c91c2a0c7daaa5",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.0_004_CLOSED",
@@ -1122,8 +1122,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "b046529cdd81c681fb0bd6e3ecff1ac18feb965cdd66c17898c91c2a0c7daaa5",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.1_CLOSED",
@@ -1133,8 +1133,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "b046529cdd81c681fb0bd6e3ecff1ac18feb965cdd66c17898c91c2a0c7daaa5",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.1_005_CLOSED",
@@ -1144,8 +1144,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "b046529cdd81c681fb0bd6e3ecff1ac18feb965cdd66c17898c91c2a0c7daaa5",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.3_CLOSED",
@@ -1155,8 +1155,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.4_CLOSED",
@@ -1166,8 +1166,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTEF_2.4.5_CLOSED",
@@ -1177,8 +1177,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHF_1.0.1_CLOSED",
@@ -2145,8 +2145,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "1e5239548a5a7761c29840e0f6775c87e165be2c",
       "stock_module_set": "3bb346c162b6f1d3c3277a13d7aa0384230548ae6af5255f8c82bcdf07649ffd",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.3.5_001_CLOSED",
@@ -2156,8 +2156,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5b87882627a47e2c29fab288764afb021e2728e3",
       "stock_module_set": "15d43276a459555a6d3aab1131209e23f8b9341350fc561250e3f6f6bf482ef0",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.3.5_002_CLOSED",
@@ -2167,8 +2167,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "1e5239548a5a7761c29840e0f6775c87e165be2c",
       "stock_module_set": "3bb346c162b6f1d3c3277a13d7aa0384230548ae6af5255f8c82bcdf07649ffd",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.3.6_001_CLOSED",
@@ -2178,8 +2178,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.0_CLOSED",
@@ -2189,8 +2189,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.0_001_CLOSED",
@@ -2200,8 +2200,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.0_002_CLOSED",
@@ -2222,8 +2222,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "b046529cdd81c681fb0bd6e3ecff1ac18feb965cdd66c17898c91c2a0c7daaa5",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.1_CLOSED",
@@ -2233,8 +2233,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.1_005_CLOSED",
@@ -2244,8 +2244,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "b046529cdd81c681fb0bd6e3ecff1ac18feb965cdd66c17898c91c2a0c7daaa5",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.3_CLOSED",
@@ -2255,8 +2255,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.4_CLOSED",
@@ -2266,8 +2266,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "3c5794b7c514a4f515c4d6db3ce5b06b0cedec9950f353747ce1c2348c58bd8b",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTHP_2.4.5_CLOSED",
@@ -2277,8 +2277,8 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "20c6a84292ac23290580311a4397351692bf77229a67aa5e628a46fd4fa5d2b3",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntk",
+      "status": "same-kernel-package-runtime-check-required"
     },
     {
       "firmware": "AGTSA_1.0.0_001_CLOSED",

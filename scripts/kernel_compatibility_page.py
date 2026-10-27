@@ -39,7 +39,7 @@ kernel sources, configuration, exported symbols and structure layouts must match
 Equal kernel packages or stock modules identify candidates; they do not certify newly built modules.</p>
 <p>The tested 4.1.38 profiles cover DGA4131FWB 18.3.n.0439 and DGA4132 18.3.k.0451.
 Other operators in this inventory do not share their complete kernel package identifiers.
-Damson 4.1.52 tests are firmware-specific and are not automatically assigned to other 4.1.52 rows.</p>
+VBNT-K 4.1.52 tests were performed on .69, firmware 19.4.1051-3401200. Other rows sharing its kernel package remain candidates requiring runtime checks.</p>
 <p>FW261/FW264 are awaiting runtime kernel configurations. No supported feed is claimed for them.
 Optional candidate feeds install modules in a staging directory and require manual dependency and loading checks.
 They do not replace stock modules or configure autoload. xt_nat remains withheld.</p>
@@ -77,7 +77,7 @@ def write_usb_report(root, style):
             profile, html.escape(record['firmware']), html.escape(record['status']),
             html.escape(record['traffic']), profile, profile, profile))
     page = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>USB RNDIS 4.1.38 validation</title><style>' + style + '</style></head><body>'
-    page += '<h1>USB RNDIS 4.1.38 validation</h1><p>Both profiles produced identical cdc_ether and rndis_host payloads. They use the same miscellaneous-class RNDIS patch as the Damson 4.1.52 pair, while retaining native usbnet.</p>'
+    page += '<h1>USB RNDIS 4.1.38 validation</h1><p>Both profiles produced identical cdc_ether and rndis_host payloads. They use the same miscellaneous-class RNDIS patch as the VBNT-K 4.1.52 pair, while retaining native usbnet.</p>'
     page += '<p>Loading, USB driver registration, unloading and stock restoration passed on both modems. Boot IDs, kernel taint and default routes were unchanged. No USB network device was attached: enumeration, DHCP and traffic remain untested.</p>'
     page += '<nav><a href="../../index.html">All packages</a><a href="results.json">Exact payload hashes</a><a href="README.md">Build and test details</a></nav><table><thead><tr><th>Profile</th><th>Firmware</th><th>Result</th><th>Device traffic</th><th>Evidence</th></tr></thead><tbody>'
     page += ''.join(rows) + '</tbody></table></body></html>'

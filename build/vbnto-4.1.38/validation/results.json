@@ -5,8 +5,8 @@
   "device": "DGA4131FWB",
   "updated": "2026-10-26",
   "source_commit": "a94ca439c94a46a5d39866349760a4da6bac9071",
-  "release": "https://github.com/FrancYescO/GUI_ipk/releases/tag/kernel-4.1.38-candidates-a94ca43",
-  "asset_base": "https://github.com/FrancYescO/GUI_ipk/releases/download/kernel-4.1.38-candidates-a94ca43/",
+  "release": "https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnto-candidates/BUILD-REPORT.md",
+  "asset_base": "https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnto-candidates/",
   "modules": [
     {
       "name": "act_connmark",

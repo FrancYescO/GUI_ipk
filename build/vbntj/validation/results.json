@@ -4,7 +4,7 @@
   "firmware": "19.4.1051-3401200",
   "device": "VBNT-K",
   "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55",
-  "asset_base": "https://francyesco.github.io/GUI_ipk/kernel/4.1.52/",
+  "asset_base": "https://francyesco.github.io/GUI_ipk/kernel/4.1.52-vbntk/",
   "source_commit": "7fc7c10",
   "abi_patch_sha256": "19c50ea6276091e81d9547a0ae17c324d5b25121af33d15b98096189e69f8853",
   "modules": [
@@ -708,5 +708,7 @@
       "boot_id": "0d16759c-1f14-4012-9dce-c4b6291fef23",
       "note": ""
     }
-  ]
+  ],
+  "profile": "4.1.52-vbntk",
+  "validation_device_suffix": ".69"
 }

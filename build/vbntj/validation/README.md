@@ -1,6 +1,6 @@
 # Linux 4.1.52 runtime validation — 27 October 2026
 
-Device: VBNT-K / Damson 19.4.1051-3401200, Linux 4.1.52 SMP PREEMPT ARMv7.
+Device: VBNT-K / VBNT-K 19.4.1051-3401200, Linux 4.1.52 SMP PREEMPT ARMv7.
 The exact kernel package version and raw payload hashes are in `results.json`.
 [Published results](https://francyesco.github.io/GUI_ipk/validation/4.1.52/).
 

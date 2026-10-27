@@ -14,8 +14,12 @@ on:
       - "scripts/kernel_compatibility_page.py"
       - "scripts/generate-feed-pages.py"
       - "build/kernel-candidates/**"
+      - "artifacts/kernel-candidates/**"
+      - "build/kernel-profiles/**"
+      - "scripts/update-vbntk-package-metadata.py"
       - "docs/kernel-compatibility.md"
       - "tests/test_kernel_candidates.py"
+      - "tests/test_kernel_release_cleanup.py"
       - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/package-usb-rndis-4.1.38.py"
       - "build/usb-rndis/**"
@@ -68,8 +72,12 @@ on:
       - "scripts/fetch-kernel-candidates.py"
       - "scripts/kernel_compatibility_page.py"
       - "build/kernel-candidates/**"
+      - "artifacts/kernel-candidates/**"
+      - "build/kernel-profiles/**"
+      - "scripts/update-vbntk-package-metadata.py"
       - "docs/kernel-compatibility.md"
       - "tests/test_kernel_candidates.py"
+      - "tests/test_kernel_release_cleanup.py"
       - "scripts/verify-vbnto-4.1.38-ipks.py"
       - "scripts/package-usb-rndis-4.1.38.py"
       - "build/usb-rndis/**"
@@ -174,7 +182,7 @@ jobs:
       - name: Assemble versioned kernel feeds
         run: python3 scripts/assemble-kernel-feed.py artifacts/damson-4.1.52-manual dist --damson-extra-dir artifacts/damson-4.1.52-network --damson-spu-dir artifacts/damson-4.1.52-spu --damson-rndis-dir artifacts/damson-4.1.52-rndis-compat --buildroot-kernel-dir artifacts/buildroot-4.1.38 --vbnto-kernel-dir artifacts/vbnto-4.1.38-manual --vbnts-kernel-dir artifacts/vbnts-4.1.38-manual
 
-      - name: Download pinned staged kernel candidates
+      - name: Stage pinned kernel candidates from repository
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/fetch-kernel-candidates.py "$RUNNER_TEMP/kernel-candidate-downloads" --repository "$GITHUB_REPOSITORY"
@@ -182,6 +190,7 @@ jobs:
       - name: Verify and index optional candidate feeds
         run: |
           python3 -m unittest discover -s tests -p test_kernel_candidates.py
+          python3 -m unittest discover -s tests -p test_kernel_release_cleanup.py
           python3 scripts/assemble-kernel-candidates.py \
             "$RUNNER_TEMP/kernel-candidate-downloads" "$RUNNER_TEMP/kernel-candidate-work" dist
 

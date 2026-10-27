@@ -93,38 +93,22 @@ scripts/verify-feed.sh dist
 
 ## OPKG feeds
 
-The six shared feeds contain userspace packages. Kernel IPKs are split into
-[`kernel/4.1.38`](https://francyesco.github.io/GUI_ipk/kernel/4.1.38/) and
-[`kernel/4.1.52`](https://francyesco.github.io/GUI_ipk/kernel/4.1.52/).
-The DGA4131FWB / VBNT-O firmware 18.3.n.0439 has a different 4.1.38 ABI;
-its router-tested TUN, SPU and WireGuard modules use the separate
-[`kernel/4.1.38-vbnto`](https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbnto/)
-feed, with an exact kernel dependency and no boot autoload. See
-[`artifacts/vbnto-4.1.38-manual/README.md`](artifacts/vbnto-4.1.38-manual/README.md)
-for the validation and firmware identity.
-The 4.1.38 feed contains a virtual kernel ABI package and 19 `kmod-*` IPKs
-built from the archived VBNTS buildroot. Thirteen IPKs contain `.ko` files;
-six are empty dependency packages for modules built into this kernel. The
-kernel IPK contains no image and cannot upgrade a router. The compiled ABI
-hash differs from the older virtual kernel package in this repository, so
-verify the firmware's exact kernel ABI before installing any module. These
-packages have not been tested on a router. They do not include the separate
-Damson 4.1.52 ABI adaptation and must not be used on VBNT-K Damson.
+The six shared feeds contain userspace packages. Kernel modules have separate
+runtime profiles:
 
-The two router-tested 4.1.52 manual modules target Damson `19.4.0866-3401052` on VBNT-K with
-kernel `4.1.52` and architecture `brcm963xx`. Check the exact firmware and
-module ABI before installing one. A matching Linux version alone is not
-sufficient. Additional 4.1.52 modules are build-verified only and should be
-tested as raw `.ko` files from `/tmp` before any persistent installation.
-The kernel feed is not part of the userspace source list below.
+| Feed | Runtime profile |
+| --- | --- |
+| `kernel/4.1.38-vbnto` | DGA4131FWB, 18.3.n.0439 |
+| `kernel/4.1.38-vbnts` | DGA4132, 18.3.k.0451 |
+| `kernel/4.1.52-vbntk` | VBNT-K at .69, 19.4.1051-3401200 |
 
-The `kernel/4.1.52` feed also includes the router-tested `cdc_ether` and
-`rndis_host` compatibility pair from PR #7, using architecture `arm_cortex-a9`.
-Both modules support miscellaneous-class USB RNDIS (`ef/04/01`) and must be
-used together with the firmware's native `usbnet`. Their IPKs have no boot
-autoload entries or installation scripts. They target the exact Damson
-firmware above; the publication workflow verifies their checksums and payloads
-before indexing both packages and deploying the feed.
+The old `kernel/4.1.52` URL remains an alias of the VBNT-K profile. The generic
+`kernel/4.1.38` feed is retained as a legacy buildroot archive with no identified
+runtime-compatible firmware. Optional staged candidate feeds and per-payload
+validation levels are described in [kernel compatibility](docs/kernel-compatibility.md).
+The 4.1.52 tests include 14 functional passes, two load/unload namespace passes,
+33 busy stock modules left unchanged, and withheld xt_nat. A matching Linux
+version alone does not establish module compatibility.
 
 Browse and search the published packages at
 [francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).
@@ -141,10 +125,10 @@ src/gz gui_telephony https://francyesco.github.io/GUI_ipk/telephony
 src/gz gui_target https://francyesco.github.io/GUI_ipk/target/packages
 ```
 
-On the exact Damson firmware above, add the kernel feed separately if needed:
+On the exact VBNT-K firmware above, add the kernel feed separately if needed:
 
 ```text
-src/gz gui_kernel_4_1_52 https://francyesco.github.io/GUI_ipk/kernel/4.1.52
+src/gz gui_kernel_4_1_52 https://francyesco.github.io/GUI_ipk/kernel/4.1.52-vbntk
 ```
 
 The following architecture priorities are also required:
