@@ -1,4 +1,4 @@
-name: Publish optional release OPKG snapshot
+name: Prepare verified application package artifacts
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       actions: read
-      contents: write
+      contents: read
     env:
       GH_TOKEN: ${{ github.token }}
       SOURCE_RUN_ID: ${{ inputs.source_run_id }}
@@ -58,14 +58,6 @@ jobs:
             release-feed/
             release-feed.json
           retention-days: 30
-      - name: Publish all verified assets before exposing the snapshot
+      - name: Report prepared application artifacts
         run: |
-          python3 scripts/publish-release-feed.py release-feed release-feed.json
-          python3 - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-          info = json.loads(Path('release-feed.json').read_text())
-          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
-              output.write('Published {} packages. Optional OPKG source:\n\n```\nsrc/gz gui_extras {}\n```\n'.format(info['packages'], info['url']))
-          PY
+          echo "Verified packages retained as workflow artifacts. Promotion uses the consolidated application archive; this workflow does not create extras Releases." >> "$GITHUB_STEP_SUMMARY"

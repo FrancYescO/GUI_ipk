@@ -11,51 +11,38 @@ Baseline and upstream releases inspected on 2026-10-25:
 | Tailscale | Not in the shared feed | 1.104.2 | Static IPK and private userspace daemon tested on router |
 | WireGuard tools | 1.0.20260223-2 | Already at inspected upstream release | No tool update needed |
 
-The application overlay is enabled only by explicit targeted builds. Publication
-uses the optional release feeds listed below. The shared Pages build continues
-using its archived recipes.
+The application overlay is enabled only by explicit targeted builds. The verified
+IPKs are retained in one consolidated application archive. The shared Pages
+build continues using its archived recipes.
 
-## Published optional feeds
+## Published application archive
 
-PR [#17](https://github.com/FrancYescO/GUI_ipk/pull/17) was merged on
-2026-10-25. The five immutable release snapshots below are published and
-independently verified.
+The seven former `Optional OPKG feed extras-*` Releases have been consolidated
+into [Application package archive v1](https://github.com/FrancYescO/GUI_ipk/releases/tag/application-packages-v1). It contains all 13 original
+IPKs: Transmission (4), aria2, aMule, ADB, Tailscale, rclone (4) and libgomp.
+Their versions and package bytes are unchanged. Original build provenance is
+preserved inside `source.json`, and every package is SHA256-pinned in the repository.
 
-| Application | Packages | Snapshot | Publication run |
-|---|---|---|---|
-| Transmission 4.1.4 | 4 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40177095441-bf82a77a324a8fda) | [40196087342](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196087342) |
-| aria2 1.37.0 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40181376755-dfb5865d9912a3c7) | [40196170052](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196170052) |
-| aMule 3.0.0 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40180412146-a4c51066b9401856) | [40196265891](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196265891) |
-| Android Debug Bridge 37.0.0p1 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40182356876-091de5949fa6266c) | [40196361523](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196361523) |
-| Tailscale 1.104.2 | 1 | [Release](https://github.com/FrancYescO/GUI_ipk/releases/tag/extras-40175326506-01fc237ad21cba54) | [40196840555](https://github.com/FrancYescO/GUI_ipk/actions/runs/40196840555) |
-
-Optional OPKG sources (add only the applications you intend to use):
+Use one optional OPKG source, replacing the retired per-application sources:
 
 ```text
-src/gz gui_transmission https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40177095441-bf82a77a324a8fda
-src/gz gui_aria2 https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40181376755-dfb5865d9912a3c7
-src/gz gui_amule https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40180412146-a4c51066b9401856
-src/gz gui_adb https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40182356876-091de5949fa6266c
-src/gz gui_tailscale https://github.com/FrancYescO/GUI_ipk/releases/download/extras-40175326506-01fc237ad21cba54
+src/gz gui_applications https://github.com/FrancYescO/GUI_ipk/releases/download/application-packages-v1
 ```
 
-Transmission includes `transmission-daemon-openssl`,
-`transmission-cli-openssl`, `transmission-remote-openssl` and `transmission-web`.
-The command-line and remote packages are optional; the daemon and web interface
-can be selected separately. Other snapshots contain their single named package.
+Install only the applications you need; do not perform a blanket upgrade.
+The aggregate index uses relative `Filename` paths compatible with the legacy
+OPKG downloader. No router configuration is changed by publication.
 
-All eight public IPKs were downloaded independently and matched the SHA256 and
-size of the router-tested CI artifacts (46,581,505 compressed bytes in total).
-Every public asset matched the prepared snapshot; plain and compressed indexes
-agree, and their entries match the source manifests. Existing snapshots were
-not replaced. The six shared Pages indexes remain byte-identical to the
-pre-publication baseline, with 5,536 distinct package names.
+The shared feed already contains about 1.05 GB of IPKs, close to the 1 GiB
+Pages limit. These optional applications require about 83 MB more, so their
+assets remain in one archive rather than duplicating seven Releases or
+exceeding Pages hosting capacity. The main package website links to this archive.
 
-Publication installed no packages and changed no router configuration. Use a
-working TLS downloader and current certificates before enabling these GitHub
-release sources. The inspected firmware's default downloader previously failed
-to fetch release assets; see the [release-feed checks](homeware-integration.md#published-optional-rclone-feed).
-Review storage requirements below before installing selected packages.
+All 13 source IPKs and their original release assets were downloaded and
+verified before consolidation. The archive is reconstructible using its own
+packages and preserved original manifests, without the retired Releases.
+Use a working TLS downloader and current certificates; see the
+[downloader checks](homeware-integration.md#consolidated-application-archive).
 
 ## Compatibility boundary
 

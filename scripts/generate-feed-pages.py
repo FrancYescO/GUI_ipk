@@ -74,6 +74,11 @@ def packages(index):
 
 def page(title, selected, groups, prefix, partial=False):
     nav = [f'<a href="{prefix}index.html">All packages</a>']
+    application_manifest = Path(__file__).resolve().parents[1] / 'build/application-archive/manifest.json'
+    if application_manifest.is_file():
+        applications = json.loads(application_manifest.read_text())
+        archive_url = applications['url'].replace('/releases/download/', '/releases/tag/')
+        nav.append(f'<a href="{html.escape(archive_url, quote=True)}">Application packages ({len(applications["packages"])})</a>')
     nav.append(f'<a href="{prefix}compatibility/index.html">Firmware compatibility and feed setup</a>')
     nav.append(f'<a href="{prefix}validation/usb-4.1.38/index.html">USB RNDIS 4.1.38 tests</a>')
     nav.append(f'<a href="{prefix}validation/4.1.38/index.html">4.1.38 validation results</a>')

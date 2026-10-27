@@ -21,6 +21,9 @@ build inputs, the 4.1.52 GPL inputs, and the GCC 5.5.0 compiler seed. Their
 historical tag names remain stable for reproducibility; their visible titles
 use the kernel version. They are required by rebuild workflows.
 
-Also retain the seven optional application feed Releases. They contain distinct
-ADB, aria2, aMule, Transmission, Tailscale, rclone and libgomp packages and are
-not redundant kernel candidate snapshots.
+The seven former optional application feed Releases were subsequently
+consolidated into `application-packages-v1`. It preserves all 13 original IPKs,
+original source manifests and a common OPKG index. The seven `extras-*`
+Releases can therefore be removed after independent archive verification.
+There are four retained Releases: three immutable build inputs/toolchains and
+one consolidated application package archive.
