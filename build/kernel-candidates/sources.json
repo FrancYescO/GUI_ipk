@@ -1,0 +1,18 @@
+{
+  "vbnto": {
+    "tag": "kernel-4.1.38-candidates-a94ca43",
+    "archive": "modules-4.1.38-stock-abi.tar.gz",
+    "archive_sha256": "e2c4f8055ff20730134b2ea66e9c4995a28adf1bbb8d4a09ba2bea75b51c809e",
+    "kernel_package": "4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d",
+    "feed": "kernel/4.1.38-vbnto-candidates",
+    "package_count": 220
+  },
+  "vbnts": {
+    "tag": "kernel-4.1.38-vbnts-candidates-d399eee",
+    "archive": "modules-4.1.38-vbnts-stock-abi.tar.gz",
+    "archive_sha256": "31885575787efc05e3e79fe23065e4e0b5ea29883da7375587851dfbeecb4696",
+    "kernel_package": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
+    "feed": "kernel/4.1.38-vbnts-candidates",
+    "package_count": 212
+  }
+}
