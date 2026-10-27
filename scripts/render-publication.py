@@ -105,7 +105,9 @@ See the linked reports for exact payloads and test limits; USB tethering traffic
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
 These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
 They stage modules outside boot paths; a successful build does not prove runtime compatibility. xt_nat remains withheld.</p>''' + candidates + '''
-<h2>Device aliases</h2><p><a href="vbnts/">kernel/vbnts</a> points to 4.1.38-vbnts;
+<h2>Device aliases</h2><p><a href="4.1.38-vbntk/Packages.gz">kernel/4.1.38-vbntk/Packages.gz</a> serves the 4.1.38-vbnts OPKG index;
+<a href="4.1.52-vbnts/Packages.gz">kernel/4.1.52-vbnts/Packages.gz</a> serves the 4.1.52-vbntk OPKG index.
+Both URLs serve actual compressed package indexes with canonical IPK paths and exact ABI dependencies.</p><p><a href="vbnts/">kernel/vbnts</a> points to 4.1.38-vbnts;
 <a href="vbntk/">kernel/vbntk</a> points to 4.1.52-vbntk. These are alternative OPKG URLs for the same packages, with the same exact kernel dependency.
 Enable either an alias or its canonical feed, once. Device name alone does not establish firmware compatibility.</p>
 <h2>Historical paths</h2><p><a href="4.1.52/">kernel/4.1.52</a> is an OPKG-compatible alias of 4.1.52-vbntk.

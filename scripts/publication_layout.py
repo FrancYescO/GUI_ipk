@@ -14,7 +14,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = 'https://francyesco.github.io/GUI_ipk'
 REPOSITORY = 'FrancYescO/GUI_ipk'
 SECTIONS = ('base', 'luci', 'packages', 'routing', 'telephony', 'target/packages', 'telephony/asterisk-20')
-KERNEL_ALIASES = {'4.1.52': '4.1.52-vbntk', 'vbnts': '4.1.38-vbnts', 'vbntk': '4.1.52-vbntk'}
+KERNEL_ALIASES = {
+    '4.1.52': '4.1.52-vbntk',
+    'vbnts': '4.1.38-vbnts', 'vbntk': '4.1.52-vbntk',
+    '4.1.38-vbntk': '4.1.38-vbnts',
+    '4.1.52-vbnts': '4.1.52-vbntk',
+}
 TRANSPORT = {'Filename', 'Size', 'SHA256sum', 'MD5Sum'}
 
 

@@ -156,3 +156,9 @@ Device aliases `kernel/vbnts` → `kernel/4.1.38-vbnts` and `kernel/vbntk` →
 `kernel/4.1.52-vbntk` provide OPKG indexes without duplicating IPKs. Use either
 the alias or its canonical feed. Exact kernel ABI dependencies remain unchanged;
 the device name does not imply compatibility with every firmware.
+
+Versioned device aliases also serve real OPKG indexes: `kernel/4.1.38-vbntk`
+uses the `4.1.38-vbnts` packages, and `kernel/4.1.52-vbnts` uses the
+`4.1.52-vbntk` packages. `Packages` and `Packages.gz` are generated files,
+not HTML redirects. These aliases retain the canonical feed’s exact kernel ABI
+dependency and do not add runtime validation for another firmware.
