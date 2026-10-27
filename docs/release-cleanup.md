@@ -27,9 +27,9 @@ into the main Pages feeds and independently downloaded with matching SHA256
 values. CI now pins their versioned Pages URLs; the duplicate application
 release can be deleted after deploying that configuration.
 
-The retained public inventory has six Releases: three immutable build input
-or toolchain releases, plus one each for kernel modules, Asterisk 20 and
-FreeSWITCH sounds. Main userspace packages remain on Pages. Original
-application build provenance and hashes remain committed in
-`build/application-archive/manifest.json`; the original consolidated provenance
-is retained in `build/application-archive/source.json`.
+The kernel and Asterisk 20 binary releases are superseded by their Pages
+feeds. Remove those duplicates only after the new Pages deployment and indexes
+are verified. FreeSWITCH sounds remains the only binary package Release because
+of its size. The three source/SDK/toolchain input releases remain necessary for
+CI. Original application build provenance and hashes remain committed in
+`build/application-archive/manifest.json` and `build/application-archive/source.json`.

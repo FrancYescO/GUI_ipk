@@ -162,8 +162,10 @@ def prepare(userspace, applications, output):
     rows.extend(kernel_inputs(output / 'work'))
     releases, pages = {}, output / 'site'
     for row in rows:
-        group = ('kernel' if row['kind'] == 'kernel' else 'asterisk20' if row['section'] == 'telephony/asterisk-20'
-                 else 'freeswitch-sounds' if row['package'].startswith('freeswitch-sounds-') else None)
+        if row['kind'] == 'kernel':
+            suffix = '-candidates' if parse(row['control']).get('X-Module-Staging-Only') == 'yes' else ''
+            row['section'] = 'kernel/' + row['profile'] + suffix
+        group = 'freeswitch-sounds' if row['package'].startswith('freeswitch-sounds-') else None
         row['storage'] = group or 'pages'
         if group:
             releases.setdefault(group, []).append(row)
@@ -171,13 +173,10 @@ def prepare(userspace, applications, output):
     for group, records in releases.items():
         if len(records) + 8 > 1000 or len({r['filename'] for r in records}) != len(records):
             raise ValueError('Release asset limit or duplicate filename')
-        digest = sha(b'publication-layout-v2\n' + index(records)) if group == 'kernel' else sha(index(records))
-        tag = ('kernel-modules' if group == 'kernel' else group) + '-' + digest[:16]
+        digest = sha(index(records))
+        tag = group + '-' + digest[:16]
         directory = output / 'releases' / tag
-        write_index(directory, [r for r in records if parse(r['control']).get('X-Module-Staging-Only') != 'yes'])
-        candidates = [r for r in records if parse(r['control']).get('X-Module-Staging-Only') == 'yes']
-        if candidates:
-            (directory / 'Candidates').write_bytes(index(candidates))
+        write_index(directory, records)
         url = 'https://github.com/' + REPOSITORY + '/releases/download/' + tag
         release_info[group] = {'tag': tag, 'url': url, 'count': len(records), 'sha256': digest}
         for row in records:
@@ -185,38 +184,32 @@ def prepare(userspace, applications, output):
             row['download_url'] = url + '/' + row['filename']
         (directory / 'source.json').write_text(json.dumps({'format_version': 1, 'group': group,
             'packages': [safe_record(r) for r in records]}, indent=2, sort_keys=True) + '\n')
-        if group == 'kernel':
-            profiles = {'4.1.38-vbnto': '4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d',
-                        '4.1.38-vbnts': '4.1.38-1-8dd693635a152c8c7b822a64e6c5c470',
-                        '4.1.52-vbntk': json.loads((ROOT / 'build/kernel-profiles/vbntk-4.1.52.json').read_text())['kernel_package']}
-            (directory / 'profiles.json').write_text(json.dumps(profiles, indent=2) + '\n')
-            for src, name in [('build/vbntj/validation/results.json', 'validation-4.1.52.json'),
-                              ('build/vbnto-4.1.38/validation/results.json', 'validation-4.1.38.json'),
-                              ('build/usb-rndis/validation.json', 'validation-usb-4.1.38.json')]:
-                report = json.loads((ROOT / src).read_text())
-                report['asset_base'] = url + '/'
-                if 'release' in report:
-                    report['release'] = url + '/build-diagnostics.tar.gz'
-                (directory / name).write_text(json.dumps(report, indent=2) + '\n')
-            write_archive(directory / 'legacy-buildroot.tar.gz',
-                          {p.name: p.read_bytes() for p in (ROOT / 'artifacts/buildroot-4.1.38').iterdir() if p.is_file()})
-            diagnostics = {}
-            for profile in ('vbnto', 'vbnts'):
-                source = output / 'work' / ('candidate-' + profile)
-                for path in source.iterdir():
-                    if path.is_file():
-                        diagnostics[profile + '/' + path.name] = path.read_bytes()
-            write_archive(directory / 'build-diagnostics.tar.gz', diagnostics)
         sums = [sha(p.read_bytes()) + '  ' + p.name for p in sorted(directory.iterdir())]
         (directory / 'SHA256SUMS').write_text('\n'.join(sums) + '\n')
         release_info[group]['assets'] = [{'name': p.name, 'sha256': sha(p.read_bytes()), 'size': p.stat().st_size}
                                           for p in sorted(directory.iterdir())]
-    for section in SECTIONS[:-1]:
+    for section in dict.fromkeys(r['section'] for r in rows if r['storage'] == 'pages'):
         records = [r for r in rows if r['section'] == section and r['storage'] == 'pages']
         write_index(pages / section, records)
         for row in records:
             shutil.copyfile(row['_path'], pages / section / row['filename'])
             row['download_url'] = SITE + '/' + section + '/' + row['filename']
+    # Retain profile diagnostics beside their candidate feeds, without overwriting
+    # the generated indexes or duplicating package bytes.
+    for profile in ('vbnto', 'vbnts'):
+        source = output / 'work/kernel-inputs/kernel' / ('4.1.38-' + profile + '-candidates')
+        destination = pages / 'kernel' / source.name
+        for path in source.iterdir():
+            if path.is_file() and path.suffix != '.ipk' and not path.name.startswith('Packages'):
+                shutil.copyfile(path, destination / path.name)
+    legacy = pages / 'kernel/4.1.38'
+    legacy.mkdir(parents=True, exist_ok=True)
+    write_archive(legacy / 'legacy-buildroot.tar.gz',
+                  {p.name: p.read_bytes() for p in (ROOT / 'artifacts/buildroot-4.1.38').iterdir() if p.is_file()})
+    # Keep the historical 4.1.52 URL as an OPKG alias without a second IPK copy.
+    aliases = [dict(r, filename='../4.1.52-vbntk/' + r['filename']) for r in rows
+               if r['section'] == 'kernel/4.1.52-vbntk']
+    write_index(pages / 'kernel/4.1.52', aliases)
     catalog = {'format_version': 1, 'repository': REPOSITORY, 'site': SITE, 'releases': release_info,
                'records': [safe_record(r) for r in rows]}
     (output / 'catalog.json').write_text(json.dumps(catalog, indent=2, sort_keys=True) + '\n')

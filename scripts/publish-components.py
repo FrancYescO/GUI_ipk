@@ -87,8 +87,7 @@ def main():
     args = parser.parse_args()
     catalog = json.loads((args.publication / 'catalog.json').read_text())
     for group, info in catalog['releases'].items():
-        titles = {'kernel': 'Kernel modules by runtime ABI', 'asterisk20': 'Asterisk 20 OPKG feed',
-                  'freeswitch-sounds': 'FreeSWITCH audio packages'}
+        titles = {'freeswitch-sounds': 'FreeSWITCH audio packages'}
         info['title'] = titles[group] + ' (' + info['tag'].rsplit('-', 1)[1] + ')'
         publish(args.publication / 'releases' / info['tag'], info, catalog['repository'], args.revision)
 

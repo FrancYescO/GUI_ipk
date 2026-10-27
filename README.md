@@ -149,5 +149,5 @@ such as BusyBox, `procd`, OpenSSL or the package manager itself.
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/AnsuelS)
 
 The public catalog uses a [mixed Pages/Release layout](docs/publication-layout.md):
-main userspace feeds stay on Pages; kernel modules, Asterisk 20 and FreeSWITCH
-sounds use coherent Release feeds. All verified application updates are retained.
+userspace, kernel modules and Asterisk 20 stay on Pages. Only the large FreeSWITCH
+sound packages use a binary Release feed. See the [kernel feed overview](https://francyesco.github.io/GUI_ipk/kernel/) for exact ABI selection and separate candidate sources. All verified application updates are retained.

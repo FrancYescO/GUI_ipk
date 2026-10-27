@@ -66,7 +66,10 @@ jobs:
           python3 scripts/overlay-openvpn-feed.py baseline
           python3 scripts/prepare-publication.py baseline applications publication
           python3 scripts/render-publication.py publication
-          bash scripts/verify-feed.sh publication/site
+          bash scripts/verify-feed.sh publication/site --allow-kmods
+          for section in base luci packages routing telephony target/packages telephony/asterisk-20; do
+            python3 scripts/check-userspace-payloads.py "publication/site/$section"
+          done
       - name: Publish immutable component releases before Pages
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: python3 scripts/publish-components.py publication --revision "$GITHUB_SHA"
