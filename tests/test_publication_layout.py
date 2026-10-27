@@ -62,6 +62,8 @@ class PublicationTests(unittest.TestCase):
             self.assertIn('no compatible runtime firmware', page)
 
     def test_device_alias_indexes_resolve_to_canonical_packages(self):
+        self.assertEqual(layout.KERNEL_ALIASES['4.1.38-vbntk'], '4.1.38-vbnts')
+        self.assertEqual(layout.KERNEL_ALIASES['4.1.52-vbnts'], '4.1.52-vbntk')
         catalog = fetch.read_catalog(ROOT / 'build/publication/bootstrap.json.gz', live=False)
         with tempfile.TemporaryDirectory() as temp:
             site = Path(temp)
