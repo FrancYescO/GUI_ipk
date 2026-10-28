@@ -1,0 +1,40 @@
+name: Kernel OPKG dependency compatibility
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ['scripts/kernel_opkg_providers.py', 'scripts/build-opkg-provider-tests.sh', 'scripts/migrate-kernel-package.sh', 'scripts/publication_layout.py', 'tests/test_kernel_opkg_providers.py', 'tests/opkg/**', 'build/kernel-opkg-providers/**', 'artifacts/opkg-provider-test-sources/**', '.github/workflows/kernel-opkg-providers.yml']
+  push:
+    branches: [main]
+    paths: ['scripts/kernel_opkg_providers.py', 'scripts/build-opkg-provider-tests.sh', 'scripts/migrate-kernel-package.sh', 'scripts/publication_layout.py', 'tests/test_kernel_opkg_providers.py', 'tests/opkg/**', 'build/kernel-opkg-providers/**', 'artifacts/opkg-provider-test-sources/**', '.github/workflows/kernel-opkg-providers.yml']
+permissions:
+  contents: read
+jobs:
+  old-opkg:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Unit and publication checks
+        run: python3 -m unittest discover -s tests
+      - name: Build the exact unpatched 2017 OPKG from pinned sources
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake build-essential libjson-c-dev
+          bash scripts/build-opkg-provider-tests.sh "$RUNNER_TEMP/old-opkg" > old-opkg-build.log 2>&1 || { tail -80 old-opkg-build.log; exit 1; }
+      - name: Materialize complete dependency fixtures
+        run: python3 tests/opkg/prepare.py "$RUNNER_TEMP/opkg-fixtures" > fixture-prepare.log 2>&1
+      - name: Test installation and controlled migration across all eight ABIs
+        run: |
+          for profile in 4.1.38-vbnto 4.1.38-vbntk 4.1.52-vbntk 4.1.52-vcnt3 4.1.52-vcnt2 4.1.52-vcntj 4.1.52-vcnta 4.1.52-vbntv; do
+            sudo env OPKG_BIN="$RUNNER_TEMP/old-opkg/opkg-build/src/opkg-cl" \
+              sh tests/opkg/run.sh "$RUNNER_TEMP/opkg-fixtures" "$profile" >> old-opkg-tests.log 2>&1 || { tail -80 old-opkg-tests.log; exit 1; }
+          done
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: old-opkg-provider-evidence-${{ github.sha }}
+          path: |
+            old-opkg-build.log
+            old-opkg-tests.log
+            fixture-prepare.log
+          retention-days: 30

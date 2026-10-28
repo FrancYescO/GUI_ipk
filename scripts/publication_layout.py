@@ -115,7 +115,7 @@ def promoted_applications(records, source):
     return records
 
 
-def kernel_inputs(work):
+def kernel_inputs(work, normalize=True):
     feed = work / 'kernel-inputs'
     assembler = load_script('assemble-kernel-feed')
     ipks = []
@@ -152,6 +152,9 @@ def kernel_inputs(work):
     rows.extend(cryptodev_records())
     if len({r['package'] for r in rows}) != len(rows):
         raise ValueError('Duplicate firmware candidate package')
+    if normalize:
+        from kernel_opkg_providers import apply as normalize_kernel_metadata
+        return normalize_kernel_metadata(rows, work / 'opkg-metadata')
     return rows
 
 
@@ -212,6 +215,11 @@ def prepare(userspace, applications, output):
         for row in records:
             shutil.copyfile(row['_path'], pages / section / row['filename'])
             row['download_url'] = SITE + '/' + section + '/' + row['filename']
+            if row.get('_archive_source'):
+                old_name = row['_archive_filename']
+                if Path(old_name).name != old_name:
+                    raise ValueError('Unsafe archived kernel input name')
+                shutil.copyfile(row['_archive_source'], pages / section / old_name)
     # Retain profile diagnostics beside their candidate feeds, without overwriting
     # the generated indexes or duplicating package bytes.
     for profile in ('vbnto', 'vbnts'):

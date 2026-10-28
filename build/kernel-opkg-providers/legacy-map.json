@@ -1,0 +1,3407 @@
+{
+  "builtin_configs": {
+    "8021q": "CONFIG_VLAN_8021Q",
+    "ac97_bus": "CONFIG_AC97_BUS",
+    "act_connmark": "CONFIG_NET_ACT_CONNMARK",
+    "act_skbedit": "CONFIG_NET_ACT_SKBEDIT",
+    "aead": "CONFIG_CRYPTO_AEAD2",
+    "aec62xx": "CONFIG_BLK_DEV_AEC62XX",
+    "aes_generic": "CONFIG_CRYPTO_AES",
+    "af_alg": "CONFIG_CRYPTO_USER_API",
+    "af_key": "CONFIG_NET_KEY",
+    "ah4": "CONFIG_INET_AH",
+    "ah6": "CONFIG_INET6_AH",
+    "algif_hash": "CONFIG_CRYPTO_USER_API_HASH",
+    "algif_skcipher": "CONFIG_CRYPTO_USER_API_SKCIPHER",
+    "appletalk": "CONFIG_ATALK",
+    "arc4": "CONFIG_CRYPTO_ARC4",
+    "ark3116": "CONFIG_USB_SERIAL_ARK3116",
+    "authenc": "CONFIG_CRYPTO_AUTHENC",
+    "belkin_sa": "CONFIG_USB_SERIAL_BELKIN",
+    "bluetooth": "CONFIG_BT",
+    "bnep": "CONFIG_BT_BNEP",
+    "bridge": "CONFIG_BRIDGE",
+    "btusb": "CONFIG_BT_HCIBTUSB",
+    "cbc": "CONFIG_CRYPTO_CBC",
+    "cdc-acm": "CONFIG_USB_ACM",
+    "cdc_ether": "CONFIG_USB_NET_CDCETHER",
+    "ch341": "CONFIG_USB_SERIAL_CH341",
+    "chainiv": "CONFIG_CRYPTO_BLKCIPHER2",
+    "cls_flow": "CONFIG_NET_CLS_FLOW",
+    "cp210x": "CONFIG_USB_SERIAL_CP210X",
+    "crc-ccitt": "CONFIG_CRC_CCITT",
+    "crc16": "CONFIG_CRC16",
+    "crc32c_generic": "CONFIG_CRYPTO_CRC32C",
+    "crypto_algapi": "CONFIG_CRYPTO_ALGAPI2",
+    "crypto_blkcipher": "CONFIG_CRYPTO_BLKCIPHER2",
+    "crypto_hash": "CONFIG_CRYPTO_HASH2",
+    "crypto_null": "CONFIG_CRYPTO_NULL",
+    "crypto_wq": "CONFIG_CRYPTO_WORKQUEUE",
+    "cryptomgr": "CONFIG_CRYPTO_MANAGER2",
+    "cypress_m8": "CONFIG_USB_SERIAL_CYPRESS_M8",
+    "deflate": "CONFIG_CRYPTO_DEFLATE",
+    "des_generic": "CONFIG_CRYPTO_DES",
+    "dm-crypt": "CONFIG_DM_CRYPT",
+    "dm-log": "CONFIG_DM_MIRROR",
+    "dm-mirror": "CONFIG_DM_MIRROR",
+    "dm-mod": "CONFIG_BLK_DEV_DM",
+    "dm-region-hash": "CONFIG_DM_MIRROR",
+    "ecb": "CONFIG_CRYPTO_ECB",
+    "echo": "CONFIG_ECHO",
+    "ehci-hcd": "CONFIG_USB_EHCI_HCD",
+    "em_u32": "CONFIG_NET_EMATCH_U32",
+    "eseqiv": "CONFIG_CRYPTO_BLKCIPHER2",
+    "esp4": "CONFIG_INET_ESP",
+    "esp6": "CONFIG_INET6_ESP",
+    "evdev": "CONFIG_INPUT_EVDEV",
+    "ezusb": "CONFIG_USB_EZUSB_FX2",
+    "ftdi_sio": "CONFIG_USB_SERIAL_FTDI_SIO",
+    "garmin_gps": "CONFIG_USB_SERIAL_GARMIN",
+    "gre": "CONFIG_NET_IPGRE_DEMUX",
+    "hci_uart": "CONFIG_BT_HCIUART",
+    "hid": "CONFIG_HID",
+    "hidp": "CONFIG_BT_HIDP",
+    "hmac": "CONFIG_CRYPTO_HMAC",
+    "i2c-algo-bit": "CONFIG_I2C_ALGOBIT",
+    "i2c-algo-pca": "CONFIG_I2C_ALGOPCA",
+    "i2c-algo-pcf": "CONFIG_I2C_ALGOPCF",
+    "i2c-core": "CONFIG_I2C",
+    "i2c-dev": "CONFIG_I2C_CHARDEV",
+    "i2c-gpio": "CONFIG_I2C_GPIO",
+    "i2c-mux": "CONFIG_I2C_MUX",
+    "i2c-tiny-usb": "CONFIG_I2C_TINY_USB",
+    "ide-core": "CONFIG_IDE",
+    "ide-gd_mod": "CONFIG_IDE_GD",
+    "ide-generic": "CONFIG_IDE_GENERIC",
+    "ide-pci-generic": "CONFIG_BLK_DEV_GENERIC",
+    "ifb": "CONFIG_IFB",
+    "input-core": "CONFIG_INPUT",
+    "ip6_tables": "CONFIG_IP6_NF_IPTABLES",
+    "ip6_udp_tunnel": "CONFIG_NET_UDP_TUNNEL",
+    "ip6t_REJECT": "CONFIG_IP6_NF_TARGET_REJECT",
+    "ip6table_filter": "CONFIG_IP6_NF_FILTER",
+    "ip6table_mangle": "CONFIG_IP6_NF_MANGLE",
+    "ip_gre": "CONFIG_NET_IPGRE",
+    "ip_tables": "CONFIG_IP_NF_IPTABLES",
+    "ip_tunnel": "CONFIG_NET_IP_TUNNEL",
+    "ip_vti": "CONFIG_NET_IPVTI",
+    "ipcomp": "CONFIG_INET_IPCOMP",
+    "ipcomp6": "CONFIG_INET6_IPCOMP",
+    "ipddp": "CONFIG_IPDDP",
+    "ipt_ECN": "CONFIG_IP_NF_TARGET_ECN",
+    "ipt_MASQUERADE": "CONFIG_IP_NF_TARGET_MASQUERADE",
+    "ipt_REJECT": "CONFIG_IP_NF_TARGET_REJECT",
+    "ipt_ah": "CONFIG_IP_NF_MATCH_AH",
+    "iptable_filter": "CONFIG_IP_NF_FILTER",
+    "iptable_mangle": "CONFIG_IP_NF_MANGLE",
+    "iptable_nat": "CONFIG_IP_NF_NAT",
+    "ipv6": "CONFIG_IPV6",
+    "ipw": "CONFIG_USB_SERIAL_IPW",
+    "it821x": "CONFIG_BLK_DEV_IT821X",
+    "keyspan": "CONFIG_USB_SERIAL_KEYSPAN",
+    "krng": "CONFIG_CRYPTO_RNG2",
+    "libcrc32c": "CONFIG_LIBCRC32C",
+    "llc": "CONFIG_LLC",
+    "lz4_compress": "CONFIG_LZ4_COMPRESS",
+    "lz4_decompress": "CONFIG_LZ4_DECOMPRESS",
+    "lzo_compress": "CONFIG_LZO_COMPRESS",
+    "lzo_decompress": "CONFIG_LZO_DECOMPRESS",
+    "mct_u232": "CONFIG_USB_SERIAL_MCT_U232",
+    "md5": "CONFIG_CRYPTO_MD5",
+    "mos7720": "CONFIG_USB_SERIAL_MOS7720",
+    "nf_conntrack": "CONFIG_NF_CONNTRACK",
+    "nf_conntrack_ipv4": "CONFIG_NF_CONNTRACK_IPV4",
+    "nf_conntrack_ipv6": "CONFIG_NF_CONNTRACK_IPV6",
+    "nf_defrag_ipv4": "CONFIG_NF_DEFRAG_IPV4",
+    "nf_defrag_ipv6": "CONFIG_NF_DEFRAG_IPV6",
+    "nf_log_common": "CONFIG_NF_LOG_COMMON",
+    "nf_log_ipv4": "CONFIG_NF_LOG_IPV4",
+    "nf_log_ipv6": "CONFIG_NF_LOG_IPV6",
+    "nf_nat": "CONFIG_NF_NAT",
+    "nf_nat_ipv4": "CONFIG_NF_NAT_IPV4",
+    "nf_nat_ipv6": "CONFIG_NF_NAT_IPV6",
+    "nf_nat_masquerade_ipv4": "CONFIG_NF_NAT_MASQUERADE_IPV4",
+    "nf_nat_masquerade_ipv6": "CONFIG_NF_NAT_MASQUERADE_IPV6",
+    "nf_nat_redirect": "CONFIG_NF_NAT_REDIRECT",
+    "nf_reject_ipv4": "CONFIG_NF_REJECT_IPV4",
+    "nf_reject_ipv6": "CONFIG_NF_REJECT_IPV6",
+    "nls_base": "CONFIG_NLS",
+    "ohci-hcd": "CONFIG_USB_OHCI_HCD",
+    "openvswitch": "CONFIG_OPENVSWITCH",
+    "option": "CONFIG_USB_SERIAL_OPTION",
+    "oti6858": "CONFIG_USB_SERIAL_OTI6858",
+    "pcompress": "CONFIG_CRYPTO_PCOMP2",
+    "pdc202xx_old": "CONFIG_BLK_DEV_PDC202XX_OLD",
+    "pl2303": "CONFIG_USB_SERIAL_PL2303",
+    "ppp_async": "CONFIG_PPP_ASYNC",
+    "ppp_generic": "CONFIG_PPP",
+    "pppoe": "CONFIG_PPPOE",
+    "qcserial": "CONFIG_USB_SERIAL_QUALCOMM",
+    "regmap-i2c": "CONFIG_REGMAP_I2C",
+    "regmap-spi": "CONFIG_REGMAP_SPI",
+    "rfcomm": "CONFIG_BT_RFCOMM",
+    "rndis_host": "CONFIG_USB_NET_RNDIS_HOST",
+    "rng": "CONFIG_CRYPTO_RNG2",
+    "sch_hfsc": "CONFIG_NET_SCH_HFSC",
+    "sha1_generic": "CONFIG_CRYPTO_SHA1",
+    "sierra": "CONFIG_USB_SERIAL_SIERRAWIRELESS",
+    "slhc": "CONFIG_SLHC",
+    "snd": "CONFIG_SND",
+    "snd-ac97-codec": "CONFIG_SND_AC97_CODEC",
+    "snd-compress": "CONFIG_SND_COMPRESS_OFFLOAD",
+    "snd-hwdep": "CONFIG_SND_HWDEP",
+    "snd-intel8x0": "CONFIG_SND_INTEL8X0",
+    "snd-mixer-oss": "CONFIG_SND_MIXER_OSS",
+    "snd-pcm": "CONFIG_SND_PCM",
+    "snd-pcm-oss": "CONFIG_SND_PCM_OSS",
+    "snd-rawmidi": "CONFIG_SND_RAWMIDI",
+    "snd-seq-device": "CONFIG_SND_SEQUENCER",
+    "snd-soc-core": "CONFIG_SND_SOC",
+    "snd-timer": "CONFIG_SND_TIMER",
+    "snd-usb-audio": "CONFIG_SND_USB_AUDIO",
+    "soundcore": "CONFIG_SOUND",
+    "spi-bitbang": "CONFIG_SPI_BITBANG",
+    "stp": "CONFIG_STP",
+    "ti_usb_3410_5052": "CONFIG_USB_SERIAL_TI",
+    "tun": "CONFIG_TUN",
+    "tunnel4": "CONFIG_INET_TUNNEL",
+    "tunnel6": "CONFIG_INET6_TUNNEL",
+    "udp_tunnel": "CONFIG_NET_UDP_TUNNEL",
+    "usb-common": "CONFIG_USB_COMMON",
+    "usb-serial-simple": "CONFIG_USB_SERIAL_SIMPLE",
+    "usb_wwan": "CONFIG_USB_SERIAL_WWAN",
+    "usbcore": "CONFIG_USB",
+    "usbnet": "CONFIG_USB_USBNET",
+    "usbserial": "CONFIG_USB_SERIAL",
+    "visor": "CONFIG_USB_SERIAL_VISOR",
+    "vport-gre": "CONFIG_OPENVSWITCH_GRE",
+    "vport-vxlan": "CONFIG_OPENVSWITCH_VXLAN",
+    "vxlan": "CONFIG_VXLAN",
+    "xfrm4_mode_beet": "CONFIG_INET_XFRM_MODE_BEET",
+    "xfrm4_mode_transport": "CONFIG_INET_XFRM_MODE_TRANSPORT",
+    "xfrm4_mode_tunnel": "CONFIG_INET_XFRM_MODE_TUNNEL",
+    "xfrm4_tunnel": "CONFIG_INET_XFRM_TUNNEL",
+    "xfrm6_mode_beet": "CONFIG_INET6_XFRM_MODE_BEET",
+    "xfrm6_mode_transport": "CONFIG_INET6_XFRM_MODE_TRANSPORT",
+    "xfrm6_mode_tunnel": "CONFIG_INET6_XFRM_MODE_TUNNEL",
+    "xfrm6_tunnel": "CONFIG_INET6_XFRM_TUNNEL",
+    "xfrm_algo": "CONFIG_XFRM_ALGO",
+    "xfrm_ipcomp": "CONFIG_XFRM_IPCOMP",
+    "xfrm_user": "CONFIG_XFRM_USER",
+    "xt_CLASSIFY": "CONFIG_NETFILTER_XT_TARGET_CLASSIFY",
+    "xt_CT": "CONFIG_NETFILTER_XT_TARGET_CT",
+    "xt_DSCP": "CONFIG_NETFILTER_XT_TARGET_DSCP",
+    "xt_HL": "CONFIG_NETFILTER_XT_TARGET_HL",
+    "xt_LED": "CONFIG_NETFILTER_XT_TARGET_LED",
+    "xt_LOG": "CONFIG_NETFILTER_XT_TARGET_LOG",
+    "xt_REDIRECT": "CONFIG_NETFILTER_XT_TARGET_REDIRECT",
+    "xt_TCPMSS": "CONFIG_NETFILTER_XT_TARGET_TCPMSS",
+    "xt_comment": "CONFIG_NETFILTER_XT_MATCH_COMMENT",
+    "xt_connbytes": "CONFIG_NETFILTER_XT_MATCH_CONNBYTES",
+    "xt_connlimit": "CONFIG_NETFILTER_XT_MATCH_CONNLIMIT",
+    "xt_connmark": "CONFIG_NETFILTER_XT_CONNMARK",
+    "xt_conntrack": "CONFIG_NETFILTER_XT_MATCH_CONNTRACK",
+    "xt_dscp": "CONFIG_NETFILTER_XT_MATCH_DSCP",
+    "xt_ecn": "CONFIG_NETFILTER_XT_MATCH_ECN",
+    "xt_esp": "CONFIG_NETFILTER_XT_MATCH_ESP",
+    "xt_helper": "CONFIG_NETFILTER_XT_MATCH_HELPER",
+    "xt_hl": "CONFIG_NETFILTER_XT_MATCH_HL",
+    "xt_length": "CONFIG_NETFILTER_XT_MATCH_LENGTH",
+    "xt_limit": "CONFIG_NETFILTER_XT_MATCH_LIMIT",
+    "xt_mac": "CONFIG_NETFILTER_XT_MATCH_MAC",
+    "xt_mark": "CONFIG_NETFILTER_XT_MARK",
+    "xt_multiport": "CONFIG_NETFILTER_XT_MATCH_MULTIPORT",
+    "xt_nat": "CONFIG_NETFILTER_XT_NAT",
+    "xt_policy": "CONFIG_NETFILTER_XT_MATCH_POLICY",
+    "xt_recent": "CONFIG_NETFILTER_XT_MATCH_RECENT",
+    "xt_state": "CONFIG_NETFILTER_XT_MATCH_STATE",
+    "xt_statistic": "CONFIG_NETFILTER_XT_MATCH_STATISTIC",
+    "xt_tcpmss": "CONFIG_NETFILTER_XT_MATCH_TCPMSS",
+    "xt_time": "CONFIG_NETFILTER_XT_MATCH_TIME",
+    "zlib_deflate": "CONFIG_ZLIB_DEFLATE",
+    "zlib_inflate": "CONFIG_ZLIB_INFLATE"
+  },
+  "builtin_rules": {
+    "8021q": [
+      {
+        "path": "linux-4.1.52/net/8021q/Makefile",
+        "rule": "obj-$(CONFIG_VLAN_8021Q)\t\t+= 8021q.o"
+      }
+    ],
+    "ac97_bus": [
+      {
+        "path": "linux-4.1.52/sound/Makefile",
+        "rule": "obj-$(CONFIG_AC97_BUS) += ac97_bus.o"
+      }
+    ],
+    "act_connmark": [
+      {
+        "path": "linux-4.1.52/net/sched/Makefile",
+        "rule": "obj-$(CONFIG_NET_ACT_CONNMARK)\t+= act_connmark.o"
+      }
+    ],
+    "act_skbedit": [
+      {
+        "path": "linux-4.1.52/net/sched/Makefile",
+        "rule": "obj-$(CONFIG_NET_ACT_SKBEDIT)\t+= act_skbedit.o"
+      }
+    ],
+    "aead": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_AEAD2) += aead.o"
+      }
+    ],
+    "aec62xx": [
+      {
+        "path": "linux-4.1.52/drivers/ide/Makefile",
+        "rule": "obj-$(CONFIG_BLK_DEV_AEC62XX)\t\t+= aec62xx.o"
+      }
+    ],
+    "aes_generic": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_AES) += aes_generic.o"
+      }
+    ],
+    "af_alg": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_USER_API) += af_alg.o"
+      }
+    ],
+    "af_key": [
+      {
+        "path": "linux-4.1.52/net/key/Makefile",
+        "rule": "obj-$(CONFIG_NET_KEY) += af_key.o"
+      }
+    ],
+    "ah4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_AH) += ah4.o"
+      }
+    ],
+    "ah6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_AH) += ah6.o"
+      }
+    ],
+    "algif_hash": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_USER_API_HASH) += algif_hash.o"
+      }
+    ],
+    "algif_skcipher": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_USER_API_SKCIPHER) += algif_skcipher.o"
+      }
+    ],
+    "appletalk": [
+      {
+        "path": "linux-4.1.52/net/appletalk/Makefile",
+        "rule": "obj-$(CONFIG_ATALK) += appletalk.o"
+      }
+    ],
+    "arc4": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_ARC4) += arc4.o"
+      }
+    ],
+    "ark3116": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_ARK3116)\t\t+= ark3116.o"
+      }
+    ],
+    "authenc": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_AUTHENC) += authenc.o authencesn.o"
+      }
+    ],
+    "belkin_sa": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_BELKIN)\t\t\t+= belkin_sa.o"
+      }
+    ],
+    "bluetooth": [
+      {
+        "path": "linux-4.1.52/net/bluetooth/Makefile",
+        "rule": "obj-$(CONFIG_BT)\t+= bluetooth.o"
+      }
+    ],
+    "bnep": [
+      {
+        "path": "linux-4.1.52/net/bluetooth/bnep/Makefile",
+        "rule": "obj-$(CONFIG_BT_BNEP) += bnep.o"
+      }
+    ],
+    "bridge": [
+      {
+        "path": "linux-4.1.52/net/bridge/Makefile",
+        "rule": "obj-$(CONFIG_BRIDGE) += bridge.o"
+      }
+    ],
+    "btusb": [
+      {
+        "path": "linux-4.1.52/drivers/bluetooth/Makefile",
+        "rule": "obj-$(CONFIG_BT_HCIBTUSB)\t+= btusb.o"
+      }
+    ],
+    "cbc": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_CBC) += cbc.o"
+      }
+    ],
+    "cdc-acm": [
+      {
+        "path": "linux-4.1.52/drivers/usb/class/Makefile",
+        "rule": "obj-$(CONFIG_USB_ACM)\t\t+= cdc-acm.o"
+      }
+    ],
+    "cdc_ether": [
+      {
+        "path": "linux-4.1.52/drivers/net/usb/Makefile",
+        "rule": "obj-$(CONFIG_USB_NET_CDCETHER)\t+= cdc_ether.o"
+      }
+    ],
+    "ch341": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_CH341)\t\t\t+= ch341.o"
+      }
+    ],
+    "chainiv": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_BLKCIPHER2) += chainiv.o"
+      }
+    ],
+    "cls_flow": [
+      {
+        "path": "linux-4.1.52/net/sched/Makefile",
+        "rule": "obj-$(CONFIG_NET_CLS_FLOW)\t+= cls_flow.o"
+      }
+    ],
+    "cp210x": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_CP210X)\t\t\t+= cp210x.o"
+      }
+    ],
+    "crc-ccitt": [
+      {
+        "path": "linux-4.1.52/lib/Makefile",
+        "rule": "obj-$(CONFIG_CRC_CCITT)\t+= crc-ccitt.o"
+      }
+    ],
+    "crc16": [
+      {
+        "path": "linux-4.1.52/lib/Makefile",
+        "rule": "obj-$(CONFIG_CRC16)\t+= crc16.o"
+      }
+    ],
+    "crc32c_generic": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_CRC32C) += crc32c_generic.o"
+      }
+    ],
+    "crypto_algapi": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_ALGAPI2) += crypto_algapi.o"
+      }
+    ],
+    "crypto_blkcipher": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_BLKCIPHER2) += crypto_blkcipher.o"
+      }
+    ],
+    "crypto_hash": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_HASH2) += crypto_hash.o"
+      }
+    ],
+    "crypto_null": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_NULL) += crypto_null.o"
+      }
+    ],
+    "crypto_wq": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_WORKQUEUE) += crypto_wq.o"
+      }
+    ],
+    "cryptomgr": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_MANAGER2) += cryptomgr.o"
+      }
+    ],
+    "cypress_m8": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_CYPRESS_M8)\t\t+= cypress_m8.o"
+      }
+    ],
+    "deflate": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_DEFLATE) += deflate.o"
+      }
+    ],
+    "des_generic": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_DES) += des_generic.o"
+      }
+    ],
+    "dm-crypt": [
+      {
+        "path": "linux-4.1.52/drivers/md/Makefile",
+        "rule": "obj-$(CONFIG_DM_CRYPT)\t\t+= dm-crypt.o"
+      }
+    ],
+    "dm-log": [
+      {
+        "path": "linux-4.1.52/drivers/md/Makefile",
+        "rule": "obj-$(CONFIG_DM_MIRROR)\t\t+= dm-mirror.o dm-log.o dm-region-hash.o"
+      }
+    ],
+    "dm-mirror": [
+      {
+        "path": "linux-4.1.52/drivers/md/Makefile",
+        "rule": "obj-$(CONFIG_DM_MIRROR)\t\t+= dm-mirror.o dm-log.o dm-region-hash.o"
+      }
+    ],
+    "dm-mod": [
+      {
+        "path": "linux-4.1.52/drivers/md/Makefile",
+        "rule": "obj-$(CONFIG_BLK_DEV_DM)\t+= dm-mod.o"
+      }
+    ],
+    "dm-region-hash": [
+      {
+        "path": "linux-4.1.52/drivers/md/Makefile",
+        "rule": "obj-$(CONFIG_DM_MIRROR)\t\t+= dm-mirror.o dm-log.o dm-region-hash.o"
+      }
+    ],
+    "ecb": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_ECB) += ecb.o"
+      }
+    ],
+    "echo": [
+      {
+        "path": "linux-4.1.52/drivers/misc/echo/Makefile",
+        "rule": "obj-$(CONFIG_ECHO) += echo.o"
+      }
+    ],
+    "ehci-hcd": [
+      {
+        "path": "linux-4.1.52/drivers/usb/host/Makefile",
+        "rule": "obj-$(CONFIG_USB_EHCI_HCD)\t+= ehci-hcd.o"
+      }
+    ],
+    "em_u32": [
+      {
+        "path": "linux-4.1.52/net/sched/Makefile",
+        "rule": "obj-$(CONFIG_NET_EMATCH_U32)\t+= em_u32.o"
+      }
+    ],
+    "eseqiv": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_BLKCIPHER2) += eseqiv.o"
+      }
+    ],
+    "esp4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_ESP) += esp4.o"
+      }
+    ],
+    "esp6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_ESP) += esp6.o"
+      }
+    ],
+    "evdev": [
+      {
+        "path": "linux-4.1.52/drivers/input/Makefile",
+        "rule": "obj-$(CONFIG_INPUT_EVDEV)\t+= evdev.o"
+      }
+    ],
+    "ezusb": [
+      {
+        "path": "linux-4.1.52/drivers/usb/misc/Makefile",
+        "rule": "obj-$(CONFIG_USB_EZUSB_FX2)\t\t+= ezusb.o"
+      }
+    ],
+    "ftdi_sio": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_FTDI_SIO)\t\t+= ftdi_sio.o"
+      }
+    ],
+    "garmin_gps": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_GARMIN)\t\t\t+= garmin_gps.o"
+      }
+    ],
+    "gre": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_NET_IPGRE_DEMUX) += gre.o"
+      }
+    ],
+    "hci_uart": [
+      {
+        "path": "linux-4.1.52/drivers/bluetooth/Makefile",
+        "rule": "obj-$(CONFIG_BT_HCIUART)\t+= hci_uart.o"
+      }
+    ],
+    "hid": [
+      {
+        "path": "linux-4.1.52/drivers/hid/Makefile",
+        "rule": "obj-$(CONFIG_HID)\t\t+= hid.o"
+      }
+    ],
+    "hidp": [
+      {
+        "path": "linux-4.1.52/net/bluetooth/hidp/Makefile",
+        "rule": "obj-$(CONFIG_BT_HIDP) += hidp.o"
+      }
+    ],
+    "hmac": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_HMAC) += hmac.o"
+      }
+    ],
+    "i2c-algo-bit": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/algos/Makefile",
+        "rule": "obj-$(CONFIG_I2C_ALGOBIT)\t+= i2c-algo-bit.o"
+      }
+    ],
+    "i2c-algo-pca": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/algos/Makefile",
+        "rule": "obj-$(CONFIG_I2C_ALGOPCA)\t+= i2c-algo-pca.o"
+      }
+    ],
+    "i2c-algo-pcf": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/algos/Makefile",
+        "rule": "obj-$(CONFIG_I2C_ALGOPCF)\t+= i2c-algo-pcf.o"
+      }
+    ],
+    "i2c-core": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/Makefile",
+        "rule": "obj-$(CONFIG_I2C)\t\t+= i2c-core.o"
+      }
+    ],
+    "i2c-dev": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/Makefile",
+        "rule": "obj-$(CONFIG_I2C_CHARDEV)\t+= i2c-dev.o"
+      }
+    ],
+    "i2c-gpio": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/busses/Makefile",
+        "rule": "obj-$(CONFIG_I2C_GPIO)\t\t+= i2c-gpio.o"
+      }
+    ],
+    "i2c-mux": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/Makefile",
+        "rule": "obj-$(CONFIG_I2C_MUX)\t\t+= i2c-mux.o"
+      }
+    ],
+    "i2c-tiny-usb": [
+      {
+        "path": "linux-4.1.52/drivers/i2c/busses/Makefile",
+        "rule": "obj-$(CONFIG_I2C_TINY_USB)\t+= i2c-tiny-usb.o"
+      }
+    ],
+    "ide-core": [
+      {
+        "path": "linux-4.1.52/drivers/ide/Makefile",
+        "rule": "obj-$(CONFIG_IDE)\t\t\t+= ide-core.o"
+      }
+    ],
+    "ide-gd_mod": [
+      {
+        "path": "linux-4.1.52/drivers/ide/Makefile",
+        "rule": "obj-$(CONFIG_IDE_GD)\t\t\t+= ide-gd_mod.o"
+      }
+    ],
+    "ide-generic": [
+      {
+        "path": "linux-4.1.52/drivers/ide/Makefile",
+        "rule": "obj-$(CONFIG_IDE_GENERIC)\t\t+= ide-generic.o"
+      }
+    ],
+    "ide-pci-generic": [
+      {
+        "path": "linux-4.1.52/drivers/ide/Makefile",
+        "rule": "obj-$(CONFIG_BLK_DEV_GENERIC)\t\t+= ide-pci-generic.o"
+      }
+    ],
+    "ifb": [
+      {
+        "path": "linux-4.1.52/drivers/net/Makefile",
+        "rule": "obj-$(CONFIG_IFB) += ifb.o"
+      }
+    ],
+    "input-core": [
+      {
+        "path": "linux-4.1.52/drivers/input/Makefile",
+        "rule": "obj-$(CONFIG_INPUT)\t\t+= input-core.o"
+      }
+    ],
+    "ip6_tables": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP6_NF_IPTABLES) += ip6_tables.o"
+      }
+    ],
+    "ip6_udp_tunnel": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_NET_UDP_TUNNEL) += ip6_udp_tunnel.o"
+      }
+    ],
+    "ip6t_REJECT": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP6_NF_TARGET_REJECT) += ip6t_REJECT.o"
+      }
+    ],
+    "ip6table_filter": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP6_NF_FILTER) += ip6table_filter.o"
+      }
+    ],
+    "ip6table_mangle": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP6_NF_MANGLE) += ip6table_mangle.o"
+      }
+    ],
+    "ip_gre": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_NET_IPGRE) += ip_gre.o"
+      }
+    ],
+    "ip_tables": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_IPTABLES) += ip_tables.o"
+      }
+    ],
+    "ip_tunnel": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_NET_IP_TUNNEL) += ip_tunnel.o"
+      }
+    ],
+    "ip_vti": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_NET_IPVTI) += ip_vti.o"
+      }
+    ],
+    "ipcomp": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_IPCOMP) += ipcomp.o"
+      }
+    ],
+    "ipcomp6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_IPCOMP) += ipcomp6.o"
+      }
+    ],
+    "ipddp": [
+      {
+        "path": "linux-4.1.52/drivers/net/appletalk/Makefile",
+        "rule": "obj-$(CONFIG_IPDDP) += ipddp.o"
+      }
+    ],
+    "ipt_ECN": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_TARGET_ECN) += ipt_ECN.o"
+      }
+    ],
+    "ipt_MASQUERADE": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_TARGET_MASQUERADE) += ipt_MASQUERADE.o"
+      }
+    ],
+    "ipt_REJECT": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_TARGET_REJECT) += ipt_REJECT.o"
+      }
+    ],
+    "ipt_ah": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_MATCH_AH) += ipt_ah.o"
+      }
+    ],
+    "iptable_filter": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_FILTER) += iptable_filter.o"
+      }
+    ],
+    "iptable_mangle": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_MANGLE) += iptable_mangle.o"
+      }
+    ],
+    "iptable_nat": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_IP_NF_NAT) += iptable_nat.o"
+      }
+    ],
+    "ipv6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_IPV6) += ipv6.o"
+      }
+    ],
+    "ipw": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_IPW)\t\t\t+= ipw.o"
+      }
+    ],
+    "it821x": [
+      {
+        "path": "linux-4.1.52/drivers/ide/Makefile",
+        "rule": "obj-$(CONFIG_BLK_DEV_IT821X)\t\t+= it821x.o"
+      }
+    ],
+    "keyspan": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_KEYSPAN)\t\t+= keyspan.o"
+      }
+    ],
+    "krng": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_RNG2) += krng.o"
+      }
+    ],
+    "libcrc32c": [
+      {
+        "path": "linux-4.1.52/lib/Makefile",
+        "rule": "obj-$(CONFIG_LIBCRC32C)\t+= libcrc32c.o"
+      }
+    ],
+    "llc": [
+      {
+        "path": "linux-4.1.52/net/llc/Makefile",
+        "rule": "obj-$(CONFIG_LLC) += llc.o"
+      }
+    ],
+    "lz4_compress": [
+      {
+        "path": "linux-4.1.52/lib/lz4/Makefile",
+        "rule": "obj-$(CONFIG_LZ4_COMPRESS) += lz4_compress.o"
+      }
+    ],
+    "lz4_decompress": [
+      {
+        "path": "linux-4.1.52/lib/lz4/Makefile",
+        "rule": "obj-$(CONFIG_LZ4_DECOMPRESS) += lz4_decompress.o"
+      }
+    ],
+    "lzo_compress": [
+      {
+        "path": "linux-4.1.52/lib/lzo/Makefile",
+        "rule": "obj-$(CONFIG_LZO_COMPRESS) += lzo_compress.o"
+      }
+    ],
+    "lzo_decompress": [
+      {
+        "path": "linux-4.1.52/lib/lzo/Makefile",
+        "rule": "obj-$(CONFIG_LZO_DECOMPRESS) += lzo_decompress.o"
+      }
+    ],
+    "mct_u232": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_MCT_U232)\t\t+= mct_u232.o"
+      }
+    ],
+    "md5": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_MD5) += md5.o"
+      }
+    ],
+    "mos7720": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_MOS7720)\t\t+= mos7720.o"
+      }
+    ],
+    "nf_conntrack": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_CONNTRACK) += nf_conntrack.o"
+      }
+    ],
+    "nf_conntrack_ipv4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_CONNTRACK_IPV4) += nf_conntrack_ipv4.o"
+      }
+    ],
+    "nf_conntrack_ipv6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_CONNTRACK_IPV6) += nf_conntrack_ipv6.o"
+      }
+    ],
+    "nf_defrag_ipv4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_DEFRAG_IPV4) += nf_defrag_ipv4.o"
+      }
+    ],
+    "nf_defrag_ipv6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_DEFRAG_IPV6) += nf_defrag_ipv6.o"
+      }
+    ],
+    "nf_log_common": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_LOG_COMMON) += nf_log_common.o"
+      }
+    ],
+    "nf_log_ipv4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_LOG_IPV4) += nf_log_ipv4.o"
+      }
+    ],
+    "nf_log_ipv6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_LOG_IPV6) += nf_log_ipv6.o"
+      }
+    ],
+    "nf_nat": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_NAT) += nf_nat.o"
+      }
+    ],
+    "nf_nat_ipv4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_NAT_IPV4) += nf_nat_ipv4.o"
+      }
+    ],
+    "nf_nat_ipv6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_NAT_IPV6) += nf_nat_ipv6.o"
+      }
+    ],
+    "nf_nat_masquerade_ipv4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_NAT_MASQUERADE_IPV4) += nf_nat_masquerade_ipv4.o"
+      }
+    ],
+    "nf_nat_masquerade_ipv6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_NAT_MASQUERADE_IPV6) += nf_nat_masquerade_ipv6.o"
+      }
+    ],
+    "nf_nat_redirect": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_NAT_REDIRECT) += nf_nat_redirect.o"
+      }
+    ],
+    "nf_reject_ipv4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_REJECT_IPV4) += nf_reject_ipv4.o"
+      }
+    ],
+    "nf_reject_ipv6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NF_REJECT_IPV6) += nf_reject_ipv6.o"
+      }
+    ],
+    "nls_base": [
+      {
+        "path": "linux-4.1.52/fs/nls/Makefile",
+        "rule": "obj-$(CONFIG_NLS)\t\t+= nls_base.o"
+      }
+    ],
+    "ohci-hcd": [
+      {
+        "path": "linux-4.1.52/drivers/usb/host/Makefile",
+        "rule": "obj-$(CONFIG_USB_OHCI_HCD)\t+= ohci-hcd.o"
+      }
+    ],
+    "openvswitch": [
+      {
+        "path": "linux-4.1.52/net/openvswitch/Makefile",
+        "rule": "obj-$(CONFIG_OPENVSWITCH) += openvswitch.o"
+      }
+    ],
+    "option": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_OPTION)\t\t\t+= option.o"
+      }
+    ],
+    "oti6858": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_OTI6858)\t\t+= oti6858.o"
+      }
+    ],
+    "pcompress": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_PCOMP2) += pcompress.o"
+      }
+    ],
+    "pdc202xx_old": [
+      {
+        "path": "linux-4.1.52/drivers/ide/Makefile",
+        "rule": "obj-$(CONFIG_BLK_DEV_PDC202XX_OLD)\t+= pdc202xx_old.o"
+      }
+    ],
+    "pl2303": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_PL2303)\t\t\t+= pl2303.o"
+      }
+    ],
+    "ppp_async": [
+      {
+        "path": "linux-4.1.52/drivers/net/ppp/Makefile",
+        "rule": "obj-$(CONFIG_PPP_ASYNC) += ppp_async.o"
+      }
+    ],
+    "ppp_generic": [
+      {
+        "path": "linux-4.1.52/drivers/net/ppp/Makefile",
+        "rule": "obj-$(CONFIG_PPP) += ppp_generic.o"
+      }
+    ],
+    "pppoe": [
+      {
+        "path": "linux-4.1.52/drivers/net/ppp/Makefile",
+        "rule": "obj-$(CONFIG_PPPOE) += pppox.o pppoe.o"
+      }
+    ],
+    "qcserial": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_QUALCOMM)\t\t+= qcserial.o"
+      }
+    ],
+    "regmap-i2c": [
+      {
+        "path": "linux-4.1.52/drivers/base/regmap/Makefile",
+        "rule": "obj-$(CONFIG_REGMAP_I2C) += regmap-i2c.o"
+      }
+    ],
+    "regmap-spi": [
+      {
+        "path": "linux-4.1.52/drivers/base/regmap/Makefile",
+        "rule": "obj-$(CONFIG_REGMAP_SPI) += regmap-spi.o"
+      }
+    ],
+    "rfcomm": [
+      {
+        "path": "linux-4.1.52/net/bluetooth/rfcomm/Makefile",
+        "rule": "obj-$(CONFIG_BT_RFCOMM) += rfcomm.o"
+      }
+    ],
+    "rndis_host": [
+      {
+        "path": "linux-4.1.52/drivers/net/usb/Makefile",
+        "rule": "obj-$(CONFIG_USB_NET_RNDIS_HOST)\t+= rndis_host.o"
+      }
+    ],
+    "rng": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_RNG2) += rng.o"
+      }
+    ],
+    "sch_hfsc": [
+      {
+        "path": "linux-4.1.52/net/sched/Makefile",
+        "rule": "obj-$(CONFIG_NET_SCH_HFSC)\t+= sch_hfsc.o"
+      }
+    ],
+    "sha1_generic": [
+      {
+        "path": "linux-4.1.52/crypto/Makefile",
+        "rule": "obj-$(CONFIG_CRYPTO_SHA1) += sha1_generic.o"
+      }
+    ],
+    "sierra": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_SIERRAWIRELESS)\t\t+= sierra.o"
+      }
+    ],
+    "slhc": [
+      {
+        "path": "linux-4.1.52/drivers/net/slip/Makefile",
+        "rule": "obj-$(CONFIG_SLHC) += slhc.o"
+      }
+    ],
+    "snd": [
+      {
+        "path": "linux-4.1.52/sound/core/Makefile",
+        "rule": "obj-$(CONFIG_SND) \t\t+= snd.o"
+      }
+    ],
+    "snd-ac97-codec": [
+      {
+        "path": "linux-4.1.52/sound/pci/ac97/Makefile",
+        "rule": "obj-$(CONFIG_SND_AC97_CODEC) += snd-ac97-codec.o"
+      }
+    ],
+    "snd-compress": [
+      {
+        "path": "linux-4.1.52/sound/core/Makefile",
+        "rule": "obj-$(CONFIG_SND_COMPRESS_OFFLOAD)\t+= snd-compress.o"
+      }
+    ],
+    "snd-hwdep": [
+      {
+        "path": "linux-4.1.52/sound/core/Makefile",
+        "rule": "obj-$(CONFIG_SND_HWDEP)\t\t+= snd-hwdep.o"
+      }
+    ],
+    "snd-intel8x0": [
+      {
+        "path": "linux-4.1.52/sound/pci/Makefile",
+        "rule": "obj-$(CONFIG_SND_INTEL8X0) += snd-intel8x0.o"
+      }
+    ],
+    "snd-mixer-oss": [
+      {
+        "path": "linux-4.1.52/sound/core/oss/Makefile",
+        "rule": "obj-$(CONFIG_SND_MIXER_OSS) += snd-mixer-oss.o"
+      }
+    ],
+    "snd-pcm": [
+      {
+        "path": "linux-4.1.52/sound/core/Makefile",
+        "rule": "obj-$(CONFIG_SND_PCM)\t\t+= snd-pcm.o"
+      }
+    ],
+    "snd-pcm-oss": [
+      {
+        "path": "linux-4.1.52/sound/core/oss/Makefile",
+        "rule": "obj-$(CONFIG_SND_PCM_OSS) += snd-pcm-oss.o"
+      }
+    ],
+    "snd-rawmidi": [
+      {
+        "path": "linux-4.1.52/sound/core/Makefile",
+        "rule": "obj-$(CONFIG_SND_RAWMIDI)\t+= snd-rawmidi.o"
+      }
+    ],
+    "snd-seq-device": [
+      {
+        "path": "linux-4.1.52/sound/core/seq/Makefile",
+        "rule": "obj-$(CONFIG_SND_SEQUENCER) += snd-seq.o snd-seq-device.o"
+      }
+    ],
+    "snd-soc-core": [
+      {
+        "path": "linux-4.1.52/sound/soc/Makefile",
+        "rule": "obj-$(CONFIG_SND_SOC)\t+= snd-soc-core.o"
+      }
+    ],
+    "snd-timer": [
+      {
+        "path": "linux-4.1.52/sound/core/Makefile",
+        "rule": "obj-$(CONFIG_SND_TIMER)\t\t+= snd-timer.o"
+      }
+    ],
+    "snd-usb-audio": [
+      {
+        "path": "linux-4.1.52/sound/usb/Makefile",
+        "rule": "obj-$(CONFIG_SND_USB_AUDIO) += snd-usb-audio.o snd-usbmidi-lib.o"
+      }
+    ],
+    "soundcore": [
+      {
+        "path": "linux-4.1.52/sound/Makefile",
+        "rule": "obj-$(CONFIG_SOUND) += soundcore.o"
+      }
+    ],
+    "spi-bitbang": [
+      {
+        "path": "linux-4.1.52/drivers/spi/Makefile",
+        "rule": "obj-$(CONFIG_SPI_BITBANG)\t\t+= spi-bitbang.o"
+      }
+    ],
+    "stp": [
+      {
+        "path": "linux-4.1.52/net/802/Makefile",
+        "rule": "obj-$(CONFIG_STP)\t+= stp.o"
+      }
+    ],
+    "ti_usb_3410_5052": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_TI)\t\t\t+= ti_usb_3410_5052.o"
+      }
+    ],
+    "tun": [
+      {
+        "path": "linux-4.1.52/drivers/net/Makefile",
+        "rule": "obj-$(CONFIG_TUN) += tun.o"
+      }
+    ],
+    "tunnel4": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_TUNNEL) += tunnel4.o"
+      }
+    ],
+    "tunnel6": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_TUNNEL) += tunnel6.o"
+      }
+    ],
+    "udp_tunnel": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_NET_UDP_TUNNEL) += udp_tunnel.o"
+      }
+    ],
+    "usb-common": [
+      {
+        "path": "linux-4.1.52/drivers/usb/common/Makefile",
+        "rule": "obj-$(CONFIG_USB_COMMON)\t  += usb-common.o"
+      }
+    ],
+    "usb-serial-simple": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_SIMPLE)\t\t\t+= usb-serial-simple.o"
+      }
+    ],
+    "usb_wwan": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_WWAN)\t\t\t+= usb_wwan.o"
+      }
+    ],
+    "usbcore": [
+      {
+        "path": "linux-4.1.52/drivers/usb/core/Makefile",
+        "rule": "obj-$(CONFIG_USB)\t\t+= usbcore.o"
+      }
+    ],
+    "usbnet": [
+      {
+        "path": "linux-4.1.52/drivers/net/usb/Makefile",
+        "rule": "obj-$(CONFIG_USB_USBNET)\t+= usbnet.o"
+      }
+    ],
+    "usbserial": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL)\t\t\t+= usbserial.o"
+      }
+    ],
+    "visor": [
+      {
+        "path": "linux-4.1.52/drivers/usb/serial/Makefile",
+        "rule": "obj-$(CONFIG_USB_SERIAL_VISOR)\t\t\t+= visor.o"
+      }
+    ],
+    "vport-gre": [
+      {
+        "path": "linux-4.1.52/net/openvswitch/Makefile",
+        "rule": "obj-$(CONFIG_OPENVSWITCH_GRE)\t+= vport-gre.o"
+      }
+    ],
+    "vport-vxlan": [
+      {
+        "path": "linux-4.1.52/net/openvswitch/Makefile",
+        "rule": "obj-$(CONFIG_OPENVSWITCH_VXLAN)\t+= vport-vxlan.o"
+      }
+    ],
+    "vxlan": [
+      {
+        "path": "linux-4.1.52/drivers/net/Makefile",
+        "rule": "obj-$(CONFIG_VXLAN) += vxlan.o"
+      }
+    ],
+    "xfrm4_mode_beet": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_XFRM_MODE_BEET) += xfrm4_mode_beet.o"
+      }
+    ],
+    "xfrm4_mode_transport": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_XFRM_MODE_TRANSPORT) += xfrm4_mode_transport.o"
+      }
+    ],
+    "xfrm4_mode_tunnel": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_XFRM_MODE_TUNNEL) += xfrm4_mode_tunnel.o"
+      }
+    ],
+    "xfrm4_tunnel": [
+      {
+        "path": "linux-4.1.52/net/ipv4/Makefile",
+        "rule": "obj-$(CONFIG_INET_XFRM_TUNNEL) += xfrm4_tunnel.o"
+      }
+    ],
+    "xfrm6_mode_beet": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_XFRM_MODE_BEET) += xfrm6_mode_beet.o"
+      }
+    ],
+    "xfrm6_mode_transport": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_XFRM_MODE_TRANSPORT) += xfrm6_mode_transport.o"
+      }
+    ],
+    "xfrm6_mode_tunnel": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_XFRM_MODE_TUNNEL) += xfrm6_mode_tunnel.o"
+      }
+    ],
+    "xfrm6_tunnel": [
+      {
+        "path": "linux-4.1.52/net/ipv6/Makefile",
+        "rule": "obj-$(CONFIG_INET6_XFRM_TUNNEL) += xfrm6_tunnel.o"
+      }
+    ],
+    "xfrm_algo": [
+      {
+        "path": "linux-4.1.52/net/xfrm/Makefile",
+        "rule": "obj-$(CONFIG_XFRM_ALGO) += xfrm_algo.o"
+      }
+    ],
+    "xfrm_ipcomp": [
+      {
+        "path": "linux-4.1.52/net/xfrm/Makefile",
+        "rule": "obj-$(CONFIG_XFRM_IPCOMP) += xfrm_ipcomp.o"
+      }
+    ],
+    "xfrm_user": [
+      {
+        "path": "linux-4.1.52/net/xfrm/Makefile",
+        "rule": "obj-$(CONFIG_XFRM_USER) += xfrm_user.o"
+      }
+    ],
+    "xt_CLASSIFY": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_CLASSIFY) += xt_CLASSIFY.o"
+      }
+    ],
+    "xt_CT": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_CT) += xt_CT.o"
+      }
+    ],
+    "xt_DSCP": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_DSCP) += xt_DSCP.o"
+      }
+    ],
+    "xt_HL": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_HL) += xt_HL.o"
+      }
+    ],
+    "xt_LED": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_LED) += xt_LED.o"
+      }
+    ],
+    "xt_LOG": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_LOG) += xt_LOG.o"
+      }
+    ],
+    "xt_REDIRECT": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_REDIRECT) += xt_REDIRECT.o"
+      }
+    ],
+    "xt_TCPMSS": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_TARGET_TCPMSS) += xt_TCPMSS.o"
+      }
+    ],
+    "xt_comment": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_COMMENT) += xt_comment.o"
+      }
+    ],
+    "xt_connbytes": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_CONNBYTES) += xt_connbytes.o"
+      }
+    ],
+    "xt_connlimit": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_CONNLIMIT) += xt_connlimit.o"
+      }
+    ],
+    "xt_connmark": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_CONNMARK) += xt_connmark.o"
+      }
+    ],
+    "xt_conntrack": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_CONNTRACK) += xt_conntrack.o"
+      }
+    ],
+    "xt_dscp": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_DSCP) += xt_dscp.o"
+      }
+    ],
+    "xt_ecn": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_ECN) += xt_ecn.o"
+      }
+    ],
+    "xt_esp": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_ESP) += xt_esp.o"
+      }
+    ],
+    "xt_helper": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_HELPER) += xt_helper.o"
+      }
+    ],
+    "xt_hl": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_HL) += xt_hl.o"
+      }
+    ],
+    "xt_length": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_LENGTH) += xt_length.o"
+      }
+    ],
+    "xt_limit": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_LIMIT) += xt_limit.o"
+      }
+    ],
+    "xt_mac": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_MAC) += xt_mac.o"
+      }
+    ],
+    "xt_mark": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MARK) += xt_mark.o"
+      }
+    ],
+    "xt_multiport": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_MULTIPORT) += xt_multiport.o"
+      }
+    ],
+    "xt_nat": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_NAT) += xt_nat.o"
+      }
+    ],
+    "xt_policy": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_POLICY) += xt_policy.o"
+      }
+    ],
+    "xt_recent": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_RECENT) += xt_recent.o"
+      }
+    ],
+    "xt_state": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_STATE) += xt_state.o"
+      }
+    ],
+    "xt_statistic": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_STATISTIC) += xt_statistic.o"
+      }
+    ],
+    "xt_tcpmss": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_TCPMSS) += xt_tcpmss.o"
+      }
+    ],
+    "xt_time": [
+      {
+        "path": "linux-4.1.52/net/netfilter/Makefile",
+        "rule": "obj-$(CONFIG_NETFILTER_XT_MATCH_TIME) += xt_time.o"
+      }
+    ],
+    "zlib_deflate": [
+      {
+        "path": "linux-4.1.52/lib/zlib_deflate/Makefile",
+        "rule": "obj-$(CONFIG_ZLIB_DEFLATE) += zlib_deflate.o"
+      }
+    ],
+    "zlib_inflate": [
+      {
+        "path": "linux-4.1.52/lib/zlib_inflate/Makefile",
+        "rule": "obj-$(CONFIG_ZLIB_INFLATE) += zlib_inflate.o"
+      }
+    ]
+  },
+  "groups": {
+    "kmod-8021q": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-8021q_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "865fda54b9f9024c97960e9fdf6f6a16bcec7521342801db2a52a6b44c5cb490",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "8021q"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/8021q/8021q.ko",
+        "modules": [
+          "8021q"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-ac97": {
+      "depends": "kernel, kmod-sound-core",
+      "extra_files": [],
+      "filename": "kmod-ac97_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "181664462e79b033800e1fa0496b9e0d0be2dc8a7b87bd986fab955450ec93bb",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ac97_bus",
+        "snd-ac97-codec"
+      ]
+    },
+    "kmod-appletalk": {
+      "depends": "kernel, kmod-llc",
+      "extra_files": [],
+      "filename": "kmod-appletalk_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "fe79a2838954f2be73f8e82d3ea7c00ee9881812f6b2752c7674292c40e94cce",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "appletalk",
+        "ipddp"
+      ]
+    },
+    "kmod-bankmgr": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-bankmgr_4.1.38+1.0-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a5613708698899a5e4b210e8b916cc1c38ea2c033e13886bbcc63fb42d2e5e4f",
+      "legacy_version": "4.1.38+1.0-1",
+      "modules": [
+        "bankmgr"
+      ]
+    },
+    "kmod-bluetooth": {
+      "depends": "kernel, kmod-usb-core, kmod-crypto-hash, kmod-crypto-ecb, kmod-lib-crc16, kmod-hid",
+      "extra_files": [],
+      "filename": "kmod-bluetooth_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "66e22e4769b12b16f4ccd0066f1eb8b808e53ebc61ddc2ee1c42fbfad86469e0",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "bluetooth",
+        "bnep",
+        "btusb",
+        "hci_uart",
+        "hidp",
+        "rfcomm"
+      ]
+    },
+    "kmod-bridge": {
+      "depends": "kernel, kmod-stp",
+      "extra_files": [],
+      "filename": "kmod-bridge_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "6ee56139b6ef40d46627fb9edc33bacf29328939880141a30fbc8cf32a5734b7",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "bridge"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/bridge/bridge.ko",
+        "modules": [
+          "bridge"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-crypto-aead": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-aead_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "716161f81c95d322ee7d9b569b636892ba7f921d112fa3b4fb3324a1226b3509",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "aead"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/aead.ko",
+        "modules": [
+          "aead"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-aes": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-aes_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "58e01299e1f1ba2a4dde700f91a6e39beecce39f21f5f53697ae26e61e67b9b0",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "aes_generic"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/aes_generic.ko",
+        "modules": [
+          "aes_generic"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-arc4": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-arc4_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "4aad05d9812618b8805fdea9f856d481aa3256fe781acadd61decfb64e956cdd",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "arc4"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/arc4.ko",
+        "modules": [
+          "arc4"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-authenc": {
+      "depends": "kernel, kmod-crypto-manager, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-authenc_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a0387f372aabf2a56e865ca0dda0f0b57b3d13df17e2947496742a3fc00eb441",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "authenc"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/authenc.ko",
+        "modules": [
+          "authenc"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-cbc": {
+      "depends": "kernel, kmod-crypto-manager, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-cbc_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "b01901e54d3e3c014da5475b727dc9f67b17e8de60c1055160c6b726d93df02d",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "cbc"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/cbc.ko",
+        "modules": [
+          "cbc"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-core": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-crypto-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "7d9face4ee8c4309ce6724cea9186f6559b732f3867459df00bab49d0cceee0b",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "crypto_algapi",
+        "crypto_blkcipher"
+      ],
+      "source_definition": {
+        "expression": "CRYPTO_MODULES = ALGAPI2=crypto_algapi BLKCIPHER2=crypto_blkcipher",
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-crc32c": {
+      "depends": "kernel, kmod-crypto-hash, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-crc32c_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "4c64b0c69ae92e7f7e34599f9b0d239a1bf0d1856d392944fd4c4422338c8e09",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "crc32c_generic"
+      ]
+    },
+    "kmod-crypto-deflate": {
+      "depends": "kernel, kmod-lib-zlib, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-deflate_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "e1a51543d745dabea98887a15cd0e482cb386c21e5b68874d6bbf64b44304654",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "deflate"
+      ]
+    },
+    "kmod-crypto-des": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-des_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9920face2c128a3a72446ce3fc4a34aaaa767ee88e67e4217698e19a8a41ef7d",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "des_generic"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/des_generic.ko",
+        "modules": [
+          "des_generic"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-ecb": {
+      "depends": "kernel, kmod-crypto-manager, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-ecb_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d223b117ecfafe2d8e7ab392e985433e1615937a84a33f9333d3720f71b77a8c",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ecb"
+      ]
+    },
+    "kmod-crypto-hash": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-hash_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "0589d6336f03206d0b3de4473b8303c73c0189dcff8948e661b94f4aff66179a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "crypto_hash"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/crypto_hash.ko",
+        "modules": [
+          "crypto_hash"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-hmac": {
+      "depends": "kernel, kmod-crypto-manager, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-hmac_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a9c668f8e11f5308334a0c41cd1d91c19022de6134d70249706dfcb6fc75c132",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "hmac"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/hmac.ko",
+        "modules": [
+          "hmac"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-iv": {
+      "depends": "kernel, kmod-crypto-manager, kmod-crypto-rng, kmod-crypto-wq, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-iv_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "7d7c195c8223a14dc828b5a156a063f06e6e2041bf6b41157eeb5ae28900b860",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "chainiv",
+        "eseqiv"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/eseqiv.ko  \t$(LINUX_DIR)/crypto/chainiv.ko",
+        "modules": [
+          "chainiv",
+          "eseqiv"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-manager": {
+      "depends": "kernel, kmod-crypto-aead, kmod-crypto-hash, kmod-crypto-pcompress, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-manager_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d42d0ac77f28ae34a548fac68137e2fad8f3031ad0bcebe4325712c82ee4452f",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "cryptomgr"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/cryptomgr.ko",
+        "modules": [
+          "cryptomgr"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-md5": {
+      "depends": "kernel, kmod-crypto-hash, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-md5_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "bb22a0da7641693c2d45cd58fb8589ae7b29ee6de626331c43af03ce3f1fc56b",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "md5"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/md5.ko",
+        "modules": [
+          "md5"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-null": {
+      "depends": "kernel, kmod-crypto-core, kmod-crypto-manager",
+      "extra_files": [],
+      "filename": "kmod-crypto-null_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "485119e9715b72c8eff8153acadb425511322f5a374200687c71a2b72e90e711",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "crypto_null"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/crypto_null.ko",
+        "modules": [
+          "crypto_null"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-ocf": {
+      "depends": "kernel, kmod-crypto-manager, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-ocf_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a7febd80a373f6b35238a942b227cb38c6c4436e3701dcf13d3f0b3ede6f2338",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "cryptodev",
+        "cryptosoft",
+        "ocf"
+      ]
+    },
+    "kmod-crypto-ocf-hifn7751": {
+      "depends": "kernel, kmod-crypto-ocf, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-ocf-hifn7751_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "164157349807c721b5e9edcf310f5f3f40818698c5cac628fee5039746af295b",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "hifn7751"
+      ]
+    },
+    "kmod-crypto-ocf-hifnhipp": {
+      "depends": "kernel, kmod-crypto-ocf, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-ocf-hifnhipp_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "7fb37ae709cf576e4cedc53df0d901ad2d7332d4ef2adc98a855c51aba73d0dc",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "hifnHIPP"
+      ]
+    },
+    "kmod-crypto-pcompress": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-pcompress_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "b7c1906fa4f23c7d3f119692fcaf2c041014a28bf154bb343af8d50fcdfacec8",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "pcompress"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/pcompress.ko",
+        "modules": [
+          "pcompress"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-rng": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-rng_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "8ac4818e35aa795641bc2d83586e2020ad12631253f080d17cd67d9e3d398130",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "krng",
+        "rng"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/rng.ko  \t$(LINUX_DIR)/crypto/krng.ko",
+        "modules": [
+          "krng",
+          "rng"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-sha1": {
+      "depends": "kernel, kmod-crypto-hash, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-sha1_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "1e2ad4fbe2b42a04bd26755a98a340c8560d37e4495ac0934beb2ff0e575930e",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "sha1_generic"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/sha1_generic.ko",
+        "modules": [
+          "sha1_generic"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-crypto-user": {
+      "depends": "kernel, kmod-crypto-hash, kmod-crypto-manager, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-user_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a1c3649b43918313feefc7abe7600729af95ffbcf3850b120b2e0aec7cba03fe",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "af_alg",
+        "algif_hash",
+        "algif_skcipher"
+      ]
+    },
+    "kmod-crypto-wq": {
+      "depends": "kernel, kmod-crypto-core",
+      "extra_files": [],
+      "filename": "kmod-crypto-wq_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "10aaf097f498a2403b1a086d9bcd59d0d62d8aa556904fcff4996a4f99cadec1",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "crypto_wq"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/crypto/crypto_wq.ko",
+        "modules": [
+          "crypto_wq"
+        ],
+        "path": "package/kernel/linux/modules/crypto.mk"
+      }
+    },
+    "kmod-dm": {
+      "depends": "kernel, kmod-crypto-manager",
+      "extra_files": [],
+      "filename": "kmod-dm_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d74fd196b3096b4188c21fce129aa93e0638a2bfda95f4d69ee9d596db786aa4",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "dm-crypt",
+        "dm-log",
+        "dm-mirror",
+        "dm-mod",
+        "dm-region-hash"
+      ]
+    },
+    "kmod-echo": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-echo_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "0475c8ac81e42d4323b4e3ce763e2bc0cae39f3d08bca2d11bbf5f308ed59ee8",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "echo"
+      ]
+    },
+    "kmod-gpio-button-hotplug": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-gpio-button-hotplug_4.1.38-2_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "2ee28f42b5010f0723cb8607ff17279f663cee67560a3e6fc178101b0de9a05a",
+      "legacy_version": "4.1.38-2",
+      "modules": [
+        "gpio-button-hotplug"
+      ]
+    },
+    "kmod-gre": {
+      "depends": "kernel, kmod-ipv6, kmod-iptunnel",
+      "extra_files": [],
+      "filename": "kmod-gre_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "6f710b8981408f1d18cf8f551d2a26708a7fd08fc81516a66517a0a9a6789a6c",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "gre",
+        "ip_gre"
+      ]
+    },
+    "kmod-hid": {
+      "depends": "kernel, kmod-input-core, kmod-input-evdev",
+      "extra_files": [],
+      "filename": "kmod-hid_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "8b3a50d42026b6476bc1e878ea9e52d2309c067d17333cf6fab99a37f7439bc3",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "hid"
+      ]
+    },
+    "kmod-i2c-algo-bit": {
+      "depends": "kernel, kmod-i2c-core",
+      "extra_files": [],
+      "filename": "kmod-i2c-algo-bit_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "10654ababe02c92bf89be3446db8c2d9a972746a4a977426d0e2874d4bd50fed",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "i2c-algo-bit"
+      ]
+    },
+    "kmod-i2c-algo-pca": {
+      "depends": "kernel, kmod-i2c-core",
+      "extra_files": [],
+      "filename": "kmod-i2c-algo-pca_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "91561937c4d6436040d3bbd9cfdcb6d3e05e98c8cdedee00b0edb01d0b612899",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "i2c-algo-pca"
+      ]
+    },
+    "kmod-i2c-algo-pcf": {
+      "depends": "kernel, kmod-i2c-core",
+      "extra_files": [],
+      "filename": "kmod-i2c-algo-pcf_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "4332ae7935568c1709fb2a8fda19832ea0cd04e30fad3e6cd689347d57a7abe2",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "i2c-algo-pcf"
+      ]
+    },
+    "kmod-i2c-core": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-i2c-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "272df1343686af4e527bf53ed9aad3603d9f253d7c6437e494dd4878c11fa256",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "i2c-core",
+        "i2c-dev"
+      ]
+    },
+    "kmod-i2c-gpio": {
+      "depends": "kernel, kmod-i2c-algo-bit",
+      "extra_files": [],
+      "filename": "kmod-i2c-gpio_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "ae58e730bcb2e133452626153a776149b579a804545c0aed995f87192d14ac7b",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "i2c-gpio"
+      ]
+    },
+    "kmod-i2c-mux": {
+      "depends": "kernel (=4.1.38-1-1f69508df87972a17a15c214cf07124c), kmod-i2c-core",
+      "extra_files": [],
+      "filename": "kmod-i2c-mux_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "cef7429e0b9195bfd820493c9f4ff523822a9c4868404a53c3c6eeeb403dc18b",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "i2c-mux"
+      ]
+    },
+    "kmod-i2c-mux-pca9541": {
+      "depends": "kernel (=4.1.38-1-ff8c23a6b1c93792131dfbaa5ccae09c), kmod-i2c-mux",
+      "extra_files": [],
+      "filename": "kmod-i2c-mux-pca9541_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "f18f926d7ecfa72dad6a3b0855fd4b9a8bb8046b31f244a7fc345e8473831378",
+      "legacy_version": "4.1.38-1",
+      "modules": []
+    },
+    "kmod-i2c-mux-pca954x": {
+      "depends": "kernel (=4.1.38-1-ff8c23a6b1c93792131dfbaa5ccae09c), kmod-i2c-mux",
+      "extra_files": [],
+      "filename": "kmod-i2c-mux-pca954x_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "6d542a82ff3c435910b5de3d52793873e1c2346b3acda4979d92f988c23aff27",
+      "legacy_version": "4.1.38-1",
+      "modules": []
+    },
+    "kmod-i2c-tiny-usb": {
+      "depends": "kernel, kmod-i2c-core, kmod-usb-core",
+      "extra_files": [],
+      "filename": "kmod-i2c-tiny-usb_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "4c22bb69c02aa08f5ef703fd5f5b40c77121b5371789deeb483a02b7865038f3",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "i2c-tiny-usb"
+      ]
+    },
+    "kmod-ide-aec62xx": {
+      "depends": "kernel, kmod-ide-core",
+      "extra_files": [],
+      "filename": "kmod-ide-aec62xx_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "20a18df07465c5fbc8d3a57b5d43c9aa5fcd8c46f3fe8d09760927482ad42e54",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "aec62xx"
+      ]
+    },
+    "kmod-ide-core": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-ide-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "8c5f067d67efb21a5d3777d8d69ea208cfb696adabf033d8a0952b70bb450c8a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ide-core",
+        "ide-gd_mod"
+      ]
+    },
+    "kmod-ide-generic": {
+      "depends": "kernel, kmod-ide-core",
+      "extra_files": [],
+      "filename": "kmod-ide-generic_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "96d6ce9506cca57d40645b180f3b5f1781f7fe54819c63ac81bf54414133b4d4",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ide-pci-generic"
+      ]
+    },
+    "kmod-ide-generic-old": {
+      "depends": "kernel, kmod-ide-core",
+      "extra_files": [],
+      "filename": "kmod-ide-generic-old_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "11afbe45c55d62eb550a641aa5b4e3a3386c7d4bd1f98185a874e1300ab7bc33",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ide-generic"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/ide/ide-generic.ko",
+        "modules": [
+          "ide-generic"
+        ],
+        "path": "package/kernel/linux/modules/block.mk"
+      }
+    },
+    "kmod-ide-it821x": {
+      "depends": "kernel, kmod-ide-core",
+      "extra_files": [],
+      "filename": "kmod-ide-it821x_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "c766b1da98d8f98f622745653a41a658a2bc262c2e23f8582a25dcfc54213131",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "it821x"
+      ]
+    },
+    "kmod-ide-pdc202xx": {
+      "depends": "kernel, kmod-ide-core",
+      "extra_files": [],
+      "filename": "kmod-ide-pdc202xx_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "aaac2248cefd6915d3d1eacec4cbd6daa3cc639d46d2b0bd11e9ed67f2522601",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "pdc202xx_old"
+      ]
+    },
+    "kmod-ifb": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-ifb_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "944b7958e94ef66162dde6754e39fb8ff5ef70e1b1d387d4d6f6a5c5c952dd13",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ifb"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/net/ifb.ko",
+        "modules": [
+          "ifb"
+        ],
+        "path": "package/kernel/linux/modules/netdevices.mk"
+      }
+    },
+    "kmod-input-core": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-input-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "1d9b1ec0f438eae0d21a4d49c89cf6e9e6b9c415cf6b67e5b7dcfc5b7ff429e9",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "input-core"
+      ]
+    },
+    "kmod-input-evdev": {
+      "depends": "kernel, kmod-input-core",
+      "extra_files": [],
+      "filename": "kmod-input-evdev_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "962dd05cb7ba82b9fc76655d4dcd90fa361dbcdfb0f4c4708f5ffd247c410838",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "evdev"
+      ]
+    },
+    "kmod-ip6tables": {
+      "depends": "kernel, kmod-nf-ipt6, kmod-ipt-core, kmod-ipt-conntrack",
+      "extra_files": [],
+      "filename": "kmod-ip6tables_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "b5125bfb391d5f58ced8a26edae797c73d92098fedc616535e616e626da55d79",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ip6t_REJECT",
+        "ip6table_filter",
+        "ip6table_mangle",
+        "nf_log_ipv6"
+      ]
+    },
+    "kmod-ipsec": {
+      "depends": "kernel, kmod-crypto-authenc, kmod-crypto-iv, kmod-crypto-des, kmod-crypto-hmac, kmod-crypto-md5, kmod-crypto-sha1, kmod-crypto-deflate, kmod-crypto-cbc",
+      "extra_files": [],
+      "filename": "kmod-ipsec_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "e50ba97e0c56f12f787d947447f794d86fb89d7139bfe230a17c294fb7dca7cb",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "af_key",
+        "xfrm_algo",
+        "xfrm_ipcomp",
+        "xfrm_user"
+      ]
+    },
+    "kmod-ipsec4": {
+      "depends": "kernel, kmod-ipsec, kmod-iptunnel4",
+      "extra_files": [],
+      "filename": "kmod-ipsec4_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "c6ef097ee5db8ef19a8567d69f16f1af086f632d59cb020258545e77593b6007",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ah4",
+        "esp4",
+        "ipcomp",
+        "xfrm4_mode_beet",
+        "xfrm4_mode_transport",
+        "xfrm4_mode_tunnel",
+        "xfrm4_tunnel"
+      ]
+    },
+    "kmod-ipsec6": {
+      "depends": "kernel, kmod-ipsec, kmod-iptunnel6",
+      "extra_files": [],
+      "filename": "kmod-ipsec6_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "b877892c58cd4133c8718a6514dac9c0c49b3b417817b4925d3e92c80babbcee",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ah6",
+        "esp6",
+        "ipcomp6",
+        "xfrm6_mode_beet",
+        "xfrm6_mode_transport",
+        "xfrm6_mode_tunnel",
+        "xfrm6_tunnel"
+      ]
+    },
+    "kmod-ipt-conntrack": {
+      "depends": "kernel, kmod-ipt-core, kmod-nf-conntrack",
+      "extra_files": [],
+      "filename": "kmod-ipt-conntrack_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "3de5626408ed230cf58593ed23584032e7933690c00957db7c0f0ca1d7437ac0",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "xt_CT",
+        "xt_conntrack",
+        "xt_state"
+      ]
+    },
+    "kmod-ipt-conntrack-extra": {
+      "depends": "kernel, kmod-ipt-core, kmod-ipt-conntrack",
+      "extra_files": [],
+      "filename": "kmod-ipt-conntrack-extra_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a522e7da7654afb4ff0af9fca0a456cdcc5d865cdb12888ddffe6eac07763ef5",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "xt_connbytes",
+        "xt_connlimit",
+        "xt_connmark",
+        "xt_helper",
+        "xt_recent"
+      ]
+    },
+    "kmod-ipt-core": {
+      "depends": "kernel, kmod-nf-ipt",
+      "extra_files": [],
+      "filename": "kmod-ipt-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "4f81b14f0dca5b43b629727fb704b625664999b15e91245007e2e23d3f28886a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ipt_REJECT",
+        "iptable_filter",
+        "iptable_mangle",
+        "nf_log_common",
+        "nf_log_ipv4",
+        "xt_LOG",
+        "xt_TCPMSS",
+        "xt_comment",
+        "xt_limit",
+        "xt_mac",
+        "xt_mark",
+        "xt_multiport",
+        "xt_time"
+      ]
+    },
+    "kmod-ipt-ipopt": {
+      "depends": "kernel, kmod-ipt-core",
+      "extra_files": [],
+      "filename": "kmod-ipt-ipopt_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "132c684c78cdb4b516c354f7a0d6ba099f2430466d072448414e69b0bff46623",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ipt_ECN",
+        "xt_CLASSIFY",
+        "xt_DSCP",
+        "xt_HL",
+        "xt_dscp",
+        "xt_ecn",
+        "xt_hl",
+        "xt_length",
+        "xt_statistic",
+        "xt_tcpmss"
+      ]
+    },
+    "kmod-ipt-ipsec": {
+      "depends": "kernel, kmod-ipt-core",
+      "extra_files": [],
+      "filename": "kmod-ipt-ipsec_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "6509ae61e9bb66861438171f4a46843897284f6cce8ccd54bfe0a6b94e4280ab",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ipt_ah",
+        "xt_esp",
+        "xt_policy"
+      ]
+    },
+    "kmod-ipt-nat": {
+      "depends": "kernel, kmod-ipt-core, kmod-nf-nat",
+      "extra_files": [],
+      "filename": "kmod-ipt-nat_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "ef05647a58cd35398499587b74c222cd54fef7223b95b17d78c05d70a507710e",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ipt_MASQUERADE",
+        "iptable_nat",
+        "xt_REDIRECT",
+        "xt_nat"
+      ]
+    },
+    "kmod-iptunnel": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-iptunnel_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "ebd3c25683d6b26f1136cb03f25d3a2f32329a3f805103e5108cce62bd8632fb",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ip_tunnel"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/ipv4/ip_tunnel.ko",
+        "modules": [
+          "ip_tunnel"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-iptunnel4": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-iptunnel4_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "cbfdb52869fb3d3e4de72550d5f5b93ff7b9e68992c6aea580f69873e874dadf",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "tunnel4"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/ipv4/tunnel4.ko",
+        "modules": [
+          "tunnel4"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-iptunnel6": {
+      "depends": "kernel, kmod-ipv6",
+      "extra_files": [],
+      "filename": "kmod-iptunnel6_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "f1a89c18d98522550b87b3099fd1519c4220bc0f9873d5aa185c100f8ac48895",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "tunnel6"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/ipv6/tunnel6.ko",
+        "modules": [
+          "tunnel6"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-ipv6": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-ipv6_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a065a032833c61b573ddfc36702d9c0d12fa5a192865b148eb5c2a09fd4d0e79",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ipv6"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/ipv6/ipv6.ko",
+        "modules": [
+          "ipv6"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-ipvti": {
+      "depends": "kernel, kmod-iptunnel, kmod-iptunnel4, kmod-ipsec4",
+      "extra_files": [],
+      "filename": "kmod-ipvti_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "88bed3426049a8bd70db973a333de7df413257ab21cbfb6faf354e9ab4f90964",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ip_vti"
+      ]
+    },
+    "kmod-ledtrig-morse": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-ledtrig-morse_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d44271f9ef0b777f1a6be24cc88c8c4915f03dd649432d8187516551369c9264",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ledtrig-morse"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/leds/ledtrig-morse.ko",
+        "modules": [
+          "ledtrig-morse"
+        ],
+        "path": "package/kernel/linux/modules/leds.mk"
+      }
+    },
+    "kmod-ledtrig-netfilter": {
+      "depends": "kernel, kmod-ipt-core",
+      "extra_files": [],
+      "filename": "kmod-ledtrig-netfilter_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9b281a98a9b457eb117881273a8da09806b27b535f06e2c930cb3ff7c32bb662",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "xt_LED"
+      ]
+    },
+    "kmod-ledtrig-usbdev": {
+      "depends": "kernel (=4.1.38-1-ff8c23a6b1c93792131dfbaa5ccae09c), kmod-usb-core",
+      "extra_files": [],
+      "filename": "kmod-ledtrig-usbdev_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "db1bef14a8369cf3a94a0f63f90bb31c711bb9f8904aa3b57e08d5ad13d156e3",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ledtrig-usbdev"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/leds/ledtrig-usbdev.ko",
+        "modules": [
+          "ledtrig-usbdev"
+        ],
+        "path": "package/kernel/linux/modules/leds.mk"
+      }
+    },
+    "kmod-lib-crc-ccitt": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-lib-crc-ccitt_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "fea27f30c190cfeca03f801ac892dc9a0a2d8d49e6bb411541682dfbb46fd5c3",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "crc-ccitt"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/lib/crc-ccitt.ko",
+        "modules": [
+          "crc-ccitt"
+        ],
+        "path": "package/kernel/linux/modules/lib.mk"
+      }
+    },
+    "kmod-lib-crc16": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-lib-crc16_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "305448590871c1b1b5ffffa21ff5c71f60441227f4ad82bf04dfd4db4374e478",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "crc16"
+      ]
+    },
+    "kmod-lib-crc32c": {
+      "depends": "kernel, kmod-crypto-crc32c",
+      "extra_files": [],
+      "filename": "kmod-lib-crc32c_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "58f8f5ac3cc5ccbfda62c800d89388a3cd74673e28faf992bc1c53b013d9d65c",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "libcrc32c"
+      ]
+    },
+    "kmod-lib-lz4": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-lib-lz4_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "fd54527200c31908a830e6701ea3b8f312a9ef039478d80d969d165a1f1cd95c",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "lz4_compress",
+        "lz4_decompress"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/lib/lz4/lz4_compress.ko  \t$(LINUX_DIR)/lib/lz4/lz4_decompress.ko",
+        "modules": [
+          "lz4_compress",
+          "lz4_decompress"
+        ],
+        "path": "package/kernel/linux/modules/lib.mk"
+      }
+    },
+    "kmod-lib-lzo": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-lib-lzo_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "11805139f2c4249672187d41c38118ee65d8d77996bdec387bf393db0c1ebdbe",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "lzo_compress",
+        "lzo_decompress"
+      ]
+    },
+    "kmod-lib-zlib": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-lib-zlib_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "cf17c1fefc1ef7fb6d99f9480b4e61d73f31a6abb7c006d99e3719e60637f19c",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "zlib_deflate",
+        "zlib_inflate"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/lib/zlib_deflate/zlib_deflate.ko      $(LINUX_DIR)/lib/zlib_inflate/zlib_inflate.ko",
+        "modules": [
+          "zlib_deflate",
+          "zlib_inflate"
+        ],
+        "path": "package/kernel/linux/modules/lib.mk"
+      }
+    },
+    "kmod-llc": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-llc_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "38352d9a74b014542b4307f5d3562d7cc1fb4284eb915730ade69902098fdf39",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "llc",
+        "p8022",
+        "psnap"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/llc/llc.ko  \t$(LINUX_DIR)/net/802/p8022.ko  \t$(LINUX_DIR)/net/802/psnap.ko",
+        "modules": [
+          "llc",
+          "p8022",
+          "psnap"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-net-airo": {
+      "depends": "kernel (=4.1.38-1-24688351dfa9c34860764824dde605f8)",
+      "extra_files": [],
+      "filename": "kmod-net-airo_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "3d4584223e267c20cc76a801dfdd3e2177f716aed42f3be705cafa2fea02f457",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "airo"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/net/wireless/airo.ko",
+        "modules": [
+          "airo"
+        ],
+        "path": "package/kernel/linux/modules/wireless.mk"
+      }
+    },
+    "kmod-net-rtl8188eu": {
+      "depends": "kernel (=4.1.38-1-24688351dfa9c34860764824dde605f8), r8188eu-firmware, kmod-usb-core",
+      "extra_files": [],
+      "filename": "kmod-net-rtl8188eu_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a49318bb1a61cf2c78d3a245ae7730aee0bd015a9d6ad915da5e278bf947c59d",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "r8188eu"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/staging/rtl8188eu/r8188eu.ko",
+        "modules": [
+          "r8188eu"
+        ],
+        "path": "package/kernel/linux/modules/wireless.mk"
+      }
+    },
+    "kmod-nf-conntrack": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-nf-conntrack_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9dc9baa530922b71beab19d1ec75186ec11fc267650d714be72d8a5ef2d09781",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "nf_conntrack",
+        "nf_conntrack_ipv4",
+        "nf_conntrack_rtcache",
+        "nf_defrag_ipv4"
+      ]
+    },
+    "kmod-nf-conntrack6": {
+      "depends": "kernel, kmod-ipv6, kmod-nf-conntrack",
+      "extra_files": [],
+      "filename": "kmod-nf-conntrack6_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "477f30382727ddcc40019c26ca5f858abd5ccd1d61a1d4d1c54e5ae2945b8055",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "nf_conntrack_ipv6",
+        "nf_defrag_ipv6"
+      ]
+    },
+    "kmod-nf-ipt": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-nf-ipt_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "98e1d1826afe099fcab2f33500b97bbe0cf20b94c471c4673c674a537cb72fe9",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ip_tables"
+      ]
+    },
+    "kmod-nf-ipt6": {
+      "depends": "kernel, kmod-nf-ipt, kmod-nf-conntrack6",
+      "extra_files": [],
+      "filename": "kmod-nf-ipt6_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "666ed8a867c230447cda6f88e3ef92f8769aa41de9d9e1728da1a4447d97c2e8",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ip6_tables"
+      ]
+    },
+    "kmod-nf-nat": {
+      "depends": "kernel, kmod-nf-conntrack, kmod-nf-ipt",
+      "extra_files": [],
+      "filename": "kmod-nf-nat_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9b95e9da9896938ff812899d8860cc785ef65c7ef08a7faa3eb42ff073e6e89e",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "nf_nat",
+        "nf_nat_ipv4",
+        "nf_nat_masquerade_ipv4",
+        "nf_nat_redirect"
+      ]
+    },
+    "kmod-nf-nat6": {
+      "depends": "kernel, kmod-nf-conntrack6, kmod-nf-ipt6, kmod-nf-nat",
+      "extra_files": [],
+      "filename": "kmod-nf-nat6_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "94c6ce48a93e29519347dbec3572cd10f3b92014d553549e908b7f0ee5831906",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "nf_nat_ipv6",
+        "nf_nat_masquerade_ipv6"
+      ]
+    },
+    "kmod-nls-base": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-nls-base_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "142308f2edf0852501c5fdbad12a766df58ccf27927757767af5f2759780935e",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "nls_base"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/fs/nls/nls_base.ko",
+        "modules": [
+          "nls_base"
+        ],
+        "path": "package/kernel/linux/modules/nls.mk"
+      }
+    },
+    "kmod-openvswitch": {
+      "depends": "kernel, kmod-lib-crc32c, kmod-mpls, kmod-nf-nat, kmod-nf-nat6",
+      "extra_files": [],
+      "filename": "kmod-openvswitch_4.1.38+2.8.5-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "19ab2ceb902ed2bcd280cb63a3143fcd32679b83ba80aa51b503d8db49213d5d",
+      "legacy_version": "4.1.38+2.8.5-1",
+      "modules": [
+        "openvswitch"
+      ]
+    },
+    "kmod-openvswitch-geneve": {
+      "depends": "kernel, kmod-openvswitch, kmod-geneve",
+      "extra_files": [],
+      "filename": "kmod-openvswitch-geneve_4.1.38+2.8.5-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "2f7f54d2571fad2461f40ddd656d11c5a8251006bb06bf41dc203a6bcf47633a",
+      "legacy_version": "4.1.38+2.8.5-1",
+      "modules": []
+    },
+    "kmod-openvswitch-gre": {
+      "depends": "kernel, kmod-openvswitch, kmod-gre",
+      "extra_files": [],
+      "filename": "kmod-openvswitch-gre_4.1.38+2.8.5-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d13a9d57d5f4ae98649380f6fae18f1f36aa36a31136f12370d7d5351c0ba819",
+      "legacy_version": "4.1.38+2.8.5-1",
+      "modules": [
+        "vport-gre"
+      ]
+    },
+    "kmod-openvswitch-vxlan": {
+      "depends": "kernel, kmod-openvswitch, kmod-vxlan",
+      "extra_files": [],
+      "filename": "kmod-openvswitch-vxlan_4.1.38+2.8.5-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "43391f4cb122c093bf4a59e264bae618090eadc66b063b01c1bc963ebfadcb25",
+      "legacy_version": "4.1.38+2.8.5-1",
+      "modules": [
+        "vport-vxlan"
+      ]
+    },
+    "kmod-ppp": {
+      "depends": "kernel, kmod-lib-crc-ccitt, kmod-slhc",
+      "extra_files": [],
+      "filename": "kmod-ppp_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "5e62da82373ef0cbe0eaf570b85d0a9673eb54a8b17fa94fd0f2a46b52b371ad",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ppp_async",
+        "ppp_generic"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/net/ppp/ppp_async.ko  \t$(LINUX_DIR)/drivers/net/ppp/ppp_generic.ko",
+        "modules": [
+          "ppp_async",
+          "ppp_generic"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-pppoe": {
+      "depends": "kernel, kmod-ppp, kmod-pppox",
+      "extra_files": [],
+      "filename": "kmod-pppoe_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "df443ede17748d385c25c3f2fe65f07c973b64d0ffdef8574761e3e6877187c4",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "pppoe"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/net/ppp/pppoe.ko",
+        "modules": [
+          "pppoe"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-pppox": {
+      "depends": "kernel, kmod-ppp",
+      "extra_files": [],
+      "filename": "kmod-pppox_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "ce78207640fdf7bf603f78de7bc9cf2c6842a478608774efbee405003e0a284f",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "pppox"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/net/ppp/pppox.ko",
+        "modules": [
+          "pppox"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-regmap": {
+      "depends": "kernel, kmod-lib-lzo, kmod-i2c-core",
+      "extra_files": [],
+      "filename": "kmod-regmap_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d611cf2d6822b1c7a4cf1ce12d878d80adf064447982d13aacad50df835d1786",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "regmap-core",
+        "regmap-i2c",
+        "regmap-spi"
+      ]
+    },
+    "kmod-ripdrv": {
+      "depends": "kernel, kmod-tommath, kmod-tomcrypt, kmod-platform",
+      "extra_files": [
+        "etc/uci-defaults/tch_0000-ripcontent",
+        "lib/preinit/97_rip",
+        "lib/preinit/98_boardname",
+        "usr/sbin/rip-create-efu.sh",
+        "usr/sbin/rip-write-efu.sh"
+      ],
+      "filename": "kmod-ripdrv_4.1.38+2014.01-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "fb2d4455a42ef94fe425714ef9525af9c459cc0266e5bf7043b7bdf246bf8994",
+      "legacy_version": "4.1.38+2014.01-1",
+      "modules": [
+        "ripdrv"
+      ]
+    },
+    "kmod-sched-cake": {
+      "depends": "kernel, kmod-ipt-conntrack",
+      "extra_files": [],
+      "filename": "kmod-sched-cake_4.1.38+2019-01-08-331ac70c-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "72d7698e5d428bda72687aac855c6232eef633e7d44d4a93d8bad20c955e4aba",
+      "legacy_version": "4.1.38+2019-01-08-331ac70c-1",
+      "modules": [
+        "sch_cake"
+      ]
+    },
+    "kmod-sched-connmark": {
+      "depends": "kernel, kmod-sched-core, kmod-ipt-core, kmod-ipt-conntrack-extra",
+      "extra_files": [],
+      "filename": "kmod-sched-connmark_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "64bcf8ef0e3f7fdd3d6f890895b14b9a23a4fa8fa88601df17bb7462c478ecec",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "act_connmark"
+      ]
+    },
+    "kmod-sched-core": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-sched-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9bd229159ec85c0966d704069153a525b0bcf3c4a11df6d2123de419290d76b2",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "act_skbedit",
+        "cls_flow",
+        "em_u32",
+        "sch_hfsc"
+      ]
+    },
+    "kmod-sched-esfq": {
+      "depends": "kernel, kmod-sched-core, kmod-ipt-core, kmod-ipt-conntrack",
+      "extra_files": [],
+      "filename": "kmod-sched-esfq_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "71aeb5a6dad93673341e99c381505927df6910807dd5f527302c6ed6ec33fde6",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "sch_esfq"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/sched/sch_esfq.ko",
+        "modules": [
+          "sch_esfq"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-slhc": {
+      "depends": "kernel, kmod-lib-crc-ccitt",
+      "extra_files": [],
+      "filename": "kmod-slhc_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9e2c54eeca542583cc8622e7240ac03e118daba86447b9a5cd7fb7d01c454a0a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "slhc"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/net/slip/slhc.ko",
+        "modules": [
+          "slhc"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-sound-core": {
+      "depends": "kernel, kmod-input-core",
+      "extra_files": [],
+      "filename": "kmod-sound-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "91168b50c0e805238706d0c13eaf91d2d4248b280a48ad336b2a81e1e5fe4c84",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "snd",
+        "snd-compress",
+        "snd-hwdep",
+        "snd-mixer-oss",
+        "snd-pcm",
+        "snd-pcm-oss",
+        "snd-rawmidi",
+        "snd-seq-device",
+        "snd-timer",
+        "soundcore"
+      ]
+    },
+    "kmod-sound-i8x0": {
+      "depends": "kernel, kmod-ac97, kmod-sound-core",
+      "extra_files": [],
+      "filename": "kmod-sound-i8x0_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "ad80fb9f2816899a65de710481aab612790ed83257aeaa405fc92c3a0f30d463",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "snd-intel8x0"
+      ]
+    },
+    "kmod-sound-soc-ac97": {
+      "depends": "kernel, kmod-ac97, kmod-sound-soc-core, kmod-sound-core",
+      "extra_files": [],
+      "filename": "kmod-sound-soc-ac97_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "a8bcf2d89708f79d952d63f144760b27d9e2f5a4c41505ef77c07204bca37c6f",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "snd-soc-ac97"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/sound/soc/codecs/snd-soc-ac97.ko",
+        "modules": [
+          "snd-soc-ac97"
+        ],
+        "path": "package/kernel/linux/modules/sound.mk"
+      }
+    },
+    "kmod-sound-soc-core": {
+      "depends": "kernel, kmod-regmap, kmod-ac97, kmod-sound-core",
+      "extra_files": [],
+      "filename": "kmod-sound-soc-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "66723f1467cd0261453a50038f7feb77f97ca87a8ce22228dcc2c14a6c8724ff",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "snd-soc-core"
+      ]
+    },
+    "kmod-spi-bitbang": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-spi-bitbang_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "76dfaa21bc3b4324068aec2282042e468c8f307ffea18ab66087ad40635a13f8",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "spi-bitbang"
+      ]
+    },
+    "kmod-spi-gpio-old": {
+      "depends": "kernel, kmod-spi-bitbang",
+      "extra_files": [],
+      "filename": "kmod-spi-gpio-old_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "e3b8afc52843c454b8125be96b5626139af59b1d8e3af2c7abc91e82891ab6b3",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "spi_gpio_old"
+      ]
+    },
+    "kmod-stp": {
+      "depends": "kernel, kmod-llc",
+      "extra_files": [],
+      "filename": "kmod-stp_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "bd995d301d364207ecc4e24b14571f5153fb55c9b860641f797c6ccf0ebc5f35",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "stp"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/net/802/stp.ko",
+        "modules": [
+          "stp"
+        ],
+        "path": "package/kernel/linux/modules/netsupport.mk"
+      }
+    },
+    "kmod-tomcrypt": {
+      "depends": "kernel, kmod-tommath",
+      "extra_files": [],
+      "filename": "kmod-tomcrypt_4.1.38+1.17-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "40a27e01c19a0bad5e82e19358a85b7ec628350c42833edc99b73606e089635b",
+      "legacy_version": "4.1.38+1.17-1",
+      "modules": [
+        "tomcrypt"
+      ]
+    },
+    "kmod-tommath": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-tommath_4.1.38+0.42.0-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "3f47cce2f9412773ba4a65db387c07c61ff709de64ebdd9b28b5990176ecc291",
+      "legacy_version": "4.1.38+0.42.0-1",
+      "modules": [
+        "tommath"
+      ]
+    },
+    "kmod-tun": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-tun_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "52095760f5bdee528cf17031afa84e052a2120b33b5be3d5c6b79afacb43bfb7",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "tun"
+      ]
+    },
+    "kmod-udptunnel4": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-udptunnel4_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "efab8962a32c48a93557009b58b9157fe69c9f4fb4052f52219e502c5fd2db13",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "udp_tunnel"
+      ]
+    },
+    "kmod-udptunnel6": {
+      "depends": "kernel",
+      "extra_files": [],
+      "filename": "kmod-udptunnel6_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "c8071f09c406a043e86efc105e50faca084952912a016a0f9fdbb7ff9d176a21",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ip6_udp_tunnel"
+      ]
+    },
+    "kmod-usb-acm": {
+      "depends": "kernel, kmod-usb-core",
+      "extra_files": [],
+      "filename": "kmod-usb-acm_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "15e8657c41a27b1ce25f00dd2b057e51c2b7a9d311667180ef3d9b147872c200",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "cdc-acm"
+      ]
+    },
+    "kmod-usb-audio": {
+      "depends": "kernel, kmod-usb-core, kmod-sound-core",
+      "extra_files": [],
+      "filename": "kmod-usb-audio_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "939583c7ee21d87d5b43001fd73b097ca8890b104348ee77954b6b25dfa6f66b",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "snd-usb-audio",
+        "snd-usbmidi-lib"
+      ]
+    },
+    "kmod-usb-core": {
+      "depends": "kernel, kmod-nls-base",
+      "extra_files": [],
+      "filename": "kmod-usb-core_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "ae2301fffd94b18a44805423d7144670a64aafa31a20385ee263f071dbce3172",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "usb-common",
+        "usbcore"
+      ],
+      "source_definition": {
+        "files": "$(LINUX_DIR)/drivers/usb/core/usbcore.ko  \t$(LINUX_DIR)/drivers/usb/common/usb-common.ko",
+        "modules": [
+          "usb-common",
+          "usbcore"
+        ],
+        "path": "package/kernel/linux/modules/usb.mk"
+      }
+    },
+    "kmod-usb-net": {
+      "depends": "kernel, kmod-usb-core",
+      "extra_files": [],
+      "modules": [
+        "usbnet"
+      ],
+      "source": "Explicit single-module capability; ELF dependency closure is checked against the profile."
+    },
+    "kmod-usb-net-cdc-ether": {
+      "depends": "kernel, kmod-usb-net",
+      "extra_files": [],
+      "modules": [
+        "cdc_ether"
+      ],
+      "source": "Explicit single-module capability; ELF dependency closure is checked against the profile."
+    },
+    "kmod-usb-net-rndis": {
+      "depends": "kernel, kmod-usb-net-cdc-ether",
+      "extra_files": [],
+      "modules": [
+        "rndis_host"
+      ],
+      "source": "Explicit single-module capability; ELF dependency closure is checked against the profile."
+    },
+    "kmod-usb-ohci": {
+      "depends": "kernel, kmod-usb-core",
+      "extra_files": [],
+      "filename": "kmod-usb-ohci_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "46f7ffaf1745de21ed4b6c9c762ad660ac7697594da876af80eded8909dc380a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ohci-hcd"
+      ]
+    },
+    "kmod-usb-serial": {
+      "depends": "kernel, kmod-usb-core",
+      "extra_files": [],
+      "filename": "kmod-usb-serial_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "4de9b9df9663cd6f86b16bfccea5d0d01d0a3e11220588c533a45798503f8f2a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "usbserial"
+      ]
+    },
+    "kmod-usb-serial-ark3116": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-ark3116_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "50738d8c6cceb5c63ac2238a8536db397c3ada689e369bd7d60404bf7d3a70cf",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ark3116"
+      ]
+    },
+    "kmod-usb-serial-belkin": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-belkin_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "67a6c7f2b9cce76374dd4d64eee9ab48d29f5fc1a21d004b41c145fa10b29825",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "belkin_sa"
+      ]
+    },
+    "kmod-usb-serial-ch341": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-ch341_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "0702f02fa8c40713d1dad180b3d40a7364ac9d6f175cfe95cdeed24101af0982",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ch341"
+      ]
+    },
+    "kmod-usb-serial-cp210x": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-cp210x_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "695c79e9820cadb8d44bb0b37924bd8bb398826a6570201574b8e05ce669f1c8",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "cp210x"
+      ]
+    },
+    "kmod-usb-serial-cypress-m8": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-cypress-m8_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "2c5d4506284b9828f617bfa20edb4ebdb4dc913c131aaf9c6de435809243455a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "cypress_m8"
+      ]
+    },
+    "kmod-usb-serial-dmx_usb_module": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-dmx_usb_module_4.1.38+0.1.20130818-2_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "0a26ae9643db0435a080c9f3ad802c632255b89e21e8f857f14aa6dde2cf78b8",
+      "legacy_version": "4.1.38+0.1.20130818-2",
+      "modules": [
+        "dmx_usb"
+      ]
+    },
+    "kmod-usb-serial-ftdi": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-ftdi_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "433a285d54cfbaa180b109d16ebe6d03bbb601723396fb64b31bfbe974494183",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ftdi_sio"
+      ]
+    },
+    "kmod-usb-serial-garmin": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-garmin_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9a113f06495051f6327961d845e396dbb56900f985d289244df80398bc4d43df",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "garmin_gps"
+      ]
+    },
+    "kmod-usb-serial-ipw": {
+      "depends": "kernel, kmod-usb-serial, kmod-usb-serial-wwan",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-ipw_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "0a871147abeb87b5ffb608522ba53b1a5b9eaf4f2379a5e16a0745e3ba5685e7",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ipw"
+      ]
+    },
+    "kmod-usb-serial-keyspan": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-keyspan_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d65694e7234ae51bcf75528ee78009390d6ab98adcd57921fc6daf5cf516449a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ezusb",
+        "keyspan"
+      ]
+    },
+    "kmod-usb-serial-mct": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-mct_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "321272e840fc46dc6705060166a84e800df69c45fb72b7581881bfad7edcc90a",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "mct_u232"
+      ]
+    },
+    "kmod-usb-serial-mos7720": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-mos7720_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "98543cb5096b0cb402297bf2ffc1d44fcc67a2f2375ecd6bb98226e209a435b5",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "mos7720"
+      ]
+    },
+    "kmod-usb-serial-option": {
+      "depends": "kernel, kmod-usb-serial-wwan, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-option_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "b84033c4d02816193e9cc79fafe78d1fa6417527892dedf7dbd58986c6ca594b",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "option"
+      ]
+    },
+    "kmod-usb-serial-oti6858": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-oti6858_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "08a0607cab3a78aeab98fcc068689635f046295158fc1e74e16f0e1b9913e18e",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "oti6858"
+      ]
+    },
+    "kmod-usb-serial-pl2303": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-pl2303_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "3fc18d5d18c51086763cbaca50d8bf57863ed4a226524d55d30527a253f97a1d",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "pl2303"
+      ]
+    },
+    "kmod-usb-serial-qualcomm": {
+      "depends": "kernel, kmod-usb-serial, kmod-usb-serial-wwan",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-qualcomm_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "95e38b06c94e6d7702d16538b77fcbbc95bf755ad1012b0f171845b84925483c",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "qcserial"
+      ]
+    },
+    "kmod-usb-serial-sierrawireless": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-sierrawireless_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "8d9db063db0b636db9b51f8f24e87b2c499e08d4697c5e8da3218d95ff9aac40",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "sierra"
+      ]
+    },
+    "kmod-usb-serial-simple": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-simple_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "980f9392683c5472dfa520c753d3a36662a93714f814a63be2efc84d15836b79",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "usb-serial-simple"
+      ]
+    },
+    "kmod-usb-serial-ti-usb": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-ti-usb_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "41f389129564ba754d38274c07dd8122c3cc7a0b8990403416dd9227c7806f3e",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ti_usb_3410_5052"
+      ]
+    },
+    "kmod-usb-serial-visor": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-visor_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "9f914a2fd0f9936fdb0f5e712a7151d76c4989e65ff2b3518c859f2ea8f906db",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "visor"
+      ]
+    },
+    "kmod-usb-serial-wwan": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-wwan_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "fe41e370b97ae054c4c8aba5b9cca7e648d003d51b4b1d83cfd16c30a6904d4e",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "usb_wwan"
+      ]
+    },
+    "kmod-usb-serial-xr_usb_serial_common": {
+      "depends": "kernel, kmod-usb-serial",
+      "extra_files": [],
+      "filename": "kmod-usb-serial-xr_usb_serial_common_4.1.38+1a-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d87cd808d11fc3a07abad03c2e069eb89c501d775e93fa23d3d07ba42c7f97b8",
+      "legacy_version": "4.1.38+1a-1",
+      "modules": [
+        "xr_usb_serial_common"
+      ]
+    },
+    "kmod-usb2": {
+      "depends": "kernel, kmod-usb-core",
+      "extra_files": [],
+      "filename": "kmod-usb2_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "17c6225dd9cf96d577764dae5fa048fbb3c81da58af286da338248e20691ec82",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "ehci-hcd"
+      ]
+    },
+    "kmod-vxlan": {
+      "depends": "kernel, kmod-iptunnel, kmod-udptunnel4, kmod-udptunnel6",
+      "extra_files": [],
+      "filename": "kmod-vxlan_4.1.38-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "d77db8ab6b294c8ed6aad507463036adcb8e64a226a9e5cc14c5ce51d99e51b6",
+      "legacy_version": "4.1.38-1",
+      "modules": [
+        "vxlan"
+      ]
+    },
+    "kmod-wireguard": {
+      "depends": "kernel, kmod-udptunnel6, kmod-udptunnel4",
+      "extra_files": [],
+      "filename": "kmod-wireguard_4.1.38+0.0.20190601-1_arm_cortex-a9_neon.ipk",
+      "ipk_sha256": "b84dd4b309e205e624d852a2a6702cf8895b8c9493bd6a574c25dd62ef3b0031",
+      "legacy_version": "4.1.38+0.0.20190601-1",
+      "modules": [
+        "wireguard"
+      ]
+    }
+  },
+  "kernel_makefiles_archive_sha256": "6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c",
+  "legacy_commit": "c95d063dbb495f7edbef5a27ae81acafa14f8f6f",
+  "legacy_url": "https://raw.githubusercontent.com/Ansuel/GUI_ipk/c95d063dbb495f7edbef5a27ae81acafa14f8f6f/target/packages/",
+  "module_definitions_archive_sha256": "803f3e0dc04fd0be1a0d17854b7caab1ef78d2c32ae6676746393ac614d74db8"
+}

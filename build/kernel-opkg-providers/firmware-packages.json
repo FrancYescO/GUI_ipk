@@ -1,0 +1,3551 @@
+{
+  "4.1.38-vbntk": {
+    "kernel_package": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
+    "packages": {
+      "kmod-bankmgr": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "bankmgr"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-bcm-usb1": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ohci-hcd",
+          "ohci-pci",
+          "ohci-platform"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm-usb2": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "bcm_usb",
+          "ehci-hcd",
+          "ehci-pci",
+          "ehci-platform"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm-usb3": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "xhci-hcd",
+          "xhci-plat-hcd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-adsl": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-xtm",
+        "extra_files": [],
+        "modules": [
+          "adsldd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-bdmf": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "bdmf"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-dsphal": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "dsphal"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-enet": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-pktflow, kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-bdmf, kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "bcm_enet"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-ethoam": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "nciTMSkmod"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-i2c-bus": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-i2c-core",
+        "extra_files": [],
+        "modules": [
+          "i2c_bcm6xxx"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-ingqos": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "bcm_ingqos"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-mcast": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "bcmmcast"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-otp": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "otp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-pktflow": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-xtmrtdrv, kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-bdmf",
+        "extra_files": [],
+        "modules": [
+          "pktflow"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-pktrunner": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-pktflow, kmod-bcm63xx-tch-rdpa-drv",
+        "extra_files": [],
+        "modules": [
+          "pktrunner"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-pwrmngt": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "pwrmngtd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "rdpa"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-drv": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-rdpa-gpl-ext, kmod-bcm63xx-tch-rdpa-mw",
+        "extra_files": [],
+        "modules": [
+          "rdpa_cmd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-gpl": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-bdmf",
+        "extra_files": [],
+        "modules": [
+          "rdpa_gpl"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-gpl-ext": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "rdpa_gpl_ext"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-mw": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "rdpa_mw"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-slicslac": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "slicslac"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-spdsvc": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-bdmf, kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "bcm_spdsvc"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wfd": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-pktrunner, kmod-bcm63xx-tch-mcast",
+        "extra_files": [],
+        "modules": [
+          "wfd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wireless": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-enet, kmod-bcm63xx-tch-wireless-emf, kmod-bcm63xx-tch-wireless-wlcsm, kmod-bcm63xx-tch-wfd",
+        "extra_files": [],
+        "modules": [
+          "wl"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wireless-emf": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-enet, kmod-bcm63xx-tch-mcast, kmod-bcm63xx-tch-wireless-wlcsm, kmod-bcm63xx-tch-wfd",
+        "extra_files": [],
+        "modules": [
+          "wlemf"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wireless-wlcsm": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "wlcsm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-xtm": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-xtmrtdrv",
+        "extra_files": [],
+        "modules": [
+          "bcmxtmcfg"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-xtmrtdrv": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "bcmxtmrtdrv"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm963xx-wdt": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "bcm963xx-wdt"
+        ],
+        "version": "4.1.38+2014.03-1"
+      },
+      "kmod-brcm63xx_tch-ipt-skiplog": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "xt_SKIPLOG"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-button-hotplug": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-input-core",
+        "extra_files": [],
+        "modules": [
+          "button-hotplug"
+        ],
+        "version": "4.1.38-3"
+      },
+      "kmod-crypto-deflate": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-lib-zlib, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "deflate"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-crypto-ecb": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-crypto-manager, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "ecb"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-crypto-sha256": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-crypto-hash, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "sha256_generic"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-crypto-sha512": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-crypto-hash, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "sha512_generic"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ebtables": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-bridge",
+        "extra_files": [],
+        "modules": [
+          "ebt_802_3",
+          "ebt_among",
+          "ebt_limit",
+          "ebt_pkttype",
+          "ebt_redirect",
+          "ebt_stp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-fs-autofs4": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "autofs4"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-fs-ext4": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-lib-crc16, kmod-crypto-hash",
+        "extra_files": [],
+        "modules": [
+          "ext4",
+          "jbd2"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-gre": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-iptunnel",
+        "extra_files": [],
+        "modules": [
+          "gre",
+          "ip_gre"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-gre6": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-iptunnel, kmod-ip6-tunnel",
+        "extra_files": [],
+        "modules": [
+          "ip6_gre"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-i2c-core": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "i2c-core",
+          "i2c-dev"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-input-core": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "input-core"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-input-gpio-keys-polled": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-input-polldev",
+        "extra_files": [],
+        "modules": [
+          "gpio_keys_polled"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-input-polldev": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-input-core",
+        "extra_files": [],
+        "modules": [
+          "input-polldev"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ip6tables": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nf-ipt6, kmod-ipt-core, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "ip6t_REJECT",
+          "ip6table_filter",
+          "ip6table_mangle",
+          "ip6table_raw",
+          "nf_log_ipv6",
+          "nf_reject_ipv6"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipip": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-iptunnel, kmod-iptunnel4",
+        "extra_files": [],
+        "modules": [
+          "ipip"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipsec": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-crypto-authenc, kmod-crypto-iv, kmod-crypto-des, kmod-crypto-hmac, kmod-crypto-md5, kmod-crypto-sha1, kmod-crypto-deflate, kmod-crypto-cbc",
+        "extra_files": [],
+        "modules": [
+          "af_key",
+          "xfrm_algo",
+          "xfrm_ipcomp",
+          "xfrm_user"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipsec4": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipsec, kmod-iptunnel4",
+        "extra_files": [],
+        "modules": [
+          "ah4",
+          "esp4",
+          "ipcomp",
+          "xfrm4_mode_beet",
+          "xfrm4_mode_transport",
+          "xfrm4_mode_tunnel",
+          "xfrm4_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipsec6": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipsec, kmod-iptunnel6",
+        "extra_files": [],
+        "modules": [
+          "ah6",
+          "esp6",
+          "ipcomp6",
+          "xfrm6_mode_beet",
+          "xfrm6_mode_transport",
+          "xfrm6_mode_tunnel",
+          "xfrm6_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-compat-xtables": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-ip6tables",
+        "extra_files": [],
+        "modules": [
+          "compat_xtables"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-conntrack": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-nf-conntrack",
+        "extra_files": [],
+        "modules": [
+          "iptable_raw",
+          "xt_CT",
+          "xt_conntrack",
+          "xt_state"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-conntrack-extra": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "xt_connbytes",
+          "xt_connlimit",
+          "xt_connmark",
+          "xt_helper",
+          "xt_recent"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-core": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nf-ipt",
+        "extra_files": [],
+        "modules": [
+          "ipt_REJECT",
+          "iptable_filter",
+          "iptable_mangle",
+          "nf_log_common",
+          "nf_log_ipv4",
+          "nf_reject_ipv4",
+          "xt_LOG",
+          "xt_TCPMSS",
+          "xt_comment",
+          "xt_limit",
+          "xt_mac",
+          "xt_mark",
+          "xt_multiport",
+          "xt_time"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-debug": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_TRACE"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-extra": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_addrtype",
+          "xt_owner",
+          "xt_physdev",
+          "xt_pkttype",
+          "xt_quota"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-filter": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-lib-textsearch, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "xt_bpf",
+          "xt_string"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-hashlimit": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_hashlimit"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-ipopt": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ipt_ECN",
+          "xt_CLASSIFY",
+          "xt_DSCP",
+          "xt_HL",
+          "xt_dscp",
+          "xt_ecn",
+          "xt_hl",
+          "xt_length",
+          "xt_statistic",
+          "xt_tcpmss"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-iprange": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_iprange"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-ipsec": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ipt_ah",
+          "xt_esp",
+          "xt_policy"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-ipset": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-nfnetlink",
+        "extra_files": [],
+        "modules": [
+          "ip_set",
+          "ip_set_bitmap_ip",
+          "ip_set_bitmap_ipmac",
+          "ip_set_bitmap_port",
+          "ip_set_hash_ip",
+          "ip_set_hash_ipmark",
+          "ip_set_hash_ipport",
+          "ip_set_hash_ipportip",
+          "ip_set_hash_ipportnet",
+          "ip_set_hash_mac",
+          "ip_set_hash_net",
+          "ip_set_hash_netiface",
+          "ip_set_hash_netnet",
+          "ip_set_hash_netport",
+          "ip_set_hash_netportnet",
+          "ip_set_list_set",
+          "xt_set"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-length2": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-ipt-compat-xtables",
+        "extra_files": [],
+        "modules": [
+          "xt_length2"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-nat": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-nf-nat",
+        "extra_files": [],
+        "modules": [
+          "ipt_MASQUERADE",
+          "iptable_nat",
+          "nf_nat_masquerade_ipv4",
+          "nf_nat_redirect",
+          "xt_REDIRECT",
+          "xt_nat"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-nat-extra": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "xt_NETMAP"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-nathelper-huawei_fcc": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-ipt-conntrack-extra, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_huawei_fcc",
+          "nf_nat_huawei_fcc"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-nathelper-rtsp": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-ipt-conntrack-extra, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_rtsp",
+          "nf_nat_rtsp"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-nfqueue": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core, kmod-nfnetlink-queue",
+        "extra_files": [],
+        "modules": [
+          "xt_NFQUEUE"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-rpfilter": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ip6t_rpfilter",
+          "ipt_rpfilter"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-tproxy": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ipt-conntrack, kmod-ip6tables, kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_TPROXY",
+          "xt_socket"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-keymanager": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ripdrv, kmod-ncr",
+        "extra_files": [],
+        "modules": [
+          "keymanager"
+        ],
+        "version": "4.1.38+0.0.1-1"
+      },
+      "kmod-l2tp": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-udptunnel4, kmod-udptunnel6",
+        "extra_files": [],
+        "modules": [
+          "l2tp_core",
+          "l2tp_netlink"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-leds-gpio": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "leds-gpio"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-default-on": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-default-on"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-netdev": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-netdev"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-pattern": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-pattern"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-timer": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-timer"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-lib-crc16": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "crc16"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-lib-textsearch": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ts_bm",
+          "ts_fsm",
+          "ts_kmp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-mii": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "mii"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-modmmswitch": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "modmmswitch"
+        ],
+        "version": "4.1.38+2012.09-1"
+      },
+      "kmod-modmmtonegen": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-modmmswitch",
+        "extra_files": [],
+        "modules": [
+          "modmmtonegen"
+        ],
+        "version": "4.1.38+2012.09-1"
+      },
+      "kmod-nat46": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "nat46"
+        ],
+        "version": "4.1.38+11-1"
+      },
+      "kmod-ncr": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-crypto-cbc, kmod-crypto-ecb, kmod-crypto-iv",
+        "extra_files": [],
+        "modules": [
+          "ncrmod"
+        ],
+        "version": "4.1.38+0.2-tch-1"
+      },
+      "kmod-nf-conntrack": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack",
+          "nf_conntrack_ipv4",
+          "nf_conntrack_rtcache",
+          "nf_defrag_ipv4"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-conntrack-netlink": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nfnetlink, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_netlink"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-conntrack6": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nf-conntrack",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_ipv6",
+          "nf_defrag_ipv6"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-ipt": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ip_tables"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-ipt6": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nf-ipt, kmod-nf-conntrack6",
+        "extra_files": [],
+        "modules": [
+          "ip6_tables"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-nat": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nf-conntrack, kmod-nf-ipt",
+        "extra_files": [],
+        "modules": [
+          "nf_nat",
+          "nf_nat_ipv4"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-nathelper": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nf-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_ftp",
+          "nf_nat_ftp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-nathelper-extra": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nf-nat, kmod-lib-textsearch",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_amanda",
+          "nf_conntrack_broadcast",
+          "nf_conntrack_h323",
+          "nf_conntrack_irc",
+          "nf_conntrack_pptp",
+          "nf_conntrack_proto_gre",
+          "nf_conntrack_sip",
+          "nf_conntrack_snmp",
+          "nf_conntrack_tftp",
+          "nf_nat_amanda",
+          "nf_nat_h323",
+          "nf_nat_irc",
+          "nf_nat_pptp",
+          "nf_nat_proto_gre",
+          "nf_nat_sip",
+          "nf_nat_snmp_basic",
+          "nf_nat_tftp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nfnetlink": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "nfnetlink"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nfnetlink-queue": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nfnetlink",
+        "extra_files": [],
+        "modules": [
+          "nfnetlink_queue"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nls-utf8": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-nls-base",
+        "extra_files": [],
+        "modules": [
+          "nls_utf8"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-paragon": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "jnl",
+          "ufsd"
+        ],
+        "version": "4.1.38+9.4.4-1"
+      },
+      "kmod-phoenix": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "dect"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-platform": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-bcm63xx-tch-otp",
+        "extra_files": [],
+        "modules": [
+          "platform"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-platform-gpl": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "platform-gpl"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-pppol2tp": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-ppp, kmod-pppox, kmod-l2tp",
+        "extra_files": [],
+        "modules": [
+          "l2tp_ppp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-qos_tch": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "cls_qos_ingress_tch",
+          "cls_qos_vlan_tch",
+          "sch_qos_tch"
+        ],
+        "version": "4.1.38+1.0-6"
+      },
+      "kmod-ripdrv": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-tommath, kmod-tomcrypt, kmod-platform",
+        "extra_files": [],
+        "modules": [
+          "ripdrv"
+        ],
+        "version": "4.1.38+2014.01-1"
+      },
+      "kmod-sfp-i2cdrv": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-i2c-core, kmod-bcm63xx-tch-i2c-bus",
+        "extra_files": [],
+        "modules": [
+          "sff8472_i2c"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-technicolor-button": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-button-hotplug, kmod-input-gpio-keys-polled",
+        "extra_files": [],
+        "modules": [
+          "technicolor_button"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-technicolor-led": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-leds-gpio",
+        "extra_files": [],
+        "modules": [
+          "technicolor_led"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-tomcrypt": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-tommath",
+        "extra_files": [],
+        "modules": [
+          "tomcrypt"
+        ],
+        "version": "4.1.38+1.17-1"
+      },
+      "kmod-tommath": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "tommath"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-udptunnel4": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "udp_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-udptunnel6": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)",
+        "extra_files": [],
+        "modules": [
+          "ip6_udp_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-acm": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "cdc-acm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-mii, kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usbnet"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-cdc-ncm": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "cdc_ncm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-huawei-cdc-ncm": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-net, kmod-usb-net-cdc-ncm, kmod-usb-wdm",
+        "extra_files": [],
+        "modules": [
+          "huawei_cdc_ncm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-qmi-wwan": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-net, kmod-usb-wdm",
+        "extra_files": [],
+        "modules": [
+          "qmi_wwan"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-sierrawireless": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "sierra_net"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-printer": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usblp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usbserial"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial-option": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-serial-wwan, kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "option"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial-qualcomm": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-serial, kmod-usb-serial-wwan",
+        "extra_files": [],
+        "modules": [
+          "qcserial"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial-sierrawireless": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "sierra"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial-wwan": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "usb_wwan"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-storage": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-scsi-core, kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usb-storage"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-wdm": {
+        "depends": "kernel (=4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "cdc-wdm"
+        ],
+        "version": "4.1.38-1"
+      }
+    },
+    "source": "Installed firmware package control/list metadata; only exact kernel-ABI bindings accepted"
+  },
+  "4.1.38-vbnto": {
+    "kernel_package": "4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d",
+    "packages": {
+      "kmod-bankmgr": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "bankmgr"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-bcm-usb1": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ohci-hcd",
+          "ohci-pci",
+          "ohci-platform"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm-usb2": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "bcm_usb",
+          "ehci-hcd",
+          "ehci-pci",
+          "ehci-platform"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm-usb3": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "xhci-hcd",
+          "xhci-plat-hcd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-adsl": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-xtm",
+        "extra_files": [],
+        "modules": [
+          "adsldd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-bdmf": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "bdmf"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-dsphal": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "dsphal"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-enet": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-pktflow, kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-bdmf, kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "bcm_enet"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-ethoam": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "nciTMSkmod"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-i2c-bus": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-i2c-core",
+        "extra_files": [],
+        "modules": [
+          "i2c_bcm6xxx"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-ingqos": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "bcm_ingqos"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-mcast": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "bcmmcast"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-otp": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "otp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-pktflow": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-xtmrtdrv, kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-bdmf",
+        "extra_files": [],
+        "modules": [
+          "pktflow"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-pktrunner": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-pktflow, kmod-bcm63xx-tch-rdpa-drv",
+        "extra_files": [],
+        "modules": [
+          "pktrunner"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-pwrmngt": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "pwrmngtd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "rdpa"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-drv": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-rdpa-gpl-ext, kmod-bcm63xx-tch-rdpa-mw",
+        "extra_files": [],
+        "modules": [
+          "rdpa_cmd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-gpl": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-bdmf",
+        "extra_files": [],
+        "modules": [
+          "rdpa_gpl"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-gpl-ext": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "rdpa_gpl_ext"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-rdpa-mw": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "rdpa_mw"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-slicslac": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "slicslac"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-spdsvc": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-rdpa-gpl, kmod-bcm63xx-tch-bdmf, kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "bcm_spdsvc"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wfd": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-pktrunner, kmod-bcm63xx-tch-mcast",
+        "extra_files": [],
+        "modules": [
+          "wfd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wireless": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-enet, kmod-bcm63xx-tch-wireless-emf, kmod-bcm63xx-tch-wireless-wlcsm, kmod-bcm63xx-tch-wfd",
+        "extra_files": [],
+        "modules": [
+          "wl"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wireless-dhd": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-enet, kmod-bcm63xx-tch-mcast, kmod-bcm63xx-tch-wireless-emf, kmod-bcm63xx-tch-wireless-wlcsm, kmod-bcm63xx-tch-wfd",
+        "extra_files": [],
+        "modules": [
+          "dhd"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wireless-emf": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-enet, kmod-bcm63xx-tch-mcast, kmod-bcm63xx-tch-wireless-wlcsm, kmod-bcm63xx-tch-wfd",
+        "extra_files": [],
+        "modules": [
+          "wlemf"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-wireless-wlcsm": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "wlcsm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-xtm": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-xtmrtdrv",
+        "extra_files": [],
+        "modules": [
+          "bcmxtmcfg"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm63xx-tch-xtmrtdrv": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "bcmxtmrtdrv"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-bcm963xx-wdt": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "bcm963xx-wdt"
+        ],
+        "version": "4.1.38+2014.03-1"
+      },
+      "kmod-brcm63xx_tch-ipt-skiplog": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "xt_SKIPLOG"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-button-hotplug": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-input-core",
+        "extra_files": [],
+        "modules": [
+          "button-hotplug"
+        ],
+        "version": "4.1.38-3"
+      },
+      "kmod-crypto-deflate": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-lib-zlib, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "deflate"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-crypto-ecb": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-crypto-manager, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "ecb"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-crypto-sha256": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-crypto-hash, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "sha256_generic"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-crypto-sha512": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-crypto-hash, kmod-crypto-core",
+        "extra_files": [],
+        "modules": [
+          "sha512_generic"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ebtables": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-bridge",
+        "extra_files": [],
+        "modules": [
+          "ebt_802_3",
+          "ebt_among",
+          "ebt_limit",
+          "ebt_pkttype",
+          "ebt_redirect",
+          "ebt_stp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-fs-autofs4": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "autofs4"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-fs-ext4": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-lib-crc16, kmod-crypto-hash",
+        "extra_files": [],
+        "modules": [
+          "ext4",
+          "jbd2"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-gobiserial": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "GobiSerial"
+        ],
+        "version": "4.1.38+2.25-1"
+      },
+      "kmod-gre": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-iptunnel",
+        "extra_files": [],
+        "modules": [
+          "gre",
+          "ip_gre"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-gre6": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-iptunnel, kmod-ip6-tunnel",
+        "extra_files": [],
+        "modules": [
+          "ip6_gre"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-hwmon-core": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "hwmon"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-hwmon-lm75": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-hwmon-core, kmod-i2c-core",
+        "extra_files": [],
+        "modules": [
+          "lm75"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-i2c-algo-bit": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-i2c-core",
+        "extra_files": [],
+        "modules": [
+          "i2c-algo-bit"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-i2c-core": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "i2c-core",
+          "i2c-dev"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-input-core": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "input-core"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-input-gpio-keys-polled": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-input-polldev",
+        "extra_files": [],
+        "modules": [
+          "gpio_keys_polled"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-input-polldev": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-input-core",
+        "extra_files": [],
+        "modules": [
+          "input-polldev"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ip6tables": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nf-ipt6, kmod-ipt-core, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "ip6t_REJECT",
+          "ip6table_filter",
+          "ip6table_mangle",
+          "ip6table_raw",
+          "nf_log_ipv6",
+          "nf_reject_ipv6"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipip": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-iptunnel, kmod-iptunnel4",
+        "extra_files": [],
+        "modules": [
+          "ipip"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipsec": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-crypto-authenc, kmod-crypto-iv, kmod-crypto-des, kmod-crypto-hmac, kmod-crypto-md5, kmod-crypto-sha1, kmod-crypto-deflate, kmod-crypto-cbc",
+        "extra_files": [],
+        "modules": [
+          "af_key",
+          "xfrm_algo",
+          "xfrm_ipcomp",
+          "xfrm_user"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipsec4": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipsec, kmod-iptunnel4",
+        "extra_files": [],
+        "modules": [
+          "ah4",
+          "esp4",
+          "ipcomp",
+          "xfrm4_mode_beet",
+          "xfrm4_mode_transport",
+          "xfrm4_mode_tunnel",
+          "xfrm4_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipsec6": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipsec, kmod-iptunnel6",
+        "extra_files": [],
+        "modules": [
+          "ah6",
+          "esp6",
+          "ipcomp6",
+          "xfrm6_mode_beet",
+          "xfrm6_mode_transport",
+          "xfrm6_mode_tunnel",
+          "xfrm6_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-compat-xtables": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-ip6tables",
+        "extra_files": [],
+        "modules": [
+          "compat_xtables"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-conntrack": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-nf-conntrack",
+        "extra_files": [],
+        "modules": [
+          "iptable_raw",
+          "xt_CT",
+          "xt_conntrack",
+          "xt_state"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-conntrack-extra": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "xt_connbytes",
+          "xt_connlimit",
+          "xt_connmark",
+          "xt_helper",
+          "xt_recent"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-core": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nf-ipt",
+        "extra_files": [],
+        "modules": [
+          "ipt_REJECT",
+          "iptable_filter",
+          "iptable_mangle",
+          "nf_log_common",
+          "nf_log_ipv4",
+          "nf_reject_ipv4",
+          "xt_LOG",
+          "xt_TCPMSS",
+          "xt_comment",
+          "xt_limit",
+          "xt_mac",
+          "xt_mark",
+          "xt_multiport",
+          "xt_time"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-debug": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_TRACE"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-extra": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_addrtype",
+          "xt_owner",
+          "xt_physdev",
+          "xt_pkttype",
+          "xt_quota"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-filter": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-lib-textsearch, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "xt_bpf",
+          "xt_string"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-hashlimit": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_hashlimit"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-ipopt": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ipt_ECN",
+          "xt_CLASSIFY",
+          "xt_DSCP",
+          "xt_HL",
+          "xt_dscp",
+          "xt_ecn",
+          "xt_hl",
+          "xt_length",
+          "xt_statistic",
+          "xt_tcpmss"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-iprange": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_iprange"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-ipsec": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ipt_ah",
+          "xt_esp",
+          "xt_policy"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-ipset": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-nfnetlink",
+        "extra_files": [],
+        "modules": [
+          "ip_set",
+          "ip_set_bitmap_ip",
+          "ip_set_bitmap_ipmac",
+          "ip_set_bitmap_port",
+          "ip_set_hash_ip",
+          "ip_set_hash_ipmark",
+          "ip_set_hash_ipport",
+          "ip_set_hash_ipportip",
+          "ip_set_hash_ipportnet",
+          "ip_set_hash_mac",
+          "ip_set_hash_net",
+          "ip_set_hash_netiface",
+          "ip_set_hash_netnet",
+          "ip_set_hash_netport",
+          "ip_set_hash_netportnet",
+          "ip_set_list_set",
+          "xt_set"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-length2": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-ipt-compat-xtables",
+        "extra_files": [],
+        "modules": [
+          "xt_length2"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-nat": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-nf-nat",
+        "extra_files": [],
+        "modules": [
+          "ipt_MASQUERADE",
+          "iptable_nat",
+          "nf_nat_masquerade_ipv4",
+          "nf_nat_redirect",
+          "xt_REDIRECT",
+          "xt_nat"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-nat-extra": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "xt_NETMAP"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-nathelper-huawei_fcc": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-ipt-conntrack-extra, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_huawei_fcc",
+          "nf_nat_huawei_fcc"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-nathelper-rtsp": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-ipt-conntrack-extra, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_rtsp",
+          "nf_nat_rtsp"
+        ],
+        "version": "4.1.38+2.14-1"
+      },
+      "kmod-ipt-nfqueue": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core, kmod-nfnetlink-queue",
+        "extra_files": [],
+        "modules": [
+          "xt_NFQUEUE"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-rpfilter": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ip6t_rpfilter",
+          "ipt_rpfilter"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ipt-tproxy": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ipt-conntrack, kmod-ip6tables, kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_TPROXY",
+          "xt_socket"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-keymanager": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ripdrv, kmod-ncr",
+        "extra_files": [],
+        "modules": [
+          "keymanager"
+        ],
+        "version": "4.1.38+0.0.1-1"
+      },
+      "kmod-l2tp": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-udptunnel4, kmod-udptunnel6",
+        "extra_files": [],
+        "modules": [
+          "l2tp_core",
+          "l2tp_netlink"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-leds-gpio": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "leds-gpio"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-default-on": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-default-on"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-netdev": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-netdev"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-pattern": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-pattern"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-ledtrig-timer": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-timer"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-lib-crc16": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "crc16"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-lib-textsearch": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ts_bm",
+          "ts_fsm",
+          "ts_kmp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-mii": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "mii"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-modmmswitch": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "modmmswitch"
+        ],
+        "version": "4.1.38+2012.09-1"
+      },
+      "kmod-modmmtonegen": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-modmmswitch",
+        "extra_files": [],
+        "modules": [
+          "modmmtonegen"
+        ],
+        "version": "4.1.38+2012.09-1"
+      },
+      "kmod-nat46": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "nat46"
+        ],
+        "version": "4.1.38+11-1"
+      },
+      "kmod-ncr": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-crypto-cbc, kmod-crypto-ecb, kmod-crypto-iv",
+        "extra_files": [],
+        "modules": [
+          "ncrmod"
+        ],
+        "version": "4.1.38+0.2-tch-1"
+      },
+      "kmod-nf-conntrack": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack",
+          "nf_conntrack_ipv4",
+          "nf_conntrack_rtcache",
+          "nf_defrag_ipv4"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-conntrack-netlink": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nfnetlink, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_netlink"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-conntrack6": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nf-conntrack",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_ipv6",
+          "nf_defrag_ipv6"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-ipt": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ip_tables"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-ipt6": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nf-ipt, kmod-nf-conntrack6",
+        "extra_files": [],
+        "modules": [
+          "ip6_tables"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-nat": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nf-conntrack, kmod-nf-ipt",
+        "extra_files": [],
+        "modules": [
+          "nf_nat",
+          "nf_nat_ipv4"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-nathelper": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nf-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_ftp",
+          "nf_nat_ftp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nf-nathelper-extra": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nf-nat, kmod-lib-textsearch",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_amanda",
+          "nf_conntrack_broadcast",
+          "nf_conntrack_h323",
+          "nf_conntrack_irc",
+          "nf_conntrack_pptp",
+          "nf_conntrack_proto_gre",
+          "nf_conntrack_sip",
+          "nf_conntrack_snmp",
+          "nf_conntrack_tftp",
+          "nf_nat_amanda",
+          "nf_nat_h323",
+          "nf_nat_irc",
+          "nf_nat_pptp",
+          "nf_nat_proto_gre",
+          "nf_nat_sip",
+          "nf_nat_snmp_basic",
+          "nf_nat_tftp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nfnetlink": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "nfnetlink"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nfnetlink-queue": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nfnetlink",
+        "extra_files": [],
+        "modules": [
+          "nfnetlink_queue"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-nls-utf8": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-nls-base",
+        "extra_files": [],
+        "modules": [
+          "nls_utf8"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-paragon": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "jnl",
+          "ufsd"
+        ],
+        "version": "4.1.38+9.4.4-1"
+      },
+      "kmod-platform": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-bcm63xx-tch-otp",
+        "extra_files": [],
+        "modules": [
+          "platform"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-platform-gpl": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "platform-gpl"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-pppol2tp": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-ppp, kmod-pppox, kmod-l2tp",
+        "extra_files": [],
+        "modules": [
+          "l2tp_ppp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-qos_tch": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "cls_qos_ingress_tch",
+          "cls_qos_vlan_tch",
+          "sch_qos_tch"
+        ],
+        "version": "4.1.38+1.0-6"
+      },
+      "kmod-ripdrv": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-tommath, kmod-tomcrypt, kmod-platform",
+        "extra_files": [],
+        "modules": [
+          "ripdrv"
+        ],
+        "version": "4.1.38+2014.01-1"
+      },
+      "kmod-sched": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-sched-core, kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "act_ipt",
+          "cls_basic",
+          "em_cmp",
+          "em_meta",
+          "em_nbyte",
+          "em_text",
+          "sch_codel",
+          "sch_fq",
+          "sch_gred",
+          "sch_pie",
+          "sch_red",
+          "sch_teql"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-sched-connmark": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-sched-core, kmod-ipt-core, kmod-ipt-conntrack-extra",
+        "extra_files": [],
+        "modules": [
+          "act_connmark"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-sched-core": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "act_skbedit",
+          "cls_flow",
+          "em_u32",
+          "sch_hfsc"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-sfp-i2cdrv": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-i2c-core, kmod-bcm63xx-tch-i2c-bus",
+        "extra_files": [],
+        "modules": [
+          "sff8472_i2c"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-technicolor-button": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-button-hotplug, kmod-input-gpio-keys-polled",
+        "extra_files": [],
+        "modules": [
+          "technicolor_button"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-technicolor-led": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-leds-gpio",
+        "extra_files": [],
+        "modules": [
+          "technicolor_led"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-tomcrypt": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-tommath",
+        "extra_files": [],
+        "modules": [
+          "tomcrypt"
+        ],
+        "version": "4.1.38+1.17-1"
+      },
+      "kmod-tommath": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "tommath"
+        ],
+        "version": "4.1.38+1.0-1"
+      },
+      "kmod-udptunnel4": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "udp_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-udptunnel6": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)",
+        "extra_files": [],
+        "modules": [
+          "ip6_udp_tunnel"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-acm": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "cdc-acm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-mii, kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usbnet"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-cdc-ether": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "cdc_ether"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-cdc-ncm": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "cdc_ncm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-huawei-cdc-ncm": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-net, kmod-usb-net-cdc-ncm, kmod-usb-wdm",
+        "extra_files": [],
+        "modules": [
+          "huawei_cdc_ncm"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-net-qmi-wwan": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-net, kmod-usb-wdm",
+        "extra_files": [],
+        "modules": [
+          "qmi_wwan"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-printer": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usblp"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usbserial"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial-option": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-serial-wwan, kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "option"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial-qualcomm": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-serial, kmod-usb-serial-wwan",
+        "extra_files": [],
+        "modules": [
+          "qcserial"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-serial-wwan": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "usb_wwan"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-storage": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-scsi-core, kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usb-storage"
+        ],
+        "version": "4.1.38-1"
+      },
+      "kmod-usb-wdm": {
+        "depends": "kernel (=4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "cdc-wdm"
+        ],
+        "version": "4.1.38-1"
+      }
+    },
+    "source": "Installed firmware package control/list metadata; only exact kernel-ABI bindings accepted"
+  },
+  "4.1.52-vbntk": {
+    "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55",
+    "packages": {
+      "kmod-bankmgr": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "bankmgr"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.0-1"
+      },
+      "kmod-bcm6xxx-tch-adsl": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-xtm",
+        "extra_files": [],
+        "modules": [
+          "adsldd"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-bcmlibs": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "bcmlibs"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-bdmf": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "bdmf"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-cmdlist": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "cmdlist"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-dsphal": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "dsphal"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-enet": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-gpl, kmod-bcm6xxx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "bcm_enet"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-ethoam": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "nciLservices",
+          "nciTMSkmod",
+          "nciexLinuxETH"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-ingqos": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "bcm_ingqos"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-ipt-nathelper-ipsec": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-conntrack, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_ipsec",
+          "nf_conntrack_proto_esp",
+          "nf_nat_ipsec",
+          "nf_nat_proto_esp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-ipt-skiplog": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "xt_SKIPLOG"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-license": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "bcm_license"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-mcast": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "bcmmcast"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-otp": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "otp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-pktflow": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-bcmlibs, kmod-bcm6xxx-tch-xtmrtdrv, kmod-bcm6xxx-tch-rdpa-gpl, kmod-bcm6xxx-tch-bdmf, kmod-bcm6xxx-tch-license",
+        "extra_files": [],
+        "modules": [
+          "pktflow"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-pktrunner": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-pktflow, kmod-bcm6xxx-tch-rdpa-mw, kmod-bcm6xxx-tch-cmdlist, kmod-bcm6xxx-tch-bcmlibs",
+        "extra_files": [],
+        "modules": [
+          "pktrunner"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-pwrmngt": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "pwrmngtd"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-rdpa": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-gpl, kmod-bcm6xxx-tch-bcmlibs",
+        "extra_files": [],
+        "modules": [
+          "rdpa"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-rdpa-drv": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-gpl, kmod-bcm6xxx-tch-rdpa-gpl-ext, kmod-bcm6xxx-tch-rdpa-mw, kmod-bcm6xxx-tch-ingqos",
+        "extra_files": [],
+        "modules": [
+          "rdpa_cmd"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-rdpa-gpl": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-bdmf",
+        "extra_files": [],
+        "modules": [
+          "rdpa_gpl"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-rdpa-gpl-ext": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "rdpa_gpl_ext"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-rdpa-mw": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-gpl, kmod-bcm6xxx-tch-rdpa",
+        "extra_files": [],
+        "modules": [
+          "rdpa_mw"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-rdpa-usr": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-gpl",
+        "extra_files": [],
+        "modules": [
+          "rdpa_usr"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-slicslac": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "slicslac"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-tcpspdtest": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-bdmf, kmod-bcm6xxx-tch-rdpa-gpl, kmod-bcm6xxx-tch-license",
+        "extra_files": [],
+        "modules": [
+          "bcm_tcpspdtest"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-usb1": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ohci-hcd",
+          "ohci-pci",
+          "ohci-platform"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-usb2": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "bcm_usb",
+          "ehci-hcd",
+          "ehci-pci",
+          "ehci-platform"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-usb3": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "xhci-hcd",
+          "xhci-plat-hcd"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-vlan": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa-mw, kmod-bcm6xxx-tch-enet",
+        "extra_files": [],
+        "modules": [
+          "bcmvlan"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-wfd": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-pktrunner, kmod-bcm6xxx-tch-mcast",
+        "extra_files": [],
+        "modules": [
+          "wfd"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-wireless": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-enet, kmod-bcm6xxx-tch-wireless-emf, kmod-bcm6xxx-tch-wireless-hnd_igs, kmod-bcm6xxx-tch-wireless-hnd, kmod-bcm6xxx-tch-wireless-wlcsm, kmod-bcm6xxx-tch-wfd",
+        "extra_files": [],
+        "modules": [
+          "wl"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-wireless-emf": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-enet, kmod-bcm6xxx-tch-mcast, kmod-bcm6xxx-tch-wireless-hnd, kmod-bcm6xxx-tch-wireless-wlcsm, kmod-bcm6xxx-tch-wfd",
+        "extra_files": [],
+        "modules": [
+          "emf"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-wireless-hnd": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-wireless-wlcsm",
+        "extra_files": [],
+        "modules": [
+          "hnd"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-wireless-hnd_igs": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-wireless-hnd, kmod-bcm6xxx-tch-wireless-emf",
+        "extra_files": [],
+        "modules": [
+          "igs"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-wireless-wlcsm": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "wlcsm"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-xtm": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-xtmrtdrv",
+        "extra_files": [],
+        "modules": [
+          "bcmxtmcfg"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm6xxx-tch-xtmrtdrv": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-rdpa, kmod-bcm6xxx-tch-bdmf",
+        "extra_files": [],
+        "modules": [
+          "bcmxtmrtdrv"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-bcm963xx-wdt": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "bcm963xx-wdt"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2014.03-1"
+      },
+      "kmod-br-netfilter": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "br_netfilter"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-button-hotplug": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-input-core",
+        "extra_files": [],
+        "modules": [
+          "button-hotplug"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-3"
+      },
+      "kmod-crypto-crc32c": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-crypto-hash",
+        "extra_files": [],
+        "modules": [
+          "crc32c_generic"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-crypto-deflate": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-lib-zlib-inflate, kmod-lib-zlib-deflate, kmod-crypto-acompress",
+        "extra_files": [],
+        "modules": [
+          "deflate"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-crypto-ecb": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-crypto-manager",
+        "extra_files": [],
+        "modules": [
+          "ecb"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-crypto-sha256": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-crypto-hash",
+        "extra_files": [],
+        "modules": [
+          "sha256_generic"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-crypto-sha512": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-crypto-hash",
+        "extra_files": [],
+        "modules": [
+          "sha512_generic"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-cryptodev": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-crypto-authenc, kmod-crypto-hash",
+        "extra_files": [],
+        "modules": [
+          "cryptodev"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.10-brcm6xxx-tch-1"
+      },
+      "kmod-ebtables": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ebt_802_3",
+          "ebt_among",
+          "ebt_limit",
+          "ebt_pkttype",
+          "ebt_redirect",
+          "ebt_stp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-fs-autofs4": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "autofs4"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-fs-ext4": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-lib-crc16, kmod-crypto-hash, kmod-crypto-crc32c",
+        "extra_files": [],
+        "modules": [
+          "ext4",
+          "jbd2"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-gobinet-broadmobi": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "BroadMobi_GobiNet"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2.36-1"
+      },
+      "kmod-gobinet-quectel": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "Quectel_GobiNet"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2.36-1"
+      },
+      "kmod-gre": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-iptunnel",
+        "extra_files": [],
+        "modules": [
+          "gre",
+          "ip_gre"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-gre6": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-iptunnel, kmod-ip6-tunnel, kmod-gre",
+        "extra_files": [],
+        "modules": [
+          "ip6_gre"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-input-core": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "input-core"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-input-gpio-keys-polled": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-input-polldev",
+        "extra_files": [],
+        "modules": [
+          "gpio_keys_polled"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-input-polldev": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-input-core",
+        "extra_files": [],
+        "modules": [
+          "input-polldev"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ip6tables": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nf-reject6, kmod-nf-ipt6, kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ip6t_REJECT",
+          "ip6table_filter",
+          "ip6table_mangle",
+          "nf_log_ipv6"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipip": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-iptunnel, kmod-iptunnel4",
+        "extra_files": [],
+        "modules": [
+          "ipip"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipsec": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-crypto-authenc, kmod-crypto-cbc, kmod-crypto-deflate, kmod-crypto-des, kmod-crypto-echainiv, kmod-crypto-hmac, kmod-crypto-iv, kmod-crypto-md5, kmod-crypto-sha1",
+        "extra_files": [],
+        "modules": [
+          "af_key",
+          "xfrm_algo",
+          "xfrm_ipcomp",
+          "xfrm_user"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipsec4": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipsec, kmod-iptunnel4",
+        "extra_files": [],
+        "modules": [
+          "ah4",
+          "esp4",
+          "ipcomp",
+          "xfrm4_mode_beet",
+          "xfrm4_mode_transport",
+          "xfrm4_mode_tunnel",
+          "xfrm4_tunnel"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipsec6": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipsec, kmod-iptunnel6",
+        "extra_files": [],
+        "modules": [
+          "ah6",
+          "esp6",
+          "ipcomp6",
+          "xfrm6_mode_beet",
+          "xfrm6_mode_transport",
+          "xfrm6_mode_tunnel",
+          "xfrm6_tunnel"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-compat-xtables": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ip6tables",
+        "extra_files": [],
+        "modules": [
+          "compat_xtables"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2.14-9"
+      },
+      "kmod-ipt-conntrack": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-nf-conntrack",
+        "extra_files": [],
+        "modules": [
+          "xt_CT",
+          "xt_conntrack",
+          "xt_state"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-conntrack-extra": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "xt_connbytes",
+          "xt_connlimit",
+          "xt_connmark",
+          "xt_helper",
+          "xt_recent"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-core": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nf-reject, kmod-nf-ipt",
+        "extra_files": [],
+        "modules": [
+          "ipt_REJECT",
+          "iptable_filter",
+          "iptable_mangle",
+          "nf_log_common",
+          "nf_log_ipv4",
+          "xt_LOG",
+          "xt_TCPMSS",
+          "xt_comment",
+          "xt_limit",
+          "xt_mac",
+          "xt_mark",
+          "xt_multiport",
+          "xt_time"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-debug": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ipt-raw, kmod-ipt-raw6",
+        "extra_files": [],
+        "modules": [
+          "xt_TRACE"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-extra": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_addrtype",
+          "xt_owner",
+          "xt_pkttype",
+          "xt_quota"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-filter": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-lib-textsearch, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "xt_blog",
+          "xt_bpf",
+          "xt_string"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-hashlimit": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_hashlimit"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-ipopt": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ipt_ECN",
+          "xt_CLASSIFY",
+          "xt_DSCP",
+          "xt_HL",
+          "xt_dscp",
+          "xt_ecn",
+          "xt_hl",
+          "xt_length",
+          "xt_statistic",
+          "xt_tcpmss"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-iprange": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_iprange"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-ipsec": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ipt_ah",
+          "xt_esp",
+          "xt_policy"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-ipset": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-nfnetlink",
+        "extra_files": [],
+        "modules": [
+          "ip_set",
+          "ip_set_bitmap_ip",
+          "ip_set_bitmap_ipmac",
+          "ip_set_bitmap_port",
+          "ip_set_hash_ip",
+          "ip_set_hash_ipmark",
+          "ip_set_hash_ipport",
+          "ip_set_hash_ipportip",
+          "ip_set_hash_ipportnet",
+          "ip_set_hash_mac",
+          "ip_set_hash_net",
+          "ip_set_hash_netiface",
+          "ip_set_hash_netnet",
+          "ip_set_hash_netport",
+          "ip_set_hash_netportnet",
+          "ip_set_list_set",
+          "xt_set"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-length2": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ipt-compat-xtables",
+        "extra_files": [],
+        "modules": [
+          "xt_length2"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2.14-9"
+      },
+      "kmod-ipt-nat": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-nf-nat",
+        "extra_files": [],
+        "modules": [
+          "ipt_MASQUERADE",
+          "iptable_nat",
+          "xt_REDIRECT",
+          "xt_nat"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-nat-extra": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "xt_NETMAP"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-nathelper-huawei_fcc": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ipt-conntrack-extra, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_huawei_fcc",
+          "nf_nat_huawei_fcc"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2.14-9"
+      },
+      "kmod-ipt-nathelper-rtsp": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ipt-conntrack-extra, kmod-ipt-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_rtsp",
+          "nf_nat_rtsp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2.14-9"
+      },
+      "kmod-ipt-nfqueue": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-nfnetlink-queue",
+        "extra_files": [],
+        "modules": [
+          "xt_NFQUEUE"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-raw": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "iptable_raw"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-raw6": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core, kmod-ip6tables",
+        "extra_files": [],
+        "modules": [
+          "ip6table_raw"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-rpfilter": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "ip6t_rpfilter",
+          "ipt_rpfilter"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ipt-tproxy": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ipt-conntrack, kmod-nf-conntrack6, kmod-ip6tables, kmod-ipt-core",
+        "extra_files": [],
+        "modules": [
+          "xt_TPROXY",
+          "xt_socket"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-keymanager": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ripdrv, kmod-ncr",
+        "extra_files": [],
+        "modules": [
+          "keymanager"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+0.0.1-1"
+      },
+      "kmod-l2tp": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-udptunnel4, kmod-udptunnel6",
+        "extra_files": [],
+        "modules": [
+          "l2tp_core",
+          "l2tp_netlink"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-leds-gpio": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "leds-gpio"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ledtrig-default-on": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-default-on"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ledtrig-netdev": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-netdev"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ledtrig-pattern": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-pattern"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-ledtrig-timer": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-timer"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-lib-crc16": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "crc16"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-lib-textsearch": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ts_bm",
+          "ts_fsm",
+          "ts_kmp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-mii": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "mii"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-modmmswitch": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "modmmswitch"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2012.09-1"
+      },
+      "kmod-modmmtonegen": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-modmmswitch",
+        "extra_files": [],
+        "modules": [
+          "modmmtonegen"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2012.09-1"
+      },
+      "kmod-nat46": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "nat46"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2017-05-12-683fbd2b-1"
+      },
+      "kmod-ncr": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-crypto-cbc, kmod-crypto-ecb, kmod-crypto-iv",
+        "extra_files": [],
+        "modules": [
+          "ncrmod"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+0.2-tch-1"
+      },
+      "kmod-nf-conntrack": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack",
+          "nf_conntrack_ipv4",
+          "nf_conntrack_rtcache",
+          "nf_defrag_ipv4"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-conntrack-netlink": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nfnetlink, kmod-ipt-conntrack",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_netlink"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-conntrack6": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nf-conntrack",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_ipv6",
+          "nf_defrag_ipv6"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-ipt": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ip_tables"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-ipt6": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nf-ipt",
+        "extra_files": [],
+        "modules": [
+          "ip6_tables"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-nat": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nf-conntrack",
+        "extra_files": [],
+        "modules": [
+          "nf_nat",
+          "nf_nat_ipv4",
+          "nf_nat_masquerade_ipv4",
+          "nf_nat_redirect"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-nathelper": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nf-nat",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_ftp",
+          "nf_nat_ftp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-nathelper-extra": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nf-nat, kmod-lib-textsearch, kmod-ipt-raw",
+        "extra_files": [],
+        "modules": [
+          "nf_conntrack_amanda",
+          "nf_conntrack_broadcast",
+          "nf_conntrack_h323",
+          "nf_conntrack_irc",
+          "nf_conntrack_pptp",
+          "nf_conntrack_proto_gre",
+          "nf_conntrack_sip",
+          "nf_conntrack_snmp",
+          "nf_conntrack_tftp",
+          "nf_nat_amanda",
+          "nf_nat_h323",
+          "nf_nat_irc",
+          "nf_nat_pptp",
+          "nf_nat_proto_gre",
+          "nf_nat_sip",
+          "nf_nat_snmp_basic",
+          "nf_nat_tftp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-reject": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "nf_reject_ipv4"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nf-reject6": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "nf_reject_ipv6"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nfnetlink": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "nfnetlink"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nfnetlink-log": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nfnetlink",
+        "extra_files": [],
+        "modules": [
+          "nfnetlink_log"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nfnetlink-queue": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nfnetlink",
+        "extra_files": [],
+        "modules": [
+          "nfnetlink_queue"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-nls-utf8": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-nls-base",
+        "extra_files": [],
+        "modules": [
+          "nls_utf8"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-paragon": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "jnl",
+          "ufsd"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+9.6.12-1"
+      },
+      "kmod-platform": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-bcm6xxx-tch-otp, kmod-platform-gpl",
+        "extra_files": [],
+        "modules": [
+          "platform"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.0-1"
+      },
+      "kmod-platform-gpl": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "platform-gpl"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.0-1"
+      },
+      "kmod-pppol2tp": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-ppp, kmod-pppox, kmod-l2tp",
+        "extra_files": [],
+        "modules": [
+          "l2tp_ppp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-qos_tch": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "cls_qos_ingress_tch",
+          "cls_qos_vlan_tch",
+          "sch_qos_tch"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.0-6"
+      },
+      "kmod-ripdrv": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-tommath, kmod-tomcrypt, kmod-platform",
+        "extra_files": [],
+        "modules": [
+          "ripdrv"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+2014.01-1"
+      },
+      "kmod-sched-core": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "act_skbedit",
+          "cls_basic",
+          "cls_flow",
+          "em_u32",
+          "sch_hfsc"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-technicolor-button": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-button-hotplug, kmod-input-gpio-keys-polled",
+        "extra_files": [],
+        "modules": [
+          "technicolor_button"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.0-1"
+      },
+      "kmod-technicolor-led": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-leds-gpio",
+        "extra_files": [],
+        "modules": [
+          "technicolor_led"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.0-1"
+      },
+      "kmod-tomcrypt": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-tommath",
+        "extra_files": [],
+        "modules": [
+          "tomcrypt"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.17-1"
+      },
+      "kmod-tommath": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "tommath"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2+1.0-1"
+      },
+      "kmod-udptunnel4": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "udp_tunnel"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-udptunnel6": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)",
+        "extra_files": [],
+        "modules": [
+          "ip6_udp_tunnel"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-acm": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "cdc-acm"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-ledtrig-usbport": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "ledtrig-usbport"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-net": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-mii, kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usbnet"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-net-cdc-ether": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "cdc_ether"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-net-cdc-ncm": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "cdc_ncm"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-net-huawei-cdc-ncm": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net, kmod-usb-net-cdc-ncm, kmod-usb-wdm",
+        "extra_files": [],
+        "modules": [
+          "huawei_cdc_ncm"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-net-qmi-wwan": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net, kmod-usb-wdm",
+        "extra_files": [],
+        "modules": [
+          "qmi_wwan"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-net-rndis": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net, kmod-usb-net-cdc-ether",
+        "extra_files": [],
+        "modules": [
+          "rndis_host"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-net-sierrawireless": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-net",
+        "extra_files": [],
+        "modules": [
+          "sierra_net"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-printer": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usblp"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-serial": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usbserial"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-serial-option": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-serial-wwan, kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "option"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-serial-qualcomm": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-serial, kmod-usb-serial-wwan",
+        "extra_files": [],
+        "modules": [
+          "qcserial"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-serial-sierrawireless": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "sierra"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-serial-wwan": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-serial",
+        "extra_files": [],
+        "modules": [
+          "usb_wwan"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-storage": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-scsi-core, kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "usb-storage"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      },
+      "kmod-usb-wdm": {
+        "depends": "kernel (=git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-usb-core",
+        "extra_files": [],
+        "modules": [
+          "cdc-wdm"
+        ],
+        "version": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1"
+      }
+    },
+    "source": "Installed firmware package control/list metadata; only exact kernel-ABI bindings accepted"
+  }
+}

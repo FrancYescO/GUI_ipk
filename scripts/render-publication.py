@@ -32,7 +32,9 @@ def page(title, selected, groups, feeds, prefix):
         for record in groups[group]:
             fields = parse(record['control'])
             description = html.escape(fields.get('Description', ''))
-            if fields.get('X-Module-Staging-Only') == 'yes':
+            if fields.get('X-Kernel-Capability') == 'yes':
+                description += '<br>Exact-ABI capability package; no module loading or automatic driver replacement.'
+            elif fields.get('X-Module-Staging-Only') == 'yes':
                 description += '<br>Staging only: manual validation required; excluded from automatic OPKG index.'
             if fields.get('X-Runtime-Test'):
                 description += '<br>Test: ' + html.escape(fields['X-Runtime-Test']) + '; ' + html.escape(fields.get('X-Runtime-Test-Status', 'see validation'))
@@ -67,7 +69,10 @@ def kernel_manifest(records):
             name = 'modgui_kernel_' + key.replace('.', '_').replace('-', '_')
             url = SITE + '/kernel/' + key
             row = {'profile': key, 'device': device, 'firmware': firmware, 'validation_router': router,
-                   'kernel_package': version, 'count': len(selected), 'url': url,
+                   'kernel_package': version, 'count': len(selected),
+                   'module_count': sum(parse(r['control']).get('X-Kernel-Capability') != 'yes' for r in selected),
+                   'capability_count': sum(parse(r['control']).get('X-Kernel-Capability') == 'yes' for r in selected),
+                   'url': url,
                    'source': 'src/gz ' + name + ' ' + url, 'staging_only': staging,
                    'status': 'Staging only; manual validation required' if staging else
                              'Runtime packages; see per-module test results',
@@ -86,7 +91,7 @@ def write_kernel_overview(site, manifest):
                     '<td>{count}</td><td>{status}</td><td><code>{abi}</code></td></tr>'.format(
                         url=html.escape(row['url']), profile=html.escape(row['profile']),
                         device=html.escape(row['device']), firmware=html.escape(row['firmware']),
-                        router=row['validation_router'], count=row['count'], status=row['status'] + '<br><a href="' + row['validation_url'] + '">Per-module results</a>',
+                        router=row['validation_router'], count=str(row['count']) + '<br><small>' + str(row['module_count']) + ' module IPKs; ' + str(row['capability_count']) + ' capabilities</small>', status=row['status'] + '<br><a href="' + row['validation_url'] + '">Per-module results</a>',
                         abi=html.escape(row['kernel_package'])))
     sources = ''.join('<h3>' + html.escape(r['profile']) + '</h3><pre>' + html.escape(r['source']) + '</pre>'
                       for r in manifest['profiles'])
@@ -107,6 +112,12 @@ VBNT-S: 15 new functional passes, 1 namespace smoke pass and 28 busy stock modul
 Both 4.1.38 profiles also reuse the exact five previously validated TUN, WireGuard, SPU, CDC Ethernet and RNDIS host payloads.
 VBNT-K: 14 functional passes, 2 smoke passes, 32 busy stock modules left unchanged, and 1 conntrack replacement checked offline only.
 See the linked reports for exact payloads and test limits; USB tethering traffic has not been tested.</p>
+<h2>OPKG module dependencies and migration</h2><p>Installable modules declare complete capabilities with exact kernel ABI dependencies.
+Multi-module capabilities require every component; verified firmware packages and built-in features are checked separately.
+Candidate modules in staging never satisfy ordinary application dependencies. Firmware OPKG 2017 has a defective
+<code>Replaces</code> parser, so normalized indexes and IPKs omit that field. Existing unverified generic modules require
+controlled file-ownership migration; no dependency bypass or forced kernel loading is used.
+<a href="https://github.com/FrancYescO/GUI_ipk/blob/main/docs/kernel-opkg-providers.md">Provider coverage and migration procedure</a>.</p>
 <h2>Cryptodev 1.14 — explicit manual load</h2><p>All eight ABI profiles include a cryptodev package, staged under
 <code>/usr/lib/kernel-module-candidates/PROFILE/cryptodev.ko</code> without autoload or stock-driver replacement.
 Final CI artifacts passed AES-CBC (copy/zero-copy, in-place/separate buffers), SHA256, HMAC and privileged-open enforcement on VBNT-O and VBNT-K/S 4.1.38.
