@@ -1,0 +1,377 @@
+Subject: [PATCH] cryptodev: track pinned-page ownership, bound buffers and restrict access
+
+Synchronous-only downstream hardening. Addresses partial/stale page releases
+without zeroing in-place cipher lengths. Require CAP_SYS_ADMIN even when
+firmware device management overrides the requested mode 0600.
+
+--- a/authenc.c
++++ b/authenc.c
+@@ -72,10 +72,9 @@
+ 		return -EINVAL;
+ 	}
+ 
++	if (!cryptodev_valid_range(caop->dst, kcaop->dst_len))
++		return -EINVAL;
+ 	pagecount = PAGECOUNT(caop->dst, kcaop->dst_len);
+-
+-	ses->used_pages = pagecount;
+-	ses->readonly_pages = 0;
+ 
+ 	rc = adjust_sg_array(ses, pagecount);
+ 	if (rc)
+@@ -88,6 +87,8 @@
+ 		return -EINVAL;
+ 	}
+ 
++	ses->used_pages = pagecount;
++	ses->readonly_pages = 0;
+ 	(*dst_sg) = ses->sg;
+ 
+ 	return 0;
+@@ -132,6 +133,10 @@
+ 	/* Note that in SRTP auth data overlap with data to be encrypted (dst)
+          */
+ 
++	if (!cryptodev_valid_range(caop->auth_src, caop->auth_len) ||
++	    !caop->src || (unsigned long)caop->src < (unsigned long)caop->auth_src ||
++	    (unsigned long)caop->src - (unsigned long)caop->auth_src > MAX_SRTP_AUTH_DATA_DIFF)
++		return -EINVAL;
+ 	auth_pagecount = PAGECOUNT(caop->auth_src, caop->auth_len);
+ 	diff = (int)(caop->src - caop->auth_src);
+ 	if (diff > MAX_SRTP_AUTH_DATA_DIFF || diff < 0) {
+@@ -202,6 +207,8 @@
+ 	 * cipher block size */
+ 	if (caop->flags & COP_FLAG_AEAD_TLS_TYPE) {
+ 		int bs = ses_ptr->cdata.blocksize;
++		if (!bs)
++			return -EINVAL;
+ 		dst_len += bs - (dst_len % bs);
+ 	}
+ 
+@@ -229,11 +236,23 @@
+ 		}
+ 	}
+ 
++	if (caop->len > CRYPTODEV_MAX_BYTES ||
++	    !cryptodev_valid_range(caop->src, caop->len) ||
++	    !cryptodev_valid_range(caop->auth_src, caop->auth_len) ||
++	    caop->tag_len > PAGE_SIZE) {
++		ret = -EINVAL;
++		goto out_unlock;
++	}
+ 	if (caop->tag_len == 0)
+ 		caop->tag_len = cryptodev_get_tag_len(ses_ptr);
+ 
+ 	kcaop->ivlen = caop->iv ? ses_ptr->cdata.ivsize : 0;
+ 	kcaop->dst_len = cryptodev_get_dst_len(caop, ses_ptr);
++	if (kcaop->dst_len > CRYPTODEV_MAX_BYTES ||
++	    !cryptodev_valid_range(caop->dst, kcaop->dst_len)) {
++		ret = -EINVAL;
++		goto out_unlock;
++	}
+ 	kcaop->task = current;
+ 	kcaop->mm = current->mm;
+ 
+--- a/cryptlib.c
++++ b/cryptlib.c
+@@ -471,7 +471,8 @@
+ 	reinit_completion(&src->async.result.completion);
+ 
+ 	statesize = crypto_ahash_statesize(src->async.s);
+-	if (unlikely(statesize <= 0)) {
++	if (unlikely(statesize <= 0 ||
++		     statesize != crypto_ahash_statesize(dst->async.s))) {
+ 		return -EINVAL;
+ 	}
+ 
+--- a/cryptodev_int.h
++++ b/cryptodev_int.h
+@@ -1,3 +1,6 @@
++#ifdef ENABLE_ASYNC
++#error "This downstream build supports synchronous cryptodev only"
++#endif
+ /* cipher stuff */
+ #ifndef CRYPTODEV_INT_H
+ # define CRYPTODEV_INT_H
+--- a/ioctl.c
++++ b/ioctl.c
+@@ -1,3 +1,4 @@
++#include <linux/capability.h>
+ /*
+  * Driver for /dev/crypto device (aka CryptoDev)
+  *
+@@ -561,6 +562,8 @@
+ 	struct crypt_priv *pcr;
+ 	int i;
+ 
++	if (!capable(CAP_SYS_ADMIN))
++		return -EPERM;
+ 	pcr = kzalloc(sizeof(*pcr), GFP_KERNEL);
+ 	if (!pcr)
+ 		return -ENOMEM;
+@@ -1208,7 +1211,7 @@
+ 	.minor = MISC_DYNAMIC_MINOR,
+ 	.name = "crypto",
+ 	.fops = &cryptodev_fops,
+-	.mode = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH,
++	.mode = S_IRUSR|S_IWUSR,
+ };
+ 
+ static int __init
+--- a/zc.c
++++ b/zc.c
+@@ -23,6 +23,9 @@
+  * 02110-1301, USA.
+  */
+ 
++#ifdef CRYPTODEV_PIN_TEST
++#include "pin-test-shim.h"
++#else
+ #include <crypto/hash.h>
+ #include <linux/crypto.h>
+ #include <linux/mm.h>
+@@ -37,6 +40,7 @@
+ #include "cryptodev_int.h"
+ #include "zc.h"
+ #include "version.h"
++#endif
+ 
+ /* Helper functions to assist zero copy.
+  * This needs to be redesigned and moved out of the session. --nmav
+@@ -53,10 +57,13 @@
+ 	int ret, pglen, i = 0;
+ 	struct scatterlist *sgp;
+ 
+-	if (unlikely(!pgcount || !len || !addr)) {
+-		sg_mark_end(sg);
++	if (!len && !pgcount)
+ 		return 0;
+-	}
++	if (!cryptodev_valid_range(addr, len) || !pgcount ||
++	    pgcount > CRYPTODEV_MAX_PAGES || !task || !mm ||
++	    task != current || mm != current->mm)
++		return -EINVAL;
++	memset(pg, 0, pgcount * sizeof(*pg));
+ 
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
+ 	down_read(&mm->mmap_sem);
+@@ -94,8 +101,15 @@
+ #else
+ 	mmap_read_unlock(mm);
+ #endif
+-	if (ret != pgcount)
+-		return -EINVAL;
++	if (ret != pgcount) {
++		/* GUP may have pinned only a prefix. Release exactly that prefix. */
++		while (ret > 0) {
++			--ret;
++			put_page(pg[ret]);
++			pg[ret] = NULL;
++		}
++		return -EINVAL;
++	}
+ 
+ 	sg_init_table(sg, pgcount);
+ 
+@@ -116,25 +130,33 @@
+ {
+ 	struct scatterlist *sg;
+ 	struct page **pages;
+-	int array_size;
+-
+-	for (array_size = ses->array_size; array_size < pagecount;
+-	     array_size *= 2)
++	unsigned int array_size;
++
++	if (pagecount < 0 || pagecount > CRYPTODEV_MAX_PAGES)
++		return -EINVAL;
++	if (pagecount <= ses->array_size)
++		return 0;
++	for (array_size = ses->array_size ? ses->array_size : DEFAULT_PREALLOC_PAGES;
++	     array_size < pagecount; array_size *= 2)
+ 		;
+-	ddebug(0, "reallocating from %d to %d pages",
+-			ses->array_size, array_size);
+-	pages = krealloc(ses->pages, array_size * sizeof(struct page *),
+-			 GFP_KERNEL);
+-	if (unlikely(!pages))
++	pages = kcalloc(array_size, sizeof(*pages), GFP_KERNEL);
++	sg = kcalloc(array_size, sizeof(*sg), GFP_KERNEL);
++	if (!pages || !sg) {
++		kfree(pages);
++		kfree(sg);
+ 		return -ENOMEM;
++	}
++	/* Called before pinning; never replace an outstanding ownership ledger. */
++	if (ses->used_pages) {
++		kfree(pages);
++		kfree(sg);
++		return -EINVAL;
++	}
++	kfree(ses->pages);
++	kfree(ses->sg);
+ 	ses->pages = pages;
+-	sg = krealloc(ses->sg, array_size * sizeof(struct scatterlist),
+-		      GFP_KERNEL);
+-	if (unlikely(!sg))
+-		return -ENOMEM;
+ 	ses->sg = sg;
+ 	ses->array_size = array_size;
+-
+ 	return 0;
+ }
+ 
+@@ -143,6 +165,8 @@
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < ses->used_pages; i++) {
++		if (!ses->pages[i])
++			continue;
+ 		if (!PageReserved(ses->pages[i]))
+ 			SetPageDirty(ses->pages[i]);
+ 
+@@ -152,8 +176,10 @@
+ 			ses->readonly_pages--;
+ 
+ 		put_page(ses->pages[i]);
++		ses->pages[i] = NULL;
+ 	}
+ 	ses->used_pages = 0;
++	ses->readonly_pages = 0;
+ }
+ 
+ /* make src and dst available in scatterlists.
+@@ -163,77 +189,52 @@
+                 void *__user src, unsigned int src_len,
+                 void *__user dst, unsigned int dst_len,
+                 struct task_struct *task, struct mm_struct *mm,
+-                struct scatterlist **src_sg,
+-                struct scatterlist **dst_sg)
+-{
+-	int src_pagecount, dst_pagecount;
++                struct scatterlist **src_sg, struct scatterlist **dst_sg)
++{
++	unsigned int src_pages, dst_pages, total;
+ 	int rc;
+ 
+-	/* Empty input is a valid option to many algorithms & is tested by NIST/FIPS */
+-	/* Make sure NULL input has 0 length */
+-	if (!src && src_len)
+-		src_len = 0;
+-
+-	/* I don't know that null output is ever useful, but we can handle it gracefully */
+-	/* Make sure NULL output has 0 length */
+-	if (!dst && dst_len)
+-		dst_len = 0;
+-
+-	src_pagecount = PAGECOUNT(src, src_len);
+-	dst_pagecount = PAGECOUNT(dst, dst_len);
+-
+-	ses->used_pages = (src == dst) ? max(src_pagecount, dst_pagecount)
+-	                               : src_pagecount + dst_pagecount;
+-
+-	ses->readonly_pages = (src == dst) ? 0 : src_pagecount;
+-
+-	if (ses->used_pages > ses->array_size) {
+-		rc = adjust_sg_array(ses, ses->used_pages);
++	*src_sg = *dst_sg = NULL;
++	if (ses->used_pages)
++		release_user_pages(ses);
++	if (!cryptodev_valid_range(src, src_len) ||
++	    !cryptodev_valid_range(dst, dst_len))
++		return -EINVAL;
++	src_pages = PAGECOUNT(src, src_len);
++	dst_pages = PAGECOUNT(dst, dst_len);
++	total = src == dst ? max(src_pages, dst_pages) : src_pages + dst_pages;
++	rc = adjust_sg_array(ses, total);
++	if (rc)
++		return rc;
++
++	if (src == dst) {
++		rc = __get_userbuf(src, max(src_len, dst_len), 1, total,
++				  ses->pages, ses->sg, task, mm);
+ 		if (rc)
+ 			return rc;
+-	}
+-
+-	if (src == dst) {	/* inplace operation */
+-		/* When we encrypt for authenc modes we need to write
+-		 * more data than the ones we read. */
+-		if (src_len < dst_len)
+-			src_len = dst_len;
+-		rc = __get_userbuf(src, src_len, 1, ses->used_pages,
+-			               ses->pages, ses->sg, task, mm);
+-		if (unlikely(rc)) {
+-			derr(1, "failed to get user pages for data IO");
++		ses->used_pages = total;
++		ses->readonly_pages = 0;
++		*src_sg = *dst_sg = ses->sg;
++		return 0;
++	}
++	if (src_pages) {
++		rc = __get_userbuf(src, src_len, 0, src_pages,
++				  ses->pages, ses->sg, task, mm);
++		if (rc)
++			return rc;
++		ses->used_pages = ses->readonly_pages = src_pages;
++		*src_sg = ses->sg;
++	}
++	if (dst_pages) {
++		rc = __get_userbuf(dst, dst_len, 1, dst_pages,
++				  ses->pages + src_pages, ses->sg + src_pages, task, mm);
++		if (rc) {
++			release_user_pages(ses);
++			*src_sg = NULL;
+ 			return rc;
+ 		}
+-		(*src_sg) = (*dst_sg) = ses->sg;
+-		return 0;
+-	}
+-
+-	*src_sg = NULL; /* default to no input */
+-	*dst_sg = NULL; /* default to ignore output */
+-
+-	if (likely(src)) {
+-		rc = __get_userbuf(src, src_len, 0, ses->readonly_pages,
+-					   ses->pages, ses->sg, task, mm);
+-		if (unlikely(rc)) {
+-			derr(1, "failed to get user pages for data input");
+-			return rc;
+-		}
+-		*src_sg = ses->sg;
+-	}
+-
+-	if (likely(dst)) {
+-		const unsigned int writable_pages =
+-			ses->used_pages - ses->readonly_pages;
+-		struct page **dst_pages = ses->pages + ses->readonly_pages;
+-		*dst_sg = ses->sg + ses->readonly_pages;
+-
+-		rc = __get_userbuf(dst, dst_len, 1, writable_pages,
+-					   dst_pages, *dst_sg, task, mm);
+-		if (unlikely(rc)) {
+-			derr(1, "failed to get user pages for data output");
+-			release_user_pages(ses);  /* FIXME: use __release_userbuf(src, ...) */
+-			return rc;
+-		}
++		ses->used_pages += dst_pages;
++		*dst_sg = ses->sg + src_pages;
+ 	}
+ 	return 0;
+ }
+--- a/zc.h
++++ b/zc.h
+@@ -21,5 +21,13 @@
+ 	: 0)
+ 
+ #define DEFAULT_PREALLOC_PAGES 32
++#define CRYPTODEV_MAX_PAGES 1024
++#define CRYPTODEV_MAX_BYTES ((CRYPTODEV_MAX_PAGES - 1) * PAGE_SIZE)
++
++static inline int cryptodev_valid_range(const void __user *buf, unsigned int len)
++{
++	return !len || (buf && (unsigned long)buf <= ~0UL - (len - 1) &&
++		       PAGECOUNT(buf, len) <= CRYPTODEV_MAX_PAGES);
++}
+ 
+ #endif

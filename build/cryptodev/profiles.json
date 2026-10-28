@@ -1,0 +1,56 @@
+{
+  "4.1.38-vbnto": {
+    "kernel_package": "4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d",
+    "architecture": "arm_cortex-a9",
+    "vermagic": "4.1.38 SMP preempt mod_unload ARMv7",
+    "feed": "kernel/4.1.38-vbnto",
+    "runtime_validated": true,
+    "export_input": "4.1.38-vbnto-exports.json.gz",
+    "runtime_device": ".45"
+  },
+  "4.1.38-vbntk": {
+    "kernel_package": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
+    "architecture": "arm_cortex-a9",
+    "vermagic": "4.1.38 SMP preempt mod_unload ARMv7",
+    "feed": "kernel/4.1.38-vbntk",
+    "runtime_validated": true,
+    "export_input": "4.1.38-vbntk-exports.json.gz",
+    "runtime_device": ".204"
+  },
+  "4.1.52-vbntk": {
+    "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55",
+    "architecture": "arm_cortex-a9",
+    "vermagic": "4.1.52 SMP preempt mod_unload ARMv7",
+    "feed": "kernel/4.1.52-vbntk",
+    "runtime_validated": false,
+    "stock_inputs": [
+      "vbntk-2.4.5"
+    ],
+    "limitation": "The stock cryptodev is busy on .69 (nginx and generic_pnpd); the new module was not substituted."
+  },
+  "4.1.52-vcnt3": {
+    "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-036bded426297fe68ce5c3d8ab8c6658",
+    "architecture": "arm_cortex-a9",
+    "vermagic": "4.1.52 SMP preempt mod_unload ARMv7",
+    "feed": "kernel/4.1.52-vcnt3-candidates",
+    "stock_inputs": [
+      "vcnt3-1.3.0",
+      "vcnt3-1.1.2"
+    ],
+    "runtime_validated": false,
+    "candidate": true,
+    "limitation": "No runtime device available; offline ABI/symbol checks only."
+  },
+  "4.1.52-vcnt2": {
+    "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-eceb083346d22dc65ce7effde3310ee1",
+    "architecture": "arm_cortex-a7",
+    "vermagic": "4.1.52 SMP preempt mod_unload ARMv7 p2v8",
+    "feed": "kernel/4.1.52-vcnt2-candidates",
+    "stock_inputs": [
+      "vcnt2-19.4.0381"
+    ],
+    "runtime_validated": false,
+    "candidate": true,
+    "limitation": "No runtime device available; offline ABI/symbol checks only."
+  }
+}

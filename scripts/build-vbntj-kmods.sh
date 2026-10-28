@@ -13,6 +13,9 @@ external_modules=()
 firmware_profile="${FIRMWARE_PROFILE:-}"
 
 case "$module_set" in
+  cryptodev)
+    module_targets=()
+    ;;
   tun)
     module_targets=(drivers/net/tun.ko)
     ;;
@@ -288,6 +291,11 @@ if grep -qx 'CONFIG_MODVERSIONS=y' "$kernel_dir/.config"; then
   echo "VBNT-K runtime has CONFIG_MODVERSIONS disabled" >&2
   exit 1
 fi
+if [[ "$module_set" == cryptodev ]]; then
+  bash "$repo_root/scripts/build-cryptodev.sh" "$kernel_dir" "$cross" "$output_dir"
+  exit 0
+fi
+
 if [[ "$build_connmark" -eq 1 && "$module_set" != firmware-candidates ]]; then
   for symbol in IFB NET_SCH_INGRESS NET_CLS_U32 NET_ACT_POLICE; do
     if ! grep -qx "CONFIG_${symbol}=y" "$kernel_dir/.config"; then

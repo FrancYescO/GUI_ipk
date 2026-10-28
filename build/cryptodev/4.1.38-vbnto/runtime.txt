@@ -1,0 +1,35 @@
+PASS AES-CBC session
+PASS session info
+driver cipher=cbc(aes-generic) hash=
+PASS AES-CBC NIST encrypt
+PASS AES-CBC NIST decrypt
+mode=zero-copy buffers=separate
+PASS AES-CBC NIST encrypt
+PASS AES-CBC NIST decrypt
+mode=zero-copy buffers=in-place
+PASS AES-CBC NIST encrypt
+PASS AES-CBC NIST decrypt
+mode=copy buffers=separate
+PASS AES-CBC NIST encrypt
+PASS AES-CBC NIST decrypt
+mode=copy buffers=in-place
+PASS reject NULL input
+PASS reject unaligned length
+PASS reject invalid session
+PASS close AES-CBC
+PASS SHA256 session
+PASS session info
+driver cipher= hash=sha256-generic
+PASS SHA256 abc
+PASS close hash
+PASS SHA256 session
+PASS session info
+driver cipher= hash=hmac(sha256-generic)
+PASS HMAC-SHA256 RFC4231
+PASS close hash
+SKIP AES-GCM unavailable errno=22
+cryptodev known-answer tests passed
+TEST_RESULT=0
+6f359ef1-dfa2-4740-bdd7-423ca8ca47e3
+4097
+MODULE_UNLOADED

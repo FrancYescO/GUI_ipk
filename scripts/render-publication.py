@@ -101,12 +101,20 @@ Linux version or operator branding alone is insufficient. Other firmware sharing
 <a href="../feeds.json">Feed manifest</a><a href="../validation/4.1.38/">4.1.38 candidate history</a><a href="../validation/4.1.52/">4.1.52 tests</a></nav>
 <pre>opkg status kernel</pre><div class="table-wrap"><table><thead><tr><th>Feed</th><th>Reference device / firmware</th><th>IPKs</th><th>Validation</th><th>Required kernel package version</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
 <h2>Runtime OPKG sources — choose one exact ABI</h2>''' + sources + '''
-<p>All three runtime feeds contain the same 49 module names.
+<p>All three runtime feeds contain the same 50 module names (including the separately staged cryptodev package).
 VBNT-O: 14 new functional passes and 30 busy stock modules left unchanged.
 VBNT-S: 15 new functional passes, 1 namespace smoke pass and 28 busy stock modules left unchanged.
 Both 4.1.38 profiles also reuse the exact five previously validated TUN, WireGuard, SPU, CDC Ethernet and RNDIS host payloads.
 VBNT-K: 14 functional passes, 2 smoke passes, 32 busy stock modules left unchanged, and 1 conntrack replacement checked offline only.
 See the linked reports for exact payloads and test limits; USB tethering traffic has not been tested.</p>
+<h2>Cryptodev 1.14 — explicit manual load</h2><p>All five ABI profiles include a cryptodev package, staged under
+<code>/usr/lib/kernel-module-candidates/PROFILE/cryptodev.ko</code> without autoload or stock-driver replacement.
+AES-CBC (copy/zero-copy, in-place/separate buffers), SHA256 and HMAC passed on VBNT-O and VBNT-K/S 4.1.38.
+AES-GCM was unavailable on those test configurations. The new 4.1.52 VBNT-K module is checked offline only:
+the existing stock cryptodev was busy in nginx and generic_pnpd and was left active.
+VCNT-2/3 remain offline candidates. This synchronous build requires CAP_SYS_ADMIN; firmware may override device modes,
+so set <code>chmod 600 /dev/crypto</code> after manual loading. No OpenSSL engine or hardware acceleration is enabled automatically.
+<a href="https://github.com/FrancYescO/GUI_ipk/blob/main/build/cryptodev/README.md">Source, tests and loading instructions</a>.</p>
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
 Additional firmware candidate feeds below have configurations recovered from original firmware images and pass offline symbol checks.
 These checks do not establish complete structure-layout compatibility or runtime behavior. VCNT-3 candidates omit SPU, disabled by its original firmware.

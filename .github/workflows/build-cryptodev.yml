@@ -1,0 +1,127 @@
+name: Reproduce cryptodev kernel modules
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ['.github/workflows/build-cryptodev.yml', 'scripts/*cryptodev*', 'scripts/build-vbnt*-kmods.sh', 'build/cryptodev/**', 'patches/cryptodev/**', 'artifacts/cryptodev/**', 'tests/test_cryptodev.py']
+  push:
+    branches: [main]
+    paths: ['.github/workflows/build-cryptodev.yml', 'scripts/*cryptodev*', 'scripts/build-vbnt*-kmods.sh', 'build/cryptodev/**', 'patches/cryptodev/**', 'artifacts/cryptodev/**', 'tests/test_cryptodev.py']
+permissions:
+  contents: read
+jobs:
+  kernel38:
+    name: Cryptodev 4.1.38 ${{ matrix.profile }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {profile: vbnto, public: 4.1.38-vbnto}
+          - {profile: vbnts, public: 4.1.38-vbntk}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BUILD_INPUTS_TAG: build-inputs-v1
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 -m unittest discover -s tests -p test_cryptodev.py
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .cache/sources
+            .cache/downloads
+          key: openwrt-inputs-${{ hashFiles('build/checksums.sha256') }}
+      - name: Fetch pinned build inputs
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes megatools
+          scripts/fetch-build-inputs.sh
+      - run: docker build --platform linux/amd64 --tag cryptodev38-builder --file build/Dockerfile .
+      - name: Compile using original profile configuration
+        env:
+          RUNTIME_PROFILE: ${{ matrix.profile }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/cryptodev-build" dist/modules
+          docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" \
+            --entrypoint /bin/bash --workdir /build --env HOME=/tmp --env JOBS=2 \
+            --env RUNTIME_PROFILE --env MODULE_SET=cryptodev --env BUILD_CRYPTODEV_TEST=1 \
+            --env WORK_DIR=/build/openwrt --env OUTPUT_DIR=/repo/dist/modules \
+            --volume "$RUNNER_TEMP/cryptodev-build:/build" --volume "$PWD:/repo" \
+            cryptodev38-builder /repo/scripts/build-vbnto-4.1.38-kmods.sh > dist/build.log 2>&1 || { tail -80 dist/build.log; exit 1; }
+      - name: Reproduce committed IPK
+        env:
+          PROFILE: ${{ matrix.public }}
+        run: python3 scripts/cryptodev_packages.py "$PROFILE" dist/modules dist/ipks --verify > dist/report.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: cryptodev-${{ matrix.public }}-${{ github.sha }}
+          path: dist/
+          retention-days: 14
+  kernel52:
+    name: Cryptodev 4.1.52 ${{ matrix.profile }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [vbntk, vcnt3, vcnt2]
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PROFILE: 4.1.52-${{ matrix.profile }}
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 -m unittest discover -s tests -p test_cryptodev.py
+      - name: Clone pinned GPL buildsystem
+        run: |
+          git clone --branch 'V5.17(ABNY.6)C0' --depth 1 https://github.com/avwarez/vmg8825_b50b.git .work/vbntj-gpl
+          test "$(git -C .work/vbntj-gpl rev-parse HEAD)" = af23960e39003ba7788f5ced0c256b1bc676a712
+      - uses: actions/cache@v6
+        with:
+          path: .work/vbntj-gpl/dl
+          key: firmware-sdk-dl-v1-${{ hashFiles('scripts/build-vbntj-kmods.sh') }}
+          restore-keys: firmware-sdk-dl-v1-
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .work/vbntj-gpl/staging_dir/host
+            .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi
+          key: damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v1
+      - name: Restore pinned compiler if needed
+        run: |
+          if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
+            scripts/fetch-damson-kernel-toolchain.sh
+            tar -xzf .cache/sources/damson-kernel-toolchain/damson-kernel-gcc-5.5.0-linux-amd64.tgz --no-same-owner -C .work/vbntj-gpl
+          fi
+      - name: Select exact firmware configuration
+        run: |
+          mkdir -p dist/config dist/modules
+          if [[ "$PROFILE" == 4.1.52-vbntk ]]; then
+            cp build/vbntj/kernel-4.1.52-damson.config dist/config/kernel.config
+            echo FIRMWARE_CHIP=63138 >> "$GITHUB_ENV"
+          else
+            python3 scripts/prepare-firmware-kernel-config.py "$PROFILE" dist/config/kernel.config
+            python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = json.loads(Path('build/kernel-firmware-profiles/profiles.json').read_text())[os.environ['PROFILE']]
+          with open(os.environ['GITHUB_ENV'], 'a') as out:
+              out.write('FIRMWARE_CHIP=' + str(p.get('chip', 63138)) + '\n')
+          PY
+          fi
+      - run: docker build --platform linux/amd64 --tag cryptodev52-builder build/vbntj
+      - name: Compile cryptodev using original ABI patches
+        run: |
+          sudo chown -R 1000:1000 .work/vbntj-gpl dist/modules
+          docker run --rm --platform linux/amd64 --env MODULE_SET=cryptodev --env FIRMWARE_CHIP \
+            --env FIRMWARE_CONFIG=/repo/dist/config/kernel.config --env OUTPUT_DIR=/out --env SOURCE_DIR=/app \
+            --volume "$PWD:/repo:ro" --volume "$PWD/.work/vbntj-gpl:/app" --volume "$PWD/dist/modules:/out" \
+            cryptodev52-builder /repo/scripts/build-vbntj-kmods.sh > dist/build.log 2>&1 || { tail -80 dist/build.log; exit 1; }
+      - name: Audit original-firmware imports and reproduce committed IPK
+        run: python3 scripts/cryptodev_packages.py "$PROFILE" dist/modules dist/ipks --verify > dist/report.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: cryptodev-${{ matrix.profile }}-4.1.52-${{ github.sha }}
+          path: dist/
+          retention-days: 14

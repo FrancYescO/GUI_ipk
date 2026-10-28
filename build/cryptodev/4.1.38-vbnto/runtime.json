@@ -1,0 +1,21 @@
+{
+  "module_sha256": "1089dbbed82fabb5231f6ef3df1646fcd0eedda3b317ec4d7c551441f649bc1c",
+  "runtime_validated": true,
+  "tests": [
+    "AES-CBC NIST encrypt/decrypt, copy and zero-copy, separate and in-place",
+    "SHA256 abc",
+    "HMAC-SHA256 RFC4231",
+    "NULL buffer, invalid length and session rejected"
+  ],
+  "gcm": "unavailable, not validated",
+  "drivers": [
+    "cbc(aes-generic)",
+    "sha256-generic",
+    "hmac(sha256-generic)"
+  ],
+  "module_unloaded": true,
+  "boot_id_unchanged": true,
+  "kernel_taint_before": 4097,
+  "kernel_taint_after": 4097,
+  "unprivileged_open_test": "Not established: first node was on nodev /tmp; retry blocked by lost modem network connectivity."
+}

@@ -52,6 +52,10 @@ for required in \
 done
 
 "${kernel_make[@]}" modules_prepare
+if [[ "${MODULE_SET:-}" == cryptodev ]]; then
+  bash "$repo_root/scripts/build-cryptodev.sh" "$kernel_dir" "$cross" "$output_dir"
+  exit 0
+fi
 if [[ "${BUILD_VALIDATION_KAT:-0}" == 1 ]]; then
   cp -R "$repo_root/build/vbnto-4.1.38/validation/kat" "$work_dir/candidate-kat"
   "${kernel_make[@]}" M="$work_dir/candidate-kat" modules

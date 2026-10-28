@@ -148,6 +148,8 @@ def kernel_inputs(work):
         raise ValueError('Unexpected kernel package set')
     from firmware_kernel_candidates import publication_records
     rows.extend(publication_records(work / 'firmware-candidates'))
+    from cryptodev_packages import publication_records as cryptodev_records
+    rows.extend(cryptodev_records())
     if len({r['package'] for r in rows}) != len(rows):
         raise ValueError('Duplicate firmware candidate package')
     return rows
