@@ -7,7 +7,7 @@ Broadcom 502L07 SDK, GCC 5.5.0 and repository ABI/backport patches. These are
 | Feed on Pages | Original reference firmware | Architecture / vermagic | Packages |
 |---|---|---|---:|
 | `kernel/4.1.52-vcnt3-candidates` | DGA4331 / VCNT-3, AGTHF 1.3.0 and 1.1.2 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 49 |
-| `kernel/4.1.52-vcnt2-candidates` | DWA0122 / VCNT-2, Belong 19.4.0381-4961004 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
+| `kernel/4.1.52-vcnt2-candidates` | DWA0122 / VCNT-2, Belong 19.4.l.0393-MR1-RB and 19.4.0381-4961004 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
 | `kernel/4.1.52-vcntj-candidates` | DGA4134 / VCNT-J, Sorgenia 19.4.0629-5661052 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
 | `kernel/4.1.52-vcnta-candidates` | DJA0231 / VCNT-A, Telstra 20.3.c.0501-MR22.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
 | `kernel/4.1.52-vbntv-candidates` | DJA0230 / VBNT-V, Telstra 20.3.c.0432-MR21.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
@@ -32,7 +32,7 @@ accepts a decrypted image or raw bank dump. RBI decoding uses Python
 `cryptography`; the kernel/ELF checks use the standard library. Extract stock
 files with `unsquashfs` on a **case-sensitive filesystem** before invoking it.
 
-VCNT-3 images require LZMA layers at offsets 38 and 16,836. The VCNT-2 bank dump
+VCNT-3 images require LZMA layers at offsets 38 and 16,836. The VCNT-2 RBI/bank dump
 and VCNT-J bank dumps require only the layer at offset 38. Telstra VCNT-A and VBNT-V require layers at 38 and 16,820. The program locates absolute ARM export
 tables using independent symbol anchors, parses stock ELF modules, and refuses
 an input whose kernel and stock-module exports do not resolve every stock
@@ -95,6 +95,8 @@ validation history. No stock module was unloaded for this correction.
 
 AGTHF 1.3.6 is already mapped to the VCNT-3 candidate feed because its kernel package, kernel source reference and all 267 stock module blobs match 1.3.0. This is stock equivalence only: the full 1.3.6 RBI could not be downloaded from the TIM server or public mirror, so no direct embedded configuration or runtime validation is claimed.
 
-VCNT-2 19.4.l.0393-MR1-RB shares the older dump's kernel package but has a different source reference and stock-module set. It remains unpromoted until the full image can be recovered and compared. HTTP/HTTPS acquisition attempts timed out. Fastweb FW261/FW264 also require an original image; a saved runtime configuration remains an alternative.
+VCNT-2 19.4.l.0393-MR1-RB was recovered from its public torrent after the HTTP/HTTPS server timed out. Its exact kernel package matches the older bank dump. The embedded configuration differs only in `CONFIG_NETFILTER_NETLINK_LOG` and `CONFIG_NETFILTER_XT_TARGET_NFLOG`, both enabled as modules in the newer image. The newest configuration is now the build reference, and the same 49 payloads are checked against both complete kernel/stock export inventories. All 255 new stock modules also match the historical Git extraction. No additional feed is needed.
+
+Fastweb FW261/FW264 still require an original image; a saved runtime configuration remains an alternative.
 
 The available VCNT-J Sorgenia image and latest inventoried Telstra images were therefore processed next. Each has a dedicated exact-dependency candidate feed. All new profiles remain offline checked only. Other kernel releases and CPU families need their own source, toolchain and ABI checks.

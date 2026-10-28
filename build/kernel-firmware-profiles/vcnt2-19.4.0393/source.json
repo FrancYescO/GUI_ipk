@@ -1,0 +1,28 @@
+{
+  "image": "vcnt-2_19.4.l.0393-MR1-RB.rbi",
+  "image_sha256": "e52e2aebe8aedbd776b7f118a90c0968b0544db9de7a0ec634d49ae2ce3ce840",
+  "board": "VCNT-2",
+  "decrypted_sha256": "7a2df06c94de8adbcb60859f9e0147c6bd0cd08da7898f6ea128c66ade98a48c",
+  "layers": [
+    {
+      "offset": 38,
+      "size": 6399328,
+      "sha256": "f94ab7fc0eabc9904d4aae40482b06254f775ca47fa320609afd1795ae78529e"
+    }
+  ],
+  "config_sha256": "8a1d964f3efad62f655fe2f805ace3fefda15569c2396fdb75cbf71eb7d90b45",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-eceb083346d22dc65ce7effde3310ee1",
+  "stock_module_count": 255,
+  "kernel_export_count": 5825,
+  "base_address": "0xc0018000",
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7 p2v8",
+  "stock_symbols_sha256": "bf6c69d91c70cccfd2b31ce4e20473407f9f8ec76b1c0fc9c6188ba36b22e499",
+  "firmware_version_file": "config version\n        option version '19.4.l.0393-6921003-20220329062646-bf8625e2475ade25cd0385b7f9cc797e438f4033'\n        option mask '6921003'\n        option timestamp '20220329062646'\n        option product 'vcnt-j_belong'\n        option marketing_name 'Damson'\n        option marketing_version '19.4.l'\n\toption config 'bf8625e2475ade25cd0385b7f9cc797e438f4033'\n\toption openwrt 'c5482d55d39d9ec69a98db55bb71cbaae70442c2'\n\toption kernel 'c9f91688f138ee278fda740257da64f9a4c8a670'\n\toption technicolor '8448908b0f316efec031cbc9655131e25defa34a'\n\toption custo '7e5fedc9e8490961c1881c24a08b8831d1c4dfc7'\n\toption lte '8314165bc866c5027dd16735bc38c2712eb89322'\n\toption packages 'cb10d2938b7b2d2cb9a46e443a5405e83127af1e'\n\toption routing '0a4c07e8ddf257269ac2d548dc70823679ef3ae8'\n",
+  "runtime_validated": false,
+  "stock_git_comparison": {
+    "repository": "https://github.com/FrancYescO/tch_firmware_extracted",
+    "commit": "fe1a7441f392377da850227d303830f2a7b5fbbb",
+    "module_count": 255,
+    "all_blob_ids_match": true
+  }
+}

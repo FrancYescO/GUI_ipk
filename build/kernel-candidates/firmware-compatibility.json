@@ -2920,8 +2920,10 @@
       "architecture": "arm_cortex-a7",
       "kernel_source": "c9f91688f138ee278fda740257da64f9a4c8a670",
       "stock_module_set": "9b9196523430ef91ae005cf8e251214fc989625f9e5cf58b0477b67a6d0a36bb",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt2",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt2-candidates",
+      "original_image_checked": true
     },
     {
       "firmware": "vcnt-a_ACR-13-18.1.c.0514-950-RB",

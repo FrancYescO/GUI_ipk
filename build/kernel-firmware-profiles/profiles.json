@@ -60,17 +60,19 @@
     "feed": "kernel/4.1.52-vcnt2-candidates",
     "status": "offline-checked-candidates",
     "runtime_validated": false,
-    "config_input": "vcnt2-19.4.0381",
+    "config_input": "vcnt2-19.4.0393",
     "stock_inputs": [
-      "vcnt2-19.4.0381"
+      "vcnt2-19.4.0381",
+      "vcnt2-19.4.0393"
     ],
     "verified_firmwares": [
-      "belong-vcnt-2_19.4.0381-4961004"
+      "belong-vcnt-2_19.4.0381-4961004",
+      "vcnt-2_19.4.l.0393-MR1-RB"
     ],
     "stock_equivalent_firmwares": [],
     "module_count": 49,
     "excluded_modules": {
-      "bcmspu": "Disabled by both original VCNT-3 configurations; no hardware validation",
+      "bcmspu": "Disabled by both original VCNT-2 configurations; no hardware validation",
       "xt_nat": "Existing cross-profile quarantine; never tested here"
     },
     "required_options": {
@@ -80,15 +82,17 @@
       "CONFIG_BCM_PKTFWD": "y",
       "CONFIG_BCM_PKTFWD_FLCTL": "y",
       "CONFIG_BCM_USBNET_THREAD": "n",
-      "CONFIG_ARM_PATCH_PHYS_VIRT": "y"
+      "CONFIG_ARM_PATCH_PHYS_VIRT": "y",
+      "CONFIG_NETFILTER_NETLINK_LOG": "m",
+      "CONFIG_NETFILTER_XT_TARGET_NFLOG": "m"
     },
     "source_sdk": "avwarez/vmg8825_b50b@af23960e39003ba7788f5ced0c256b1bc676a712 + pinned Broadcom 502L07 SDK + repository ABI patches",
     "compiler": "GCC 5.5.0",
-    "firmware_mirror": "https://media.githubusercontent.com/media/hack-technicolor/tch-bank-dumps/master/vcnt-2/belong-vcnt-2_19.4.0381-4961004-bank_dump.lfs.xz",
-    "original_config_note": "Original public bank dump; all 255 stock modules and embedded kernel are checked offline. The newer 19.4.l.0393 firmware is not included without an image/configuration comparison.",
+    "firmware_mirror": "https://raw.githubusercontent.com/hack-technicolor/hack-technicolor/master/torrents/vcnt-2/vcnt-2_19.4.l.0393-MR1-RB.rbi.torrent",
+    "original_config_note": "Latest original RBI and older public bank dump each provide a complete kernel configuration and 255 stock modules. Only NETFILTER_NETLINK_LOG and NETFILTER_XT_TARGET_NFLOG differ; the latest configuration is the build reference. Both original symbol inventories are audited.",
     "vermagic": "4.1.52 SMP preempt mod_unload ARMv7 p2v8",
     "bundle": "artifacts/firmware-kernel-candidates/vcnt2-4.1.52.tar.gz",
-    "bundle_sha256": "e23a1c7bf0aa053da90745c9a1480d027ff6ed5b8c09a732ac82549e4023aa09",
+    "bundle_sha256": "5f2da3ad228e38090ab6ea945a35b7ca51a4da481275e4f2dbcb20a00f2f5430",
     "firmware_option_changes": 440
   },
   "4.1.52-vcntj": {
