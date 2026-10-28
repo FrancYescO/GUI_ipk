@@ -107,17 +107,18 @@ VBNT-S: 15 new functional passes, 1 namespace smoke pass and 28 busy stock modul
 Both 4.1.38 profiles also reuse the exact five previously validated TUN, WireGuard, SPU, CDC Ethernet and RNDIS host payloads.
 VBNT-K: 14 functional passes, 2 smoke passes, 32 busy stock modules left unchanged, and 1 conntrack replacement checked offline only.
 See the linked reports for exact payloads and test limits; USB tethering traffic has not been tested.</p>
-<h2>Cryptodev 1.14 — explicit manual load</h2><p>All five ABI profiles include a cryptodev package, staged under
+<h2>Cryptodev 1.14 — explicit manual load</h2><p>All eight ABI profiles include a cryptodev package, staged under
 <code>/usr/lib/kernel-module-candidates/PROFILE/cryptodev.ko</code> without autoload or stock-driver replacement.
-Preliminary local builds passed AES-CBC (copy/zero-copy, in-place/separate buffers), SHA256 and HMAC on VBNT-O and VBNT-K/S 4.1.38; final CI artifacts await retesting.
+Final CI artifacts passed AES-CBC (copy/zero-copy, in-place/separate buffers), SHA256, HMAC and privileged-open enforcement on VBNT-O and VBNT-K/S 4.1.38.
 AES-GCM was unavailable on those test configurations. The new 4.1.52 VBNT-K module is checked offline only:
 the existing stock cryptodev was busy in nginx and generic_pnpd and was left active.
-VCNT-2/3 remain offline candidates. This synchronous build requires CAP_SYS_ADMIN; firmware may override device modes,
+VCNT-2/3/J/A and VBNT-V remain offline candidates. This synchronous build requires CAP_SYS_ADMIN; firmware may override device modes,
 so set <code>chmod 600 /dev/crypto</code> after manual loading. No OpenSSL engine or hardware acceleration is enabled automatically.
 <a href="https://github.com/FrancYescO/GUI_ipk/blob/main/build/cryptodev/README.md">Source, tests and loading instructions</a>.</p>
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
 Additional firmware candidate feeds below have configurations recovered from original firmware images and pass offline symbol checks.
-These checks do not establish complete structure-layout compatibility or runtime behavior. VCNT-3 candidates omit SPU, disabled by its original firmware.
+These checks do not establish complete structure-layout compatibility or runtime behavior.
+SPU is omitted from the additional firmware feeds. Telstra VCNT-A and VBNT-V already have TUN built into the kernel, so they contain 48 packages each without tun.ko; VCNT-3, VCNT-2 and VCNT-J contain 49 each.
 These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
 They stage modules outside boot paths; a successful build does not prove runtime compatibility. xt_nat remains withheld.</p>''' + candidates + '''
 <h2>VBNT-K canonical feeds and VBNT-S aliases</h2><p>VBNT-K is the canonical public feed name for each kernel version.

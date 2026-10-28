@@ -12,6 +12,10 @@
     {
       "input": "vcnt2-19.4.0381",
       "sha256": "4e634f68a311ad481cf1bf10dfe85d93d2a7b557bf0e97f14f228c8b41792b5e"
+    },
+    {
+      "input": "vcnt2-19.4.0393",
+      "sha256": "bf6c69d91c70cccfd2b31ce4e20473407f9f8ec76b1c0fc9c6188ba36b22e499"
     }
   ],
   "unresolved_symbols": [],

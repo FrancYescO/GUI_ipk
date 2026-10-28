@@ -10,6 +10,10 @@ def write_compatibility(root, style, script):
     repo = Path(__file__).resolve().parents[1]
     source = repo / 'build/kernel-candidates'
     report = json.loads((source / 'firmware-compatibility.json').read_text())
+    profiles = json.loads((repo / 'build/kernel-firmware-profiles/profiles.json').read_text())
+    firmware_links = ''.join('<a href="../' + html.escape(entry['feed'], quote=True) + '/">'
+                             + html.escape(entry['device']) + ' candidates</a>\n'
+                             for entry in profiles.values() if entry.get('bundle'))
     destination = root / 'compatibility'
     destination.mkdir(parents=True, exist_ok=True)
     for filename in ('firmware-compatibility.json', 'planned-profiles.json'):
@@ -49,8 +53,7 @@ They do not replace stock modules or configure autoload. xt_nat remains withheld
 <nav><a href="../index.html">All packages</a>
 <a href="../kernel/4.1.38-vbnto-candidates/index.html">VBNT-O candidates</a>
 <a href="../kernel/4.1.38-vbntk-candidates/index.html">VBNT-K 4.1.38 candidates</a>
-<a href="../kernel/4.1.52-vcnt3-candidates/">VCNT-3 candidates</a>
-<a href="../kernel/4.1.52-vcnt2-candidates/">VCNT-2 candidates</a>
+''' + firmware_links + '''
 <a href="kernel-compatibility.md">Feed setup and scope</a>
 <a href="firmware-compatibility.json">JSON inventory</a>
 <a href="firmware-compatibility.csv">CSV inventory</a>

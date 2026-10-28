@@ -3,7 +3,7 @@ import gzip
 import json
 from pathlib import Path
 from firmware_kernel_candidates import archive, files
-from kernel_firmware import elf_module, sha, unresolved
+from kernel_firmware import config_options, elf_module, sha, unresolved
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build/cryptodev'
@@ -39,6 +39,10 @@ def audit(profile, payload):
         if missing:
             raise ValueError('Unresolved cryptodev imports: ' + repr(missing))
         checks.append({'input': name, 'sha256': sha(raw)})
+    if entry['runtime_validated']:
+        evidence = json.loads((BUILD / profile / 'runtime.json').read_text())
+        if evidence.get('module_sha256') != sha(payload) or not evidence.get('runtime_validated'):
+            raise ValueError('Runtime evidence belongs to a different cryptodev payload: ' + profile)
     return {'module_sha256': sha(payload), 'vermagic': entry['vermagic'], 'symbol_checks': checks,
             'unresolved_symbols': [], 'runtime_validated': entry['runtime_validated']}
 
@@ -105,4 +109,9 @@ if __name__ == '__main__':
         expected = json.loads((ROOT / 'artifacts/cryptodev' / args.profile / 'manifest.json').read_text())
         if report['ipk_sha256'] != expected['ipk_sha256']:
             raise SystemExit('cryptodev IPK differs from committed build')
+        snapshot = config_options(gzip.decompress((BUILD / args.profile / 'build.config.gz').read_bytes()))
+        actual = config_options((args.modules / 'build.config').read_bytes())
+        if actual != snapshot:
+            changed = sorted(k for k in actual.keys() | snapshot.keys() if actual.get(k) != snapshot.get(k))
+            raise SystemExit('Kernel build configuration differs from committed snapshot: ' + ', '.join(changed))
     print(json.dumps(report, indent=2))

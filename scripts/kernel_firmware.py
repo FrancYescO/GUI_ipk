@@ -18,6 +18,9 @@ def decrypt_rbi(data):
         'VBNT-S': '0ef34d972945869ef40f89873fed30269020e107685c097751bef9479d75d620',
         'VBNT-O': '916aeb569d8cbf8cfaf060aec533d43a9ef0acb3138f8351c4112674212975a5',
         'VCNT-3': 'afe6a928efd1d5824cca03cf6f9cd7796fcbe9a746aa7120792b666fc2c3ebb6',
+        'VCNT-A': 'ad8a87e29be6b6ed72f575c1c80bbd638e7ce95e5bf9824145fd7d042cda2d79',
+        'VCNT-2': '7516539450a63b8670502ef972cdc9b331b99fb39403e7f75a88bb6fe3602c52',
+        'VBNT-V': '7bffb7ebbe416d38078712ec5ac5def6e4e50ee58848d6f2c072df6e0c6cefe7',
     }
     if len(data) < 0x144:
         raise ValueError('Truncated RBI')
@@ -49,7 +52,7 @@ def decrypt_rbi(data):
         elif kind == 0xb4:
             import zlib
             decoder = zlib.decompressobj()
-            data = decoder.decompress(data[10:], 128 * 1024**2)
+            data = decoder.decompress(data[10:], 256 * 1024**2)
             if not decoder.eof:
                 raise ValueError('Incomplete or oversized RBI layer')
         elif kind == 0xb7:

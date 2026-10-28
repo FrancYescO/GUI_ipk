@@ -9,6 +9,22 @@ on:
 permissions:
   contents: read
 jobs:
+  profiles:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: select
+        run: |
+          python3 - <<'PYCODE'
+          import json, os
+          from pathlib import Path
+          profiles = json.loads(Path('build/cryptodev/profiles.json').read_text())
+          matrix = {'profile': [p.split('-', 1)[1] for p in profiles if p.startswith('4.1.52-')]}
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('matrix=' + json.dumps(matrix) + '\n')
+          PYCODE
   kernel38:
     name: Cryptodev 4.1.38 ${{ matrix.profile }}
     runs-on: ubuntu-24.04
@@ -59,13 +75,13 @@ jobs:
           path: dist/
           retention-days: 14
   kernel52:
+    needs: profiles
     name: Cryptodev 4.1.52 ${{ matrix.profile }}
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     strategy:
       fail-fast: false
-      matrix:
-        profile: [vbntk, vcnt3, vcnt2]
+      matrix: ${{ fromJSON(needs.profiles.outputs.matrix) }}
     env:
       GH_TOKEN: ${{ github.token }}
       PROFILE: 4.1.52-${{ matrix.profile }}

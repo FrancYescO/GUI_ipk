@@ -20,8 +20,8 @@ class PublicationTests(unittest.TestCase):
     def test_complete_bootstrap_has_semantic_components_and_all_updates(self):
         catalog = json.loads(gzip.decompress((ROOT / 'build/publication/bootstrap.json.gz').read_bytes()))
         rows = catalog['records']
-        self.assertEqual(len(rows), 6248)
-        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 6240)
+        self.assertEqual(len(rows), 6396)
+        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 6388)
         self.assertEqual(set(catalog['releases']), {'freeswitch-sounds'})
         self.assertLess(sum(r['size'] for r in rows if r['storage'] == 'pages'), 750 * 1024**2)
         pins = json.loads((ROOT / 'build/application-archive/manifest.json').read_text())
@@ -45,7 +45,7 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual([(r['profile'], r['count']) for r in manifest['profiles']],
                          [('4.1.38-vbnto', 50), ('4.1.38-vbntk', 50), ('4.1.52-vbntk', 50)])
         self.assertEqual([(r['profile'], r['count']) for r in manifest['candidates']],
-                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212), ('4.1.52-vcnt3-candidates', 50), ('4.1.52-vcnt2-candidates', 50)])
+                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212), ('4.1.52-vcnt3-candidates', 50), ('4.1.52-vcnt2-candidates', 50), ('4.1.52-vcntj-candidates', 50), ('4.1.52-vcnta-candidates', 49), ('4.1.52-vbntv-candidates', 49)])
         for row in manifest['profiles'] + manifest['candidates']:
             self.assertEqual(row['url'], layout.SITE + '/kernel/' + row['profile'])
             self.assertTrue(row['source'].endswith(' ' + row['url']))

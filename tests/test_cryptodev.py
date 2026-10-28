@@ -21,7 +21,9 @@ class CryptodevTests(unittest.TestCase):
         from firmware_kernel_candidates import files
         from kernel_firmware import config_options
         rows = publication_records()
-        self.assertEqual(len(rows), 5)
+        self.assertEqual(len(rows), len(definitions()))
+        firmware = json.loads((ROOT / 'build/kernel-firmware-profiles/profiles.json').read_text())
+        self.assertTrue({k for k, v in firmware.items() if v.get('bundle')} <= set(definitions()))
         for row in rows:
             profile = row['profile']
             definition = definitions()[profile]
@@ -41,7 +43,7 @@ class CryptodevTests(unittest.TestCase):
                 (directory / 'cryptodev.ko').write_bytes(payload)
                 result = package(profile, directory, directory / 'ipks')
                 self.assertEqual(result['ipk_sha256'], row['sha256'])
-            self.assertFalse(definition['runtime_validated'])  # Final CI payloads await modem retesting.
+            self.assertEqual(definition['runtime_validated'], profile.startswith('4.1.38-'))
 
     def test_pinned_source_and_page_ownership(self):
         self.assertEqual(hashlib.sha256(ARCHIVE.read_bytes()).hexdigest(),

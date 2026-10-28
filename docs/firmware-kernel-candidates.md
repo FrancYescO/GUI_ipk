@@ -1,25 +1,28 @@
 # Firmware kernel candidates from static images
 
-Two additional firmware profiles are compiled from the pinned GPL buildsystem,
+Five firmware profiles are compiled from the pinned GPL buildsystem,
 Broadcom 502L07 SDK, GCC 5.5.0 and repository ABI/backport patches. These are
 **offline-checked candidates, not runtime-validated modules**.
 
 | Feed on Pages | Original reference firmware | Architecture / vermagic | Packages |
 |---|---|---|---:|
 | `kernel/4.1.52-vcnt3-candidates` | DGA4331 / VCNT-3, AGTHF 1.3.0 and 1.1.2 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 49 |
-| `kernel/4.1.52-vcnt2-candidates` | DWA0122 / VCNT-2, Belong 19.4.0381-4961004 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
+| `kernel/4.1.52-vcnt2-candidates` | DWA0122 / VCNT-2, Belong 19.4.l.0393-MR1-RB and 19.4.0381-4961004 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
+| `kernel/4.1.52-vcntj-candidates` | DGA4134 / VCNT-J, Sorgenia 19.4.0629-5661052 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
+| `kernel/4.1.52-vcnta-candidates` | DJA0231 / VCNT-A, Telstra 20.3.c.0501-MR22.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
+| `kernel/4.1.52-vbntv-candidates` | DJA0230 / VBNT-V, Telstra 20.3.c.0432-MR21.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
 
 Enable a candidate source manually only after matching its complete virtual
 kernel package version. The source-selection helper does not enable candidates.
 The exact source lines are in the public kernel overview and each feed's
-`opkg.conf`. The two profiles cannot be interchanged despite sharing Linux 4.1.52.
+`opkg.conf`. These profiles cannot be interchanged despite sharing Linux 4.1.52.
 
 The module set contains the existing network, netfilter and QoS targets, TUN,
 WireGuard 1.0.20220627, CDC Ethernet, RNDIS and USBnet. SPU is not included:
-both original configurations disable it. `xt_nat` remains quarantined across
+VCNT-3, VCNT-2 and VCNT-J disable it; Telstra enables vendor implementation 3, which needs separate ABI checks. `xt_nat` remains quarantined across
 profiles and was not loaded or tested. IPKs contain a single module under
 `/usr/lib/kernel-module-candidates/<profile>/`, an exact kernel dependency and
-no maintainer scripts or boot autoload files.
+no maintainer scripts or boot autoload files. TUN is already built into both Telstra kernels, so their feeds omit `tun.ko` and contain 48 packages each. The audit rejects modules that duplicate exports built into the kernel.
 
 ## Input recovery and checks
 
@@ -29,12 +32,12 @@ accepts a decrypted image or raw bank dump. RBI decoding uses Python
 `cryptography`; the kernel/ELF checks use the standard library. Extract stock
 files with `unsquashfs` on a **case-sensitive filesystem** before invoking it.
 
-VCNT-3 images require LZMA layers at offsets 38 and 16,836. The VCNT-2 bank dump
-requires only the layer at offset 38. The program locates absolute ARM export
+VCNT-3 images require LZMA layers at offsets 38 and 16,836. The VCNT-2 RBI/bank dump
+and VCNT-J bank dumps require only the layer at offset 38. Telstra VCNT-A and VBNT-V require layers at 38 and 16,820. The program locates absolute ARM export
 tables using independent symbol anchors, parses stock ELF modules, and refuses
 an input whose kernel and stock-module exports do not resolve every stock
 module's strong imports. The checked inputs contain 267 stock modules per
-VCNT-3 image and 255 for VCNT-2.
+VCNT-3 image, 255 for VCNT-2, 259 for VCNT-J, 287 for VCNT-A and 288 for VBNT-V.
 
 The historical Git extraction of AGTHF 1.1.2 has at least one case-collision
 error (`xt_DSCP.ko`). Its audit therefore uses stock modules directly from the
@@ -53,7 +56,7 @@ The proven SDK configuration is adapted using differences between the original
 VBNT-K runtime configuration and each original target configuration. This
 preserves 22 VCNT-3-specific changes and 440 VCNT-2-specific changes before
 Kconfig resolves dependencies. Required platform and changed Broadcom kernel-feature ABI options are
-checked again after `olddefconfig`. The build records its final configuration.
+checked again after `olddefconfig`. The new configurations have 445 differences for VCNT-J, 175 for VCNT-A and 172 for VBNT-V relative to the reference; the exact counts are pinned in the profile definitions. The build records its final configuration.
 Matching symbols and configuration do **not** prove every structure layout,
 vendor patch or functional behavior. Device validation is still required.
 
@@ -88,15 +91,12 @@ have complete offline symbol closure. The replacement has not been loaded or
 functionally tested; its previous payload and busy observation remain in the
 validation history. No stock module was unloaded for this correction.
 
-## Remaining profile order
+## Newer firmware and acquisition limits
 
-VCNT-3 was first, followed by VCNT-2 because a complete public bank dump and
-matching SDK support were available. Fastweb FW261/FW264 remain next once a
-complete original RBI or bank image can be acquired. Their server did not
-respond and the bounded public torrent attempt downloaded no data. An SSH
-runtime configuration is an alternative input, not a requirement.
+AGTHF 1.3.6 is already mapped to the VCNT-3 candidate feed because its kernel package, kernel source reference and all 267 stock module blobs match 1.3.0. This is stock equivalence only: the full 1.3.6 RBI could not be downloaded from the TIM server or public mirror, so no direct embedded configuration or runtime validation is claimed.
 
-Other kernel releases and CPU families require their own source, toolchain and
-ABI checks. The newer VCNT-2 19.4.l.0393 firmware and older VCNT-3 ABI groups are
-not claimed compatible solely because their Linux version or kernel package
-fingerprint resembles a checked profile.
+VCNT-2 19.4.l.0393-MR1-RB was recovered from its public torrent after the HTTP/HTTPS server timed out. Its exact kernel package matches the older bank dump. The embedded configuration differs only in `CONFIG_NETFILTER_NETLINK_LOG` and `CONFIG_NETFILTER_XT_TARGET_NFLOG`, both enabled as modules in the newer image. The newest configuration is now the build reference, and the same 49 payloads are checked against both complete kernel/stock export inventories. All 255 new stock modules also match the historical Git extraction. No additional feed is needed.
+
+Fastweb FW261/FW264 still require an original image; a saved runtime configuration remains an alternative.
+
+The available VCNT-J Sorgenia image and latest inventoried Telstra images were therefore processed next. Each has a dedicated exact-dependency candidate feed. All new profiles remain offline checked only. Other kernel releases and CPU families need their own source, toolchain and ABI checks.

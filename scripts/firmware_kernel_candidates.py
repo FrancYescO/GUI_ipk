@@ -46,7 +46,7 @@ def expected_names():
 
 def audit(profile, payloads):
     entry = definitions()[profile]
-    if set(payloads) != expected_names() or len(payloads) != entry['module_count']:
+    if set(payloads) != expected_names() - set(entry['excluded_modules']) or len(payloads) != entry['module_count']:
         raise ValueError('Unexpected firmware candidate module set')
     modules = []
     for name, payload in sorted(payloads.items()):
@@ -70,6 +70,9 @@ def audit(profile, payloads):
             raise ValueError('Versioned-symbol kernels need CRC verification')
         if unresolved(stock['stock_modules'], stock['exports']):
             raise ValueError('Original stock symbol closure failed')
+        for module in modules:
+            if set(module['exports']) & set(stock['exports']):
+                raise ValueError('Candidate duplicates built-in kernel exports: ' + module['name'])
         provided = stock['exports'] + [symbol for m in stock['stock_modules'] for symbol in m['exports']]
         missing = unresolved(modules, provided)
         if missing:
