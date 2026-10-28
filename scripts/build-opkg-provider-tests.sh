@@ -17,6 +17,6 @@ cmake -S "$work/source/opkg-lede-4bd8601ebd95c130e504cc724b0c5eb163050982" -B "$
   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_PREFIX_PATH="$work/install" \
   -DCMAKE_C_FLAGS="-I$work/install/include -fcommon -D_GNU_SOURCE" \
   -DCMAKE_EXE_LINKER_FLAGS="-L$work/install/lib -Wl,-rpath,$work/install/lib" \
-  -DBUILD_TESTS=OFF -DENABLE_USIGN=OFF -DLOCK_FILE="$work/opkg.lock" -DVERSION=4bd8601-2017-07-28
+  -DBUILD_TESTS=OFF -DENABLE_USIGN=OFF -DVERSION=4bd8601-2017-07-28
 cmake --build "$work/opkg-build" --parallel 2
 "$work/opkg-build/src/opkg-cl" --version
