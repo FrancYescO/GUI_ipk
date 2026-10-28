@@ -1,8 +1,8 @@
 {
   "asset": "kmod-cryptodev-4.1.52-vcnt2-candidate_1.14-1_arm_cortex-a7.ipk",
   "control": "Package: kmod-cryptodev-4.1.52-vcnt2-candidate\nVersion: 1.14-1\nArchitecture: arm_cortex-a7\nDepends: kernel (= git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-eceb083346d22dc65ce7effde3310ee1)\nSection: kernel\nMaintainer: GUI_ipk\nDescription: Synchronous cryptodev 1.14 with bounded page ownership; manual load, privileged access only\nX-Manual-Install-Only: yes\nX-Offline-Symbol-Check: passed\nX-Runtime-Validated: no\nX-Kernel-Profile: 4.1.52-vcnt2\nX-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7 p2v8\nX-Module-Path: /usr/lib/kernel-module-candidates/4.1.52-vcnt2/cryptodev.ko\nX-Module-Staging-Only: yes\n",
-  "ipk_sha256": "8f938b6656b32e46e2ba27f71a474f15255e0b003b6de65e7dea882ea1c33ade",
-  "module_sha256": "6eebc200029443be79ae0fd3168336e5aec9f80eaf485b86a7a26ef0294576d1",
+  "ipk_sha256": "77b3b71cfa742b500f7250ff7257782b25a14fa65974306e264035cda0d0eeea",
+  "module_sha256": "258ff9d38688ad3c42a59e83cd73ef28228b5d3d19d408931ead0fc0ac2ec88b",
   "patch_sha256": "d612f352dc946a32b47cfd56ea85283e2d9ab4ec67217e33c952b0481b8dfe5f",
   "profile": "4.1.52-vcnt2",
   "runtime_validated": false,

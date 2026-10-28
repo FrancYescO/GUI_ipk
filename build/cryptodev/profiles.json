@@ -4,18 +4,20 @@
     "architecture": "arm_cortex-a9",
     "vermagic": "4.1.38 SMP preempt mod_unload ARMv7",
     "feed": "kernel/4.1.38-vbnto",
-    "runtime_validated": true,
+    "runtime_validated": false,
     "export_input": "4.1.38-vbnto-exports.json.gz",
-    "runtime_device": ".45"
+    "runtime_device": ".45",
+    "limitation": "CI artifact awaits runtime retest. Preliminary local build passed functional tests; ELF differences are diagnostic source filenames only, with identical configuration and imports."
   },
   "4.1.38-vbntk": {
     "kernel_package": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
     "architecture": "arm_cortex-a9",
     "vermagic": "4.1.38 SMP preempt mod_unload ARMv7",
     "feed": "kernel/4.1.38-vbntk",
-    "runtime_validated": true,
+    "runtime_validated": false,
     "export_input": "4.1.38-vbntk-exports.json.gz",
-    "runtime_device": ".204"
+    "runtime_device": ".204",
+    "limitation": "CI artifact awaits runtime retest. Preliminary local build passed functional tests; ELF differences are diagnostic source filenames only, with identical configuration and imports."
   },
   "4.1.52-vbntk": {
     "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55",

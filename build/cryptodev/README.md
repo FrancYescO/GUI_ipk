@@ -9,8 +9,8 @@ VBNT-K public feed alias.
 
 | Profile | Feed | New module validation |
 | --- | --- | --- |
-| 4.1.38-vbnto | `kernel/4.1.38-vbnto` | Functional tests on .45 |
-| 4.1.38-vbntk | `kernel/4.1.38-vbntk` | Functional tests on .204 |
+| 4.1.38-vbnto | `kernel/4.1.38-vbnto` | CI artifact awaits .45 retest |
+| 4.1.38-vbntk | `kernel/4.1.38-vbntk` | CI artifact awaits .204 retest |
 | 4.1.52-vbntk | `kernel/4.1.52-vbntk` | Offline symbols; existing stock cryptodev busy on .69 |
 | 4.1.52-vcnt3 | `kernel/4.1.52-vcnt3-candidates` | Offline candidates |
 | 4.1.52-vcnt2 | `kernel/4.1.52-vcnt2-candidates` | Offline candidates |
@@ -72,7 +72,11 @@ GCM session creation was unavailable on both tested 4.1.38 configurations: GCM i
 not marked runtime validated. Neither SPU loading nor performance/acceleration
 claims are part of these tests. Boot IDs and kernel taint remained unchanged;
 the temporary modules were unloaded and temporary device nodes/files removed.
-Results are recorded under each profile in this directory, tied to module hashes.
+Results are recorded under each profile in this directory, tied to the tested
+module hashes. Those functional passes apply to preliminary local builds. The
+final CI artifacts differ in diagnostic source filenames, with identical parsed
+configuration, imports and executable sections. They are deliberately marked
+runtime-unvalidated pending a new modem test; no publication is claimed yet.
 
 `.github/workflows/build-cryptodev.yml` builds all five profiles from pinned GPL
 sources/toolchains and original runtime configurations using the existing ABI
@@ -82,3 +86,11 @@ exports and produces deterministic IPKs; CI must reproduce the committed IPK
 SHA256 byte for byte. Config snapshots and manifest hashes record the inputs.
 Candidates have no hardware runtime validation: offline symbol closure alone
 does not prove complete structure layout or behavior compatibility.
+
+The first dedicated source CI run was
+[40692416645](https://github.com/FrancYescO/GUI_ipk/actions/runs/40692416645).
+It built all five modules and checked their firmware imports. Its byte comparison
+against preliminary local builds failed because `WARN_ON` embeds absolute source
+filenames. The committed IPKs now use that CI output, with the standard source
+paths selected by the build recipes. A second clean CI run must reproduce them;
+overriding the build/source directories can change diagnostic strings and hashes.

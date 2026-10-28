@@ -1,11 +1,11 @@
 {
   "asset": "kmod-cryptodev-4.1.38-vbntk_1.14-1_arm_cortex-a9.ipk",
-  "control": "Package: kmod-cryptodev-4.1.38-vbntk\nVersion: 1.14-1\nArchitecture: arm_cortex-a9\nDepends: kernel (= 4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)\nSection: kernel\nMaintainer: GUI_ipk\nDescription: Synchronous cryptodev 1.14 with bounded page ownership; manual load, privileged access only\nX-Manual-Install-Only: yes\nX-Offline-Symbol-Check: passed\nX-Runtime-Validated: yes\nX-Kernel-Profile: 4.1.38-vbntk\nX-Kernel-Vermagic: 4.1.38 SMP preempt mod_unload ARMv7\nX-Module-Path: /usr/lib/kernel-module-candidates/4.1.38-vbntk/cryptodev.ko\n",
-  "ipk_sha256": "1736bc2aacbee1be738d9961172a58df79db076b76ce48ba92c5b8fbc58bf074",
-  "module_sha256": "1f135dc1058622f4758dc2539533487fc8342f712f1573e75b37625ac6dcb026",
+  "control": "Package: kmod-cryptodev-4.1.38-vbntk\nVersion: 1.14-1\nArchitecture: arm_cortex-a9\nDepends: kernel (= 4.1.38-1-8dd693635a152c8c7b822a64e6c5c470)\nSection: kernel\nMaintainer: GUI_ipk\nDescription: Synchronous cryptodev 1.14 with bounded page ownership; manual load, privileged access only\nX-Manual-Install-Only: yes\nX-Offline-Symbol-Check: passed\nX-Runtime-Validated: no\nX-Kernel-Profile: 4.1.38-vbntk\nX-Kernel-Vermagic: 4.1.38 SMP preempt mod_unload ARMv7\nX-Module-Path: /usr/lib/kernel-module-candidates/4.1.38-vbntk/cryptodev.ko\n",
+  "ipk_sha256": "7389da6d8dd03e9e9352b5cccf517728303ad841b1922f7037b785aa606f1583",
+  "module_sha256": "9736f4dc5d68dacbe021849f108fcaeefab611334302f79b74f9663ed96e65af",
   "patch_sha256": "d612f352dc946a32b47cfd56ea85283e2d9ab4ec67217e33c952b0481b8dfe5f",
   "profile": "4.1.38-vbntk",
-  "runtime_validated": true,
+  "runtime_validated": false,
   "source_commit": "08644db02d43478f802755903212f5ee506af73b",
   "source_sha256": "e795acb85118f1f39f0155df8fd28a3d79de7d1240b91bdf8cc9e2a1747d2642",
   "symbol_checks": [

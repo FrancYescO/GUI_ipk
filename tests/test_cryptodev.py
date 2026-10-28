@@ -41,7 +41,7 @@ class CryptodevTests(unittest.TestCase):
                 (directory / 'cryptodev.ko').write_bytes(payload)
                 result = package(profile, directory, directory / 'ipks')
                 self.assertEqual(result['ipk_sha256'], row['sha256'])
-            self.assertEqual(definition['runtime_validated'], profile.startswith('4.1.38-'))
+            self.assertFalse(definition['runtime_validated'])  # Final CI payloads await modem retesting.
 
     def test_pinned_source_and_page_ownership(self):
         self.assertEqual(hashlib.sha256(ARCHIVE.read_bytes()).hexdigest(),

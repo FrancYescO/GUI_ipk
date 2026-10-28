@@ -109,7 +109,7 @@ VBNT-K: 14 functional passes, 2 smoke passes, 32 busy stock modules left unchang
 See the linked reports for exact payloads and test limits; USB tethering traffic has not been tested.</p>
 <h2>Cryptodev 1.14 — explicit manual load</h2><p>All five ABI profiles include a cryptodev package, staged under
 <code>/usr/lib/kernel-module-candidates/PROFILE/cryptodev.ko</code> without autoload or stock-driver replacement.
-AES-CBC (copy/zero-copy, in-place/separate buffers), SHA256 and HMAC passed on VBNT-O and VBNT-K/S 4.1.38.
+Preliminary local builds passed AES-CBC (copy/zero-copy, in-place/separate buffers), SHA256 and HMAC on VBNT-O and VBNT-K/S 4.1.38; final CI artifacts await retesting.
 AES-GCM was unavailable on those test configurations. The new 4.1.52 VBNT-K module is checked offline only:
 the existing stock cryptodev was busy in nginx and generic_pnpd and was left active.
 VCNT-2/3 remain offline candidates. This synchronous build requires CAP_SYS_ADMIN; firmware may override device modes,
