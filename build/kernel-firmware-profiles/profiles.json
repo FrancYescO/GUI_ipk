@@ -143,7 +143,9 @@
     "stock_inputs": [
       "vcnta-20.3.0501"
     ],
-    "stock_equivalent_firmwares": [],
+    "stock_equivalent_firmwares": [
+      "vcnt-a_20.3.c.0501-MR22-RC"
+    ],
     "module_count": 48,
     "excluded_modules": {
       "bcmspu": "Vendor SPU implementation 3 enabled; omitted from this portable module set pending separate ABI verification",
@@ -163,7 +165,7 @@
     "firmware_mirror": "http://fwstore.bdms.telstra.net/Technicolor_vcnt-a_20.3.c.0501-MR22.1-RA/vcnt-a_20.3.c.0501-MR22.1-RA.rbi",
     "original_config_note": "Embedded original RBI configuration and complete stock symbol closure; no runtime validation.",
     "bundle": "artifacts/firmware-kernel-candidates/vcnta-4.1.52.tar.gz",
-    "bundle_sha256": "40312665e2b63dfc18b3e8cc5392fd3792dc03a98cae9386654279bb2a08ca67",
+    "bundle_sha256": "455d04e557465e61d57f50bcfc41cfbd09fc65e72775308080ff2a68a282903d",
     "verified_firmwares": [
       "vcnt-a_20.3.c.0501-MR22.1-RA"
     ],
@@ -183,7 +185,10 @@
     "stock_inputs": [
       "vbntv-20.3.0432"
     ],
-    "stock_equivalent_firmwares": [],
+    "stock_equivalent_firmwares": [
+      "vcnt-a_20.3.c.0432-MR21-RA",
+      "vcnt-a_20.3.c.0432-MR21.1-RA"
+    ],
     "module_count": 48,
     "excluded_modules": {
       "bcmspu": "Vendor SPU implementation 3 enabled; omitted from this portable module set pending separate ABI verification",
@@ -203,7 +208,7 @@
     "firmware_mirror": "http://fwstore.bdms.telstra.net/Technicolor_vbnt-v_20.3.c.0432-MR21.1-RA/vbnt-v_20.3.c.0432-MR21.1-RA.rbi",
     "original_config_note": "Embedded original RBI configuration and complete stock symbol closure; no runtime validation.",
     "bundle": "artifacts/firmware-kernel-candidates/vbntv-4.1.52.tar.gz",
-    "bundle_sha256": "bc6665ca8d665b0cdd4eb608b83451d8523937ea61339f06c09052342d64ee4a",
+    "bundle_sha256": "0f39787898129e828e6a94b9c98caf544c6e1cec5102c2bfc3be68a902f74718",
     "verified_firmwares": [
       "vbnt-v_20.3.c.0432-MR21.1-RA"
     ],

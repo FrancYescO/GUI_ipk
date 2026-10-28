@@ -2,11 +2,11 @@
 
 Pages hosts the six main userspace feeds (`base`, `luci`, `packages`, `routing`,
 `telephony`, `target/packages`), Asterisk 20, all three runtime kernel profiles
-and four separate candidate feeds. Only the eight large FreeSWITCH sound
+and seven separate candidate feeds. Only the eight large FreeSWITCH sound
 packages use a binary Release feed (about 387 MiB).
 
-All 6,243 catalog records are retained: 6,235 IPKs are on Pages, about 700 MiB,
-including all thirteen promoted application updates and all 677 kernel IPKs.
+All 6,388 catalog records are retained: 6,380 IPKs are on Pages, about 700 MiB,
+including all thirteen promoted application updates and all 822 kernel IPKs.
 Package bytes and SHA256 values are unchanged. `feeds.json` lists every source;
 the catalog links directly to Pages or the FreeSWITCH sound release.
 
@@ -25,7 +25,7 @@ status. Kernel release alone, such as `uname -r`, does not identify the ABI.
 | `kernel/4.1.38-vbntk-candidates` | VBNT-S ABI above | 212 | Optional staging only; manual validation |
 
 The additional `kernel/4.1.52-vcnt3-candidates` and
-`kernel/4.1.52-vcnt2-candidates` feeds contain 49 staged IPKs each, built for
+`kernel/4.1.52-vcnt2-candidates` feeds contain 49 staged IPKs each. The new VCNT-J Sorgenia feed also has 49; the latest Telstra VCNT-A and VBNT-V feeds have 48 each because TUN is built into those kernels. All are built for
 original-image configurations and checked against original kernel/stock exports.
 VCNT-2 uses `arm_cortex-a7` and `ARMv7 p2v8`; VCNT-3 uses `arm_cortex-a9` and
 `ARMv7`. They are not interchangeable or runtime validated. See

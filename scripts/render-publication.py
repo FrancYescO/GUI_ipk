@@ -109,7 +109,8 @@ VBNT-K: 14 functional passes, 2 smoke passes, 32 busy stock modules left unchang
 See the linked reports for exact payloads and test limits; USB tethering traffic has not been tested.</p>
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
 Additional firmware candidate feeds below have configurations recovered from original firmware images and pass offline symbol checks.
-These checks do not establish complete structure-layout compatibility or runtime behavior. VCNT-3 candidates omit SPU, disabled by its original firmware.
+These checks do not establish complete structure-layout compatibility or runtime behavior.
+SPU is omitted from the additional firmware feeds. Telstra VCNT-A and VBNT-V already have TUN built into the kernel, so they contain 48 packages each without tun.ko; VCNT-3, VCNT-2 and VCNT-J contain 49 each.
 These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
 They stage modules outside boot paths; a successful build does not prove runtime compatibility. xt_nat remains withheld.</p>''' + candidates + '''
 <h2>VBNT-K canonical feeds and VBNT-S aliases</h2><p>VBNT-K is the canonical public feed name for each kernel version.

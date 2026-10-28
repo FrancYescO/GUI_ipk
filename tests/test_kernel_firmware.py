@@ -9,6 +9,7 @@ import sys
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -125,11 +126,20 @@ class FirmwareKernelTests(unittest.TestCase):
                 report = candidates.restore(profile, Path(temp))
                 self.assertEqual(len(report['modules']), 48)
                 self.assertNotIn('tun', {m['name'] for m in report['modules']})
-            payloads = {p.stem: p.read_bytes() for p in (ROOT / 'artifacts/damson-4.1.52-manual').glob('tun.ko')}
-            self.assertTrue(payloads)
-            # An attempted module for a built-in service must never enter a feed.
-            with self.assertRaises(ValueError):
-                candidates.audit(profile, payloads)
+            entry = candidates.definitions()[profile]
+            payloads = {}
+            for name, ipk in candidates.files((ROOT / entry['bundle']).read_bytes()).items():
+                if name.endswith('.ipk'):
+                    data = candidates.files(candidates.files(ipk)['./data.tar.gz'])
+                    path, raw = next(iter(data.items()))
+                    payloads[Path(path).stem] = raw
+            payloads['tun'] = (ROOT / 'artifacts/damson-4.1.52-manual/tun.ko').read_bytes()
+            definitions = candidates.definitions()
+            definitions[profile]['module_count'] = 49
+            del definitions[profile]['excluded_modules']['tun']
+            with patch.object(candidates, 'definitions', return_value=definitions):
+                with self.assertRaisesRegex(ValueError, 'duplicates built-in kernel exports: tun'):
+                    candidates.audit(profile, payloads)
 
 
 if __name__ == '__main__':

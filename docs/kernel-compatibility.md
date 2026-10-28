@@ -178,3 +178,5 @@ The offline audit also found two unavailable Altibox symbols in the old VBNT-K
 conntrack payload. Revision `4.1.52-2` removes those SDK-only hooks and passes
 original-firmware symbol checks. The replacement has not been loaded; the prior
 busy observation and original payload hash remain in the validation history.
+
+Latest firmware candidate feeds are listed in the [kernel overview](https://francyesco.github.io/GUI_ipk/kernel/) and [firmware build matrix](firmware-kernel-candidates.md). VCNT-J Sorgenia 19.4.0629 has 49 staged packages; Telstra VCNT-A 20.3.c.0501 and VBNT-V 20.3.c.0432 have 48 each, with TUN already built into their kernels. These are offline checks only and require manual device validation.

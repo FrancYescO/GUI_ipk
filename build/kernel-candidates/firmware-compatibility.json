@@ -3030,8 +3030,10 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "4fc0170d7b40139c6aaaab126c6b8a405fe1bdcb",
       "stock_module_set": "1d2ba65ff342bbba08bd22d05c161e7c36893a1947db11700c815e47df518138",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntv",
+      "status": "stock-modules-identical-runtime-check-required",
+      "candidate_feed": "kernel/4.1.52-vbntv-candidates",
+      "original_image_checked": false
     },
     {
       "firmware": "vcnt-a_20.3.c.0432-MR21.1-RA",
@@ -3041,8 +3043,10 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "4fc0170d7b40139c6aaaab126c6b8a405fe1bdcb",
       "stock_module_set": "1d2ba65ff342bbba08bd22d05c161e7c36893a1947db11700c815e47df518138",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntv",
+      "status": "stock-modules-identical-runtime-check-required",
+      "candidate_feed": "kernel/4.1.52-vbntv-candidates",
+      "original_image_checked": false
     },
     {
       "firmware": "vcnt-a_20.3.c.0501-MR22-RC",
@@ -3052,8 +3056,10 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "e708a640ef098f58d00e56509c96f709a95f5907",
       "stock_module_set": "330d973cfa172cad7a3a1959cc52a43942670df182455cc442fb0b89cbae1d2b",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnta",
+      "status": "stock-modules-identical-runtime-check-required",
+      "candidate_feed": "kernel/4.1.52-vcnta-candidates",
+      "original_image_checked": false
     },
     {
       "firmware": "vcnt-a_20.3.c.0501-MR22.1-RA",
