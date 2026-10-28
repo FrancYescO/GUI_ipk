@@ -24,7 +24,7 @@ b57683693dac321fd9527f5d9216a11c8dd6c8323056c1c397725883e4312fce  kmod-ipt-rejec
 cfcc17e76091cc364016ff67bf50d6baa452337883e3b2c52c2f14c05e296dd7  kmod-iptable-filter-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 9960d736ec54198becab52ab34e3010f6ab2008bb78e47bd301c2e59ae32cca5  kmod-iptable-mangle-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 1b3f62d3783e69c6dd09821ae9500b3c061b9d167ab2cfaf56b6815c4db79bc7  kmod-iptable-nat-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
-9df8a653a1d8ad9e348ce37686cd6de00086371f8290ffc1168b9288f4a86a7d  kmod-nf-conntrack-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
+0698ec2c1d6050ec7a32f72216d6dbfe6803fc703d89b4f4c39834066dd2b33d  kmod-nf-conntrack-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk
 6701f4c3e445b89b8ce5e74e34c65b961c340c37bd7361cd9fdc03228967c36c  kmod-nf-conntrack-ipv4-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 56e49bc3a1bbc08de0c6d0cf1b96ecb8f9d2384e50486b0e8acc5e5f90f1aa66  kmod-nf-conntrack-ipv6-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 9ab91ad7634c50aea1afb7ed92a09f6f25bf40afdacbb1e34186ede7c4f9adaf  kmod-nf-defrag-ipv4-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
@@ -54,7 +54,7 @@ a3608478d39eeb8f79a9b2e2225a7d1c9a9e5041341e0cc43597887c01e080c9  kmod-xt-limit-
 7a240ed3a9d9495e3240066627d2447208e163f43ad8cc8f1e3090779aa8dbd6  kmod-xt-state-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 f51873937bc2ca64dfdcf45b00ef9b3a9dee76c6851718d69091befae8d33577  kmod-xt-tcpmss-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
 9c409bf27528a2fb4d03a3b68b7f4b27080408f1bbad2a95f401d7d7dc516d84  kmod-xt-time-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk
-ba0129d922895bb63435e2d93dd8dc06f7853228b2d713175fab24b717afa2fc  nf_conntrack.ko
+cab6fa885c798a24250e0c8bf16a60bdf01a00687ab0a74e46474a87c0f41865  nf_conntrack.ko
 702ee1fc361231b1705dbe4a30df5b20c3cefed7159a031db2b4344ecc3dac74  nf_conntrack_ipv4.ko
 3730594e815a44e4826e3a8beed605dc4abe9a63b6dd81779ff1125cc96b631a  nf_conntrack_ipv6.ko
 20c2933c22e13292fb924b87a7fcf9479e378c561bc5e85684a6e6200cdf57a3  nf_defrag_ipv4.ko

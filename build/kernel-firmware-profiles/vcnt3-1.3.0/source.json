@@ -1,0 +1,27 @@
+{
+  "image": "AGTHF_1.3.0_CLOSED.rbi",
+  "image_sha256": "307c3556411e9ac364bb872ae5a0273e4941fb7fbcf49e47c68c0fb09f7df6ae",
+  "board": "VCNT-3",
+  "decrypted_sha256": "ee34be7682a8fe3a26a7b78cf8283e29e491030bc287a1e75b4393289c11f5b3",
+  "layers": [
+    {
+      "offset": 38,
+      "size": 2206678,
+      "sha256": "fae843301a5be166c5e64064fd015641cdcb91c449421d6f12f32306b5848313"
+    },
+    {
+      "offset": 16836,
+      "size": 6188480,
+      "sha256": "79946d0dae9d9559583a8788a9cd7563c5e27c03aa3033bf0dd7ed9b696ca7b7"
+    }
+  ],
+  "config_sha256": "cb1b1f11c87063942badfced76f6a07c3fe141f961ec067839becfdc4bddad43",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-036bded426297fe68ce5c3d8ab8c6658",
+  "stock_module_count": 267,
+  "kernel_export_count": 5910,
+  "base_address": "0xc0018000",
+  "stock_symbols_sha256": "c79dfb64ce86b8130bccb80eee788f1d7e08ec12a400a4c2ff3a80e0365ad7bb",
+  "firmware_version_file": "config version\n        option version '19.4.1051-4661126-20240410113337-cf49b74e8c88c918fead0a0f9ad052f3283f4ee7'\n        option mask '4661126'\n        option timestamp '20240410113337'\n        option product 'vcnt-d_ti'\n        option marketing_name 'Damson'\n        option marketing_version '19.4'\n\toption config 'cf49b74e8c88c918fead0a0f9ad052f3283f4ee7'\n\toption openwrt 'e2ae576c182333a98baa8e831ee25c97a3c3361e'\n\toption kernel '5c1688dc9cc0c60e2e5534d702efa8c262815dae'\n\toption technicolor '5f7c2806891bca9beeb0607412b87a11d3dbc6db'\n\toption custo '945ba06a95091ac1263df7e6daa53e3a309885ad'\n\toption lte 'b142c13576b13d62db59d967c3988a1ab0582075'\n\toption packages 'd1d2575cb4d19a1dfcfb24959866379b7d41d9a9'\n\toption routing '0a4c07e8ddf257269ac2d548dc70823679ef3ae8'\n",
+  "runtime_validated": false,
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7"
+}

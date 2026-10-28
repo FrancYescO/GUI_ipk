@@ -1,6 +1,6 @@
 {
   "kernel": "4.1.52",
-  "updated": "2026-10-27",
+  "updated": "2026-10-28",
   "firmware": "19.4.1051-3401200",
   "device": "VBNT-K",
   "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55",
@@ -234,17 +234,28 @@
     },
     {
       "name": "nf_conntrack",
-      "sha256": "ba0129d922895bb63435e2d93dd8dc06f7853228b2d713175fab24b717afa2fc",
-      "asset": "kmod-nf-conntrack-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
       "package": "kmod-nf-conntrack-4.1.52-manual",
-      "status": "skip_busy",
-      "level": "load-unload",
-      "load_exit": 0,
-      "functional_exit": 0,
-      "restore_exit": 0,
-      "initially_loaded": true,
-      "boot_id": "0d16759c-1f14-4012-9dce-c4b6291fef23",
-      "note": "Stock module in use; candidate was not substituted or runtime validated."
+      "asset": "kmod-nf-conntrack-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk",
+      "sha256": "cab6fa885c798a24250e0c8bf16a60bdf01a00687ab0a74e46474a87c0f41865",
+      "status": "compiled",
+      "level": "offline-symbol-check",
+      "runtime_validation_performed": false,
+      "previous_candidate": {
+        "name": "nf_conntrack",
+        "sha256": "ba0129d922895bb63435e2d93dd8dc06f7853228b2d713175fab24b717afa2fc",
+        "asset": "kmod-nf-conntrack-4.1.52-manual_4.1.52-1_arm_cortex-a9.ipk",
+        "package": "kmod-nf-conntrack-4.1.52-manual",
+        "status": "skip_busy",
+        "level": "load-unload",
+        "load_exit": 0,
+        "functional_exit": 0,
+        "restore_exit": 0,
+        "initially_loaded": true,
+        "boot_id": "0d16759c-1f14-4012-9dce-c4b6291fef23",
+        "note": "Stock module in use; candidate was not substituted or runtime validated."
+      },
+      "offline_input": "build/kernel-firmware-profiles/vbntk-2.4.5",
+      "note": "Revision 2 removes SDK-only Altibox UDP/proc hooks absent from the original firmware. Original kernel and stock modules resolve every strong import. This replacement payload was not loaded or functionally tested; the historical busy observation applies to the previous candidate."
     },
     {
       "name": "nf_conntrack_ipv4",
@@ -710,5 +721,14 @@
     }
   ],
   "profile": "4.1.52-vbntk",
-  "validation_device_suffix": ".69"
+  "validation_device_suffix": ".69",
+  "offline_corrections": [
+    {
+      "module": "nf_conntrack",
+      "patch": "patches/vbntj-4.1.52/004-omit-altibox-udp-timeout.patch",
+      "patch_sha256": "7b0207f801ea1ea7296d946c2df50286affeff02815b0399e10ea5b8695eb554",
+      "reason": "Two undefined SDK-only Altibox symbols absent from original kernel exports and stock module exports",
+      "runtime_validated": false
+    }
+  ]
 }

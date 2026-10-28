@@ -1,0 +1,24 @@
+{
+  "image": "belong-vcnt-2_19.4.0381-4961004-bank_dump.lfs",
+  "image_sha256": "8f80a1418b3368f021b73d6f4994663db4a621f6259e23a10f826135bccb76b7",
+  "board": "VCNT-2",
+  "decrypted_sha256": "8f80a1418b3368f021b73d6f4994663db4a621f6259e23a10f826135bccb76b7",
+  "layers": [
+    {
+      "offset": 38,
+      "size": 6399328,
+      "sha256": "06ce045685c7e7faddbca6aa8dfde014f73ed341a0c028705925648b126aef2c"
+    }
+  ],
+  "config_sha256": "6deb6fc87fd8de45d840f4e93bae61475257e482ce5199fd50b4fcdccb07fc13",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-eceb083346d22dc65ce7effde3310ee1",
+  "stock_module_count": 255,
+  "kernel_export_count": 5825,
+  "base_address": "0xc0018000",
+  "stock_symbols_sha256": "4e634f68a311ad481cf1bf10dfe85d93d2a7b557bf0e97f14f228c8b41792b5e",
+  "firmware_version_file": "config version\n        option version '19.4.0381-4961004-20200907123835-1fb704a06063557866bccdb0325b6b4a2110d4bb'\n        option mask '4961004'\n        option timestamp '20200907123835'\n        option product 'vcnt-j_belong'\n        option marketing_name 'Damson'\n        option marketing_version '19.4'\n\toption config '1fb704a06063557866bccdb0325b6b4a2110d4bb'\n\toption openwrt '88ac55bb0fc48c3dc53b8f405224ee789584a565'\n\toption kernel '8cf567173f11c904dc9200b01e32dc255af2f5e9'\n\toption technicolor 'c3f7a3bfe245a698df1b1bfd661739cba0345692'\n\toption routing '0a4c07e8ddf257269ac2d548dc70823679ef3ae8'\n\toption custo '79d9b53a6b9185c2b25e18525951c821dcf97cc0'\n\toption lte '8314165bc866c5027dd16735bc38c2712eb89322'\n\toption packages 'cb10d2938b7b2d2cb9a46e443a5405e83127af1e'\n",
+  "runtime_validated": false,
+  "download_url": "https://media.githubusercontent.com/media/hack-technicolor/tch-bank-dumps/master/vcnt-2/belong-vcnt-2_19.4.0381-4961004-bank_dump.lfs.xz",
+  "download_sha256": "f51bdcaff4c20388e26126ca145326796c854e2ba9218eeceba556eb7692ef02",
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7 p2v8"
+}

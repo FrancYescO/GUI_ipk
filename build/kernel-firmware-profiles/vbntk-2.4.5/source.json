@@ -1,0 +1,26 @@
+{
+  "image": "AGTEF_2.4.5_CLOSED.rbi",
+  "image_sha256": "8fe8eb38531ac3f1cdc58671c5598885204a037d3db530a5230f476398b6a1f8",
+  "board": "VBNT-K",
+  "decrypted_sha256": "d0e74f0d9d735824b932ada192dc70f84650761beb69baffdf1f39ab0c41a1dc",
+  "layers": [
+    {
+      "offset": 38,
+      "size": 2216622,
+      "sha256": "d87109e2187d63dca7a43b27249bedc375304e84bfe48a2602f9aebd08f0832f"
+    },
+    {
+      "offset": 16836,
+      "size": 6222112,
+      "sha256": "e902dba92f78b83ea482f284460b761e48882931e9a7328e4f4e27f20c7ef50f"
+    }
+  ],
+  "config_sha256": "c38176fe091edc7e4bd613af3b8fba2b582671448bd64c5046856a931f23b4d6",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55",
+  "stock_module_count": 269,
+  "kernel_export_count": 5918,
+  "base_address": "0xc0018000",
+  "stock_symbols_sha256": "a9258e5f69e7b3bdeb8507459e3cc3e6bf341b4f7a22a29047b5984c2db64dad",
+  "firmware_version_file": "config version\n        option version '19.4.1051-3401200-20241119103149-cf49b74e8c88c918fead0a0f9ad052f3283f4ee7'\n        option mask '3401200'\n        option timestamp '20241119103149'\n        option product 'vant-w_ti'\n        option marketing_name 'Damson'\n        option marketing_version '19.4'\n\toption config 'cf49b74e8c88c918fead0a0f9ad052f3283f4ee7'\n\toption openwrt 'e2ae576c182333a98baa8e831ee25c97a3c3361e'\n\toption kernel '5c1688dc9cc0c60e2e5534d702efa8c262815dae'\n\toption lte 'b142c13576b13d62db59d967c3988a1ab0582075'\n\toption packages 'd1d2575cb4d19a1dfcfb24959866379b7d41d9a9'\n\toption custo '945ba06a95091ac1263df7e6daa53e3a309885ad'\n\toption routing '0a4c07e8ddf257269ac2d548dc70823679ef3ae8'\n\toption technicolor '5f7c2806891bca9beeb0607412b87a11d3dbc6db'\n",
+  "runtime_validated": false
+}

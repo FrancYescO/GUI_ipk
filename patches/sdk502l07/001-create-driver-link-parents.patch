@@ -1,0 +1,14 @@
+Subject: [PATCH] sdk: create parent directories for generated driver links
+
+GPL archives omit some proprietary driver directories. Permit preparation
+of public kernel targets without requiring those driver implementations.
+No stub driver or replacement exports are introduced.
+
+--- a/bcmdrivers/Makefile
++++ b/bcmdrivers/Makefile
+@@ -34,0 +35 @@
++	$$(Q)mkdir -p $$(dir $$@)
+@@ -63,0 +65 @@
++	$$(Q)mkdir -p $$(dir $$@)
+@@ -106,0 +109 @@
++	$$(Q)mkdir -p $$(dir $$@)

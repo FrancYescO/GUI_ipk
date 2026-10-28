@@ -105,18 +105,18 @@ class KernelCandidateTests(unittest.TestCase):
 
     def test_inventory_does_not_claim_runtime_validation_for_matching_hash(self):
         data = json.loads((ROOT / 'build/kernel-candidates/firmware-compatibility.json').read_text())
-        self.assertEqual(len(data['firmwares']), 279)
+        self.assertEqual(len(data['firmwares']), 280)
         tim = next(r for r in data['firmwares'] if r['firmware'] == 'AGTHP_2.2.0_CLOSED')
         self.assertEqual(tim['status'], 'stock-modules-identical-runtime-check-required')
         planned = json.loads((ROOT / 'build/kernel-candidates/planned-profiles.json').read_text())
         self.assertIsNone(planned['4.1.38-fastweb-fw261']['feed'])
-        self.assertEqual(planned['4.1.38-fastweb-fw261']['status'], 'runtime-config-required')
+        self.assertEqual(planned['4.1.38-fastweb-fw261']['status'], 'original-kernel-image-required')
 
     def test_public_inventory_exports_all_firmware_rows_and_setup(self):
         write_compatibility(self.root, '', '')
         page = (self.root / 'compatibility/index.html').read_text()
-        self.assertEqual(page.count('<tr>'), 280)
-        self.assertIn('FW261/FW264 are awaiting runtime kernel configurations', page)
+        self.assertEqual(page.count('<tr>'), 281)
+        self.assertIn('FW261/FW264 are awaiting complete kernel images', page)
         self.assertTrue((self.root / 'compatibility/firmware-compatibility.csv').is_file())
         self.assertTrue((self.root / 'compatibility/kernel-compatibility.md').is_file())
 

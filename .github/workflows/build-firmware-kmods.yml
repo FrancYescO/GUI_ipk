@@ -1,0 +1,129 @@
+name: Firmware kernel candidates
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/build-firmware-kmods.yml'
+      - 'scripts/*firmware*'
+      - 'scripts/build-vbntj-kmods.sh'
+      - 'build/kernel-firmware-profiles/**'
+      - 'build/vbntj/**'
+      - 'artifacts/firmware-kernel-candidates/**'
+      - 'patches/vbntj-4.1.52/**'
+      - 'patches/sdk502l07/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build-firmware-kmods.yml'
+      - 'scripts/*firmware*'
+      - 'scripts/build-vbntj-kmods.sh'
+      - 'build/kernel-firmware-profiles/**'
+      - 'artifacts/firmware-kernel-candidates/**'
+      - 'patches/vbntj-4.1.52/**'
+      - 'patches/sdk502l07/**'
+
+permissions:
+  contents: read
+
+jobs:
+  profiles:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: select
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          profiles = json.loads(Path('build/kernel-firmware-profiles/profiles.json').read_text())
+          matrix = {'profile': [k for k, v in profiles.items() if v.get('bundle')]}
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('matrix=' + json.dumps(matrix) + '\n')
+          PY
+  build:
+    needs: profiles
+    name: Build ${{ matrix.profile }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.profiles.outputs.matrix) }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      FIRMWARE_PROFILE: ${{ matrix.profile }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify pinned inputs and tests
+        run: python3 -m unittest discover -s tests
+      - name: Clone pinned GPL buildsystem
+        run: |
+          git clone --branch 'V5.17(ABNY.6)C0' --depth 1 https://github.com/avwarez/vmg8825_b50b.git .work/vbntj-gpl
+          test "$(git -C .work/vbntj-gpl rev-parse HEAD)" = af23960e39003ba7788f5ced0c256b1bc676a712
+      - uses: actions/cache@v6
+        with:
+          path: .work/vbntj-gpl/dl
+          key: firmware-sdk-dl-v1-${{ hashFiles('scripts/build-vbntj-kmods.sh') }}
+          restore-keys: |
+            firmware-sdk-dl-v1-
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .work/vbntj-gpl/staging_dir/host
+            .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi
+          key: damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v1
+      - name: Restore verified compiler seed if needed
+        run: |
+          if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
+            scripts/fetch-damson-kernel-toolchain.sh
+            tar -xzf .cache/sources/damson-kernel-toolchain/damson-kernel-gcc-5.5.0-linux-amd64.tgz --no-same-owner -C .work/vbntj-gpl
+          fi
+      - name: Prepare per-firmware configuration and ABI guards
+        run: |
+          mkdir -p dist/config dist/modules
+          python3 scripts/prepare-firmware-kernel-config.py "$FIRMWARE_PROFILE" dist/config/kernel.config
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          profile = json.loads(Path('build/kernel-firmware-profiles/profiles.json').read_text())[os.environ['FIRMWARE_PROFILE']]
+          Path('dist/config/required.txt').write_text(''.join('# ' + k + ' is not set\n' if v == 'n' else k + '=' + v + '\n' for k,v in profile['required_options'].items()))
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write('FIRMWARE_CHIP=' + str(profile.get('chip', 63138)) + '\n')
+              output.write('FIRMWARE_VERMAGIC=' + profile['vermagic'] + '\n')
+          PY
+      - name: Build compatibility image
+        run: docker build --platform linux/amd64 --tag firmware-kernel-builder build/vbntj
+      - name: Compile allowlisted modules from pinned sources
+        run: |
+          sudo chown -R 1000:1000 .work/vbntj-gpl dist/modules
+          docker run --rm --platform linux/amd64 \
+            --env MODULE_SET=firmware-candidates --env FIRMWARE_PROFILE --env FIRMWARE_CHIP --env FIRMWARE_VERMAGIC \
+            --env FIRMWARE_CONFIG=/repo/dist/config/kernel.config \
+            --env FIRMWARE_REQUIRED_OPTIONS=/repo/dist/config/required.txt \
+            --env OUTPUT_DIR=/out --env SOURCE_DIR=/app \
+            --volume "$PWD:/repo:ro" --volume "$PWD/.work/vbntj-gpl:/app" \
+            --volume "$PWD/dist/modules:/out" firmware-kernel-builder \
+            /repo/scripts/build-vbntj-kmods.sh > dist/build.log 2>&1 || { tail -90 dist/build.log; exit 1; }
+      - name: Audit original-firmware symbols and reproduce committed IPKs
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          import firmware_kernel_candidates as candidates
+          profile = os.environ['FIRMWARE_PROFILE']
+          digest = candidates.package(profile, Path('dist/modules'), Path('dist/candidates.tar.gz'))
+          expected = candidates.definitions()[profile]['bundle_sha256']
+          if digest != expected:
+              raise SystemExit('Candidate bytes differ from pinned bundle: ' + digest + ' != ' + expected)
+          print('Reproduced all candidate IPKs exactly:', digest)
+          PY
+      - name: Retain candidate build evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: firmware-kmods-${{ matrix.profile }}-${{ github.sha }}
+          path: dist/
+          retention-days: 14

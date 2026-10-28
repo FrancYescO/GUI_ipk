@@ -156,6 +156,20 @@ jobs:
             exit 1
           fi
 
+      - name: Verify built module imports against original VBNT-K firmware
+        run: |
+          python3 - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from firmware_kernel_candidates import audit_vbntk_ipks
+          ipks = list(Path('dist/vbntj-kmods').glob('*.ipk'))
+          if not ipks:
+              raise SystemExit('No kernel IPKs available for offline symbol verification')
+          report = audit_vbntk_ipks(ipks)
+          print('Verified original-firmware symbol closure for', report['module_count'], 'modules')
+          PY
+
       - name: Upload compile log after failure
         if: failure()
         uses: actions/upload-artifact@v7
