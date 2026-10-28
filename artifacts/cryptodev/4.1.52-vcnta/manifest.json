@@ -1,0 +1,19 @@
+{
+  "asset": "kmod-cryptodev-4.1.52-vcnta-candidate_1.14-1_arm_cortex-a9.ipk",
+  "control": "Package: kmod-cryptodev-4.1.52-vcnta-candidate\nVersion: 1.14-1\nArchitecture: arm_cortex-a9\nDepends: kernel (= git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-7ccab18b461e7dbcd98a4827bd1f494a)\nSection: kernel\nMaintainer: GUI_ipk\nDescription: Synchronous cryptodev 1.14 with bounded page ownership; manual load, privileged access only\nX-Manual-Install-Only: yes\nX-Offline-Symbol-Check: passed\nX-Runtime-Validated: no\nX-Kernel-Profile: 4.1.52-vcnta\nX-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7\nX-Module-Path: /usr/lib/kernel-module-candidates/4.1.52-vcnta/cryptodev.ko\nX-Module-Staging-Only: yes\n",
+  "ipk_sha256": "933c1f7e373727cdfadcb2ba65e53a206739684b38590798ed2c5e07db33c465",
+  "module_sha256": "f17d8013cdebf394a3f94ea3613586c980ce89be2b5494a9dd08cacf54554fef",
+  "patch_sha256": "d612f352dc946a32b47cfd56ea85283e2d9ab4ec67217e33c952b0481b8dfe5f",
+  "profile": "4.1.52-vcnta",
+  "runtime_validated": false,
+  "source_commit": "08644db02d43478f802755903212f5ee506af73b",
+  "source_sha256": "e795acb85118f1f39f0155df8fd28a3d79de7d1240b91bdf8cc9e2a1747d2642",
+  "symbol_checks": [
+    {
+      "input": "vcnta-20.3.0501",
+      "sha256": "caf5c50b6b5a2e9e5ed3b51d496afa3835ce2562c3dcd9aee39acae867fe5243"
+    }
+  ],
+  "unresolved_symbols": [],
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7"
+}

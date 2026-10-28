@@ -1,0 +1,21 @@
+{
+  "module_sha256": "9736f4dc5d68dacbe021849f108fcaeefab611334302f79b74f9663ed96e65af",
+  "runtime_validated": true,
+  "tests": [
+    "AES-CBC NIST encrypt/decrypt, copy and zero-copy, separate and in-place",
+    "SHA256 abc",
+    "HMAC-SHA256 RFC4231",
+    "NULL buffer, invalid length and session rejected",
+    "Unprivileged open rejected with EPERM independently of device mode 0666"
+  ],
+  "gcm": "unavailable, not validated",
+  "drivers": [
+    "cbc(aes-generic)",
+    "sha256-generic",
+    "hmac(sha256-generic)"
+  ],
+  "module_unloaded": true,
+  "boot_id_unchanged": true,
+  "kernel_taint_before": 4097,
+  "kernel_taint_after": 4097
+}

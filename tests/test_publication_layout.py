@@ -20,8 +20,8 @@ class PublicationTests(unittest.TestCase):
     def test_complete_bootstrap_has_semantic_components_and_all_updates(self):
         catalog = json.loads(gzip.decompress((ROOT / 'build/publication/bootstrap.json.gz').read_bytes()))
         rows = catalog['records']
-        self.assertEqual(len(rows), 6388)
-        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 6380)
+        self.assertEqual(len(rows), 6396)
+        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 6388)
         self.assertEqual(set(catalog['releases']), {'freeswitch-sounds'})
         self.assertLess(sum(r['size'] for r in rows if r['storage'] == 'pages'), 750 * 1024**2)
         pins = json.loads((ROOT / 'build/application-archive/manifest.json').read_text())
@@ -43,9 +43,9 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual({r['url'].rsplit('/', 1)[1]: r['profile'] for r in manifest['aliases']}, layout.KERNEL_ALIASES)
         self.assertNotIn('url', manifest)  # No misleading combined OPKG source.
         self.assertEqual([(r['profile'], r['count']) for r in manifest['profiles']],
-                         [('4.1.38-vbnto', 49), ('4.1.38-vbntk', 49), ('4.1.52-vbntk', 49)])
+                         [('4.1.38-vbnto', 50), ('4.1.38-vbntk', 50), ('4.1.52-vbntk', 50)])
         self.assertEqual([(r['profile'], r['count']) for r in manifest['candidates']],
-                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212), ('4.1.52-vcnt3-candidates', 49), ('4.1.52-vcnt2-candidates', 49), ('4.1.52-vcntj-candidates', 49), ('4.1.52-vcnta-candidates', 48), ('4.1.52-vbntv-candidates', 48)])
+                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212), ('4.1.52-vcnt3-candidates', 50), ('4.1.52-vcnt2-candidates', 50), ('4.1.52-vcntj-candidates', 50), ('4.1.52-vcnta-candidates', 49), ('4.1.52-vbntv-candidates', 49)])
         for row in manifest['profiles'] + manifest['candidates']:
             self.assertEqual(row['url'], layout.SITE + '/kernel/' + row['profile'])
             self.assertTrue(row['source'].endswith(' ' + row['url']))
@@ -77,7 +77,7 @@ class PublicationTests(unittest.TestCase):
                 actual = [layout.parse(stanza) for stanza in data.decode().strip().split('\n\n')]
                 expected = [r for r in catalog['records'] if r['section'] == 'kernel/' + profile]
                 self.assertEqual(len(actual), len(expected))
-                self.assertIn(len(actual), (49, 212))
+                self.assertIn(len(actual), (50, 212))
                 by_name = {r['package']: r for r in expected}
                 for fields in actual:
                     row = by_name[fields['Package']]

@@ -13,6 +13,9 @@ external_modules=()
 firmware_profile="${FIRMWARE_PROFILE:-}"
 
 case "$module_set" in
+  cryptodev)
+    module_targets=()
+    ;;
   tun)
     module_targets=(drivers/net/tun.ko)
     ;;
@@ -247,7 +250,7 @@ cp "${FIRMWARE_CONFIG:-$repo_root/build/vbntj/kernel-4.1.52-damson.config}" "$ke
   --disable BCM_MAP \
   --module USB_USBNET \
   --module USB_NET_CDCETHER
-if [[ "$module_set" != firmware-candidates ]] || ! grep -qx 'CONFIG_TUN=y' "$FIRMWARE_CONFIG"; then
+if [[ "$module_set" != firmware-candidates && "$module_set" != cryptodev ]] || ! grep -qx 'CONFIG_TUN=y' "$FIRMWARE_CONFIG"; then
   "$kernel_dir/scripts/config" --file "$kernel_dir/.config" --module TUN
 fi
 if [[ "$module_set" == rndis-compat ]]; then
@@ -293,6 +296,11 @@ if grep -qx 'CONFIG_MODVERSIONS=y' "$kernel_dir/.config"; then
   echo "VBNT-K runtime has CONFIG_MODVERSIONS disabled" >&2
   exit 1
 fi
+if [[ "$module_set" == cryptodev ]]; then
+  bash "$repo_root/scripts/build-cryptodev.sh" "$kernel_dir" "$cross" "$output_dir"
+  exit 0
+fi
+
 if [[ "$build_connmark" -eq 1 && "$module_set" != firmware-candidates ]]; then
   for symbol in IFB NET_SCH_INGRESS NET_CLS_U32 NET_ACT_POLICE; do
     if ! grep -qx "CONFIG_${symbol}=y" "$kernel_dir/.config"; then

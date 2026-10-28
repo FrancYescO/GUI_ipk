@@ -1,0 +1,19 @@
+{
+  "asset": "kmod-cryptodev-4.1.52-vcntj-candidate_1.14-1_arm_cortex-a7.ipk",
+  "control": "Package: kmod-cryptodev-4.1.52-vcntj-candidate\nVersion: 1.14-1\nArchitecture: arm_cortex-a7\nDepends: kernel (= git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-5d95c78d1a4588f40400db3c58ed5df1)\nSection: kernel\nMaintainer: GUI_ipk\nDescription: Synchronous cryptodev 1.14 with bounded page ownership; manual load, privileged access only\nX-Manual-Install-Only: yes\nX-Offline-Symbol-Check: passed\nX-Runtime-Validated: no\nX-Kernel-Profile: 4.1.52-vcntj\nX-Kernel-Vermagic: 4.1.52 SMP preempt mod_unload ARMv7 p2v8\nX-Module-Path: /usr/lib/kernel-module-candidates/4.1.52-vcntj/cryptodev.ko\nX-Module-Staging-Only: yes\n",
+  "ipk_sha256": "082cb00cad2f576018f83b05c0e585212b1d79ba0e2666cee6a887ec40730d65",
+  "module_sha256": "258ff9d38688ad3c42a59e83cd73ef28228b5d3d19d408931ead0fc0ac2ec88b",
+  "patch_sha256": "d612f352dc946a32b47cfd56ea85283e2d9ab4ec67217e33c952b0481b8dfe5f",
+  "profile": "4.1.52-vcntj",
+  "runtime_validated": false,
+  "source_commit": "08644db02d43478f802755903212f5ee506af73b",
+  "source_sha256": "e795acb85118f1f39f0155df8fd28a3d79de7d1240b91bdf8cc9e2a1747d2642",
+  "symbol_checks": [
+    {
+      "input": "vcntj-19.4.0629",
+      "sha256": "411a4f49c3b85acd68ee85ef021a78afd660ed8a4a5463b3873b44e36854aea0"
+    }
+  ],
+  "unresolved_symbols": [],
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7 p2v8"
+}
