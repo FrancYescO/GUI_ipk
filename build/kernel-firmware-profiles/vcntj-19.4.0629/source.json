@@ -1,0 +1,22 @@
+{
+  "image": "sorgenia-vcnt-j_19.4.0629-5661052-bank_dump",
+  "image_sha256": "34b48f13b0c3f7898f668c9f41f1e22c8f54f68f7bd6d85520ef0626a409597c",
+  "board": null,
+  "decrypted_sha256": "34b48f13b0c3f7898f668c9f41f1e22c8f54f68f7bd6d85520ef0626a409597c",
+  "layers": [
+    {
+      "offset": 38,
+      "size": 6457200,
+      "sha256": "153ed152876d02524a6b578ddcf0c96211a20be5e721fea132295e2bb6b49910"
+    }
+  ],
+  "config_sha256": "923973cebdc6b2abe65446483d1842059792040f41636519f70236cab68d5601",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-5d95c78d1a4588f40400db3c58ed5df1",
+  "stock_module_count": 259,
+  "kernel_export_count": 5831,
+  "base_address": "0xc0018000",
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7 p2v8",
+  "stock_symbols_sha256": "411a4f49c3b85acd68ee85ef021a78afd660ed8a4a5463b3873b44e36854aea0",
+  "firmware_version_file": "config version\n        option version '19.4.0629-5661052-20220503111421-8bf2ad03a5d100aae63bf40dc2903a686ecf4d4f'\n        option mask '5661052'\n        option timestamp '20220503111421'\n        option product 'vcnt-j'\n        option marketing_name 'Damson'\n        option marketing_version '19.4'\n\toption config '8bf2ad03a5d100aae63bf40dc2903a686ecf4d4f'\n\toption openwrt '30cb7134648cba20428773c518a0cfe6e8f0c731'\n\toption kernel 'be771f5d11797f4f35c34895cd413283ca01d6ee'\n\toption routing '0a4c07e8ddf257269ac2d548dc70823679ef3ae8'\n\toption packages '631d2b7b1b5a4691a9f50a751c8b748803b1c19a'\n\toption technicolor 'd74024758a6eed14550086f63b1f437dff3ac6c4'\n\toption lte '0444574fca10f0239a383a79b504c630d63d8ec2'\n\toption custo 'e870d96979a65b7bdd87416dab0db118c19e1e82'\n",
+  "runtime_validated": false
+}

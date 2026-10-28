@@ -1,0 +1,33 @@
+{
+  "image": "vcnt-a_20.3.c.0501-MR22.1-RA.rbi",
+  "image_sha256": "0cb2ae406a1333c101498dd84afef87823f097870e074ed3b5eb9cf7a2df05fe",
+  "board": "VCNT-A",
+  "decrypted_sha256": "df95d9dea02effc3e892db418b9c41cd1d09b934214778fa12eb761fee6214f1",
+  "layers": [
+    {
+      "offset": 38,
+      "size": 2233782,
+      "sha256": "4af2783e2931bcb4472acc641548c2e31238c6e90b8bd1d083baff55712d9750"
+    },
+    {
+      "offset": 16820,
+      "size": 6263588,
+      "sha256": "4a6fe078fbdffe98c095cfe7054e3ebdc1dda263d471a675c4555262c98cf6ba"
+    }
+  ],
+  "config_sha256": "6a9c4d08a4b4b1a67adce3502c41de64c3f070529eaca82a26dfb8cb88b284d4",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-7ccab18b461e7dbcd98a4827bd1f494a",
+  "stock_module_count": 287,
+  "kernel_export_count": 5918,
+  "base_address": "0xc0018000",
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7",
+  "stock_symbols_sha256": "caf5c50b6b5a2e9e5ed3b51d496afa3835ce2562c3dcd9aee39acae867fe5243",
+  "firmware_version_file": "config version\n        option version '20.3.c.0501-3241007-20230628084009-e77194432077c25d1c749b32260ae47ec7a4c840'\n        option mask '3241007'\n        option timestamp '20230628084009'\n        option product 'vbnt-j_telstra'\n        option marketing_name 'Egyptian Blue'\n        option marketing_version '20.3.c'\n\toption config 'e77194432077c25d1c749b32260ae47ec7a4c840'\n\toption openwrt '3f85ae24ddc2f83a433f7646c784b9ba35aaa0e1'\n\toption kernel 'e708a640ef098f58d00e56509c96f709a95f5907'\n\toption routing '07ba8737587eca52c08910b0b0b34b81c0a58855'\n\toption technicolor 'e3b6842accc323605ed9c8cb45ee51b17d609ff4'\n\toption packages 'e9e3c5eeebbccb758d0be5dd81f049223de6cf85'\n\toption lte 'f82bb6b24125eaa2f5f7ee1530d92d244f3908a1'\n\toption custo 'dfdb4e6ec9aea707ee57ddc4fd2f4e532acd0004'\n",
+  "runtime_validated": false,
+  "stock_git_comparison": {
+    "repository": "https://github.com/FrancYescO/tch_firmware_extracted",
+    "commit": "a33642ea3c032e03d417b3e3bd027e79b8f0a162",
+    "module_count": 287,
+    "all_blob_ids_match": true
+  }
+}

@@ -9,6 +9,7 @@ import sys
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -80,7 +81,7 @@ class FirmwareKernelTests(unittest.TestCase):
                 continue
             with tempfile.TemporaryDirectory() as temp:
                 report = candidates.restore(profile, Path(temp))
-                self.assertEqual(len(report['modules']), 49)
+                self.assertEqual(len(report['modules']), entry['module_count'])
                 self.assertFalse(report['runtime_validated'])
                 self.assertNotIn('bcmspu', {m['name'] for m in report['modules']})
                 self.assertNotIn('xt_nat', {m['name'] for m in report['modules']})
@@ -111,6 +112,34 @@ class FirmwareKernelTests(unittest.TestCase):
         self.assertEqual(report['module_count'], 49)
         self.assertEqual(report['unresolved_symbols'], [])
         self.assertFalse(report['runtime_validation_performed'])
+
+    def test_telstra_builtin_tun_is_preserved_and_not_packaged(self):
+        spec = importlib.util.spec_from_file_location('prepare_telstra', ROOT / 'scripts/prepare-firmware-kernel-config.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        for profile in ('4.1.52-vcnta', '4.1.52-vbntv'):
+            options = config_options(module.prepare(profile)[0].encode())
+            self.assertEqual(options['CONFIG_TUN'], 'y')
+            self.assertEqual(options['CONFIG_BCM_USBNET_THREAD'], 'y')
+            self.assertEqual(options['CONFIG_BCM_HNDROUTER'], 'n')
+            with tempfile.TemporaryDirectory() as temp:
+                report = candidates.restore(profile, Path(temp))
+                self.assertEqual(len(report['modules']), 48)
+                self.assertNotIn('tun', {m['name'] for m in report['modules']})
+            entry = candidates.definitions()[profile]
+            payloads = {}
+            for name, ipk in candidates.files((ROOT / entry['bundle']).read_bytes()).items():
+                if name.endswith('.ipk'):
+                    data = candidates.files(candidates.files(ipk)['./data.tar.gz'])
+                    path, raw = next(iter(data.items()))
+                    payloads[Path(path).stem] = raw
+            payloads['tun'] = (ROOT / 'artifacts/damson-4.1.52-manual/tun.ko').read_bytes()
+            definitions = candidates.definitions()
+            definitions[profile]['module_count'] = 49
+            del definitions[profile]['excluded_modules']['tun']
+            with patch.object(candidates, 'definitions', return_value=definitions):
+                with self.assertRaisesRegex(ValueError, 'duplicates built-in kernel exports: tun'):
+                    candidates.audit(profile, payloads)
 
 
 if __name__ == '__main__':
