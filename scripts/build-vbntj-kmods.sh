@@ -52,6 +52,9 @@ case "$module_set" in
     module_targets=()
     while IFS= read -r target; do
       [[ -z "$target" || "$target" == \#* || "$target" == */xt_nat.ko ]] && continue
+      if [[ "$target" == drivers/net/tun.ko ]] && grep -qx 'CONFIG_TUN=y' "$FIRMWARE_CONFIG"; then
+        continue
+      fi
       module_targets+=("$target")
     done < "$repo_root/build/vbntj/network-feed.modules"
     module_targets+=(drivers/net/usb/usbnet.ko drivers/net/usb/cdc_ether.ko drivers/net/usb/rndis_host.ko)
@@ -242,9 +245,11 @@ cp "${FIRMWARE_CONFIG:-$repo_root/build/vbntj/kernel-4.1.52-damson.config}" "$ke
   --enable WEXT_SPY \
   --enable WEXT_PRIV \
   --disable BCM_MAP \
-  --module TUN \
   --module USB_USBNET \
   --module USB_NET_CDCETHER
+if [[ "$module_set" != firmware-candidates ]] || ! grep -qx 'CONFIG_TUN=y' "$FIRMWARE_CONFIG"; then
+  "$kernel_dir/scripts/config" --file "$kernel_dir/.config" --module TUN
+fi
 if [[ "$module_set" == rndis-compat ]]; then
   "$kernel_dir/scripts/config" --file "$kernel_dir/.config" --module USB_NET_RNDIS_HOST
 fi

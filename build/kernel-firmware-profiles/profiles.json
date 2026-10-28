@@ -144,24 +144,26 @@
       "vcnta-20.3.0501"
     ],
     "stock_equivalent_firmwares": [],
-    "module_count": 49,
+    "module_count": 48,
     "excluded_modules": {
       "bcmspu": "Vendor SPU implementation 3 enabled; omitted from this portable module set pending separate ABI verification",
-      "xt_nat": "Existing cross-profile quarantine; never tested here"
+      "xt_nat": "Existing cross-profile quarantine; never tested here",
+      "tun": "TUN is built into the original kernel (CONFIG_TUN=y); a module would duplicate tun_get_socket"
     },
     "required_options": {
       "CONFIG_BCM_CHIP_NUMBER": "63138",
       "CONFIG_BCM_HNDROUTER": "n",
       "CONFIG_BCM_PKTFWD": "n",
       "CONFIG_BCM_USBNET_THREAD": "y",
-      "CONFIG_PPP_MULTILINK": "n"
+      "CONFIG_PPP_MULTILINK": "n",
+      "CONFIG_TUN": "y"
     },
     "source_sdk": "avwarez/vmg8825_b50b@af23960e39003ba7788f5ced0c256b1bc676a712 + pinned Broadcom 502L07 SDK + repository ABI patches",
     "compiler": "GCC 5.5.0",
     "firmware_mirror": "http://fwstore.bdms.telstra.net/Technicolor_vcnt-a_20.3.c.0501-MR22.1-RA/vcnt-a_20.3.c.0501-MR22.1-RA.rbi",
     "original_config_note": "Embedded original RBI configuration and complete stock symbol closure; no runtime validation.",
     "bundle": "artifacts/firmware-kernel-candidates/vcnta-4.1.52.tar.gz",
-    "bundle_sha256": "3f93ed4318fe7e9fcd90e86717eee338e7ba35826eb592344873df558ffde172",
+    "bundle_sha256": "40312665e2b63dfc18b3e8cc5392fd3792dc03a98cae9386654279bb2a08ca67",
     "verified_firmwares": [
       "vcnt-a_20.3.c.0501-MR22.1-RA"
     ],
@@ -182,24 +184,26 @@
       "vbntv-20.3.0432"
     ],
     "stock_equivalent_firmwares": [],
-    "module_count": 49,
+    "module_count": 48,
     "excluded_modules": {
       "bcmspu": "Vendor SPU implementation 3 enabled; omitted from this portable module set pending separate ABI verification",
-      "xt_nat": "Existing cross-profile quarantine; never tested here"
+      "xt_nat": "Existing cross-profile quarantine; never tested here",
+      "tun": "TUN is built into the original kernel (CONFIG_TUN=y); a module would duplicate tun_get_socket"
     },
     "required_options": {
       "CONFIG_BCM_CHIP_NUMBER": "63138",
       "CONFIG_BCM_HNDROUTER": "n",
       "CONFIG_BCM_PKTFWD": "n",
       "CONFIG_BCM_USBNET_THREAD": "y",
-      "CONFIG_PPP_MULTILINK": "n"
+      "CONFIG_PPP_MULTILINK": "n",
+      "CONFIG_TUN": "y"
     },
     "source_sdk": "avwarez/vmg8825_b50b@af23960e39003ba7788f5ced0c256b1bc676a712 + pinned Broadcom 502L07 SDK + repository ABI patches",
     "compiler": "GCC 5.5.0",
     "firmware_mirror": "http://fwstore.bdms.telstra.net/Technicolor_vbnt-v_20.3.c.0432-MR21.1-RA/vbnt-v_20.3.c.0432-MR21.1-RA.rbi",
     "original_config_note": "Embedded original RBI configuration and complete stock symbol closure; no runtime validation.",
     "bundle": "artifacts/firmware-kernel-candidates/vbntv-4.1.52.tar.gz",
-    "bundle_sha256": "0e8ec8c3c602a38e3283db521beba1bbfabb222c68bdaa255a0a1cc6942b1ca5",
+    "bundle_sha256": "bc6665ca8d665b0cdd4eb608b83451d8523937ea61339f06c09052342d64ee4a",
     "verified_firmwares": [
       "vbnt-v_20.3.c.0432-MR21.1-RA"
     ],

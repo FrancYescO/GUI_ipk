@@ -2907,8 +2907,10 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "4fc0170d7b40139c6aaaab126c6b8a405fe1bdcb",
       "stock_module_set": "1d2ba65ff342bbba08bd22d05c161e7c36893a1947db11700c815e47df518138",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vbntv",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vbntv-candidates",
+      "original_image_checked": true
     },
     {
       "firmware": "vcnt-2_19.4.l.0393-MR1-RB",
@@ -3061,8 +3063,10 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "e708a640ef098f58d00e56509c96f709a95f5907",
       "stock_module_set": "330d973cfa172cad7a3a1959cc52a43942670df182455cc442fb0b89cbae1d2b",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnta",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnta-candidates",
+      "original_image_checked": true
     },
     {
       "firmware": "vcnt-c_DGA2231TMX_18.3.g.0301v3_ff8f20c8",
@@ -3099,6 +3103,20 @@
       "candidate_feed": "kernel/4.1.52-vcnt2-candidates",
       "source_url": "https://media.githubusercontent.com/media/hack-technicolor/tch-bank-dumps/master/vcnt-2/belong-vcnt-2_19.4.0381-4961004-bank_dump.lfs.xz",
       "original_image_sha256": "8f80a1418b3368f021b73d6f4994663db4a621f6259e23a10f826135bccb76b7"
+    },
+    {
+      "firmware": "sorgenia-vcnt-j_19.4.0629-5661052",
+      "commit": null,
+      "kernel_release": "4.1.52",
+      "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-5d95c78d1a4588f40400db3c58ed5df1",
+      "architecture": "arm_cortex-a7",
+      "kernel_source": "be771f5d11797f4f35c34895cd413283ca01d6ee",
+      "stock_module_set": null,
+      "profile": "4.1.52-vcntj",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcntj-candidates",
+      "source_url": "https://raw.githubusercontent.com/hack-technicolor/tch-bank-dumps/master/vcnt-j/sorgenia-vcnt-j_19.4.0629-5661052-bank_dump.xz",
+      "original_image_checked": true
     }
   ]
 }
