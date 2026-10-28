@@ -236,7 +236,7 @@
       "name": "nf_conntrack",
       "package": "kmod-nf-conntrack-4.1.52-manual",
       "asset": "kmod-nf-conntrack-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk",
-      "sha256": "cab6fa885c798a24250e0c8bf16a60bdf01a00687ab0a74e46474a87c0f41865",
+      "sha256": "3af7a2779f0e050acd78e50a4e7978e27ebed7fa101f897045c80483ddc0f179",
       "status": "compiled",
       "level": "offline-symbol-check",
       "runtime_validation_performed": false,
