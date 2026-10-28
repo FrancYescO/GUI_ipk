@@ -1,0 +1,26 @@
+{
+  "tool": "firmware OPKG 2017",
+  "opkg_commit": "4bd8601ebd95c130e504cc724b0c5eb163050982",
+  "executor": ".204",
+  "scope": "Offline-root package/dependency tests only; not runtime kernel validation of other models",
+  "passed_profiles": [
+    "4.1.38-vbnto",
+    "4.1.38-vbntk",
+    "4.1.52-vbntk",
+    "4.1.52-vcnt3",
+    "4.1.52-vcnt2",
+    "4.1.52-vcntj",
+    "4.1.52-vcnta",
+    "4.1.52-vbntv"
+  ],
+  "module_payloads_unchanged": 830,
+  "cases": [
+    "clean application dependency",
+    "generic ownership migration",
+    "complete multi-module group",
+    "builtin capability without module",
+    "staging-only module not a provider",
+    "wrong kernel ABI refused",
+    "active module migration refused"
+  ]
+}

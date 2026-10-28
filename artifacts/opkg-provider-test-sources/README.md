@@ -11,3 +11,8 @@ They are not installable packages and are not added to any public OPKG feed.
 Copyright and license notices are included in the archives (opkg GPL-2.0;
 libubox files carry their individual ISC/BSD/LGPL notices). No compatibility
 patch is applied: tests must pass with the old Replaces-parser defect present.
+
+The test build disables modern host FORTIFY instrumentation for the 2017
+libubox flexible-array idiom, which GCC/glibc now reject. This only affects
+the isolated CI test binary; no OPKG or library binary is shipped to modems.
+The historical package-manager source and its Replaces bug remain unmodified.

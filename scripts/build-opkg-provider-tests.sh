@@ -10,7 +10,7 @@ echo "cc059c5d48dd24182a917c758ca2e6710db17d3a5c2cc7474f1cb40ce5b40c72  $inputs/
 tar -xzf "$inputs/opkg-4bd8601.tar.gz" -C "$work/source"
 tar -xzf "$inputs/libubox-fd57eea.tar.gz" -C "$work/source"
 cmake -S "$work/source/libubox-fd57eea9f37e447814afbf934db626288aac23c4" -B "$work/ubox-build" \
-  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_LUA=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX="$work/install"
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_C_FLAGS="-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -Wno-error=array-bounds" -DBUILD_LUA=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX="$work/install"
 cmake --build "$work/ubox-build" --parallel 2
 cmake --install "$work/ubox-build"
 cmake -S "$work/source/opkg-lede-4bd8601ebd95c130e504cc724b0c5eb163050982" -B "$work/opkg-build" \
