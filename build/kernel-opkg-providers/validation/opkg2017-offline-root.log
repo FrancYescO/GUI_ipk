@@ -1,0 +1,299 @@
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbnto/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbnto/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbnto/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbnto/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/fixture-vpn_1_all.ipk
+Installing kmod-tun-vbnto-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/kmod-tun-vbnto-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-tun-vbnto-4.1.38-manual.
+Configuring fixture-vpn.
+Status: install user installed
+Status: install ok installed
+Installing kmod-tun (4.1.38-1) to root...
+Installing fixture-unrelated (1) to root...
+Configuring kmod-tun.
+Configuring fixture-unrelated.
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/fixture-vpn_1_all.ipk
+Configuring fixture-vpn.
+Module is active: quiesce its consumers and review unloading before migration
+No packages removed.
+Installing kmod-tun-vbnto-4.1.38-manual (4.1.38-2) to root...
+Configuring kmod-tun-vbnto-4.1.38-manual.
+Upgrading kmod-tun on root from 4.1.38-1 to 4.1.38-2...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/kmod-tun_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-tun.
+Verified module file and OPKG ownership updated: kmod-tun-vbnto-4.1.38-manual
+Package kmod-tun (4.1.38-2) installed in root is up to date.
+Depends: kernel (= 4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-tun-vbnto-4.1.38-manual (= 4.1.38-2)
+Status: install user installed
+kmod-tun-vbnto-4.1.38-manual - 4.1.38-2
+PASS generic migration preserves module bytes, ownership and consumer
+Installing kmod-sched-core (4.1.38-1) to root...
+Configuring kmod-sched-core.
+Installing fixture-group (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/fixture-group_1_all.ipk
+Configuring fixture-group.
+Installing kmod-act-skbedit-vbnto-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/kmod-act-skbedit-vbnto-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-act-skbedit-vbnto-4.1.38-manual.
+Installing kmod-cls-flow-vbnto-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/kmod-cls-flow-vbnto-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-cls-flow-vbnto-4.1.38-manual.
+Installing kmod-em-u32-vbnto-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/kmod-em-u32-vbnto-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-em-u32-vbnto-4.1.38-manual.
+Installing kmod-sch-hfsc-vbnto-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/kmod-sch-hfsc-vbnto-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-sch-hfsc-vbnto-4.1.38-manual.
+Installing kmod-sched-core-4.1.38-vbnto-compat (4.1.38-1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/kmod-sched-core-4.1.38-vbnto-compat_4.1.38-1_arm_cortex-a9.ipk
+Configuring kmod-sched-core-4.1.38-vbnto-compat.
+Status: install user installed
+Status: install user installed
+PASS complete multi-module group migration
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+ * 	kernel (= 4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbnto/repo/fixture-vpn_1_all.ipk
+PASS wrong kernel ABI rejected
+ALL_CASES_PASSED=4.1.38-vbnto
+ * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbntk/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbntk/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbntk/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.38-vbntk/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/fixture-vpn_1_all.ipk
+Installing kmod-tun-vbnts-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/kmod-tun-vbnts-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-tun-vbnts-4.1.38-manual.
+Configuring fixture-vpn.
+Status: install user installed
+Status: install ok installed
+Installing kmod-tun (4.1.38-1) to root...
+Installing fixture-unrelated (1) to root...
+Configuring kmod-tun.
+Configuring fixture-unrelated.
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/fixture-vpn_1_all.ipk
+Configuring fixture-vpn.
+Module is active: quiesce its consumers and review unloading before migration
+No packages removed.
+Installing kmod-tun-vbnts-4.1.38-manual (4.1.38-2) to root...
+Configuring kmod-tun-vbnts-4.1.38-manual.
+Upgrading kmod-tun on root from 4.1.38-1 to 4.1.38-2...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/kmod-tun_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-tun.
+Verified module file and OPKG ownership updated: kmod-tun-vbnts-4.1.38-manual
+Package kmod-tun (4.1.38-2) installed in root is up to date.
+Depends: kernel (= 4.1.38-1-8dd693635a152c8c7b822a64e6c5c470), kmod-tun-vbnts-4.1.38-manual (= 4.1.38-2)
+Status: install user installed
+kmod-tun-vbnts-4.1.38-manual - 4.1.38-2
+PASS generic migration preserves module bytes, ownership and consumer
+Installing kmod-sched-core (4.1.38-1) to root...
+Configuring kmod-sched-core.
+Installing fixture-group (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/fixture-group_1_all.ipk
+Configuring fixture-group.
+Installing kmod-act-skbedit-vbnts-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/kmod-act-skbedit-vbnts-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-act-skbedit-vbnts-4.1.38-manual.
+Installing kmod-cls-flow-vbnts-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/kmod-cls-flow-vbnts-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-cls-flow-vbnts-4.1.38-manual.
+Installing kmod-em-u32-vbnts-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/kmod-em-u32-vbnts-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-em-u32-vbnts-4.1.38-manual.
+Installing kmod-sch-hfsc-vbnts-4.1.38-manual (4.1.38-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/kmod-sch-hfsc-vbnts-4.1.38-manual_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-sch-hfsc-vbnts-4.1.38-manual.
+Upgrading kmod-sched-core on root from 4.1.38-1 to 4.1.38-2...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/kmod-sched-core_4.1.38-2_arm_cortex-a9.ipk
+Configuring kmod-sched-core.
+Status: install user installed
+Status: install user installed
+PASS complete multi-module group migration
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.38-vbntk/repo/fixture-vpn_1_all.ipk
+ * 	kernel (= 4.1.38-1-8dd693635a152c8c7b822a64e6c5c470) * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
+PASS wrong kernel ABI rejected
+ALL_CASES_PASSED=4.1.38-vbntk
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntk/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntk/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntk/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntk/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/fixture-vpn_1_all.ipk
+Installing kmod-tun-4.1.52-manual (4.1.52-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-tun-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk
+Configuring kmod-tun-4.1.52-manual.
+Configuring fixture-vpn.
+Status: install user installed
+Status: install ok installed
+Installing kmod-tun (4.1.52-1) to root...
+Installing fixture-unrelated (1) to root...
+Configuring kmod-tun.
+Configuring fixture-unrelated.
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/fixture-vpn_1_all.ipk
+Configuring fixture-vpn.
+Module is active: quiesce its consumers and review unloading before migration
+No packages removed.
+Installing kmod-tun-4.1.52-manual (4.1.52-2) to root...
+Configuring kmod-tun-4.1.52-manual.
+Upgrading kmod-tun on root from 4.1.52-1 to 4.1.52-2...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-tun_4.1.52-2_arm_cortex-a9.ipk
+Configuring kmod-tun.
+Verified module file and OPKG ownership updated: kmod-tun-4.1.52-manual
+Package kmod-tun (4.1.52-2) installed in root is up to date.
+Depends: kernel (= git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55), kmod-tun-4.1.52-manual (= 4.1.52-2)
+Status: install user installed
+kmod-tun-4.1.52-manual - 4.1.52-2
+PASS generic migration preserves module bytes, ownership and consumer
+Installing kmod-nf-nat (4.1.52-1) to root...
+Configuring kmod-nf-nat.
+Installing fixture-group (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/fixture-group_1_all.ipk
+Configuring fixture-group.
+Installing kmod-nf-nat-4.1.52-manual (4.1.52-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-nf-nat-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk
+Installing kmod-nf-conntrack-4.1.52-manual (4.1.52-3) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-nf-conntrack-4.1.52-manual_4.1.52-3_arm_cortex-a9.ipk
+Configuring kmod-nf-conntrack-4.1.52-manual.
+Configuring kmod-nf-nat-4.1.52-manual.
+Installing kmod-nf-nat-ipv4-4.1.52-manual (4.1.52-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-nf-nat-ipv4-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk
+Configuring kmod-nf-nat-ipv4-4.1.52-manual.
+Installing kmod-nf-nat-masquerade-ipv4-4.1.52-manual (4.1.52-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-nf-nat-masquerade-ipv4-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk
+Configuring kmod-nf-nat-masquerade-ipv4-4.1.52-manual.
+Installing kmod-nf-nat-redirect-4.1.52-manual (4.1.52-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-nf-nat-redirect-4.1.52-manual_4.1.52-2_arm_cortex-a9.ipk
+Configuring kmod-nf-nat-redirect-4.1.52-manual.
+Installing kmod-nf-nat-4.1.52-vbntk-compat (4.1.52-1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/kmod-nf-nat-4.1.52-vbntk-compat_4.1.52-1_arm_cortex-a9.ipk
+Configuring kmod-nf-nat-4.1.52-vbntk-compat.
+Status: install user installed
+Status: install user installed
+PASS complete multi-module group migration
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+ * 	kernel (= git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-f4e97ee0656c3a247868bb0a3f9c7e55)Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntk/repo/fixture-vpn_1_all.ipk
+ * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
+PASS wrong kernel ABI rejected
+ALL_CASES_PASSED=4.1.52-vbntk
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt3/repo/fixture-vpn_1_all.ipk
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+ * 	kmod-tun * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
+PASS staging-only candidates do not provide TUN: 4.1.52-vcnt3
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnt2/repo/fixture-vpn_1_all.ipk
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+ * 	kmod-tun * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
+PASS staging-only candidates do not provide TUN: 4.1.52-vcnt2
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcntj/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcntj/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcntj/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcntj/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcntj/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcntj/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcntj/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcntj/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcntj/repo/fixture-vpn_1_all.ipk
+PASS staging-only candidates do not provide TUN: 4.1.52-vcntj
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+ * 	kmod-tun * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnta/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnta/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnta/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnta/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnta/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnta/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnta/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vcnta/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnta/repo/fixture-vpn_1_all.ipk
+Installing kmod-tun (4.1.52-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnta/repo/kmod-tun_4.1.52-2_arm_cortex-a9.ipk
+Configuring kmod-tun.
+Configuring fixture-vpn.
+Status: install user installed
+Status: install ok installed
+PASS builtin TUN capability installs no module
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vcnta/repo/fixture-vpn_1_all.ipk
+PASS wrong kernel ABI rejected
+ALL_CASES_PASSED=4.1.52-vcnta
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+ * 	kernel (= git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-7ccab18b461e7dbcd98a4827bd1f494a) * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntv/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntv/clean//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntv/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntv/legacy//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntv/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntv/group//var/opkg-lists/fixture
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntv/repo/Packages
+Updated list of available packages in /tmp/gui-ipk-provider-fixture/4.1.52-vbntv/wrong//var/opkg-lists/fixture
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntv/repo/fixture-vpn_1_all.ipk
+Installing kmod-tun (4.1.52-2) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntv/repo/kmod-tun_4.1.52-2_arm_cortex-a9.ipk
+Configuring kmod-tun.
+Configuring fixture-vpn.
+Status: install user installed
+Status: install ok installed
+PASS builtin TUN capability installs no module
+Installing fixture-vpn (1) to root...
+Downloading file:///tmp/gui-ipk-provider-fixture/4.1.52-vbntv/repo/fixture-vpn_1_all.ipk
+PASS wrong kernel ABI rejected
+ALL_CASES_PASSED=4.1.52-vbntv
+Collected errors:
+ * satisfy_dependencies_for: Cannot satisfy the following dependencies for fixture-vpn:
+ * 	kernel (= git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-dd8ba54e40bfed7fbfc03841eba8fcc5) * 
+ * opkg_install_cmd: Cannot install package fixture-vpn.
