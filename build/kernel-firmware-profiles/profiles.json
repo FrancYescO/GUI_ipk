@@ -130,5 +130,81 @@
     "bundle": "artifacts/firmware-kernel-candidates/vcntj-4.1.52.tar.gz",
     "bundle_sha256": "2cb0f94b46cb08de6fa43307658cb9a7807f588e21734123d0f284a5e03c0011",
     "firmware_option_changes": 445
+  },
+  "4.1.52-vcnta": {
+    "device": "DJA0231 / VCNT-A (Telstra)",
+    "kernel_release": "4.1.52",
+    "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-7ccab18b461e7dbcd98a4827bd1f494a",
+    "architecture": "arm_cortex-a9",
+    "feed": "kernel/4.1.52-vcnta-candidates",
+    "status": "offline-checked-candidates",
+    "runtime_validated": false,
+    "config_input": "vcnta-20.3.0501",
+    "stock_inputs": [
+      "vcnta-20.3.0501"
+    ],
+    "stock_equivalent_firmwares": [],
+    "module_count": 49,
+    "excluded_modules": {
+      "bcmspu": "Vendor SPU implementation 3 enabled; omitted from this portable module set pending separate ABI verification",
+      "xt_nat": "Existing cross-profile quarantine; never tested here"
+    },
+    "required_options": {
+      "CONFIG_BCM_CHIP_NUMBER": "63138",
+      "CONFIG_BCM_HNDROUTER": "n",
+      "CONFIG_BCM_PKTFWD": "n",
+      "CONFIG_BCM_USBNET_THREAD": "y",
+      "CONFIG_PPP_MULTILINK": "n"
+    },
+    "source_sdk": "avwarez/vmg8825_b50b@af23960e39003ba7788f5ced0c256b1bc676a712 + pinned Broadcom 502L07 SDK + repository ABI patches",
+    "compiler": "GCC 5.5.0",
+    "firmware_mirror": "http://fwstore.bdms.telstra.net/Technicolor_vcnt-a_20.3.c.0501-MR22.1-RA/vcnt-a_20.3.c.0501-MR22.1-RA.rbi",
+    "original_config_note": "Embedded original RBI configuration and complete stock symbol closure; no runtime validation.",
+    "bundle": "artifacts/firmware-kernel-candidates/vcnta-4.1.52.tar.gz",
+    "bundle_sha256": "3f93ed4318fe7e9fcd90e86717eee338e7ba35826eb592344873df558ffde172",
+    "verified_firmwares": [
+      "vcnt-a_20.3.c.0501-MR22.1-RA"
+    ],
+    "chip": 63138,
+    "vermagic": "4.1.52 SMP preempt mod_unload ARMv7",
+    "firmware_option_changes": 175
+  },
+  "4.1.52-vbntv": {
+    "device": "DJA0230 / VBNT-V (Telstra)",
+    "kernel_release": "4.1.52",
+    "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-dd8ba54e40bfed7fbfc03841eba8fcc5",
+    "architecture": "arm_cortex-a9",
+    "feed": "kernel/4.1.52-vbntv-candidates",
+    "status": "offline-checked-candidates",
+    "runtime_validated": false,
+    "config_input": "vbntv-20.3.0432",
+    "stock_inputs": [
+      "vbntv-20.3.0432"
+    ],
+    "stock_equivalent_firmwares": [],
+    "module_count": 49,
+    "excluded_modules": {
+      "bcmspu": "Vendor SPU implementation 3 enabled; omitted from this portable module set pending separate ABI verification",
+      "xt_nat": "Existing cross-profile quarantine; never tested here"
+    },
+    "required_options": {
+      "CONFIG_BCM_CHIP_NUMBER": "63138",
+      "CONFIG_BCM_HNDROUTER": "n",
+      "CONFIG_BCM_PKTFWD": "n",
+      "CONFIG_BCM_USBNET_THREAD": "y",
+      "CONFIG_PPP_MULTILINK": "n"
+    },
+    "source_sdk": "avwarez/vmg8825_b50b@af23960e39003ba7788f5ced0c256b1bc676a712 + pinned Broadcom 502L07 SDK + repository ABI patches",
+    "compiler": "GCC 5.5.0",
+    "firmware_mirror": "http://fwstore.bdms.telstra.net/Technicolor_vbnt-v_20.3.c.0432-MR21.1-RA/vbnt-v_20.3.c.0432-MR21.1-RA.rbi",
+    "original_config_note": "Embedded original RBI configuration and complete stock symbol closure; no runtime validation.",
+    "bundle": "artifacts/firmware-kernel-candidates/vbntv-4.1.52.tar.gz",
+    "bundle_sha256": "0e8ec8c3c602a38e3283db521beba1bbfabb222c68bdaa255a0a1cc6942b1ca5",
+    "verified_firmwares": [
+      "vbnt-v_20.3.c.0432-MR21.1-RA"
+    ],
+    "chip": 63138,
+    "vermagic": "4.1.52 SMP preempt mod_unload ARMv7",
+    "firmware_option_changes": 172
   }
 }

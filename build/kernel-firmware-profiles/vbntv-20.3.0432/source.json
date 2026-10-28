@@ -1,0 +1,27 @@
+{
+  "image": "vbnt-v_20.3.c.0432-MR21.1-RA.rbi",
+  "image_sha256": "9a0c37f439f271ae354b8ab320223546b2436c5b68b2d02bcb46def1b6e02b2f",
+  "board": "VBNT-V",
+  "decrypted_sha256": "db9ee6160d77091d11893f4610b93701bda12f253f06bcf044590e90b8cfdeca",
+  "layers": [
+    {
+      "offset": 38,
+      "size": 2230770,
+      "sha256": "b77b057e08b43df8d7d8d99f10391a4680174cb12ab718ab517adf4d1410b670"
+    },
+    {
+      "offset": 16820,
+      "size": 6255332,
+      "sha256": "417f20366726e1934486624746f702056e679e27bfecc8973aac62982ace4061"
+    }
+  ],
+  "config_sha256": "e317f9b5c5fc632bda6ce7b003a14fa6576f388c297a9a60220c6a85c67c0b67",
+  "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-dd8ba54e40bfed7fbfc03841eba8fcc5",
+  "stock_module_count": 288,
+  "kernel_export_count": 5918,
+  "base_address": "0xc0018000",
+  "vermagic": "4.1.52 SMP preempt mod_unload ARMv7",
+  "stock_symbols_sha256": "1e977249dc110c623f004f811b60c2a0e95fcffeef54373ac43c68df01b4e59a",
+  "firmware_version_file": "config version\n        option version '20.3.c.0432-3241010-20221012023328-f4cc8d43fdb9e1fe7bf3bba5aa8caddbc8cb4014'\n        option mask '3241010'\n        option timestamp '20221012023328'\n        option product 'vbnt-j_telstra'\n        option marketing_name 'Egyptian Blue'\n        option marketing_version '20.3.c'\n\toption config 'f4cc8d43fdb9e1fe7bf3bba5aa8caddbc8cb4014'\n\toption openwrt 'e9829919b3a50aa4d2047c1078b302c7340d0168'\n\toption kernel '4fc0170d7b40139c6aaaab126c6b8a405fe1bdcb'\n\toption lte 'df24e52de4c972faf45f9682fa069a4e7379cebd'\n\toption custo 'a1dd7c06dda40840434498b08284eddeef09f90d'\n\toption technicolor 'f8f2f77059c235e44195f58437bf401aba2b0fcc'\n\toption routing '07ba8737587eca52c08910b0b0b34b81c0a58855'\n\toption packages 'e9e3c5eeebbccb758d0be5dd81f049223de6cf85'\n",
+  "runtime_validated": false
+}
