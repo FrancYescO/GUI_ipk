@@ -23,6 +23,8 @@ def write_report(source, destination, style, script):
             label = 'Functional test passed' if module['level'] == 'load-unload-functional' else 'Load/unload + namespace only'
         elif status == 'skip_busy':
             label = 'Not substituted: stock module in use'
+        elif status == 'compiled' and module['level'] == 'offline-symbol-check':
+            label = 'Offline symbols checked; not runtime validated'
         elif status.startswith('blocked'):
             label = 'WITHHELD: stock unload caused reboot; candidate untested'
         else:
@@ -43,11 +45,14 @@ def write_report(source, destination, style, script):
 <p>Updated {html.escape(report['updated'])}. Device: VBNT-K at .69, firmware {html.escape(report['firmware'])}.
 Kernel: 4.1.52 SMP preempt mod_unload ARMv7. Kernel package: <code>{html.escape(report['kernel_package'])}</code>.</p>
 <p><strong>{functional} functional passes; {smoke} load/unload and namespace smoke passes;
-{counts['skip_busy']} busy stock modules left unchanged.</strong> A smoke pass does not establish full functionality.
+{counts['skip_busy']} busy stock modules left unchanged; {counts['compiled']} replacement payloads checked offline only.</strong> A smoke pass does not establish full functionality.
 Each result applies to the exact module SHA-256 and this firmware ABI.</p>
 <p>Corrected Zyxel-only QoS drop-statistic and NAT range extensions absent from Technicolor firmware.
 The original HFSC payload warned under traffic and pinned a test namespace; a controlled reboot restored stock modules.
-Corrected HFSC, flow and REDIRECT passed traffic tests. Existing filenames and version <code>4.1.52-1</code> are retained; payload and IPK checksums changed.</p>
+Corrected HFSC, flow and REDIRECT passed traffic tests. Their filenames and version <code>4.1.52-1</code> are retained; payload and IPK checksums changed.</p>
+<p>Conntrack revision <code>4.1.52-2</code> removes SDK-only Altibox UDP timeout and proc hooks.
+Its original revision required two symbols absent from the firmware. The corrected payload passes offline symbol checks;
+it has not been loaded or functionally tested. Its previous candidate and busy test history remain in the evidence.</p>
 <p><strong>xt_nat is withheld.</strong> SSH was lost during removal of the stock module, before the new candidate loaded;
 the modem returned with a different boot ID. The cause is unresolved and the removal will not be repeated.
 The untested candidate is excluded from the installable feed. The final validation session retained its boot ID and initial taint.</p>

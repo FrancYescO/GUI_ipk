@@ -94,9 +94,7 @@ separate step.
 
 Fastweb FW261 and FW264 share kernel package
 `4.1.38-1-42740ce3f7be0198c1d4501cfd664fa0`. Their kernel sources differ;
-they are candidates for one shared profile, pending comparison of runtime
-configurations and module tests. The extracted filesystems do not contain the
-full kernel configurations. The profile is recorded as awaiting those inputs;
+they are candidates for one shared profile, pending recovery of configurations from complete RBI/kernel images and module tests. The extracted filesystems alone do not contain the full kernel configurations. The profile is recorded as awaiting those inputs;
 there is no installable feed claiming support for these firmwares yet.
 
 All profiles share the repository and build tooling. Git branches are used
@@ -133,7 +131,7 @@ compiler/build-input releases remain necessary for CI.
 
 The VBNT-K 4.1.52 packages declare `arm_cortex-a9`, confirmed in OPKG on
 .69. The former `brcm963xx` package architecture is not accepted by that modem.
-Package names and version `4.1.52-1` are retained; container metadata and
+Package names and version `4.1.52-1` are retained for those traffic-tested corrections; container metadata and
 filenames change, while every module payload remains identical to the registry.
 Run `opkg update` to obtain the refreshed indexes.
 
@@ -167,3 +165,16 @@ manual IPKs per profile from the committed bundles and reports.
 `prepare-kernel-runtime-probe.py` prepares a private repeat-test directory with
 the exact payloads and pinned temporary tc/libmnl tooling; it does not connect
 to a modem or install packages.
+
+## Additional static-image builds
+
+The VCNT-3 and VCNT-2 4.1.52 profiles now have 49 compiled, offline-checked staged
+IPKs each. These are separate candidate feeds, not runtime-validated additions
+to the existing three reference-device feeds. Configurations and stock exports
+come from original RBI/bank images; CPU and full vermagic differences are
+preserved. See [firmware candidate builds](firmware-kernel-candidates.md).
+
+The offline audit also found two unavailable Altibox symbols in the old VBNT-K
+conntrack payload. Revision `4.1.52-2` removes those SDK-only hooks and passes
+original-firmware symbol checks. The replacement has not been loaded; the prior
+busy observation and original payload hash remain in the validation history.

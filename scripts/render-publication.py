@@ -13,6 +13,7 @@ from publication_layout import ROOT, SITE, KERNEL_ALIASES, parse, write_snapshot
 from kernel_compatibility_page import write_compatibility
 from kernel_validation_page import write_report
 from kernel_runtime_validation import write_runtime_report
+from firmware_kernel_candidates import definitions as firmware_definitions, restore as restore_firmware
 
 spec = importlib.util.spec_from_file_location('pages', ROOT / 'scripts/generate-feed-pages.py')
 pages = importlib.util.module_from_spec(spec)
@@ -52,6 +53,10 @@ def kernel_manifest(records):
         ('4.1.38-vbntk', 'DGA4132 / VBNT-S', '18.3.k.0451', '.204', '4.1.38-1-8dd693635a152c8c7b822a64e6c5c470'),
         ('4.1.52-vbntk', vbntk['device'], vbntk['firmware'], '.69', vbntk['kernel_package']),
     ]
+    for profile, entry in firmware_definitions().items():
+        if entry.get('bundle'):
+            definitions.append((profile, entry['device'], ', '.join(entry['verified_firmwares']),
+                                'not runtime tested', entry['kernel_package']))
     profiles, candidates = [], []
     for profile, device, firmware, router, version in definitions:
         for staging in (False, True):
@@ -89,7 +94,7 @@ def write_kernel_overview(site, manifest):
                          for r in manifest['candidates'])
     content = '''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Available kernel OPKG feeds</title><style>''' + pages.STYLE + '''code, pre {overflow-wrap:anywhere;white-space:pre-wrap}</style></head><body>
-<h1>Available kernel OPKG feeds</h1><p>Three runtime feeds and two separate candidate feeds, all hosted on Pages.
+<h1>Available kernel OPKG feeds</h1><p>''' + str(len(manifest['profiles'])) + ''' runtime feeds and ''' + str(len(manifest['candidates'])) + ''' separate candidate feeds, all hosted on Pages.
 Enable only the runtime feed matching your complete installed <code>kernel</code> package version.
 Linux version or operator branding alone is insufficient. Other firmware sharing the ABI still needs runtime validation.</p>
 <nav><a href="../index.html">All packages</a><a href="../compatibility/">Firmware compatibility</a>
@@ -100,9 +105,11 @@ Linux version or operator branding alone is insufficient. Other firmware sharing
 VBNT-O: 14 new functional passes and 30 busy stock modules left unchanged.
 VBNT-S: 15 new functional passes, 1 namespace smoke pass and 28 busy stock modules left unchanged.
 Both 4.1.38 profiles also reuse the exact five previously validated TUN, WireGuard, SPU, CDC Ethernet and RNDIS host payloads.
-VBNT-K: 14 functional passes, 2 smoke passes and 33 busy stock modules left unchanged.
+VBNT-K: 14 functional passes, 2 smoke passes, 32 busy stock modules left unchanged, and 1 conntrack replacement checked offline only.
 See the linked reports for exact payloads and test limits; USB tethering traffic has not been tested.</p>
 <h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
+Additional firmware candidate feeds below have configurations recovered from original firmware images and pass offline symbol checks.
+These checks do not establish complete structure-layout compatibility or runtime behavior. VCNT-3 candidates omit SPU, disabled by its original firmware.
 These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
 They stage modules outside boot paths; a successful build does not prove runtime compatibility. xt_nat remains withheld.</p>''' + candidates + '''
 <h2>VBNT-K canonical feeds and VBNT-S aliases</h2><p>VBNT-K is the canonical public feed name for each kernel version.
@@ -155,6 +162,7 @@ def render(publication):
     for profile in ('vbnto', 'vbnts'):
         write_runtime_report(ROOT / 'build' / (profile + '-4.1.38/runtime-validation'),
                              site / 'validation' / ('4.1.38-' + profile), pages.STYLE)
+    write_firmware_reports(site)
     userspace = [{'name': 'modgui_' + key.replace('/', '_').replace('-', '_'), 'url': url,
                   'source': 'src/gz modgui_' + key.replace('/', '_').replace('-', '_') + ' ' + url}
                  for key, url in feeds.items() if not key.startswith('kernel/') and key != 'telephony/asterisk-20']
@@ -165,12 +173,41 @@ def render(publication):
     (site / 'opkg-kernel.conf').write_text('# Enable only one runtime source matching the exact installed kernel package.\n' + '\n'.join('# ' + r['kernel_package'] + '\n# ' + r['source'] for r in kernels['profiles']) + '\n')
     for helper in ('print-opkg-sources.sh', 'opkg-release-wget.sh'):
         shutil.copyfile(ROOT / 'scripts' / helper, site / helper)
+
     (site / '.nojekyll').touch()
     write_snapshot(site / 'publication.json.gz', catalog)
     size = sum(p.stat().st_size + 1024 for p in site.rglob('*') if p.is_file())
     if size >= 1073741824:
         raise ValueError('Pages archive would exceed 1 GiB')
     print('Rendered', len(catalog['records']), 'catalog entries;', len(list(site.rglob('*.ipk'))), 'Pages IPKs;', size, 'estimated TAR bytes')
+
+
+def write_firmware_reports(site):
+    for profile, entry in firmware_definitions().items():
+        if not entry.get('bundle'):
+            continue
+        with tempfile.TemporaryDirectory() as temp:
+            report = restore_firmware(profile, Path(temp))
+        destination = site / 'validation' / profile
+        destination.mkdir(parents=True, exist_ok=True)
+        (destination / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
+        rows = ''.join('<tr><td>' + html.escape(m['name']) + '</td><td><code>' + m['sha256'] +
+                       '</code></td><td><a href="' + SITE + '/' + entry['feed'] + '/' + m['asset'] +
+                       '">Staged IPK</a></td></tr>' for m in report['modules'])
+        sources = ''.join('<li>' + html.escape(check['input']) + ': original image SHA256 <code>' +
+                          check['image_sha256'] + '</code>; no unresolved imports</li>' for check in report['firmware_checks'])
+        content = ('<!doctype html><html lang="en"><meta charset="utf-8"><title>' + html.escape(profile) +
+                   ' offline candidate checks</title><style>' + pages.STYLE +
+                   'code{overflow-wrap:anywhere}</style><h1>' + html.escape(profile) +
+                   ' offline candidate checks</h1><p><strong>No runtime validation has been performed.</strong> ' +
+                   html.escape(report['limitations']) + '</p><p>Reference device: ' + html.escape(entry['device']) +
+                   '. Exact kernel dependency: <code>' + html.escape(entry['kernel_package']) +
+                   '</code>.</p><p>Compiler: GCC 5.5.0. Pinned GPL SDK with documented ABI adaptations. '
+                   'SPU is omitted when disabled by the original configuration; xt_nat remains quarantined.</p>' +
+                   '<ul>' + sources + '</ul><p><a href="results.json">Per-module evidence</a> · '
+                   '<a href="../../kernel/">Kernel feed selection</a></p><table><thead><tr><th>Module</th>'
+                   '<th>Payload SHA256</th><th>Download</th></tr></thead><tbody>' + rows + '</tbody></table></html>')
+        (destination / 'index.html').write_text(content)
 
 
 if __name__ == '__main__':

@@ -109,8 +109,14 @@ The old `kernel/4.1.52` URL remains an alias of the VBNT-K profile. The generic
 runtime-compatible firmware. Optional staged candidate feeds and per-payload
 validation levels are described in [kernel compatibility](docs/kernel-compatibility.md).
 The 4.1.52 tests include 14 functional passes, two load/unload namespace passes,
-33 busy stock modules left unchanged, and withheld xt_nat. A matching Linux
+32 busy stock modules left unchanged, one conntrack replacement checked offline only, and withheld xt_nat. A matching Linux
 version alone does not establish module compatibility.
+
+Additional offline-checked candidate feeds provide 49 IPKs each for VCNT-3
+(DGA4331) and VCNT-2 (DWA0122), with distinct exact kernel dependencies and
+architectures. They have not been runtime validated and stage modules outside
+boot paths. See [firmware candidate builds](docs/firmware-kernel-candidates.md)
+for original-image hashes, source alignment, exclusions and CI reproduction.
 
 Browse and search the published packages at
 [francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).

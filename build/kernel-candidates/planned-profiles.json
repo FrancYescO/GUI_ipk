@@ -5,13 +5,14 @@
       "18.3.n.0462_FW_261_DGA4131",
       "18.3.n.0482_FW_264_DGA4131"
     ],
-    "status": "runtime-config-required",
+    "status": "original-kernel-image-required",
     "required_inputs": [
-      "/proc/config.gz from FW261 and FW264",
-      "stock module samples and compiler identity",
-      "runtime ABI and module functional validation"
+      "Complete original RBI or raw firmware bank containing embedded IKCONFIG; saved runtime config is an alternative",
+      "Pinned firmware/compiler metadata and original stock modules",
+      "Offline source/ABI checks, then device runtime validation"
     ],
-    "feed": null
+    "feed": null,
+    "input_search": "2026-10-28: original HTTP source unavailable; bounded public torrents downloaded no data"
   },
   "4.1.52-tim-f4e97ee0": {
     "kernel_package_suffix": "f4e97ee0656c3a247868bb0a3f9c7e55",

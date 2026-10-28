@@ -10,6 +10,7 @@ build_connmark=0
 build_wireguard=0
 build_spu=0
 external_modules=()
+firmware_profile="${FIRMWARE_PROFILE:-}"
 
 case "$module_set" in
   tun)
@@ -44,6 +45,18 @@ case "$module_set" in
       module_targets+=("$target")
     done < "$repo_root/build/vbntj/network-feed.modules"
     build_connmark=1
+    ;;
+  firmware-candidates)
+    test -n "$firmware_profile"
+    test -f "${FIRMWARE_CONFIG:?Missing prepared firmware configuration}"
+    module_targets=()
+    while IFS= read -r target; do
+      [[ -z "$target" || "$target" == \#* || "$target" == */xt_nat.ko ]] && continue
+      module_targets+=("$target")
+    done < "$repo_root/build/vbntj/network-feed.modules"
+    module_targets+=(drivers/net/usb/usbnet.ko drivers/net/usb/cdc_ether.ko drivers/net/usb/rndis_host.ko)
+    build_connmark=1
+    build_wireguard=1
     ;;
   *)
     echo "Unsupported MODULE_SET: $module_set" >&2
@@ -210,14 +223,18 @@ patch --batch --forward --directory "$kernel_dir" -p1 \
   < "$repo_root/patches/vbntj-4.1.52/001-damson-network-abi.patch"
 patch --batch --forward --directory "$kernel_dir" -p1 \
   < "$repo_root/patches/vbntj-4.1.52/002-damson-qos-nat-abi.patch"
+patch --batch --forward --directory "$kernel_dir" -p1 \
+  < "$repo_root/patches/vbntj-4.1.52/004-omit-altibox-udp-timeout.patch"
+patch --batch --forward --directory "$sdk_dir" -p1 \
+  < "$repo_root/patches/sdk502l07/001-create-driver-link-parents.patch"
 
-if [[ "$module_set" == rndis-compat ]]; then
+if [[ "$module_set" == rndis-compat || "$module_set" == firmware-candidates ]]; then
   bash "$repo_root/scripts/apply-usb-rndis-compat.sh" "$kernel_dir"
   patch --batch --forward --directory "$kernel_dir" -p1 \
     < "$repo_root/patches/vbntj-4.1.52/003-cdc-ether-damson-led-abi.patch"
 fi
 
-cp "$repo_root/build/vbntj/kernel-4.1.52-damson.config" "$kernel_dir/.config"
+cp "${FIRMWARE_CONFIG:-$repo_root/build/vbntj/kernel-4.1.52-damson.config}" "$kernel_dir/.config"
 "$kernel_dir/scripts/config" --file "$kernel_dir/.config" \
   --enable WIRELESS_EXT \
   --enable WEXT_CORE \
@@ -246,12 +263,20 @@ export STAGING_DIR="$TARGET_DIR"
 export BCM_PROFILE=VMG8825_B50B
 export TARGET_CROSS="$cross"
 export BCM_HOSTTOOLS_DIR="$source_dir/staging_dir/host/bin/502L07"
-export BRCM_CHIP=63138
+export BRCM_CHIP="${FIRMWARE_CHIP:-63138}"
 export BCM_KF=y
 
-kernel_make=(make -C "$kernel_dir" ARCH=arm CROSS_COMPILE="$cross")
+kernel_make=(make -C "$kernel_dir" ARCH=arm CROSS_COMPILE="$cross" BRCM_CHIP="$BRCM_CHIP")
 "${kernel_make[@]}" olddefconfig
 "${kernel_make[@]}" modules_prepare
+if [[ "$module_set" == firmware-candidates ]]; then
+  while IFS= read -r setting; do
+    [[ -z "$setting" ]] && continue
+    grep -Fxq "$setting" "$kernel_dir/.config" || {
+      echo "Firmware ABI option lost during olddefconfig: $setting" >&2; exit 1;
+    }
+  done < "${FIRMWARE_REQUIRED_OPTIONS:?Missing firmware ABI guards}"
+fi
 
 for symbol in WIRELESS_EXT WEXT_CORE WEXT_PROC WEXT_SPY WEXT_PRIV; do
   if ! grep -qx "CONFIG_${symbol}=y" "$kernel_dir/.config"; then
@@ -263,7 +288,7 @@ if grep -qx 'CONFIG_MODVERSIONS=y' "$kernel_dir/.config"; then
   echo "VBNT-K runtime has CONFIG_MODVERSIONS disabled" >&2
   exit 1
 fi
-if [[ "$build_connmark" -eq 1 ]]; then
+if [[ "$build_connmark" -eq 1 && "$module_set" != firmware-candidates ]]; then
   for symbol in IFB NET_SCH_INGRESS NET_CLS_U32 NET_ACT_POLICE; do
     if ! grep -qx "CONFIG_${symbol}=y" "$kernel_dir/.config"; then
       echo "Required built-in QoS option CONFIG_${symbol}=y was lost" >&2
@@ -306,9 +331,11 @@ if [[ "$build_spu" -eq 1 ]]; then
   cp -R "$repo_root/build/vbntj-spu-test" "$source_dir/.damson-spu-test"
   "${kernel_make[@]}" M="$source_dir/.damson-spu-test" modules
 fi
-rm -rf "$canary_dir"
-cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
-"${kernel_make[@]}" M="$canary_dir" modules
+if [[ "$module_set" != firmware-candidates ]]; then
+  rm -rf "$canary_dir"
+  cp -R "$repo_root/build/vbntj-canary" "$canary_dir"
+  "${kernel_make[@]}" M="$canary_dir" modules
+fi
 
 mkdir -p "$output_dir"
 rm -f -- \
@@ -324,7 +351,9 @@ done
 for module in ${external_modules[@]+"${external_modules[@]}"}; do
   cp "$module" "$output_dir/$(basename "$module")"
 done
-cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
+if [[ "$module_set" != firmware-candidates ]]; then
+  cp "$canary_dir/vbntj_abi_canary.ko" "$output_dir/"
+fi
 if [[ "$build_spu" -eq 1 ]]; then
   cp "$source_dir/.damson-spu-test/damson_spu_test.ko" "$output_dir/"
 fi
@@ -333,11 +362,25 @@ for module in "$output_dir"/*.ko; do
   "$cross_strip" --strip-debug "$module"
   vermagic="$("$cross_readelf" -p .modinfo "$module" \
     | sed -n 's/.*vermagic=//p' | head -n1 | sed 's/[[:space:]]*$//')"
-  if [[ "$vermagic" != '4.1.52 SMP preempt mod_unload ARMv7' ]]; then
+  if [[ "$vermagic" != "${FIRMWARE_VERMAGIC:-4.1.52 SMP preempt mod_unload ARMv7}" ]]; then
     echo "Unexpected vermagic in $(basename "$module"): $vermagic" >&2
     exit 1
   fi
 done
+
+if [[ "$module_set" == firmware-candidates ]]; then
+  # Canonical source paths keep __FILE__ diagnostics stable; build IDs also
+  # encode removed debug information and must not affect distributable bytes.
+  for module in "$output_dir"/*.ko; do
+    "${cross}objcopy" --remove-section .note.gnu.build-id "$module"
+  done
+  cp "$kernel_dir/.config" "$output_dir/build.config"
+  printf 'profile=%s\ncompiler=%s\nsource_commit=%s\nruntime_validated=no\n' \
+    "$firmware_profile" "$compiler_version" af23960e39003ba7788f5ced0c256b1bc676a712 \
+    > "$output_dir/BUILD-METADATA.txt"
+  echo "Built staged firmware candidates; host-side stock-symbol audit and packaging still required"
+  exit 0
+fi
 
 for module in "$output_dir"/*.ko; do
   module_name="$(basename "$module" .ko)"
@@ -380,6 +423,10 @@ build_manual_ipk() {
     return 0
   fi
   package_version="4.1.52-1"
+  if [[ "$module_stem" == nf_conntrack ]]; then
+    package_version="4.1.52-2"
+    "${cross}objcopy" --remove-section .note.gnu.build-id "$module"
+  fi
 
   package_arch="arm_cortex-a9"
   package_file="$output_dir/${package_name}_${package_version}_${package_arch}.ipk"
@@ -408,6 +455,9 @@ X-Manual-Install-Only: yes
 Conflicts: $legacy_package_name
 Replaces: $legacy_package_name
 EOF
+  if [[ "$module_stem" == nf_conntrack ]]; then
+    printf 'X-Offline-Symbol-Check: passed\nX-Runtime-Validated: no\n' >> "$control_root/control"
+  fi
 
   (
     cd "$control_root"

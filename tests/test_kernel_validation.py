@@ -56,7 +56,7 @@ class KernelValidationTests(unittest.TestCase):
             write_report(SOURCE, destination, '', '')
             html = (destination / 'index.html').read_text()
             self.assertIn('14 functional passes; 2 load/unload and namespace smoke passes;', html)
-            self.assertIn('33 busy stock modules', html)
+            self.assertIn('32 busy stock modules', html)
             self.assertIn('WITHHELD: stock unload caused reboot; candidate untested', html)
             self.assertEqual(html.count('<tr>'), 51)
             self.assertNotIn('kmod-xt-nat-4.1.52-manual_', html)

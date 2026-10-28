@@ -1,0 +1,169 @@
+Subject: [PATCH] conntrack: omit SDK-only Altibox UDP timeout hooks
+
+The VCNT-3 firmware exports neither Altibox timeout variable. Restore
+normal conntrack timeouts while preserving the Broadcom derived timeout.
+
+--- a/net/netfilter/nf_conntrack_proto_udp.c
++++ b/net/netfilter/nf_conntrack_proto_udp.c
+@@ -29,3 +28,0 @@
+-/* Altibox: Customized UDP timeout*/
+-extern uint32_t nf_ct_udp_STB_timeout __read_mostly;
+-extern uint32_t nf_ct_udp_STB_port __read_mostly;
+@@ -92,19 +88,0 @@
+-	const struct udphdr *hp;
+-	struct udphdr _hdr;
+-	int mFlag = 0;
+-
+-	//parse UDP header
+-	/* Actually only need first 8 bytes. */
+-	hp = skb_header_pointer(skb, dataoff, sizeof(_hdr), &_hdr);
+-	if (hp != NULL)
+-	{
+-		//if match the dest. port, set flag
+-		if (( hp->source == htons(nf_ct_udp_STB_port)) || ( hp->dest == htons(nf_ct_udp_STB_port)))
+-		{
+-			mFlag=1;
+-			// printk(">>> STB mFlag=1  sport=%d dport=%d <<<\n", hp->source, hp->dest);
+-		} else {
+-			//printk(">>>  UDP sport=%d dport=%d <<<\n", hp->source, hp->dest);
+-		}
+-	}
+-
+@@ -121 +99 @@
+-				nf_ct_refresh_acct(ct, ctinfo, skb, (mFlag)? (nf_ct_udp_STB_timeout*HZ) : timeout );
++				nf_ct_refresh_acct(ct, ctinfo, skb, timeout );
+@@ -123 +101 @@
+-				nf_ct_refresh_acct(ct, ctinfo, skb, (mFlag)? (nf_ct_udp_STB_timeout*HZ) : timeouts[UDP_CT_REPLIED] );
++				nf_ct_refresh_acct(ct, ctinfo, skb, timeouts[UDP_CT_REPLIED] );
+@@ -129 +107 @@
+-		nf_ct_refresh_acct(ct, ctinfo, skb, (mFlag)? (nf_ct_udp_STB_timeout*HZ) : timeouts[UDP_CT_UNREPLIED] );
++		nf_ct_refresh_acct(ct, ctinfo, skb, timeouts[UDP_CT_UNREPLIED] );
+--- a/net/netfilter/nf_conntrack_core.c
++++ b/net/netfilter/nf_conntrack_core.c
+@@ -71,19 +70,0 @@
+-
+-/* Altibox has a CA system that is used to handle entitlements for STB.
+-   The STB is always talking to STB on destination port 1600 and will
+-   start a new connection to CA server every 600 seconds. The CA server
+-   is also used to notify STB of other events (like request to reboot etc) */
+-#define PROC_STB_PORT	"zy_nf_ct_udp_STB_port"
+-#define PROC_STB_TIMEOUT	"zy_nf_ct_udp_STB_timeout"
+-extern uint32_t nf_ct_udp_STB_timeout __read_mostly;
+-extern uint32_t nf_ct_udp_STB_port __read_mostly;
+-
+-static ssize_t proc_STB_timeout_read(struct file * file, char * buffer, size_t len, loff_t *offset);
+-static ssize_t proc_STB_timeout_write(struct file *file, const char *buf, size_t count, loff_t *offset);
+-static ssize_t proc_STB_port_read(struct file * file, char * buffer, size_t len, loff_t *offset);
+-static ssize_t proc_STB_port_write(struct file *file, const char *buf, size_t count, loff_t *offset);
+-
+-
+-int Zy_UDP_init_proc(void);
+-void Zy_UDP_deinit_proc(void);
+-
+@@ -2348,2 +2328,0 @@
+-	Zy_UDP_deinit_proc();
+-
+@@ -2663,4 +2641,0 @@
+-	ret = Zy_UDP_init_proc();
+-	if (ret < 0)
+-		goto err_proto_zy_udp;
+-
+@@ -2675,2 +2649,0 @@
+-err_proto_zy_udp:
+-	 Zy_UDP_deinit_proc();
+@@ -2705,95 +2677,0 @@
+-static ssize_t proc_STB_timeout_read(struct file * file, char * buffer, size_t len, loff_t *offset)
+-{
+-    ssize_t ret=0;
+-    if(*offset == 0)
+-    {
+-        (*offset) = sprintf(buffer, "%d", nf_ct_udp_STB_timeout );
+-        if(likely(*offset != 0))
+-            ret=*offset;
+-    }
+-    return ret;
+-}
+-
+-static ssize_t proc_STB_timeout_write(struct file *file, const char *buf, size_t count, loff_t *offset)
+-{
+-	char local_buf[20];
+-	int len;
+-
+-	len = sizeof(local_buf) < count ? sizeof(local_buf) - 1 : count;
+-	len = len - copy_from_user(local_buf, buf, len);
+-	local_buf[len] = 0;
+-	sscanf(local_buf,"%d",&nf_ct_udp_STB_timeout);
+-
+-    return len;
+-}
+-
+-static ssize_t proc_STB_port_read(struct file * file, char * buffer, size_t len, loff_t *offset)
+-{
+-	ssize_t ret=0;
+-    if(*offset == 0)
+-    {
+-        (*offset) = sprintf(buffer, "%d", nf_ct_udp_STB_port );
+-        if(likely(*offset != 0))
+-            ret=*offset;
+-    }
+-    return ret;
+-}
+-
+-static ssize_t proc_STB_port_write(struct file *file, const char *buf, size_t count, loff_t *offset)
+-{
+-	char local_buf[20];
+-	int len;
+-
+-	len = sizeof(local_buf) < count ? sizeof(local_buf) - 1 : count;
+-	len = len - copy_from_user(local_buf, buf, len);
+-	local_buf[len] = 0;
+-
+-	sscanf(local_buf,"%d",&nf_ct_udp_STB_port);
+-
+-    return len;
+-}
+-
+-static struct file_operations zyudp_stbtimeout_proc_fops = {
+-	 .owner	 = THIS_MODULE,
+-	 .read    = proc_STB_timeout_read,
+-	 .write   = proc_STB_timeout_write,
+-};
+-
+-static struct file_operations zyudp_stbport_proc_fops = {
+-	 .owner	 = THIS_MODULE,
+-	 .read    = proc_STB_port_read,
+-	 .write   = proc_STB_port_write,
+-};
+-
+-
+-int Zy_UDP_init_proc(void)
+-{
+-	struct proc_dir_entry *proc_zy_nf_ct_udp_STB_port, *proc_zy_nf_ct_udp_STB_timeout;
+-
+-	//STB port part
+-	proc_zy_nf_ct_udp_STB_port = proc_create(PROC_STB_PORT, 0644, NULL, &zyudp_stbport_proc_fops);
+-	if (proc_zy_nf_ct_udp_STB_port == NULL) {
+-		printk(KERN_ALERT "Error: Could not initialize /proc/%s\n", PROC_STB_PORT);
+-		// return -ENOMEM;
+-		return -1;
+-	}
+-	printk(KERN_INFO "/proc/%s created\n", PROC_STB_PORT);
+-	//STB timeout part
+-	proc_zy_nf_ct_udp_STB_timeout = proc_create(PROC_STB_TIMEOUT, 0644, NULL, &zyudp_stbtimeout_proc_fops);
+-	if (proc_zy_nf_ct_udp_STB_timeout == NULL){
+-		printk(KERN_ALERT "Error: Could not initialize /proc/%s\n", PROC_STB_TIMEOUT);
+-		// return -ENOMEM;
+-		return -1;
+-	}
+-	printk(KERN_INFO "/proc/%s created\n", PROC_STB_TIMEOUT);
+-	return 0;	/* everything is ok */
+-}
+-
+-void  Zy_UDP_deinit_proc(void)
+-{
+-	remove_proc_entry(PROC_STB_TIMEOUT, NULL);
+-	printk(KERN_INFO "/proc/%s remove\n", PROC_STB_TIMEOUT);
+-	remove_proc_entry(PROC_STB_PORT, NULL);
+-	printk(KERN_INFO "/proc/%s remove\n", PROC_STB_PORT);
+-}
+-

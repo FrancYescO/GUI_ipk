@@ -121,6 +121,8 @@ def kernel_inputs(work):
     ipks = []
     for suffix in ('manual', 'network', 'spu', 'rndis-compat'):
         ipks.extend((ROOT / ('artifacts/damson-4.1.52-' + suffix)).glob('*.ipk'))
+    from firmware_kernel_candidates import audit_vbntk_ipks
+    audit_vbntk_ipks(ipks)
     assembler.write_feed('4.1.52', ipks, feed)
     stage = load_script('fetch-kernel-candidates')
     stage.download(work / 'candidates', REPOSITORY)
@@ -144,6 +146,10 @@ def kernel_inputs(work):
                                  '4.1.38-vbntk' if profile == '4.1.38-vbnts' else profile))
     if len(rows) != 579 or len({r['package'] for r in rows}) != 579:
         raise ValueError('Unexpected kernel package set')
+    from firmware_kernel_candidates import publication_records
+    rows.extend(publication_records(work / 'firmware-candidates'))
+    if len({r['package'] for r in rows}) != len(rows):
+        raise ValueError('Duplicate firmware candidate package')
     return rows
 
 

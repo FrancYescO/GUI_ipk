@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-27",
+  "updated": "2026-10-28",
   "source": "https://github.com/FrancYescO/tch_firmware_extracted",
   "notice": "Kernel package equality and stock module identity do not certify newly built module compatibility. Runtime validation applies only to recorded payloads and tested firmware.",
   "firmwares": [
@@ -1276,8 +1276,10 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "1e5239548a5a7761c29840e0f6775c87e165be2c",
       "stock_module_set": "b52de4e11e9ad2243dd55ab9f339865d26f4535cbdd3175bbd9cf160299bd5bf",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates",
+      "stock_extraction_warning": "Historical Git archive has a case collision; original RBI stock modules are used for the offline audit."
     },
     {
       "firmware": "AGTHF_1.1.2_001_CLOSED",
@@ -1331,8 +1333,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.2.0_004_CLOSED",
@@ -1353,8 +1356,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.0_CLOSED",
@@ -1364,8 +1368,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.0_001_CLOSED",
@@ -1375,8 +1380,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.0_003_CLOSED",
@@ -1386,8 +1392,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.1_CLOSED",
@@ -1397,8 +1404,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.1_001_CLOSED",
@@ -1408,8 +1416,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.2_CLOSED",
@@ -1419,8 +1428,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.2_001_CLOSED",
@@ -1430,8 +1440,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.4_CLOSED",
@@ -1441,8 +1452,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.5_CLOSED",
@@ -1452,8 +1464,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHF_1.3.6_CLOSED",
@@ -1463,8 +1476,9 @@
       "architecture": "arm_cortex-a9",
       "kernel_source": "5c1688dc9cc0c60e2e5534d702efa8c262815dae",
       "stock_module_set": "66bad96ae4ac5946bc7cf611e2e589cbbea6bc990223bc42fd8ea8e906f09abc",
-      "profile": null,
-      "status": "build-required"
+      "profile": "4.1.52-vcnt3",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt3-candidates"
     },
     {
       "firmware": "AGTHP_1.0.1_001_CLOSED",
@@ -3071,6 +3085,20 @@
       "stock_module_set": "be527440fe693920836cf56f09f5c789e2359645f357581af26f49f4577d20bc",
       "profile": null,
       "status": "build-required"
+    },
+    {
+      "firmware": "belong-vcnt-2_19.4.0381-4961004",
+      "commit": null,
+      "kernel_release": "4.1.52",
+      "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1-1-eceb083346d22dc65ce7effde3310ee1",
+      "architecture": "arm_cortex-a7",
+      "kernel_source": null,
+      "stock_module_set": null,
+      "profile": "4.1.52-vcnt2",
+      "status": "offline-candidates-runtime-validation-required",
+      "candidate_feed": "kernel/4.1.52-vcnt2-candidates",
+      "source_url": "https://media.githubusercontent.com/media/hack-technicolor/tch-bank-dumps/master/vcnt-2/belong-vcnt-2_19.4.0381-4961004-bank_dump.lfs.xz",
+      "original_image_sha256": "8f80a1418b3368f021b73d6f4994663db4a621f6259e23a10f826135bccb76b7"
     }
   ]
 }
