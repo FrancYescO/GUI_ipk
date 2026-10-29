@@ -1,0 +1,33 @@
+{
+  "aead_encrypt_callbacks": [],
+  "aead_givencrypt_callbacks": [
+    "spu_aead_givencrypt"
+  ],
+  "format_version": 1,
+  "hardware_plain_cbc_validation": "not-established",
+  "plain_cbc_aes_registered": false,
+  "registered_algorithms": [
+    "authenc(hmac(md5),cbc(aes))",
+    "authenc(hmac(md5),cbc(des))",
+    "authenc(hmac(md5),cbc(des3_ede))",
+    "authenc(hmac(sha1),cbc(aes))",
+    "authenc(hmac(sha1),cbc(des))",
+    "authenc(hmac(sha1),cbc(des3_ede))",
+    "authenc(hmac(sha256),cbc(aes))",
+    "authenc(hmac(sha256),cbc(des))",
+    "authenc(hmac(sha256),cbc(des3_ede))"
+  ],
+  "runner_authentication_modes": [
+    "rdpa_auth_alg_sha1",
+    "rdpa_auth_alg_md5",
+    "rdpa_auth_alg_sha2",
+    "rdpa_auth_alg_checksum"
+  ],
+  "runner_descriptor_parameters": "rdpa_traffic_dir dir, rdpa_ipsec_auth_alg_e auth_algorithm, rdpa_ipsec_crypt_mech_e crypt_mechanism, rdpa_ipsec_crypt_alg_e crypt_algorithm, uint8_t nxt_hdr, uint32_t *auth_config, uint32_t *crypt_config, uint32_t *crypt_config2",
+  "scope": "source-interface-inventory-only",
+  "source_sha256": {
+    "rdpa_ipsec_helper.h": "494ff744bf951ef6714781d03f39224c71ebebd6b52e0bb2340edf4d1f0c5142",
+    "spu.c": "0ae8021dc6dea4e18682cdbb735e54e7fa7437b54bd1386903487956704c1024",
+    "spu_runner.c": "6d596b9bedfcc848a395cb2a55630f07699ab26a4a393e43067e5e7c559ac578"
+  }
+}

@@ -15,6 +15,8 @@ for spu_patch in \
   "$repo_root/patches/vbntj-spu/003-idempotent-ipsec-object-destroy.patch"; do
   patch --batch --forward -d "$module_dir" -p1 < "$spu_patch"
 done
+python "$repo_root/scripts/audit-spu-cbc.py" "$sdk" --module-source "$module_dir" \
+  > "$module_dir/spu-capabilities.json"
 cat > "$module_dir/Makefile" <<'EOF'
 obj-m := bcmspu.o
 bcmspu-y := spu.o spu_runner.o

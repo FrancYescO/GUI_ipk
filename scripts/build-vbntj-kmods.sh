@@ -369,6 +369,7 @@ if [[ "$module_set" != firmware-candidates ]]; then
 fi
 if [[ "$build_spu" -eq 1 ]]; then
   cp "$source_dir/.damson-spu-test/damson_spu_test.ko" "$output_dir/"
+  cp "$source_dir/.damson-spu/spu-capabilities.json" "$output_dir/"
 fi
 
 for module in "$output_dir"/*.ko; do
