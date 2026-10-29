@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "experimental": true,
+  "runtime_profile": "4.1.52-vbntk",
+  "kernel_abi": "f4e97ee0656c3a247868bb0a3f9c7e55",
+  "source_commit": "5369d11df075585419af52d95490516baea6d533",
+  "test_apps": {
+    "packages": [
+      {
+        "package": "libcap-ng",
+        "version": "0.8.5-1",
+        "download_url": "https://francyesco.github.io/GUI_ipk/base/libcap-ng_0.8.5-1_arm_cortex-a9_neon.ipk",
+        "sha256": "75517645f2022be038ffe50a08e90cae0b09b51edb771798ba42c5ea0a95c88a"
+      },
+      {
+        "package": "liblzo",
+        "version": "2.10-1",
+        "download_url": "https://francyesco.github.io/GUI_ipk/base/liblzo_2.10-1_arm_cortex-a9_neon.ipk",
+        "sha256": "6d91a0e2a04dae6dc79c83b188246eea68471c49d1b873c4b9b6035dfa092076"
+      },
+      {
+        "package": "openvpn-openssl",
+        "version": "2.6.23-1",
+        "download_url": "https://francyesco.github.io/GUI_ipk/base/openvpn-openssl_2.6.23-1_arm_cortex-a9_neon.ipk",
+        "sha256": "f5009eacc004b2336ecc312578fbbe10c4df609686b5300c6ca589f662c2abee"
+      },
+      {
+        "package": "liblz4",
+        "version": "v1.7.5-1",
+        "download_url": "https://francyesco.github.io/GUI_ipk/packages/liblz4_v1.7.5-1_arm_cortex-a9_neon.ipk",
+        "sha256": "c28f031fa646ff36b77769c3ca2af92a3d735cff50f421c6698fafe43a9463ee"
+      }
+    ]
+  },
+  "files": {
+    "SHA256SUMS": "97d0f96a58986e3972bcb15e5f1814db2a05cb3e71a29b5a7b865ad03a23dfd2",
+    "app-inputs.json": "4268185ac6ab625491e9272c375b57b1de607abe7e065a7e269302f1107fb3c7",
+    "apps/usr/lib/libcap-ng.so.0.0.0": "05fa1ea678d6c98380db9f1632768566e4dbc887765621541731a75d1956ed94",
+    "apps/usr/lib/liblz4.so.1.7.5": "e72fdd2f32f7b957b0e3225ed984029e44d063cb16ef199eb8bd25b9e9c4e71d",
+    "apps/usr/lib/liblzo2.so.2.0.0": "f43801594767619a5660ad2d5d68b0ba0b350b344579ae531e41c1f274c8b413",
+    "apps/usr/sbin/openvpn": "427977f586ba26609553db8aa7f0857b0f851ac5411404cf4bf174fed15bd485",
+    "baseline-bcmspu.ko": "ca9e4af7eaa13705afba66a87cbeb6ac04c9fabb90f5caef61de5a92911d574e",
+    "baseline-bcmspu.ko.undefined-symbols": "db751a2c32ee3337eaf95167656c606410bbaca6cb6078dc4865f16aa2eee83f",
+    "bcmspu.ko": "0a441746b1e2b8449f14abd52289c39433ab8ccc1045b6bbefe2b7700ffda2fc",
+    "bcmspu.ko.undefined-symbols": "0095191f83ee84707ffd2d7c10f853bcd527507f606501996031c42734b02b60",
+    "build.config": "333509725d0dd400ebb005de85a6a3dfa94c79a37daa1a870827b4a0cfc07d8e",
+    "cryptodev_cbc_lab.ko": "b34eb6386570f9abfbb0f9d50971ebf64c615b30b61d48ce0ce199950cbfa47a",
+    "cryptodev_cbc_lab.ko.undefined-symbols": "bc52e67316301c853eed88bb369244bbae004c92e2d5a746d107c2ee00fa25d3",
+    "evp-test": "559ec7cda3e076a31e8f8cb53a02913d3005937e7c83db5986dea57176f99a0c",
+    "openvpn-test.sh": "b0c672d2a05d2631b262f4da395f68341a0ae923d7a59a0e6b2eef8c83321631",
+    "redirect-crypto.so": "76d9f06f93214b20f930baf015b7aaacd276edd1664fed392f46905cf0c2bebc",
+    "run-engine.sh": "2d5f9fe19bdd08ee1fc862688fbb0f8bdda39b811c9fb3afaeeeda4fe17cd528",
+    "run-probe.sh": "b88b385bb0fd68e9315c2a720d162708c6dcd163052c2764972cfbf135a7f916",
+    "session-test": "7c60a274a7049e806d48a59769b82d126095669df2208434d0ddf309687a1afc",
+    "sha1_spu_cbc_lab.ko": "94567d62f3e1169730586a70d3c956ec788a573a83097aec82f6be09e95862d2",
+    "sha1_spu_cbc_lab.ko.undefined-symbols": "c0a0b91c015493b954a3867cc2f71df494f9d2609c2e300ef2bfb926ec8e4e07",
+    "spu_cbc_kat.ko": "26b6dfd797c2ca8eff2bd4758fb55eaf2a3edc91014aa617d6ad04ed6eaea827",
+    "spu_cbc_kat.ko.undefined-symbols": "58a08e2a756c49597656db3d8371d75368523ef2587634d31ed73b8f8389ea8e",
+    "spu_cbc_lab.ko": "45b089d5921bac1ce7e35a38b717ab835f94cf413d299eb8ec84fc4411320e20",
+    "spu_cbc_lab.ko.undefined-symbols": "094cebc7bb1737027dfab52b9ec62d8055fc9340ee6d8b77dca55aa4d73cdf35",
+    "spu_cbc_probe.ko": "5fabd56863e612511faeac16ff983bc4717ea1c31294bcc2165232ca94cef0d4",
+    "spu_cbc_probe.ko.undefined-symbols": "22b4b24a8281e9a48ae9a322a0a12f89605cc67365025472de270fa5150fdddf",
+    "spu_sha1_kat.ko": "24feffda154994d7b0fc93f7b116f436845bc71baf8bac4b56b72d0d337d27ec",
+    "spu_sha1_kat.ko.undefined-symbols": "fae2ead1115c9afa8be2c5f13ecbc7a1335eb4fc286ea332f136c50152440c64",
+    "symbol-audit.json": "ecce0a80039519c33999ff2a44ffe5e9087e0c60cade7db6d123c0ba98b67588",
+    "userspace.SHA256SUMS": "97b3d9f6ee42c343e557811aa46fa1ce2e7954f06c5964711f938388c334bbfe",
+    "vbntj_abi_canary.ko": "5fbd470f02dd1bbe87483a7045ce198d124a481af55911d5a1a85330b65d442a",
+    "vbntj_abi_canary.ko.undefined-symbols": "cd343ba7462d2db2964f44338f310c9ce3984d00a7c3e26970d5fde471a7d097"
+  }
+}

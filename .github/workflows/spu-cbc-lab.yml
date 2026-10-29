@@ -1,0 +1,19 @@
+name: Isolated SPU CBC source checks
+on:
+  pull_request:
+    paths: ['experiments/spu-cbc/**', 'tests/test_spu_cbc_lab.py', '.github/workflows/spu-cbc-lab.yml']
+  push:
+    branches: [main]
+    paths: ['experiments/spu-cbc/**', 'tests/test_spu_cbc_lab.py', '.github/workflows/spu-cbc-lab.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 -m unittest discover -s tests
+      - name: Check lab shell syntax
+        run: bash -n experiments/spu-cbc/*.sh
