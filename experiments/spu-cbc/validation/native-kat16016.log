@@ -1,0 +1,68 @@
+
+MODE=4
+f5f36629-c02e-420f-ba8f-ed6632ac1f57
+4
+PRIVATE_ALGORITHMS=12
+[ 4221.292320] spu_cbc_kat: ALL PASS
+[ 4221.292326] spu_cbc_kat: result=0
+[ 4221.985820] spu_cbc_kat: allocate hw=0 sw=0
+[ 4221.986045] spu_cbc_kat: AES128 len=16 inplace=0: PASS (0)
+[ 4221.986151] spu_cbc_kat: AES128 len=16 inplace=1: PASS (0)
+[ 4221.986247] spu_cbc_kat: AES128 len=32 inplace=0: PASS (0)
+[ 4221.986344] spu_cbc_kat: AES128 len=32 inplace=1: PASS (0)
+[ 4221.986445] spu_cbc_kat: AES128 len=64 inplace=0: PASS (0)
+[ 4221.986543] spu_cbc_kat: AES128 len=64 inplace=1: PASS (0)
+[ 4221.986896] spu_cbc_kat: AES128 len=1504 inplace=0: PASS (0)
+[ 4221.987179] spu_cbc_kat: AES128 len=1504 inplace=1: PASS (0)
+[ 4221.989294] spu_cbc_kat: AES128 len=16016 inplace=0: PASS (0)
+[ 4221.991499] spu_cbc_kat: AES128 len=16016 inplace=1: PASS (0)
+[ 4221.991632] spu_cbc_kat: AES192 len=16 inplace=0: PASS (0)
+[ 4221.991726] spu_cbc_kat: AES192 len=16 inplace=1: PASS (0)
+[ 4221.991871] spu_cbc_kat: AES192 len=32 inplace=0: PASS (0)
+[ 4221.991973] spu_cbc_kat: AES192 len=32 inplace=1: PASS (0)
+[ 4221.992076] spu_cbc_kat: AES192 len=64 inplace=0: PASS (0)
+[ 4221.992175] spu_cbc_kat: AES192 len=64 inplace=1: PASS (0)
+[ 4221.992451] spu_cbc_kat: AES192 len=1504 inplace=0: PASS (0)
+[ 4221.992722] spu_cbc_kat: AES192 len=1504 inplace=1: PASS (0)
+[ 4221.994904] spu_cbc_kat: AES192 len=16016 inplace=0: PASS (0)
+[ 4221.997084] spu_cbc_kat: AES192 len=16016 inplace=1: PASS (0)
+[ 4221.997212] spu_cbc_kat: AES256 len=16 inplace=0: PASS (0)
+[ 4221.997306] spu_cbc_kat: AES256 len=16 inplace=1: PASS (0)
+[ 4221.997401] spu_cbc_kat: AES256 len=32 inplace=0: PASS (0)
+[ 4221.997496] spu_cbc_kat: AES256 len=32 inplace=1: PASS (0)
+[ 4221.997593] spu_cbc_kat: AES256 len=64 inplace=0: PASS (0)
+[ 4221.997690] spu_cbc_kat: AES256 len=64 inplace=1: PASS (0)
+[ 4221.998006] spu_cbc_kat: AES256 len=1504 inplace=0: PASS (0)
+[ 4221.998291] spu_cbc_kat: AES256 len=1504 inplace=1: PASS (0)
+[ 4222.000581] spu_cbc_kat: AES256 len=16016 inplace=0: PASS (0)
+[ 4222.002894] spu_cbc_kat: AES256 len=16016 inplace=1: PASS (0)
+[ 4222.003014] spu_cbc_kat: AES128 len=16 inplace=0: PASS (0)
+[ 4222.003106] spu_cbc_kat: AES128 len=16 inplace=1: PASS (0)
+[ 4222.003202] spu_cbc_kat: AES128 len=32 inplace=0: PASS (0)
+[ 4222.003296] spu_cbc_kat: AES128 len=32 inplace=1: PASS (0)
+[ 4222.003393] spu_cbc_kat: AES128 len=64 inplace=0: PASS (0)
+[ 4222.003489] spu_cbc_kat: AES128 len=64 inplace=1: PASS (0)
+[ 4222.003780] spu_cbc_kat: AES128 len=1504 inplace=0: PASS (0)
+[ 4222.004040] spu_cbc_kat: AES128 len=1504 inplace=1: PASS (0)
+[ 4222.006051] spu_cbc_kat: AES128 len=16016 inplace=0: PASS (0)
+[ 4222.008062] spu_cbc_kat: AES128 len=16016 inplace=1: PASS (0)
+[ 4222.008069] spu_cbc_kat: ALL PASS
+[ 4222.008075] spu_cbc_kat: result=0
+Encryption stats
+     Ingress 0
+     Fallback 0
+     Egress 0
+     Error 0
+     Dropped 0
+Decryption stats
+     Ingress 96
+     Fallback 0
+     Egress 96
+     Error 0
+     Dropped 0
+CBC_ENCRYPT_CHUNKS
+48
+CBC_DECRYPT_CHUNKS
+48
+CLEANUP_OK
+f5f36629-c02e-420f-ba8f-ed6632ac1f57

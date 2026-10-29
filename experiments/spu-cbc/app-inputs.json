@@ -1,0 +1,28 @@
+{
+  "packages": [
+    {
+      "package": "libcap-ng",
+      "version": "0.8.5-1",
+      "download_url": "https://francyesco.github.io/GUI_ipk/base/libcap-ng_0.8.5-1_arm_cortex-a9_neon.ipk",
+      "sha256": "75517645f2022be038ffe50a08e90cae0b09b51edb771798ba42c5ea0a95c88a"
+    },
+    {
+      "package": "liblzo",
+      "version": "2.10-1",
+      "download_url": "https://francyesco.github.io/GUI_ipk/base/liblzo_2.10-1_arm_cortex-a9_neon.ipk",
+      "sha256": "6d91a0e2a04dae6dc79c83b188246eea68471c49d1b873c4b9b6035dfa092076"
+    },
+    {
+      "package": "openvpn-openssl",
+      "version": "2.6.23-1",
+      "download_url": "https://francyesco.github.io/GUI_ipk/base/openvpn-openssl_2.6.23-1_arm_cortex-a9_neon.ipk",
+      "sha256": "f5009eacc004b2336ecc312578fbbe10c4df609686b5300c6ca589f662c2abee"
+    },
+    {
+      "package": "liblz4",
+      "version": "v1.7.5-1",
+      "download_url": "https://francyesco.github.io/GUI_ipk/packages/liblz4_v1.7.5-1_arm_cortex-a9_neon.ipk",
+      "sha256": "c28f031fa646ff36b77769c3ca2af92a3d735cff50f421c6698fafe43a9463ee"
+    }
+  ]
+}

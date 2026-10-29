@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-29",
+  "runtime_profile": "4.1.52-vbntk",
+  "kernel_abi": "f4e97ee0656c3a247868bb0a3f9c7e55",
+  "boot_id": "f5f36629-c02e-420f-ba8f-ed6632ac1f57",
+  "module_set": "private experimental CBC, native mode 4",
+  "kernel_matrix": {
+    "key_bits": [
+      128,
+      192,
+      256,
+      128
+    ],
+    "lengths": [
+      16,
+      32,
+      64,
+      1504,
+      16016
+    ],
+    "encrypt_chunks": 48,
+    "decrypt_chunks": 48,
+    "runner_errors": 0,
+    "fallbacks": 0
+  },
+  "openvpn": {
+    "version": "2.6.23",
+    "cipher_bits": [
+      128,
+      256
+    ],
+    "auth": "SHA256",
+    "pings_each_direction": 5,
+    "ping_payload_bytes": 1000,
+    "packet_loss_percent": 0,
+    "encrypt_chunk_delta_per_run": 40,
+    "decrypt_chunk_delta_per_run": 20,
+    "cleanup_pass": true
+  },
+  "validated_files_sha256": {
+    "baseline-bcmspu.ko": "d74b6c02d264519effd130abf13a73883e5a4041506b7236915144968b787277",
+    "bcmspu.ko": "669f5f8c84a5210d04828840de09570fd064a75efc09ea0ccc0033ac99945c39",
+    "cryptodev_cbc_lab.ko": "ae04d866e633a93d59d11a8d1b26a74ddf62b3a1f4cdb5e236363249034c3ce2",
+    "evp-test": "1987bd630a01003829be0679e5cf8da174426ce8ce2922a55c45681db8155899",
+    "redirect-crypto.so": "4ecf39d6f47e5b377f98b438a9d5698ca5bf9f08458037c5c88679b54b864c2e",
+    "session-test": "fab85f3e85db28631764098d17111d77ada430a07212c47a50288d083ce4f1b1",
+    "sha1_spu_cbc_lab.ko": "9d096d15bf1994d5101c994329cdb749e3f076ecd93f46b55fd0b2cf0e79f992",
+    "spu_cbc_kat.ko": "c1b2895acbe5f9ff48d111b748b9c437438aa9ad55cea3a31efc96f573048fe0",
+    "spu_cbc_lab.ko": "56f01cb0ca482fed66e13f0813f33e704af5090391df3a6f99eb10b82c2839eb",
+    "spu_cbc_probe.ko": "0751f2be2864088968229f18428002f1cd181856c88c066af232a3d4c3d4d12a",
+    "spu_sha1_kat.ko": "094d301e5a492ab3ab220ff1bc3d91014c104b974ab2032ad6c0f0b2ecd7123d",
+    "vbntj_abi_canary.ko": "657528f920e9c7a3956a0aa0ee89a969a5921642768fb7b1c78722f421b3647a"
+  },
+  "scope": "Local short tests only; no WAN throughput or long-duration qualification; rebuilt files require hash comparison and fresh checks if bytes differ."
+}
