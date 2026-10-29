@@ -61,6 +61,7 @@ class KernelProviderTests(unittest.TestCase):
                 self.assertNotIn(b'insmod ', script)
                 self.assertNotIn(b'rmmod ', script)
                 self.assertNotIn(b'--force-depends', script)
+                self.assertNotIn(b'opkg status', script)
         self.assertEqual(module_count, 830)
 
     def test_staging_is_never_a_module_provider(self):
@@ -97,3 +98,78 @@ class KernelProviderTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class PackageHookLockTests(unittest.TestCase):
+    def run_guard(self, status, replacements=None, dependencies=None, active=()):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            database = root / 'status'
+            database.write_text(status)
+            module_root = root / 'sys/module'
+            module_root.mkdir(parents=True)
+            for name in active:
+                (module_root / name).mkdir()
+            # Any nested OPKG call would fail under the parent install's lock.
+            opkg = root / 'opkg'
+            marker = root / 'nested-opkg'
+            opkg.write_text('#!/bin/sh\ntouch "'+str(marker)+'"\nexit 99\n')
+            opkg.chmod(0o755)
+            script = providers.guard('4.1.38-1-exact', replacements or {}, dependencies)
+            script = script.replace(b'/usr/lib/opkg/status', str(database).encode())
+            script = script.replace(b'/sys/module/', (str(module_root)+'/').encode())
+            import os
+            result = subprocess.run(['sh'], input=script, capture_output=True,
+                                    env={**os.environ, 'PATH':str(root)+':'+os.environ['PATH'], 'IPKG_INSTROOT':''})
+            self.assertFalse(marker.exists(), 'Maintainer hook must not invoke OPKG while its lock is held')
+            return result
+
+    @staticmethod
+    def stanza(name, version, depends='', state='install ok installed'):
+        return 'Package: '+name+'\nVersion: '+version+'\nStatus: '+state+'\nDepends: '+depends+'\n\n'
+
+    def test_exact_kernel_passes_without_nested_opkg(self):
+        status = self.stanza('kernel-extra', 'wrong') + self.stanza('kernel', '4.1.38-1-exact')
+        self.assertEqual(self.run_guard(status).returncode, 0)
+
+    def test_missing_uninstalled_and_wrong_kernel_fail_closed(self):
+        for status in ('', self.stanza('kernel', 'wrong'),
+                       self.stanza('kernel', '4.1.38-1-exact', state='deinstall ok not-installed')):
+            with self.subTest(status=status):
+                self.assertNotEqual(self.run_guard(status).returncode, 0)
+
+    def test_stock_dependency_requires_installed_exact_abi(self):
+        base = self.stanza('kernel', '4.1.38-1-exact')
+        for dep, accepted in [('', False),
+                (self.stanza('kmod-base', '1', 'kernel (= wrong)'), False),
+                (self.stanza('kmod-base', '1', 'kernel (= 4.1.38-1-exact)'), True),
+                (self.stanza('kmod-base-extra', '1', 'kernel (= 4.1.38-1-exact)'), False)]:
+            with self.subTest(dep=dep):
+                result = self.run_guard(base+dep, dependencies=['kmod-base'])
+                self.assertEqual(result.returncode == 0, accepted, result.stderr)
+
+    def test_active_legacy_module_still_blocks_migration(self):
+        base = self.stanza('kernel', '4.1.38-1-exact')
+        legacy = self.stanza('kmod-tun', '4.1.38-1', 'kernel')
+        result = self.run_guard(base+legacy, {'kmod-tun':['tun']}, active=['tun'])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b'active module tun', result.stderr)
+        self.assertEqual(self.run_guard(base+legacy, {'kmod-tun':['tun']}).returncode, 0)
+
+    def test_uninstalled_duplicates_cannot_supply_abi_evidence(self):
+        exact = 'kernel (= 4.1.38-1-exact)'
+        base = self.stanza('kernel', '4.1.38-1-exact')
+        stale_kernel = self.stanza('kernel', 'old', state='install ok not-installed')
+        self.assertEqual(self.run_guard(stale_kernel+base).returncode, 0)
+        stale_dependency = self.stanza('kmod-base', '1', exact, state='install ok not-installed')
+        installed_dependency = self.stanza('kmod-base', '0', 'kernel (= wrong)')
+        result = self.run_guard(base+stale_dependency+installed_dependency, dependencies=['kmod-base'])
+        self.assertNotEqual(result.returncode, 0)
+        stale_alias = self.stanza('kmod-tun', '2', exact, state='install ok not-installed')
+        installed_alias = self.stanza('kmod-tun', '1', 'kernel')
+        result = self.run_guard(base+stale_alias+installed_alias, {'kmod-tun':['tun']}, active=['tun'])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b'active module tun', result.stderr)
+
+    def test_ambiguous_installed_records_fail_closed(self):
+        base = self.stanza('kernel', '4.1.38-1-exact')
+        self.assertNotEqual(self.run_guard(base+base).returncode, 0)

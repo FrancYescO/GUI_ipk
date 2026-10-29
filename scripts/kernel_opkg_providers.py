@@ -18,7 +18,7 @@ from kernel_firmware import config_options, elf_module
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build/kernel-opkg-providers'
-POLICY = '1'
+POLICY = '2'
 
 
 def sha(data):
@@ -49,7 +49,7 @@ def upgraded(version):
     match = re.fullmatch(r'(.+)-(\d+)', version)
     if not match:
         raise ValueError('Unrecognized module package revision: ' + version)
-    return match[1] + '-' + str(int(match[2]) + 1)
+    return match[1] + '-' + str(int(match[2]) + int(POLICY))
 
 
 def config(profile):
@@ -72,15 +72,32 @@ def guard(kernel, replacements, stock_dependencies=None):
     script = '''#!/bin/sh
 set -eu
 [ -z "${IPKG_INSTROOT:-}" ] || exit 0
-installed=$(opkg status kernel 2>/dev/null | sed -n 's/^Version: //p')
+# Package hooks run while OPKG already holds its lock. Never invoke OPKG here.
+package_status() {
+  awk -v wanted="$1" '
+    BEGIN { RS=""; FS="\\n" }
+    {
+      package=0; installed=0
+      for (i=1; i<=NF; i++) {
+        if ($i == "Package: " wanted) package=1
+        if ($i ~ /^Status:.* installed$/) installed=1
+      }
+      if (package && installed) { found++; print }
+    }
+    END { if (found > 1) exit 2 }
+  ' /usr/lib/opkg/status
+}
+metadata=$(package_status kernel)
+printf '%s\\n' "$metadata" | grep -q '^Status:.* installed' || { echo 'Kernel package is not installed' >&2; exit 1; }
+installed=$(printf '%s\\n' "$metadata" | sed -n 's/^Version: //p')
 [ "$installed" = EXPECTED_KERNEL ] || { echo 'Kernel ABI mismatch; refusing module installation' >&2; exit 1; }
 '''.replace('EXPECTED_KERNEL', q(kernel))
     for package in sorted(stock_dependencies or []):
-        script += f'''metadata=$(opkg status {q(package)} 2>/dev/null || true)
+        script += f'''metadata=$(package_status {q(package)})
 printf '%s\\n' "$metadata" | grep -q '^Status:.* installed' &&\nprintf '%s\\n' "$metadata" | grep -F -- {binding} >/dev/null || {{ echo 'Missing exact-ABI firmware dependency: {package}' >&2; exit 1; }}
 '''
     for generic, modules in sorted(replacements.items()):
-        script += f'''metadata=$(opkg status {q(generic)} 2>/dev/null || true)
+        script += f'''metadata=$(package_status {q(generic)})
 if printf '%s\\n' "$metadata" | grep -q '^Status:.* installed' &&
    ! printf '%s\\n' "$metadata" | grep -F -- {binding} >/dev/null; then
 '''

@@ -106,3 +106,44 @@ sostituiti da dati di prova non eseguibili. Verificano installazione pulita,
 provider builtin, migrazione di proprietà, gruppi multipli, conservazione dei
 consumatori e rifiuto dell'ABI sbagliata. I candidate modulari non devono
 soddisfare accidentalmente la dipendenza TUN.
+
+## Correzione dei preinst sul firmware (metadata policy 2)
+
+La rivalidazione della GUI ha rilevato che `opkg status` eseguito dal `preinst`
+non può acquisire il lock già detenuto dall'installazione. Il guard legge ora
+`/usr/lib/opkg/status` direttamente, per tutti i provider e le capability.
+Seleziona soltanto record con il nome esatto e stato finale `installed`:
+il firmware conserva anche record non installati di altre versioni o
+architetture. Un record non installato non può fornire l'ABI a un altro record;
+più record installati dello stesso nome fanno fallire il controllo.
+Restano il confronto ABI esatto, le dipendenze firmware verificate e il rifiuto
+richiesto quando un vecchio generico ha ancora un modulo attivo.
+
+La policy 2 incrementa di nuovo la revisione di tutti i 1.178 IPK kernel,
+così OPKG può aggiornare gli script. I payload degli 830 moduli non cambiano;
+tutti i record userspace e Release del catalogo restano identici. Il helper di
+migrazione riconosce entrambe le policy 1 e 2. Non sono necessarie ricompilazioni
+kernel o nuovi branch ABI per questa correzione.
+
+Sul `.45` e sul `.204` sono state provate le installazioni con l'OPKG reale:
+prima il guard rifiuta il vecchio TUN attivo, poi, con TUN inutilizzato e
+scaricato, vengono installati il provider specifico e il canonico `kmod-tun`
+`4.1.38-3`. Il modulo viene ricaricato; creazione e rimozione di un'interfaccia
+riescono, ownership e SHA256 sono corretti, OpenVPN 2.6.23 parte per la sola
+lettura della versione. VPN server/client restano disabilitate, boot ID
+invariati. Non si dichiara qui una nuova prova di traffico VPN.
+
+Una prova preliminare ha anche mostrato che `--force-reinstall` nel vecchio
+OPKG rimuove il file precedente prima del `preinst`: quando il guard lo rifiuta,
+il file può quindi mancare. Il file TUN del `.45` è stato ripristinato dal
+backup locale verificato senza scaricare il modulo attivo o riavviare.
+Le prove concluse usano l'aggiornamento normale, senza `--force-reinstall`;
+il helper deve essere usato soltanto dopo il suo preflight che richiede il
+modulo scaricato. `--force-overwrite` resta limitato al singolo payload già
+verificato per correggerne l'ownership; non esclude i controlli ABI/dipendenze.
+
+I log `validation/preinst-lock-{45,204}.log` sotto
+`build/kernel-opkg-providers/` conservano anche i rifiuti attesi del guard.
+Sei test aggiuntivi verificano assenza di chiamate OPKG annidate, ABI errata,
+dipendenze stock, modulo attivo, duplicati non installati e record ambigui.
+La suite locale passa 138 test (uno saltato).
