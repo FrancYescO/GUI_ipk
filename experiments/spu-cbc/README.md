@@ -32,7 +32,10 @@ SHA1 ARM facoltativo ha nome privato e priorità 1, inferiore a quello generico.
 ## Prove e limiti
 
 [results.json](validation/results.json) registra ABI, boot ID e SHA256 dei file
-provati. I log pubblicati non contengono chiavi VPN. La matrice kernel comprende
+provati. È stato scaricato e verificato anche il bundle della
+[build CI riuscita](https://github.com/FrancYescO/GUI_ipk/actions/runs/40872573085):
+matrice kernel completa e traffico OpenVPN AES-256 superati sul modem.
+I log pubblicati non contengono chiavi VPN. La matrice kernel comprende
 AES-128/192/256, buffer separati e in-place, scatterlist non allineate, lunghezze
 16/32/64/1504/16016, passaggio fra chunk e IV finale: 48 chunk per direzione,
 zero errori/fallback. Le prove EVP confrontano il ciphertext con il software
@@ -65,6 +68,7 @@ il bridge e SHA1 ARM. I tool userspace usano il toolchain GCC 4.8 pubblico,
 header OpenSSL 1.0.2t ufficiali e sorgente cryptodev: tutti verificati SHA256.
 Le app di prova sono IPK pubblici elencati in `app-inputs.json`, estratti senza
 installazione. L'artefatto separato si chiama `spu-cbc-4.1.52-vbntk-<commit>`;
+contiene un archivio `.tar.gz` che conserva permessi e symlink.
 `bundle.json` lega input e payload al commit. Il workflow **Isolated SPU CBC
 source checks** verifica trasformazione del bridge, isolamento del tool e shim.
 

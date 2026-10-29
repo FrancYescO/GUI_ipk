@@ -216,12 +216,13 @@ jobs:
           python3 experiments/spu-cbc/fetch-test-apps.py dist/vbntj-kmods/spu-cbc-lab/apps
           python3 experiments/spu-cbc/audit-bundle.py dist/vbntj-kmods/spu-cbc-lab
           python3 experiments/spu-cbc/manifest.py dist/vbntj-kmods/spu-cbc-lab
+          tar -czf dist/spu-cbc-4.1.52-vbntk.tar.gz -C dist/vbntj-kmods/spu-cbc-lab .
       - name: Upload isolated experimental CBC bundle
         if: inputs.module_set == 'spu-cbc-probe'
         uses: actions/upload-artifact@v7
         with:
           name: spu-cbc-4.1.52-vbntk-${{ github.sha }}
-          path: dist/vbntj-kmods/spu-cbc-lab/
+          path: dist/spu-cbc-4.1.52-vbntk.tar.gz
           if-no-files-found: error
           retention-days: 30
       - name: Upload VBNT-K modules and manual-only IPKs

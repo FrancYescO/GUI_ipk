@@ -13,10 +13,14 @@ echo "e795acb85118f1f39f0155df8fd28a3d79de7d1240b91bdf8cc9e2a1747d2642  $repo/ar
 tar -xzf "$openssl_archive" --strip-components=1 -C "$work/openssl"
 tar -xzf "$repo/artifacts/cryptodev/source/cryptodev-linux-08644db.tar.gz" --strip-components=1 -C "$work/headers"
 (cd "$work/openssl" && perl Configure linux-armv4 > configure.log)
-"${cross}gcc" -O2 -Wall -Wextra -Werror -I"$work/headers" \
+# Resolve indirect librt/libpthread dependencies when the toolchain is relocated.
+# rpath-link is a build-time search path and is not embedded in the executables.
+runtime_lib=$(dirname "$("${cross}gcc" -print-file-name=libc.so)")
+link_flags="-Wl,-rpath-link,$runtime_lib"
+"${cross}gcc" -O2 -Wall -Wextra -Werror "$link_flags" -I"$work/headers" \
   "$repo/experiments/spu-cbc/session-test.c" -lrt -o "$out/session-test"
-"${cross}gcc" -O2 -Wall -Wextra -Werror -shared -fPIC \
+"${cross}gcc" -O2 -Wall -Wextra -Werror "$link_flags" -shared -fPIC \
   "$repo/experiments/spu-cbc/redirect-crypto.c" -ldl -o "$out/redirect-crypto.so"
-"${cross}gcc" -O2 -Wall -Wextra -Werror -I"$work/openssl/include" \
+"${cross}gcc" -O2 -Wall -Wextra -Werror "$link_flags" -I"$work/openssl/include" \
   "$repo/experiments/spu-cbc/evp-test.c" -ldl -lrt -o "$out/evp-test"
 (cd "$out" && sha256sum session-test redirect-crypto.so evp-test > userspace.SHA256SUMS)

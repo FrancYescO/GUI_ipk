@@ -1,0 +1,154 @@
+
+MODE=4
+SOFTWARE_BEFORE
+PASS NIST session
+PASS session info
+driver cipher=cbc(aes-generic)
+PASS NIST encrypt
+PASS NIST decrypt
+PASS NIST encrypt
+PASS NIST decrypt
+PASS close NIST session
+PASS benchmark session
+PASS session info
+driver cipher=cbc(aes-generic)
+BENCH encrypt bytes=180224 elapsed_ns=7254640 process_cpu_us=7000 KiB/s=24260
+BENCH decrypt bytes=180224 elapsed_ns=7484700 process_cpu_us=8000 KiB/s=23514
+PASS benchmark roundtrip
+PASS close benchmark
+[16441.124596] spu_sha1_kat: SHA1 abc and HMAC-SHA1 RFC2202: PASS (0)
+FRAMING_HASH
+hmac(sha1-spu-cbc-lab-arm)
+HARDWARE_SESSION
+PASS NIST session
+PASS session info
+driver cipher=spu-cbc-native-lab
+PASS NIST encrypt
+PASS NIST decrypt
+PASS NIST encrypt
+PASS NIST decrypt
+PASS close NIST session
+PASS benchmark session
+PASS session info
+driver cipher=spu-cbc-native-lab
+BENCH encrypt bytes=180224 elapsed_ns=11965560 process_cpu_us=5000 KiB/s=14708
+BENCH decrypt bytes=180224 elapsed_ns=11474860 process_cpu_us=5000 KiB/s=15337
+PASS benchmark roundtrip
+PASS close benchmark
+Encryption stats
+     Ingress 0
+     Fallback 0
+     Egress 0
+     Error 0
+     Dropped 0
+Decryption stats
+     Ingress 260
+     Fallback 0
+     Egress 260
+     Error 0
+     Dropped 0
+CBC_ENCRYPT_CHUNKS
+130
+CBC_DECRYPT_CHUNKS
+130
+OPENSSL_EVP_ENGINE
+LIBRARY OpenSSL 1.0.2u  20 Dec 2019
+EVP software encrypt keybits=128 bytes=262144 elapsed_ns=9815220 KiB/s=26081
+EVP software decrypt keybits=128 bytes=262144 elapsed_ns=10657760 KiB/s=24020
+EVP software encrypt keybits=192 bytes=262144 elapsed_ns=11108620 KiB/s=23045
+EVP software decrypt keybits=192 bytes=262144 elapsed_ns=11528240 KiB/s=22206
+EVP software encrypt keybits=256 bytes=262144 elapsed_ns=12130020 KiB/s=21104
+EVP software decrypt keybits=256 bytes=262144 elapsed_ns=12852540 KiB/s=19918
+cryptodev-lab: redirected device open
+EVP cryptodev encrypt keybits=128 bytes=262144 elapsed_ns=12173280 KiB/s=21029
+EVP cryptodev decrypt keybits=128 bytes=262144 elapsed_ns=11828500 KiB/s=21642
+EVP_MATCH_AES128
+EVP cryptodev encrypt keybits=192 bytes=262144 elapsed_ns=11981440 KiB/s=21366
+EVP cryptodev decrypt keybits=192 bytes=262144 elapsed_ns=12318820 KiB/s=20781
+EVP_MATCH_AES192
+EVP cryptodev encrypt keybits=256 bytes=262144 elapsed_ns=12334240 KiB/s=20755
+EVP cryptodev decrypt keybits=256 bytes=262144 elapsed_ns=12728400 KiB/s=20112
+EVP_MATCH_AES256
+Encryption stats
+     Ingress 0
+     Fallback 0
+     Egress 0
+     Error 0
+     Dropped 0
+Decryption stats
+     Ingress 644
+     Fallback 0
+     Egress 644
+     Error 0
+     Dropped 0
+CBC_ENCRYPT_CHUNKS
+322
+CBC_DECRYPT_CHUNKS
+322
+/lib/modules/4.1.52/tun.ko: OK
+cryptodev-lab: redirected device open
+cryptodev-lab: redirected device open
+2026-10-29 09:09:48 DEPRECATED OPTION: The option --secret is deprecated.
+cryptodev-lab: redirected device open
+2026-10-29 09:09:48 DEPRECATED OPTION: The option --secret is deprecated.
+/tmp/spu-cbc-lab/openvpn-a.log:2026-10-29 09:09:48 UDPv4 link remote: [AF_INET]127.0.0.1:45282
+/tmp/spu-cbc-lab/openvpn-b.log:2026-10-29 09:09:48 UDPv4 link remote: [AF_INET]127.0.0.1:45281
+OPENVPN_AES256_CBC
+PING 198.19.253.2 (198.19.253.2): 1000 data bytes
+1008 bytes from 198.19.253.2: seq=0 ttl=64 time=2.977 ms
+1008 bytes from 198.19.253.2: seq=1 ttl=64 time=1.686 ms
+1008 bytes from 198.19.253.2: seq=2 ttl=64 time=1.416 ms
+1008 bytes from 198.19.253.2: seq=3 ttl=64 time=1.441 ms
+1008 bytes from 198.19.253.2: seq=4 ttl=64 time=1.423 ms
+
+--- 198.19.253.2 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 1.416/1.788/2.977 ms
+PING 198.19.253.1 (198.19.253.1): 1000 data bytes
+1008 bytes from 198.19.253.1: seq=0 ttl=64 time=1.560 ms
+1008 bytes from 198.19.253.1: seq=1 ttl=64 time=1.409 ms
+1008 bytes from 198.19.253.1: seq=2 ttl=64 time=1.410 ms
+1008 bytes from 198.19.253.1: seq=3 ttl=64 time=1.388 ms
+1008 bytes from 198.19.253.1: seq=4 ttl=64 time=1.412 ms
+
+--- 198.19.253.1 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 1.388/1.435/1.560 ms
+OPENVPN_DATA_PASS
+Encryption stats
+     Ingress 0
+     Fallback 0
+     Egress 0
+     Error 0
+     Dropped 0
+Decryption stats
+     Ingress 704
+     Fallback 0
+     Egress 704
+     Error 0
+     Dropped 0
+CBC_ENCRYPT_CHUNKS
+362
+CBC_DECRYPT_CHUNKS
+342
+OPENVPN_CLEANUP_OK
+CLEANUP_OK
+f5f36629-c02e-420f-ba8f-ed6632ac1f57
+SOFTWARE_AFTER
+PASS NIST session
+PASS session info
+driver cipher=cbc(aes-generic)
+PASS NIST encrypt
+PASS NIST decrypt
+PASS NIST encrypt
+PASS NIST decrypt
+PASS close NIST session
+PASS benchmark session
+PASS session info
+driver cipher=cbc(aes-generic)
+BENCH encrypt bytes=180224 elapsed_ns=8104500 process_cpu_us=7000 KiB/s=21716
+BENCH decrypt bytes=180224 elapsed_ns=7812520 process_cpu_us=8000 KiB/s=22527
+PASS benchmark roundtrip
+PASS close benchmark
+CLEANUP_OK
+f5f36629-c02e-420f-ba8f-ed6632ac1f57

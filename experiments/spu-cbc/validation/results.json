@@ -38,18 +38,31 @@
     "cleanup_pass": true
   },
   "validated_files_sha256": {
-    "baseline-bcmspu.ko": "d74b6c02d264519effd130abf13a73883e5a4041506b7236915144968b787277",
-    "bcmspu.ko": "669f5f8c84a5210d04828840de09570fd064a75efc09ea0ccc0033ac99945c39",
+    "baseline-bcmspu.ko": "aa915b02646cb19c27e14e61321666db19b56bbd0680b522c0dfbb721e0027e5",
+    "bcmspu.ko": "46e30b338eb123e576b4df871c05c6ea29692c6e9214b9e6b93bced56a75ea35",
     "cryptodev_cbc_lab.ko": "ae04d866e633a93d59d11a8d1b26a74ddf62b3a1f4cdb5e236363249034c3ce2",
-    "evp-test": "1987bd630a01003829be0679e5cf8da174426ce8ce2922a55c45681db8155899",
-    "redirect-crypto.so": "4ecf39d6f47e5b377f98b438a9d5698ca5bf9f08458037c5c88679b54b864c2e",
-    "session-test": "fab85f3e85db28631764098d17111d77ada430a07212c47a50288d083ce4f1b1",
+    "evp-test": "7a8bd9214eab4e639860d66352806cbf82f3ebcd9e2160d7a627a8bf123645be",
+    "redirect-crypto.so": "3fc6e24c2622b80cb8c8f0e5dc2c3ac970a4b27c3fa3cf2df8d056126f654313",
+    "session-test": "b427370e735605319e24a412dcacba04c7cbefd242a814705df1343dbfe5f370",
     "sha1_spu_cbc_lab.ko": "9d096d15bf1994d5101c994329cdb749e3f076ecd93f46b55fd0b2cf0e79f992",
-    "spu_cbc_kat.ko": "c1b2895acbe5f9ff48d111b748b9c437438aa9ad55cea3a31efc96f573048fe0",
-    "spu_cbc_lab.ko": "56f01cb0ca482fed66e13f0813f33e704af5090391df3a6f99eb10b82c2839eb",
-    "spu_cbc_probe.ko": "0751f2be2864088968229f18428002f1cd181856c88c066af232a3d4c3d4d12a",
-    "spu_sha1_kat.ko": "094d301e5a492ab3ab220ff1bc3d91014c104b974ab2032ad6c0f0b2ecd7123d",
-    "vbntj_abi_canary.ko": "657528f920e9c7a3956a0aa0ee89a969a5921642768fb7b1c78722f421b3647a"
+    "spu_cbc_kat.ko": "25ec79e997ebf461e993e5b1b90d8e29f3726b20225f5b0db72a80dcd4f24279",
+    "spu_cbc_lab.ko": "c74b55cff9cd02457f7a3936dd52085873a7c153fe45ad884ac5b67b559efc5f",
+    "spu_cbc_probe.ko": "72820974a13382b5abb3723d4719601e49e3c40ffeb51007de1341b224bbafa4",
+    "spu_sha1_kat.ko": "6f04deece4db25415f579e870345bcadcfe8a05ce55553aefcee19f998bd84c5",
+    "vbntj_abi_canary.ko": "2d1fb05a63d80469c76d54ca261ae9899994376e95c927e9ad975f04d5145a57"
   },
-  "scope": "Local short tests only; no WAN throughput or long-duration qualification; rebuilt files require hash comparison and fresh checks if bytes differ."
+  "scope": "Local short tests only; no WAN throughput or long-duration qualification; rebuilt files require hash comparison and fresh checks if bytes differ.",
+  "source_commit": "5369d11df075585419af52d95490516baea6d533",
+  "source_notes": "Final rebuild includes whitespace cleanup in CBC C source and explicit build-time rpath-link in userspace recipe; final raw modules and tools were re-tested with full matrix and OpenVPN AES128/256.",
+  "ci": {
+    "run_id": 40872573085,
+    "url": "https://github.com/FrancYescO/GUI_ipk/actions/runs/40872573085",
+    "build_pass": true,
+    "downloaded_hashes_pass": true,
+    "kernel_matrix_pass": true,
+    "openvpn_aes256_pass": true,
+    "cleanup_pass": true,
+    "bundle_manifest": "ci-bundle.json",
+    "notes": "Executable permissions restored after legacy raw Actions download; follow-up CI artifact is tar.gz to preserve modes and symlinks."
+  }
 }
