@@ -56,7 +56,9 @@ traffico crittografico: i contatori SPU sono rimasti a zero. `spuctl stop` e
 | `.204` | `4a080e58-76b2-4210-92d6-bc6898322bbc` | `ef7a375495c71c4ff0d484856e1c7dbf9d737b9d5613aca7d2dfff3eb5e3a697` |
 
 Sul `.69` non è stato sostituito il cryptodev stock, utilizzato da servizi del
-firmware. Le precedenti prove IPsec AES/SHA1 con contatori SPU in incremento
+firmware. La lettura corrente di `/proc/crypto` mostra anch'essa
+`cbc(aes-generic)`; SPU non risultava caricato, mentre cryptodev aveva due
+riferimenti attivi. Le precedenti prove IPsec AES/SHA1 con contatori SPU in incremento
 rimangono valide; non provano accelerazione OpenVPN. Le prove OpenSSL/cryptodev
 riportate nella chat DumaOS avevano già mostrato dati corretti e contatori SPU
 invariati.
