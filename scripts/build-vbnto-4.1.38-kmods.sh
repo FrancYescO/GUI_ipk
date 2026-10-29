@@ -70,6 +70,7 @@ if [[ "${BUILD_SPU:-0}" == 1 ]]; then
     "$repo_root/scripts/build-damson-spu.sh" \
     "$sdk_dir" "$kernel_dir" "$cross" "$work_dir/vbnto-spu"
   cp "$work_dir/vbnto-spu/bcmspu.ko" "$probe_dir/bcmspu.ko"
+  cp "$work_dir/vbnto-spu/spu-capabilities.json" "$probe_dir/"
   "${cross}nm" --undefined-only "$probe_dir/bcmspu.ko" \
     | awk '{print $NF}' | LC_ALL=C sort -u \
     > "$probe_dir/bcmspu.undefined-symbols"

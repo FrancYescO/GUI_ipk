@@ -38,6 +38,11 @@ need explicit cryptodev support; installing this module does not automatically
 accelerate OpenSSL. Actual drivers used by the 4.1.38 tests were `cbc(aes-generic)`,
 `sha256-generic` and `hmac(sha256-generic)` (software implementations).
 
+The [SPU AES-CBC investigation](../../docs/spu-cbc-investigation.md) records
+the source and runtime checks: the current impl3 provider exposes combined
+IPsec AEAD algorithms, without a standalone AES-CBC path for OpenSSL. Loading
+SPU and cryptodev together does not establish OpenVPN hardware acceleration.
+
 ## Source and downstream changes
 
 * Upstream: https://github.com/cryptodev-linux/cryptodev-linux
