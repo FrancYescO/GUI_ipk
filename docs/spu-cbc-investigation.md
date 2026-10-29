@@ -17,7 +17,7 @@ Sono stati esaminati i sorgenti dei due SDK già utilizzati dalle build:
 * Broadcom 502L07, usato per ricostruire il profilo 4.1.52.
 
 Gli hash dei tre file esaminati e l'inventario delle interfacce sono conservati
-in `build/spu-cbc/sdk416-source.json` e `sdk502l07-source.json`.
+in `build/spu-cbc/bcmopen-dg400-source.json` e `sdk502l07-source.json`.
 Il rapporto identifica le interfacce sorgente; non certifica capacità del silicio
 o del firmware Runner.
 
