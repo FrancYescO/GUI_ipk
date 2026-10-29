@@ -39,7 +39,7 @@ tar -xOzf "$work/control.tar.gz" ./control > "$work/control"
 tar -xOzf "$ipk" ./data.tar.gz > "$work/data.tar.gz"
 field() { sed -n "s/^$1: //p" "$work/control"; }
 [ "$(field Package)" = "$package" ] || { echo 'Unexpected package identity' >&2; exit 1; }
-[ "$(field X-Kernel-OPKG-Metadata)" = 1 ] || { echo 'Use a normalized kernel IPK' >&2; exit 1; }
+case "$(field X-Kernel-OPKG-Metadata)" in 1|2) ;; *) echo 'Use a normalized kernel IPK' >&2; exit 1 ;; esac
 required=$(field Depends | sed -n 's/.*kernel (= \([^)]*\)).*/\1/p')
 installed=$(run_opkg status kernel | sed -n 's/^Version: //p')
 [ -n "$required" ] && [ "$required" = "$installed" ] || { echo 'Kernel ABI mismatch' >&2; exit 1; }

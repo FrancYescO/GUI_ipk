@@ -1,0 +1,28 @@
+{
+  "metadata_policy": 2,
+  "kernel_records_updated": 1178,
+  "module_payloads_preserved": 830,
+  "userspace_and_release_records_unchanged": true,
+  "devices": {
+    "45": {
+      "profile": "4.1.38-vbnto",
+      "boot_id": "582beddd-f2cb-462b-aa09-42ba6b8bb93a"
+    },
+    "204": {
+      "profile": "4.1.38-vbntk",
+      "boot_id": "4a080e58-76b2-4210-92d6-bc6898322bbc"
+    }
+  },
+  "tun_payload_sha256": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430",
+  "version": "4.1.38-3",
+  "live_checks": [
+    "active legacy module rejected",
+    "installation under OPKG lock passes",
+    "exact-ABI canonical alias upgraded",
+    "TUN interface create/delete",
+    "module file owner is model-specific package",
+    "OpenVPN 2.6.23 binary runs",
+    "VPN flags remain disabled",
+    "boot ID unchanged"
+  ]
+}

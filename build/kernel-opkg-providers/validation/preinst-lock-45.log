@@ -1,0 +1,24 @@
+
+kmod-tun-vbnto-4.1.38-manual_4.1.38-3_arm_cortex-a9.ipk: OK
+kmod-tun_4.1.38-3_arm_cortex-a9.ipk: OK
+Legacy kmod-tun has active module tun; quiesce and validate it before migration
+Collected errors:
+ * pkg_run_script: package "kmod-tun-vbnto-4.1.38-manual" preinst script returned status 1.
+ * preinst_configure: Aborting installation of kmod-tun-vbnto-4.1.38-manual.
+ * opkg_install_cmd: Cannot install package kmod-tun-vbnto-4.1.38-manual.
+Installing kmod-tun-vbnto-4.1.38-manual (4.1.38-3) to root...
+ACTIVE_GUARD_PASS
+Installing kmod-tun-vbnto-4.1.38-manual (4.1.38-3) to root...
+Configuring kmod-tun-vbnto-4.1.38-manual.
+Upgrading kmod-tun on root from 4.1.38-1 to 4.1.38-3...
+Removing obsolete file /etc/modules.d/30-tun.
+Configuring kmod-tun.
+Version: 4.1.38-3
+Depends: kernel (= 4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)
+Depends: kernel (= 4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d)
+Version: 4.1.38-3
+Depends: kernel (= 4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d), kmod-tun-vbnto-4.1.38-manual (= 4.1.38-3)
+kmod-tun-vbnto-4.1.38-manual - 4.1.38-3
+OpenVPN 2.6.23 arm-openwrt-linux-gnu [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [MH/PKTINFO] [AEAD]
+INSTALL_AND_TUN_PASS
+582beddd-f2cb-462b-aa09-42ba6b8bb93a
