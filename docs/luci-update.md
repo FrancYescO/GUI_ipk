@@ -18,7 +18,7 @@ it does not migrate the firmware to a current LuCI release.
 `patches/luci-18.06-update.patch.gz` is a deterministic compressed Git diff
 between those revisions, generated with rename detection disabled. Its SHA-256
 is checked using `build/luci-update.sha256` before any source changes.
-No upstream fetch is needed during the package build.
+No upstream fetch is needed for the LuCI delta during the package build.
 
 `scripts/apply-luci-update.sh` checks the archived feed HEAD, applies the
 delta with `git apply` (including deleted and empty files), and fixes
@@ -59,10 +59,17 @@ explicit scanner package selections.
 
 The targeted build covers `feeds/luci/luci-lib-jsonc`,
 `feeds/luci/luci-base` and `feeds/luci/luci-app-firewall`
-using the repository's Ubuntu 18.04 / GCC 4.8 environment. Cross-compilation
-is running locally; package-build results and router runtime validation are
-still pending. Do not treat the source and metadata checks as a completed
-package build.
+using the repository's Ubuntu 18.04 / GCC 4.8 environment. The archived
+downloader first tries the retired LEDE mirror, causing repeated timeouts
+for uncached dependencies. `patches/userspace-source-mirrors.patch` removes
+that mirror and prefers the
+current OpenWrt source cache before mirror2. Explicit recipe URLs and archive
+checksums are unchanged. The firewall, rpcd and iptables archives were fetched
+from the current mirror and verified against all three archived recipe hashes.
+
+Cross-compilation is being validated in GitHub Actions; package-build results
+and router runtime validation are still pending. Do not treat the source and
+metadata checks as a completed package build.
 
 Before publishing a complete feed, test login/logout, the status and network
 pages, saving a firewall rule and the installed translations on a test router.

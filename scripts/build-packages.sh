@@ -50,6 +50,11 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# The retired LEDE mirror times out repeatedly for each uncached dependency.
+# Keep recipe hashes and explicit source URLs; prefer the current OpenWrt cache.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/userspace-source-mirrors.patch"
+
 # Restore stripped LuCI payloads before applying the pinned upstream delta.
 git -C "$work_dir/feeds/luci" checkout HEAD -- \
   applications/luci-app-statistics/root/usr/bin \
