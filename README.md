@@ -13,6 +13,14 @@ Newer optional ARM applications use pinned static SDKs. See
 [application updates](docs/application-updates.md) for versions, completed router
 checks, installation requirements and publication status.
 
+### LuCI maintenance update
+
+LuCI uses the final `openwrt-18.06` revision, pinned to `20b3600`
+(9 February 2021), applied as a checksum-verified delta to the archived
+`50788da` snapshot. Existing Homeware and translation overlays are applied
+afterwards. See [LuCI update details](docs/luci-update.md) for provenance,
+validation and runtime checks. This remains the historical 18.06 LuCI stack.
+
 ### Scanner packages
 
 Both userspace and full profiles explicitly select SANE 1.0.27 from the

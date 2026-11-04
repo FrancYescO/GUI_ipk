@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/openwrt/luci",
+  "branch": "openwrt-18.06",
+  "base_revision": "50788da24e87bf2298dd7a2cebb13f533a8a6616",
+  "revision": "20b3600d4d64bf60588cf4975c7a62104411870e",
+  "commit_timestamp": 1612922347,
+  "package_version": "git-21.041.07147-20b3600",
+  "patch": "patches/luci-18.06-update.patch.gz",
+  "sha256": "12bbabc08d08221c9a81663355dabe8e3f773267aedb5f150a6d5b67a10e7f16"
+}
