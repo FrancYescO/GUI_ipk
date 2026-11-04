@@ -16,3 +16,7 @@ The recipe patch is copied only when `ENABLE_NATIVE_GCC_BOOTSTRAP=1`,
 `USERSPACE_ONLY=1`, and the explicit target list includes
 `feeds/packages/gcc`. Normal builds do not apply it. This opt-in does not
 make the compiler build supported or bypass the C++14 requirement.
+
+The older `patches/gcc-arm-libgcc-bootstrap-modes.patch` is retained as a
+diagnostic predecessor from the userspace investigation. It is not applied
+by the build script and must not be stacked with the fuller native patch.

@@ -1,0 +1,62 @@
+--- a/package/network/config/swconfig/src/swlib.c
++++ b/package/network/config/swconfig/src/swlib.c
+@@ -53,0 +54 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -62,0 +64 @@
++#endif
+@@ -213,0 +216 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -217,0 +221 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -218,0 +223 @@
++#endif
+@@ -244,0 +250 @@
++#endif
+@@ -264,0 +271 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -266,0 +274 @@
++#endif
+@@ -339,0 +348 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -363,0 +373 @@
++#endif
+@@ -387,0 +398 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -391,0 +403 @@
++#endif
+@@ -433,0 +446 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -434,0 +448 @@
++#endif
+@@ -436,0 +451 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -437,0 +453 @@
++#endif
+@@ -482,0 +499 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -524,0 +542 @@
++#endif
+--- a/package/network/config/swconfig/src/cli.c
++++ b/package/network/config/swconfig/src/cli.c
+@@ -86,0 +87 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -103,0 +105 @@
++#endif
+@@ -106,0 +109 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -107,0 +111 @@
++#endif
+@@ -124,0 +129 @@
++#ifdef SWCONFIG_HAS_LINK_API
+@@ -139,0 +145 @@
++#endif
+--- a/package/network/config/swconfig/src/Makefile
++++ b/package/network/config/swconfig/src/Makefile
+@@ -4,0 +5,7 @@
++
++# Vendor kernels can expose the legacy swconfig UAPI regardless of version.
++# Use the same headers and flags as the actual objects; never invent wire IDs.
++SWCONFIG_LINK_API := $(shell printf '%s\n' '\#include <linux/switch.h>' 'int swconfig_link_api[] = { SWITCH_TYPE_LINK, SWITCH_ATTR_OP_VALUE_LINK, SWITCH_LINK_FLAG_TX_FLOW, SWITCH_LINK_FLAG_RX_FLOW };' | $(CC) $(CFLAGS) -x c -fsyntax-only - 2>/dev/null && echo 1)
++ifeq ($(SWCONFIG_LINK_API),1)
++CFLAGS += -DSWCONFIG_HAS_LINK_API
++endif
