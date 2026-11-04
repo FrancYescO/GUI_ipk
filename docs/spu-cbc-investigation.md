@@ -1,11 +1,15 @@
 # SPU e AES-CBC per OpenVPN: verifica del 29 ottobre 2026
 
+**Aggiornamento:** il successivo [prototipo CBC nativo](../experiments/spu-cbc/README.md)
+ha superato vettori kernel, OpenSSL e traffico OpenVPN AES-128/256 sul `.69`.
+Le conclusioni seguenti descrivono il driver originale e la verifica preliminare.
+
 La correzione delle dipendenze OPKG è pubblicata con la PR #39. Interessa
 tutti gli 830 IPK kernel: i `.ko` sono invariati, mentre i metadati distinguono
 moduli installabili, funzionalità builtin e candidate in staging. Questa
 correzione non aggiunge accelerazione a OpenVPN.
 
-## Risultato della verifica del driver
+## Risultato della verifica del driver originale
 
 Il driver BCM63138 `spudd/impl3` disponibile nei due SDK non implementa il
 percorso AES-CBC richiesto da cryptodev/OpenSSL. Non è stata pubblicata una

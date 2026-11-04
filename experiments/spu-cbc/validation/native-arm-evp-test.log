@@ -1,0 +1,107 @@
+
+MODE=4
+SOFTWARE_BEFORE
+PASS NIST session
+PASS session info
+driver cipher=cbc(aes-generic)
+PASS NIST encrypt
+PASS NIST decrypt
+PASS NIST encrypt
+PASS NIST decrypt
+PASS close NIST session
+PASS benchmark session
+PASS session info
+driver cipher=cbc(aes-generic)
+BENCH encrypt bytes=180224 elapsed_ns=7124120 process_cpu_us=7000 KiB/s=24704
+BENCH decrypt bytes=180224 elapsed_ns=7450020 process_cpu_us=8000 KiB/s=23624
+PASS benchmark roundtrip
+PASS close benchmark
+[ 6334.137432] spu_sha1_kat: SHA1 abc and HMAC-SHA1 RFC2202: PASS (0)
+FRAMING_HASH
+hmac(sha1-spu-cbc-lab-arm)
+HARDWARE_SESSION
+PASS NIST session
+PASS session info
+driver cipher=spu-cbc-native-lab
+PASS NIST encrypt
+PASS NIST decrypt
+PASS NIST encrypt
+PASS NIST decrypt
+PASS close NIST session
+PASS benchmark session
+PASS session info
+driver cipher=spu-cbc-native-lab
+BENCH encrypt bytes=180224 elapsed_ns=11760700 process_cpu_us=5000 KiB/s=14965
+BENCH decrypt bytes=180224 elapsed_ns=12112220 process_cpu_us=5000 KiB/s=14530
+PASS benchmark roundtrip
+PASS close benchmark
+Encryption stats
+     Ingress 0
+     Fallback 0
+     Egress 0
+     Error 0
+     Dropped 0
+Decryption stats
+     Ingress 260
+     Fallback 0
+     Egress 260
+     Error 0
+     Dropped 0
+CBC_ENCRYPT_CHUNKS
+130
+CBC_DECRYPT_CHUNKS
+130
+OPENSSL_EVP_ENGINE
+LIBRARY OpenSSL 1.0.2u  20 Dec 2019
+EVP software encrypt keybits=128 bytes=262144 elapsed_ns=10543160 KiB/s=24281
+EVP software decrypt keybits=128 bytes=262144 elapsed_ns=10781980 KiB/s=23743
+EVP software encrypt keybits=192 bytes=262144 elapsed_ns=11093480 KiB/s=23076
+EVP software decrypt keybits=192 bytes=262144 elapsed_ns=11700180 KiB/s=21880
+EVP software encrypt keybits=256 bytes=262144 elapsed_ns=12412260 KiB/s=20624
+EVP software decrypt keybits=256 bytes=262144 elapsed_ns=12942400 KiB/s=19779
+cryptodev-lab: redirected device open
+EVP cryptodev encrypt keybits=128 bytes=262144 elapsed_ns=12029640 KiB/s=21280
+EVP cryptodev decrypt keybits=128 bytes=262144 elapsed_ns=11838480 KiB/s=21624
+EVP_MATCH_AES128
+EVP cryptodev encrypt keybits=192 bytes=262144 elapsed_ns=12294040 KiB/s=20823
+EVP cryptodev decrypt keybits=192 bytes=262144 elapsed_ns=12014060 KiB/s=21308
+EVP_MATCH_AES192
+EVP cryptodev encrypt keybits=256 bytes=262144 elapsed_ns=12323460 KiB/s=20773
+EVP cryptodev decrypt keybits=256 bytes=262144 elapsed_ns=12646140 KiB/s=20243
+EVP_MATCH_AES256
+Encryption stats
+     Ingress 0
+     Fallback 0
+     Egress 0
+     Error 0
+     Dropped 0
+Decryption stats
+     Ingress 644
+     Fallback 0
+     Egress 644
+     Error 0
+     Dropped 0
+CBC_ENCRYPT_CHUNKS
+322
+CBC_DECRYPT_CHUNKS
+322
+CLEANUP_OK
+f5f36629-c02e-420f-ba8f-ed6632ac1f57
+SOFTWARE_AFTER
+PASS NIST session
+PASS session info
+driver cipher=cbc(aes-generic)
+PASS NIST encrypt
+PASS NIST decrypt
+PASS NIST encrypt
+PASS NIST decrypt
+PASS close NIST session
+PASS benchmark session
+PASS session info
+driver cipher=cbc(aes-generic)
+BENCH encrypt bytes=180224 elapsed_ns=6892820 process_cpu_us=6000 KiB/s=25533
+BENCH decrypt bytes=180224 elapsed_ns=7344660 process_cpu_us=8000 KiB/s=23962
+PASS benchmark roundtrip
+PASS close benchmark
+CLEANUP_OK
+f5f36629-c02e-420f-ba8f-ed6632ac1f57

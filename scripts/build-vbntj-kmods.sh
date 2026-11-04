@@ -37,7 +37,7 @@ case "$module_set" in
     module_targets=()
     build_wireguard=1
     ;;
-  spu-probe)
+  spu-probe|spu-cbc-probe)
     module_targets=()
     build_spu=1
     ;;
@@ -518,3 +518,13 @@ usb_led_abi_patch=patches/vbntj-4.1.52/003-cdc-ether-damson-led-abi.patch (rndis
 EOF
 
 echo "Built ABI-checked VBNT-K modules and manual-only IPKs in $output_dir"
+
+# Separate raw lab bundle: it never enters the stable IPK directory or feed.
+if [[ "$module_set" == spu-cbc-probe ]]; then
+  lab="$output_dir/spu-cbc-lab"
+  bash "$repo_root/experiments/spu-cbc/build.sh" "$sdk_dir" "$kernel_dir" "$cross" "$source_dir/.spu-cbc-driver" "$lab"
+  bash "$repo_root/experiments/spu-cbc/build-bridge.sh" "$kernel_dir" "$cross" "$source_dir/.spu-cbc-bridge" "$lab"
+  bash "$repo_root/experiments/spu-cbc/build-armhash.sh" "$kernel_dir" "$cross" "$source_dir/.spu-cbc-armhash" "$lab"
+  cp "$repo_root/experiments/spu-cbc/"{run-probe.sh,run-engine.sh,openvpn-test.sh,app-inputs.json} "$lab/"
+  (cd "$lab" && sha256sum ./*.ko > SHA256SUMS)
+fi
