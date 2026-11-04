@@ -67,9 +67,17 @@ current OpenWrt source cache before mirror2. Explicit recipe URLs and archive
 checksums are unchanged. The firewall, rpcd and iptables archives were fetched
 from the current mirror and verified against all three archived recipe hashes.
 
-Cross-compilation is being validated in GitHub Actions; package-build results
-and router runtime validation are still pending. Do not treat the source and
-metadata checks as a completed package build.
+The [targeted GitHub Actions build](https://github.com/FrancYescO/GUI_ipk/actions/runs/41929440547)
+passed for source commit `f6d6715`. It produced 128 IPKs across six feed indexes.
+The repository feed verifier passed; all 127 indexed packages matched their
+recorded sizes and SHA-256 values. The raw artifact also retains an unindexed
+libc toolchain side product, which is not advertised by the feed indexes.
+
+All three LuCI targets report `git-21.041.07147-20b3600-1`. The parser and JSON
+modules were checked as 32-bit little-endian ARM ELF binaries, and the packaged
+`luci/version.lua` reports the pinned revision and `openwrt-18.06` branch.
+These are build and artifact checks; router runtime validation and public feed
+publication remain pending.
 
 Before publishing a complete feed, test login/logout, the status and network
 pages, saving a firewall rule and the installed translations on a test router.
