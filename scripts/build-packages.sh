@@ -13,6 +13,23 @@ shard_count="${PACKAGE_SHARD_COUNT:-16}"
 build_config="${BUILD_CONFIG:-$repo_root/build/openwrt.config}"
 userspace_only="${USERSPACE_ONLY:-0}"
 package_compile_failed=0
+native_gcc_bootstrap="${ENABLE_NATIVE_GCC_BOOTSTRAP:-0}"
+case "$native_gcc_bootstrap" in
+  0) ;;
+  1)
+    native_gcc_target=0
+    for target in $package_targets; do
+      target="${target#package/}"
+      target="${target%/compile}"
+      [[ "$target" != feeds/packages/gcc ]] || native_gcc_target=1
+    done
+    if [[ "$userspace_only" != 1 || "$native_gcc_target" != 1 ]]; then
+      echo "Experimental GCC bootstrap requires USERSPACE_ONLY=1 and explicit PACKAGE_TARGETS=feeds/packages/gcc" >&2
+      exit 1
+    fi
+    ;;
+  *) echo "ENABLE_NATIVE_GCC_BOOTSTRAP must be 0 or 1" >&2; exit 1 ;;
+esac
 
 buildroot_archive="$source_dir/openwrt_18.x_tch_buildroot_based_custom.tar.xz"
 toolchain_archive="$source_dir/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar"
@@ -193,6 +210,10 @@ if [[ "$userspace_only" == 1 ]]; then
     < "$repo_root/patches/swconfig-vendor-uapi.patch"
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-dependency-repairs.patch"
+  if [[ "$native_gcc_bootstrap" == 1 ]]; then
+    cp "$repo_root/patches/gcc-native-arm-bootstrap-modes.patch" \
+      "$work_dir/feeds/packages/devel/gcc/patches/999-arm-bootstrap-modes.patch"
+  fi
   # Import selected source updates while keeping the legacy build framework.
   patch --directory "$work_dir" --strip 1 \
     < "$repo_root/patches/userspace-package-updates.patch"
