@@ -50,6 +50,20 @@ tar --extract --xz --file "$buildroot_archive" \
   --directory "$work_dir" --no-same-owner \
   --exclude J --exclude bin --exclude build_dir --exclude logs --exclude staging_dir
 
+# The retired LEDE mirror times out repeatedly for each uncached dependency.
+# Keep recipe hashes and explicit source URLs; prefer the current OpenWrt cache.
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/userspace-source-mirrors.patch"
+
+# Restore stripped LuCI payloads before applying the pinned upstream delta.
+git -C "$work_dir/feeds/luci" checkout HEAD -- \
+  applications/luci-app-statistics/root/usr/bin \
+  contrib/package/freifunk-common/files/usr/bin \
+  contrib/package/meshwizard/files/usr/bin \
+  libs/luci-lib-nixio/axTLS/www/bin \
+  libs/luci-lib-nixio/axTLS/www/test_dir/bin
+bash "$repo_root/scripts/apply-luci-update.sh" "$work_dir"
+
 # Apply the pinned OpenVPN recipes before generating package metadata.
 bash "$repo_root/scripts/apply-userspace-overlay.sh" "$work_dir"
 
@@ -296,12 +310,6 @@ git -C "$work_dir/feeds/packages" checkout HEAD -- \
   utils/bmx7-dnsupdate/files/usr/bin \
   utils/prometheus-node-exporter-lua/files/usr/bin \
   utils/yunbridge/files/usr/bin
-git -C "$work_dir/feeds/luci" checkout HEAD -- \
-  applications/luci-app-statistics/root/usr/bin \
-  contrib/package/freifunk-common/files/usr/bin \
-  contrib/package/meshwizard/files/usr/bin \
-  libs/luci-lib-nixio/axTLS/www/bin \
-  libs/luci-lib-nixio/axTLS/www/test_dir/bin
 
 # OpenWrt's old kernel recipe has no usable checksum metadata for this
 # version, so download the exact upstream archive ourselves and verify the
@@ -350,6 +358,9 @@ ln -s VANTW/patches-4.1 "$active_kernel_patches"
 cp "$build_config" "$work_dir/.config"
 
 make_args=(--directory "$work_dir" --jobs "$jobs" V=sc)
+# Refresh local feed indexes, including recipes introduced by the LuCI update.
+# The -i operation reads the staged tree and performs no network update.
+(cd "$work_dir" && ./scripts/feeds update -i luci && ./scripts/feeds install -a -p luci)
 make "${make_args[@]}" defconfig
 if [[ "${PREPARE_KERNEL_ONLY:-0}" == 1 ]]; then
   make "${make_args[@]}" target/linux/prepare
@@ -488,6 +499,7 @@ if [[ -n "$package_targets" ]]; then
     ln -sf "$(command -v cmake)" "$work_dir/staging_dir/host/bin/cmake"
     ln -sf "$(command -v flock)" "$work_dir/staging_dir/host/bin/flock"
     ln -sf "$(command -v patchelf)" "$work_dir/staging_dir/host/bin/patchelf"
+    ln -sf "$(command -v pkg-config)" "$work_dir/staging_dir/host/bin/pkg-config"
     if [[ "${BUILD_KMODS:-0}" == 1 ]]; then
       make "${make_args[@]}" target/linux/compile
     fi
