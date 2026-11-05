@@ -69,17 +69,26 @@ def compare(catalog, feed, metadata=None, config=None):
     if not indexes:
         raise ValueError('No OPKG indexes found under {}'.format(feed))
     recipes = {}
+    compiler_constraints = {}
     if metadata:
         source = ''
+        package = ''
         for line in metadata.read_text(encoding='utf-8').splitlines():
             if line.startswith('Source-Makefile: '):
                 source = line.split(': ', 1)[1]
+                package = ''
             elif line.startswith('Package: '):
-                recipes[line.split(': ', 1)[1]] = source
+                package = line.split(': ', 1)[1]
+                recipes[package] = source
+            elif package and line.startswith('Depends: '):
+                compiler_constraints[package] = re.findall(r'@!(GCC_[A-Z0-9_]+)', line)
     selected = None
+    enabled = set()
     if config:
         selected = set()
         for line in config.read_text(encoding='utf-8').splitlines():
+            if line.startswith('CONFIG_') and line.endswith(('=y', '=m')):
+                enabled.add(line[len('CONFIG_'):-2])
             if line.startswith('CONFIG_PACKAGE_') and line.endswith(('=y', '=m')):
                 selected.add(line[len('CONFIG_PACKAGE_'):-2])
     results = []
@@ -87,10 +96,13 @@ def compare(catalog, feed, metadata=None, config=None):
         row = dict(row)
         name = row['name']
         versions = built.get(name, set())
+        blocked = sorted(set(compiler_constraints.get(name, [])) & enabled)
         if versions:
             status = 'present'
         elif metadata and name not in recipes:
             status = 'no-recipe'
+        elif blocked:
+            status = 'toolchain-unavailable'
         elif selected is not None and name not in selected:
             status = 'not-selected'
         elif metadata:
@@ -99,6 +111,7 @@ def compare(catalog, feed, metadata=None, config=None):
             status = 'missing'
         row.update(status=status, built_versions=';'.join(sorted(versions)),
                    recipe=recipes.get(name, ''),
+                   unavailable_reason=('compiler constraint: ' + ', '.join('@!' + item for item in blocked)) if blocked and not versions else '',
                    provided_by=';'.join(sorted(providers.get(name, set()))))
         filename = '{}_{}_{}.ipk'.format(name, row['version'], row['architecture'])
         row['source_file'] = row['section'] + '/' + filename
@@ -131,7 +144,7 @@ def main():
         output = args.output or args.feed
         output.mkdir(parents=True, exist_ok=True)
         fields = ['homeware', 'section', 'name', 'version', 'architecture', 'status',
-                  'built_versions', 'recipe', 'provided_by', 'source_file']
+                  'built_versions', 'recipe', 'provided_by', 'source_file', 'unavailable_reason']
         with (output / 'homeware-coverage.csv').open('w', encoding='utf-8', newline='') as stream:
             writer = csv.DictWriter(stream, fields)
             writer.writeheader()
@@ -147,6 +160,7 @@ def main():
                   'Presence does not establish ABI, dependency or runtime compatibility. Different ABI package names remain distinct; versions are recorded without ranking them.',
                   'Catalog entries come from IPK filenames, not their internal control metadata. Homeware 18/19 are source labels, not verified kernel ABI declarations.', '',
                   'When metadata is supplied, `no-recipe`, `not-selected` and `not-built` distinguish remaining work. No missing package is silently considered integrated.', '']
+        lines += ['`toolchain-unavailable` records compiler constraints from metadata; `unavailable_reason` identifies them. These packages still count as missing.', '']
         (output / 'homeware-coverage.md').write_text('\n'.join(lines), encoding='utf-8')
         print(json.dumps(summary, sort_keys=True))
     except (OSError, ValueError, KeyError, csv.Error) as error:

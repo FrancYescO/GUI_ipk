@@ -1,0 +1,40 @@
+--- a/include/toplevel.mk
++++ b/include/toplevel.mk
+@@ -25 +25 @@
+-export GIT_CONFIG_PARAMETERS='core.autocrlf=false'
++export GIT_CONFIG_PARAMETERS='core.autocrlf=false' 'url.https://github.com/.insteadOf=git://github.com/'
+--- a/package/network/utils/rssileds/Makefile
++++ b/package/network/utils/rssileds/Makefile
+@@ -12 +12 @@
+-PKG_RELEASE:=1
++PKG_RELEASE:=2
+@@ -21 +21 @@
+-  DEPENDS:=+libiwinfo
++  DEPENDS:=+libiwinfo +libnl-tiny
+--- a/package/network/services/hostapd/Makefile
++++ b/package/network/services/hostapd/Makefile
+@@ -10 +10 @@
+-PKG_RELEASE:=8
++PKG_RELEASE:=9
+--- a/feeds/packages/sound/mpd/Makefile
++++ b/feeds/packages/sound/mpd/Makefile
+@@ -34,7 +34,7 @@
+   CATEGORY:=Sound
+   TITLE:=Music Player Daemon
+   URL:=http://www.musicpd.org/
+-  DEPENDS:= +zlib +libcurl +libpthread +libmpdclient +libstdcpp $(ICONV_DEPENDS) \
++  DEPENDS:= @!GCC_VERSION_4_8 +zlib +libcurl +libpthread +libmpdclient +libstdcpp $(ICONV_DEPENDS) \
+ 	    +AUDIO_SUPPORT:alsa-lib +boost +boost-container +libexpat
+ endef
+ 
+--- a/feeds/packages/net/zerotier/Makefile
++++ b/feeds/packages/net/zerotier/Makefile
+@@ -23,7 +23,7 @@
+ define Package/zerotier
+   SECTION:=net
+   CATEGORY:=Network
+-  DEPENDS:=+libpthread +libstdcpp +kmod-tun +ip +libminiupnpc +libnatpmp
++  DEPENDS:= @!GCC_VERSION_4_8 +libpthread +libstdcpp +kmod-tun +ip +libminiupnpc +libnatpmp
+   TITLE:=Create flat virtual Ethernet networks of almost unlimited size
+   URL:=https://www.zerotier.com
+   SUBMENU:=VPN

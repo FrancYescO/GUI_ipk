@@ -157,6 +157,20 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Free hosted runner space for legacy package builds
+        run: |
+          df -h /
+          # Host SDKs are unused: compilation runs inside the pinned container.
+          if [[ "${RUNNER_ENVIRONMENT:-}" == github-hosted ]]; then
+            sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+          fi
+          df -h /
+          available_kib=$(df -Pk / | awk 'NR == 2 { print $4 }')
+          if (( available_kib < 35 * 1024 * 1024 )); then
+            echo "Insufficient runner disk space for the archived buildroot (35 GiB required)" >&2
+            exit 1
+          fi
+
       - name: Restore source archive cache
         uses: actions/cache@v6
         with:

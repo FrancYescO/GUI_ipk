@@ -61,7 +61,7 @@ to their exact SHA-256 payload and firmware. `xt_nat` remains withheld.
 
 ## Firmware inventory
 
-The public compatibility page lists 279 firmware branches from
+The public compatibility page lists 281 firmware branches from
 `FrancYescO/tch_firmware_extracted`, with source commits, kernel package,
 architecture, vendor kernel source and stock-module fingerprint. It describes
 build candidates, not a list of devices on which every module is supported.
