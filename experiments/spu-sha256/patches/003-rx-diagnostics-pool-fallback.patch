@@ -1,0 +1,201 @@
+--- a/spu.h
++++ b/spu.h
+@@ -59,6 +59,12 @@
+ #define SPU_MAX_PAYLOAD          ((1 << 14) - 1)
+ 
+ #define SPU_NUM_DESCR            64
++extern unsigned int spu_lab_rx_poll_ms;
++extern bool spu_lab_rx_drain;
++void spu_lab_count_rx_polls(void);
++void spu_lab_count_rx_batches(void);
++void spu_lab_count_rx_done(void);
++void spu_lab_count_rx_invalid(void);
+ extern int spu_lab_transfers;
+ void spu_lab_count_tx_error(void);
+ void spu_lab_count_recycle(void);
+--- a/spu.c
++++ b/spu.c
+@@ -68,6 +68,32 @@
+ void spu_lab_count_tx_error(void) { atomic_inc(&lab_tx_error); }
+ void spu_lab_count_recycle(void) { atomic_inc(&lab_recycle); }
+ 
++/* Laboratory RX diagnostics and pre-enqueue software fallback. */
++unsigned int spu_lab_rx_poll_ms;
++module_param_named(rx_poll_ms, spu_lab_rx_poll_ms, uint, 0444);
++bool spu_lab_rx_drain;
++module_param_named(rx_drain, spu_lab_rx_drain, bool, 0444);
++static bool pool_fallback;
++module_param(pool_fallback, bool, 0444);
++static bool force_pool_fallback;
++module_param(force_pool_fallback, bool, 0444);
++static atomic_t lab_rx_polls = ATOMIC_INIT(0);
++module_param_cb(lab_rx_polls, &spu_lab_counter_ops, &lab_rx_polls, 0444);
++static atomic_t lab_rx_batches = ATOMIC_INIT(0);
++module_param_cb(lab_rx_batches, &spu_lab_counter_ops, &lab_rx_batches, 0444);
++static atomic_t lab_rx_done = ATOMIC_INIT(0);
++module_param_cb(lab_rx_done, &spu_lab_counter_ops, &lab_rx_done, 0444);
++static atomic_t lab_rx_invalid = ATOMIC_INIT(0);
++module_param_cb(lab_rx_invalid, &spu_lab_counter_ops, &lab_rx_invalid, 0444);
++static atomic_t lab_inflight = ATOMIC_INIT(0);
++module_param_cb(lab_inflight, &spu_lab_counter_ops, &lab_inflight, 0444);
++static atomic_t lab_pool_fallback_uses = ATOMIC_INIT(0);
++module_param_cb(lab_pool_fallback_uses, &spu_lab_counter_ops, &lab_pool_fallback_uses, 0444);
++void spu_lab_count_rx_polls(void) { atomic_inc(&lab_rx_polls); }
++void spu_lab_count_rx_batches(void) { atomic_inc(&lab_rx_batches); }
++void spu_lab_count_rx_done(void) { atomic_inc(&lab_rx_done); }
++void spu_lab_count_rx_invalid(void) { atomic_inc(&lab_rx_invalid); }
++
+ /* Keep cipher acceleration; require opt-in for full ESP flow acceleration.
+  * The legacy flow path was reported to crash with Windows/DHCP clients. */
+ static bool blog_offload;
+@@ -202,6 +228,7 @@
+ 
+     pTransReq = list_first_entry(&spuinfo->transReqList, struct spu_trans_req, entry);
+     list_del_init(&pTransReq->entry);
++    atomic_inc(&lab_inflight);
+ 
+     spin_unlock_irqrestore(&spuinfo->spuListLock, flags);
+     /* do not initialize index or list */
+@@ -223,6 +250,7 @@
+       return;
+    }
+    list_add_tail(&pTransReq->entry, &spuinfo->transReqList);
++   atomic_dec(&lab_inflight);
+    spin_unlock_irqrestore(&spuinfo->spuListLock, flags);
+ }
+ 
+@@ -546,6 +574,24 @@
+ }
+ 
+ 
++static int spu_lab_fallback(struct spu_ctx *ctx, void *req, bool encrypt)
++{
++    int err;
++    atomic_inc(&lab_pool_fallback_uses);
++    /* The existing fallback provider excludes ASYNC and NEED_FALLBACK. */
++    err = spu_aead_do_fallback_cipher(ctx->fallback_cipher, req, encrypt);
++    if (encrypt) {
++        if (!err || err == -EINPROGRESS) spuinfo->stats.encFallback++;
++        else spuinfo->stats.encDrops++;
++        if (!err) spuinfo->stats.encSpuEgress++;
++    } else {
++        if (!err || err == -EINPROGRESS) spuinfo->stats.decFallback++;
++        else spuinfo->stats.decDrops++;
++        if (!err) spuinfo->stats.decSpuEgress++;
++    }
++    return err;
++}
++
+ static void spu_esp_crypt_done (struct spu_trans_req *transReq)
+ {
+     struct aead_request *areq = transReq->context;
+@@ -791,10 +837,16 @@
+         return err;
+     }
+ 
++    if (force_pool_fallback) {
++        kfree_skb(pSkb);
++        return spu_lab_fallback(pCtx, req, true);
++    }
+     pTransReq = spu_alloc_trans_req(areq->base.flags);
+     if (IS_ERR(pTransReq))
+     {
+         kfree_skb(pSkb);
++        if (pool_fallback && PTR_ERR(pTransReq) == -EBUSY)
++            return spu_lab_fallback(pCtx, req, true);
+         spuinfo->stats.encDrops++;
+         return PTR_ERR(pTransReq);
+     }
+@@ -912,10 +964,16 @@
+         return err;
+     }
+ 
++    if (force_pool_fallback) {
++        kfree_skb(pSkb);
++        return spu_lab_fallback(pCtx, areq, false);
++    }
+     pTransReq = spu_alloc_trans_req(areq->base.flags);
+     if (IS_ERR(pTransReq))
+     {
+         kfree_skb(pSkb);
++        if (pool_fallback && PTR_ERR(pTransReq) == -EBUSY)
++            return spu_lab_fallback(pCtx, areq, false);
+         spuinfo->stats.decDrops++;
+         return PTR_ERR(pTransReq);
+     }
+@@ -1581,6 +1639,7 @@
+     dev_t dev = 0;
+     dev_t devno;
+ 
++    if (spu_lab_rx_poll_ms > 1000) return -EINVAL;
+     if (spu_lab_transfers != 64 && spu_lab_transfers != 128 && spu_lab_transfers != 256)
+         return -EINVAL;
+     spuinfo = kzalloc(sizeof(struct spu_info), GFP_KERNEL);
+--- a/spu_runner.c
++++ b/spu_runner.c
+@@ -324,7 +324,16 @@
+     while (1)
+     {
+         /* Wait to be woken up by received packets */
+-        wait_event_interruptible(spuinfo->rx_thread_wqh, spuinfo->rx_work_avail || kthread_should_stop());
++        if (spu_lab_rx_poll_ms) {
++            long ready = wait_event_interruptible_timeout(spuinfo->rx_thread_wqh,
++                spuinfo->rx_work_avail || kthread_should_stop(),
++                msecs_to_jiffies(spu_lab_rx_poll_ms));
++            if (!ready) spu_lab_count_rx_polls();
++            rdpa_cpu_int_disable(rdpa_cpu_host, CPU_RX_IPSEC_LOOPBACK_QUEUE_ID);
++        } else {
++            wait_event_interruptible(spuinfo->rx_thread_wqh,
++                spuinfo->rx_work_avail || kthread_should_stop());
++        }
+ 
+         /* Abort if we were woken up to terminate */
+         if (kthread_should_stop())
+@@ -334,7 +343,7 @@
+         }
+ 
+         count = 0;
+-        while ( count < SPU_RX_BUDGET )
++        while ( count < SPU_RX_BUDGET && !kthread_should_stop() )
+         {
+             pNBuf = NULL;
+             memset(&info, 0, sizeof(rdpa_cpu_rx_info_t));
+@@ -367,15 +376,19 @@
+                 {
+                     pTransReq->err = 0;
+                 }
++                spu_lab_count_rx_done();
+                 pTransReq->callback(pTransReq);
+                 spu_free_trans_req(pTransReq);
+             }
+             else
+             {
++                spu_lab_count_rx_invalid();
+                 SPU_TRACE(("spu_runner_rxq_thread: error in rdpa_cpu_loopback_packet_get()"
+                            "(%d:%d)\n", rc, info.reason));
+                 if ( NULL != pNBuf )
+                     nbuff_free(pNBuf);
++                if (rc)
++                    break;
+             }
+ 
+             /* budget was consumed */
+@@ -383,7 +396,8 @@
+             {
+                /* Yield CPU to allow others to have a chance, then continue to
+                   top of loop for more work.  */
+-               if ((current->policy == SCHED_FIFO) || (current->policy == SCHED_RR))
++               spu_lab_count_rx_batches();
++               if (spu_lab_rx_drain || (current->policy == SCHED_FIFO) || (current->policy == SCHED_RR))
+                {
+                   count = 0;
+                   cond_resched();
+@@ -391,6 +405,8 @@
+             }
+         }
+ 
++        if (kthread_should_stop())
++            break;
+         spuinfo->rx_work_avail = 0;
+         rdpa_cpu_int_enable(rdpa_cpu_host, CPU_RX_IPSEC_LOOPBACK_QUEUE_ID);
+     }

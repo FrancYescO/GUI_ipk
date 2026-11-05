@@ -1,0 +1,47 @@
+name: Bootstrap Damson build inputs
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: bootstrap-damson-build-inputs-v1
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  upload:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DAMSON_INPUTS_TAG: damson-build-inputs-v1
+      DAMSON_INPUTS_MODE: bootstrap
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Refuse to replace an existing input release
+        run: |
+          if gh release view "$DAMSON_INPUTS_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $DAMSON_INPUTS_TAG already exists; input releases are immutable." >&2
+            exit 1
+          fi
+
+      - name: Download and verify pinned inputs
+        run: scripts/fetch-damson-build-inputs.sh
+
+      - name: Preserve checksums and provenance
+        run: |
+          cp build/vbntj/inputs.tsv .cache/sources/damson/INPUTS.tsv
+          cp build/vbntj/inputs.sha256 .cache/sources/damson/SHA256SUMS
+          cp build/vbntj/INPUTS.md .cache/sources/damson/INPUTS.md
+
+      - name: Store inputs in this repository
+        run: |
+          gh release create "$DAMSON_INPUTS_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Damson build inputs v1" \
+            --notes-file build/vbntj/INPUTS.md \
+            .cache/sources/damson/*

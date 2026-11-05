@@ -1,0 +1,247 @@
+name: Damson 4.1.52 kernel-module artifacts
+
+run-name: Damson 4.1.52 — ${{ inputs.module_set || 'router-tested + rndis-compat' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      module_set:
+        description: "Allowlisted kernel modules to build"
+        required: true
+        default: router-tested
+        type: choice
+        options:
+          - tun
+          - network-smoke
+          - rndis-compat
+          - qos-probe
+          - spu-probe
+          - router-tested
+          - spu-sha256-lab
+          - spu-sha256-inplace-lab
+      standard_tools:
+        description: "Include pinned static iperf3/wg and standard crypto modules (raw lab profiles only)"
+        type: boolean
+        default: false
+  pull_request:
+    paths:
+      - ".github/workflows/build-vbntj-kmods.yml"
+      - "build/vbntj/**"
+      - "build/vbntj-canary/**"
+      - "build/vbntj-spu-test/**"
+      - "experiments/spu-sha256/**"
+      - "patches/vbntj-4.1.52/**"
+      - "scripts/build-vbntj-kmods.sh"
+      - "scripts/build-damson-spu.sh"
+      - "patches/vbntj-spu/**"
+      - "scripts/fetch-damson-build-inputs.sh"
+      - "scripts/fetch-damson-kernel-toolchain.sh"
+      - "scripts/verify-manual-kmod-ipks.sh"
+      - "artifacts/damson-4.1.52-manual/**"
+      - "artifacts/damson-4.1.52-rndis-compat/**"
+  push:
+    branches:
+      - kmods-4.1.52
+      - main
+    paths:
+      - ".github/workflows/build-vbntj-kmods.yml"
+      - "build/vbntj/**"
+      - "build/vbntj-canary/**"
+      - "build/vbntj-spu-test/**"
+      - "experiments/spu-sha256/**"
+      - "patches/vbntj-4.1.52/**"
+      - "scripts/build-vbntj-kmods.sh"
+      - "scripts/build-damson-spu.sh"
+      - "patches/vbntj-spu/**"
+      - "scripts/fetch-damson-build-inputs.sh"
+      - "scripts/fetch-damson-kernel-toolchain.sh"
+      - "scripts/verify-manual-kmod-ipks.sh"
+      - "artifacts/damson-4.1.52-manual/**"
+      - "artifacts/damson-4.1.52-rndis-compat/**"
+
+concurrency:
+  group: vbntj-kmods-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        module_set: ${{ fromJSON(github.event_name == 'workflow_dispatch' && format('["{0}"]', inputs.module_set) || '["router-tested", "rndis-compat"]') }}
+    name: Compile and verify ${{ matrix.module_set }} modules
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DAMSON_INPUTS_TAG: damson-build-inputs-v1
+      MODULE_SET: ${{ matrix.module_set }}
+      LAB_STANDARD_TOOLS: ${{ inputs.standard_tools && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Verify committed router-tested packages
+        run: |
+          (cd artifacts/damson-4.1.52-manual && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-manual
+
+      - name: Verify committed RNDIS compatibility packages
+        run: |
+          (cd artifacts/damson-4.1.52-rndis-compat && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh artifacts/damson-4.1.52-rndis-compat
+
+      - name: Cache pinned Damson release inputs
+        uses: actions/cache@v6
+        with:
+          path: .cache/sources/damson
+          key: damson-build-inputs-v1-${{ hashFiles('build/vbntj/inputs.tsv') }}
+
+      - name: Download and verify inputs from this repository
+        run: scripts/fetch-damson-build-inputs.sh
+
+      - name: Extract pinned GPL buildsystem and stage archives
+        run: |
+          mkdir -p .work/vbntj-gpl
+          tar -xzf .cache/sources/damson/vmg8825_b50b-af23960e39003ba7788f5ced0c256b1bc676a712.tar.gz -C .work/vbntj-gpl
+          mkdir -p .work/vbntj-gpl/dl
+          while IFS=$'\t' read -r filename _checksum _rest; do
+            [[ -z "$filename" || "$filename" == \#* || "$filename" == vmg8825_b50b-* ]] && continue
+            cp ".cache/sources/damson/$filename" .work/vbntj-gpl/dl/
+          done < build/vbntj/inputs.tsv
+
+      - name: Cache installed Damson toolchain
+        uses: actions/cache@v6
+        with:
+          path: |
+            .work/vbntj-gpl/staging_dir/host
+            .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi
+          key: damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v2-${{ hashFiles('build/vbntj/inputs.tsv', 'scripts/build-vbntj-kmods.sh') }}
+          restore-keys: |
+            damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v2-
+            damson-toolchain-linux-amd64-gcc-5.5.0-glibc-2.26-v1
+
+      - name: Build Ubuntu 12.04 compatibility image
+        run: docker build --platform linux/amd64 --tag vbntj-gpl-builder build/vbntj
+
+      - name: Stage preserved kernel compiler for SPU
+        if: inputs.module_set == 'spu-probe' || inputs.module_set == 'spu-sha256-lab' || inputs.module_set == 'spu-sha256-inplace-lab'
+        run: |
+          if [[ ! -x .work/vbntj-gpl/staging_dir/toolchain-arm_v7-a_gcc-5.5.0_glibc-2.26_eabi/bin/arm-openwrt-linux-gnueabi-gcc ]]; then
+            scripts/fetch-damson-kernel-toolchain.sh
+            tar -xzf .cache/sources/damson-kernel-toolchain/damson-kernel-gcc-5.5.0-linux-amd64.tgz \
+              --no-same-owner -C .work/vbntj-gpl
+          fi
+
+      - name: Stage pinned standard comparison tools
+        if: inputs.standard_tools
+        run: |
+          [[ "$MODULE_SET" == spu-sha256-lab || "$MODULE_SET" == spu-sha256-inplace-lab ]]
+          experiments/spu-sha256/fetch-standard-tools.sh .cache/sources/spu-standard-tools
+
+      - name: Prepare kernel and compile modules
+        run: |
+          mkdir -p dist/vbntj-kmods
+          sudo chown -R 1000:1000 .work/vbntj-gpl dist/vbntj-kmods
+          docker run --rm \
+            --platform linux/amd64 \
+            --env MODULE_SET \
+            --env LAB_STANDARD_TOOLS \
+            --env OUTPUT_DIR=/out \
+            --env SOURCE_DIR=/app \
+            --volume "$PWD:/repo" \
+            --volume "$PWD/.work/vbntj-gpl:/app" \
+            --volume "$PWD/dist/vbntj-kmods:/out" \
+            vbntj-gpl-builder \
+            /repo/scripts/build-vbntj-kmods.sh
+
+      - name: Verify checksums
+        run: cd dist/vbntj-kmods && sha256sum --check SHA256SUMS
+
+      - name: Verify manual-only IPK safety
+        if: inputs.module_set != 'spu-sha256-lab' && inputs.module_set != 'spu-sha256-inplace-lab'
+        run: scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
+
+      - name: Verify laboratory profile contains no installable packages
+        if: inputs.module_set == 'spu-sha256-lab' || inputs.module_set == 'spu-sha256-inplace-lab'
+        run: |
+          test "$(find dist/vbntj-kmods -name '*.ipk' -type f | wc -l)" -eq 0
+          for module in bcmspu damson_spu_test vbntj_abi_canary aes-arm sha256-arm spu_sha256_hybrid; do
+            test -s "dist/vbntj-kmods/$module.ko"
+          done
+          strings dist/vbntj-kmods/bcmspu.ko | grep -F 'parmtype=transfer_requests:int'
+          strings dist/vbntj-kmods/bcmspu.ko | grep -F 'parmtype=pool_fallback:bool'
+          if [[ "$LAB_STANDARD_TOOLS" == 1 ]]; then
+            for module in gcm ghash-generic gf128mul ctr seqiv wireguard; do
+              test -s "dist/vbntj-kmods/$module.ko"
+            done
+            for binary in wg iperf3-lab udp-encap veth-offloads; do
+              readelf -h "dist/vbntj-kmods/$binary" | grep -Eq 'Machine:[[:space:]]+ARM'
+              if readelf -l "dist/vbntj-kmods/$binary" | grep -q INTERP; then exit 1; fi
+            done
+          fi
+          if [[ "$MODULE_SET" == spu-sha256-inplace-lab ]]; then
+            if strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'; then
+              echo 'In-place profile was not compiled with its explicit opt-in'
+              exit 1
+            fi
+          else
+            strings dist/vbntj-kmods/spu_sha256_hybrid.ko | grep -F 'in_place requires SPU_INPLACE_LAB=1'
+          fi
+
+      - name: Upload Damson modules and manual-only IPKs
+        uses: actions/upload-artifact@v7
+        with:
+          name: damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}
+          path: dist/vbntj-kmods/
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    name: Publish versioned IPK downloads
+    if: github.ref == 'refs/heads/kmods-4.1.52' && (github.event_name == 'push' || inputs.module_set == 'router-tested')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download this run's verified artifact
+        run: |
+          gh run download "$GITHUB_RUN_ID" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name "damson-4.1.52-router-tested-$GITHUB_SHA" \
+            --dir dist/vbntj-kmods
+
+      - name: Verify packages before release
+        run: |
+          (cd dist/vbntj-kmods && sha256sum --check SHA256SUMS)
+          scripts/verify-manual-kmod-ipks.sh dist/vbntj-kmods
+          test "$(find dist/vbntj-kmods -maxdepth 1 -name 'kmod-*.ipk' -type f | wc -l)" -eq 2
+
+      - name: Publish immutable, commit-pinned Release
+        run: |
+          tag="damson-4.1.52-manual-${GITHUB_SHA:0:7}"
+          release_dir="dist/vbntj-kmods"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            mkdir -p dist/existing-release
+            gh release download "$tag" --repo "$GITHUB_REPOSITORY" \
+              --pattern 'kmod-*.ipk' --dir dist/existing-release
+            for ipk in "$release_dir"/kmod-*.ipk; do
+              cmp "$ipk" "dist/existing-release/$(basename "$ipk")"
+            done
+            echo "Verified existing Release $tag"
+          else
+            gh release create "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "Damson 4.1.52 manual kernel modules (${GITHUB_SHA:0:7})" \
+              --notes "Manual installation only. Built and verified by Actions run $GITHUB_RUN_ID for Damson 19.4.0866-3401052, kernel 4.1.52, brcm963xx. Test the raw modules from /tmp on each firmware before installing." \
+              "$release_dir"/kmod-*.ipk
+          fi
