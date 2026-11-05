@@ -56,6 +56,8 @@ on:
       - "patches/https-dns-proxy-gnu99.patch"
       - "patches/ath10k-board-source-mirror.patch"
       - "patches/userspace-package-updates.patch"
+      - "patches/userspace-ci-compat.patch"
+      - "patches/hostapd-taxonomy-mlme.patch"
       - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/userspace-kernel-configure.patch"
       - "patches/libpcap-c99.patch"
@@ -97,6 +99,8 @@ on:
       - "patches/https-dns-proxy-gnu99.patch"
       - "patches/ath10k-board-source-mirror.patch"
       - "patches/userspace-package-updates.patch"
+      - "patches/userspace-ci-compat.patch"
+      - "patches/hostapd-taxonomy-mlme.patch"
       - "patches/gcc-native-arm-bootstrap-modes.patch"
       - "patches/userspace-kernel-configure.patch"
       - "patches/libpcap-c99.patch"
@@ -156,6 +160,20 @@ jobs:
       BUILD_INPUTS_TAG: build-inputs-v1
     steps:
       - uses: actions/checkout@v7
+
+      - name: Free hosted runner space for legacy package builds
+        run: |
+          df -h /
+          # Host SDKs are unused: compilation runs inside the pinned container.
+          if [[ "${RUNNER_ENVIRONMENT:-}" == github-hosted ]]; then
+            sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+          fi
+          df -h /
+          available_kib=$(df -Pk / | awk 'NR == 2 { print $4 }')
+          if (( available_kib < 35 * 1024 * 1024 )); then
+            echo "Insufficient runner disk space for the archived buildroot (35 GiB required)" >&2
+            exit 1
+          fi
 
       - name: Restore source archive cache
         uses: actions/cache@v6

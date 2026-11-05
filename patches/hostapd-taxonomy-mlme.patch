@@ -1,0 +1,21 @@
+--- a/src/ap/sta_info.c
++++ b/src/ap/sta_info.c
+@@ -698,7 +698,7 @@
+ 	sta->last_seq_ctrl = WLAN_INVALID_MGMT_SEQ;
+ 	dl_list_init(&sta->ip6addr);
+ 
+-#ifdef CONFIG_TAXONOMY
++#if defined(CONFIG_TAXONOMY) && defined(NEED_AP_MLME)
+ 	sta_track_claim_taxonomy_info(hapd->iface, addr,
+ 				      &sta->probe_ie_taxonomy);
+ #endif /* CONFIG_TAXONOMY */
+--- a/wpa_supplicant/Makefile
++++ b/wpa_supplicant/Makefile
+@@ -256,6 +256,7 @@
+ ifdef CONFIG_MESH
++NEED_AP_MLME=y
+ NEED_80211_COMMON=y
+ NEED_SHA256=y
+ NEED_AES_SIV=y
+ CONFIG_SAE=y
+ CONFIG_AP=y

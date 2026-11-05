@@ -56,11 +56,6 @@ esac
 rm -rf "$work_dir" "$output_dir"
 mkdir -p "$work_dir" "$output_dir"
 
-# Several pinned feed recipes still use the retired GitHub git:// transport.
-# Keep the rewrite in this disposable build directory.
-export GIT_CONFIG_GLOBAL="$work_dir/.gitconfig"
-git config --file "$GIT_CONFIG_GLOBAL" url.https://github.com/.insteadOf git://github.com/
-
 # The snapshot intentionally has no build/staging products. J is an accidental
 # nested tar file and is not used by the OpenWrt build system.
 tar --extract --xz --file "$buildroot_archive" \
@@ -71,6 +66,10 @@ tar --extract --xz --file "$buildroot_archive" \
 # Keep recipe hashes and explicit source URLs; prefer the current OpenWrt cache.
 patch --directory "$work_dir" --strip 1 \
   < "$repo_root/patches/userspace-source-mirrors.patch"
+patch --directory "$work_dir" --strip 1 \
+  < "$repo_root/patches/userspace-ci-compat.patch"
+cp "$repo_root/patches/hostapd-taxonomy-mlme.patch" \
+  "$work_dir/package/network/services/hostapd/patches/999-taxonomy-mlme.patch"
 
 # Restore stripped LuCI payloads before applying the pinned upstream delta.
 git -C "$work_dir/feeds/luci" checkout HEAD -- \
@@ -542,6 +541,7 @@ elif [[ "$userspace_only" == 1 && -n "$shard_index" ]]; then
   make "${make_args[@]}" target/linux/configure
   prepare_kernel_modules
   compile_with_report "${shard_targets[@]}"
+  make --directory "$work_dir" package/index
 elif [[ "$userspace_only" == 1 ]]; then
   # `world` also compiles the vendor kernel, including modules unrelated to
   # this userspace feed. Some kmods are selected indirectly as dependencies;

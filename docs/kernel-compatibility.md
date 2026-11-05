@@ -61,7 +61,7 @@ to their exact SHA-256 payload and firmware. `xt_nat` remains withheld.
 
 ## Firmware inventory
 
-The public compatibility page lists 279 firmware branches from
+The public compatibility page lists 281 firmware branches from
 `FrancYescO/tch_firmware_extracted`, with source commits, kernel package,
 architecture, vendor kernel source and stock-module fingerprint. It describes
 build candidates, not a list of devices on which every module is supported.
@@ -71,7 +71,7 @@ build candidates, not a list of devices on which every module is supported.
 | 3.4.11 | 118 | 35 |
 | 4.1.38 | 55 | 12 |
 | 4.1.45 | 14 | 2 |
-| 4.1.52 | 92 | 17; three branches lack package metadata |
+| 4.1.52 | 94 | 17; three branches lack package metadata |
 
 The 66 identifiers are not 66 mandatory Git branches or proof of 66 incompatible
 module ABIs. The OpenWrt package fingerprint covers selected `y/m` configuration
@@ -105,7 +105,7 @@ compatibility.
 
 `kernel/4.1.38` is retained as an archive of the historical VBNTS buildroot.
 Its virtual kernel package is `4.1.38-1-e5d0b8e85af0ba3d06a2ba17859e868a`.
-None of the 279 inventoried firmware branches declares that complete package
+None of the 281 inventoried firmware branches declares that complete package
 identifier. There is no identified runtime target for these modules, and no
 claim that the generic feed works on the .45 or .204. It is useful as a build
 reference; the two exact runtime feeds provide the supported deployment path.
