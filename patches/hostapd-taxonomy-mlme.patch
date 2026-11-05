@@ -9,3 +9,13 @@
  	sta_track_claim_taxonomy_info(hapd->iface, addr,
  				      &sta->probe_ie_taxonomy);
  #endif /* CONFIG_TAXONOMY */
+--- a/wpa_supplicant/Makefile
++++ b/wpa_supplicant/Makefile
+@@ -256,6 +256,7 @@
+ ifdef CONFIG_MESH
++NEED_AP_MLME=y
+ NEED_80211_COMMON=y
+ NEED_SHA256=y
+ NEED_AES_SIV=y
+ CONFIG_SAE=y
+ CONFIG_AP=y

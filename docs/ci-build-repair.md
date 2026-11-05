@@ -19,7 +19,9 @@ targeted LuCI build. The failed run is 41940459355.
 - hostapd's taxonomy caller must use the same `NEED_AP_MLME` guard as the
   provider in beacon.c. The fix preserves taxonomy when MLME is built and
   avoids an undefined reference in non-MLME variants; it does not disable
-  the feature for valid wireless builds.
+  the feature for valid wireless builds. The mesh supplicant also explicitly
+  enables MLME, which its mesh/SAE objects require even when the selected
+  driver does not enable it implicitly.
 - MPD 0.20.9 needs C++14 and the bundled ZeroTier JSON header rejects GCC 4.8.
   Their versions and compiler checks remain unchanged. An explicit package
   constraint makes these recipes unavailable to the pinned 4.8 toolchain.
