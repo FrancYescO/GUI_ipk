@@ -26,7 +26,8 @@ class ExperimentalCompilerTests(unittest.TestCase):
                        USERSPACE_ONLY=userspace, PACKAGE_TARGETS=target,
                        SOURCE_DIR=temporary)
             return subprocess.run(['bash', str(ROOT / 'scripts/build-packages.sh')],
-                                  env=env, capture_output=True, text=True)
+                                  env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                  universal_newlines=True)
 
     def test_shared_build_cannot_enable_experimental_compiler(self):
         result = self.preflight('1')
@@ -62,7 +63,7 @@ class SwitchHeaderProbeTests(unittest.TestCase):
                 'TARGET_CC := ' + shutil.which('cc') + '\nLINUX_DIR := ' + str(work) + '\n' +
                 expression + "\nall:\n\t@printf '%s' '$(SWCONFIG_HAS_LINK)'\n")
             return subprocess.check_output(['make', '--no-print-directory', '-s', '-C', str(work)],
-                                           text=True).strip()
+                                           universal_newlines=True).strip()
 
     def test_complete_link_uapi_is_enabled(self):
         self.assertEqual(self.probe('enum { ' + ', '.join(LINK_IDS) + ' };\n'), '1')
