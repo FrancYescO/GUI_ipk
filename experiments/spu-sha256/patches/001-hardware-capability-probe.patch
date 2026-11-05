@@ -1,0 +1,24 @@
+--- a/spu.c
++++ b/spu.c
+@@ -44,6 +44,10 @@
+ #include "spu_runner.h"
+ #include "spu_blog.h"
+ 
++static bool experimental_sha256_hw128;
++module_param(experimental_sha256_hw128, bool, 0444);
++MODULE_PARM_DESC(experimental_sha256_hw128, "Lab-only SHA256-128 Runner capability probe");
++
+ struct spu_info *spuinfo = NULL;
+ 
+ /* Keep cipher acceleration; require opt-in for full ESP flow acceleration.
+@@ -218,7 +222,9 @@
+     char               *ptr2;
+     struct crypto_aead *aead = crypto_aead_reqtfm(areq);
+ 
+-    if (crypto_aead_authsize(aead) != SPU_MAX_ICV_LENGTH)
++    if (crypto_aead_authsize(aead) != SPU_MAX_ICV_LENGTH &&
++        !(experimental_sha256_hw128 && crypto_aead_authsize(aead) == 16 &&
++          (((struct spu_ctx *)crypto_aead_ctx(aead))->descAlg & BCM_DESC_AUTH_ALG_SHA256)))
+         return SPU_FALLBACK_METHOD_CIPHER;
+ 
+     do 

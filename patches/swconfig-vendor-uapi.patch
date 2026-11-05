@@ -1,6 +1,6 @@
 --- a/package/network/config/swconfig/Makefile
 +++ b/package/network/config/swconfig/Makefile
-@@ -23,8 +23,17 @@
+@@ -23,8 +23,18 @@
    TITLE:=Switch configuration utility
  endef
  
@@ -8,9 +8,10 @@
 +# implement the structured link attribute, so only expose it when all of the
 +# required identifiers are available.
 +SWCONFIG_HAS_LINK := $(shell \
-+	grep -q SWITCH_ATTR_OP_VALUE_LINK $(LINUX_DIR)/user_headers/include/linux/switch.h 2>/dev/null && \
-+	grep -q SWITCH_TYPE_LINK $(LINUX_DIR)/user_headers/include/linux/switch.h 2>/dev/null && \
-+	grep -q SWITCH_LINK_FLAG_RX_FLOW $(LINUX_DIR)/user_headers/include/linux/switch.h 2>/dev/null && echo 1)
++	printf '\043include <linux/switch.h>\n%s\n' \
++	'int swconfig_link_api[] = { SWITCH_TYPE_LINK, SWITCH_ATTR_OP_VALUE_LINK, SWITCH_LINK_ATTR_MAX, SWITCH_LINK_FLAG_ANEG, SWITCH_LINK_FLAG_DUPLEX, SWITCH_LINK_FLAG_EEE_1000BASET, SWITCH_LINK_FLAG_EEE_100BASET, SWITCH_LINK_FLAG_LINK, SWITCH_LINK_FLAG_RX_FLOW, SWITCH_LINK_FLAG_TX_FLOW, SWITCH_LINK_SPEED };' | \
++	$(TARGET_CC) $(TARGET_CPPFLAGS) $(TARGET_CFLAGS) \
++	-I$(LINUX_DIR)/user_headers/include -x c -fsyntax-only - >/dev/null 2>&1 && echo 1)
 +
  TARGET_CPPFLAGS := \
  	-D_GNU_SOURCE \

@@ -13,6 +13,27 @@ Newer optional ARM applications use pinned static SDKs. See
 [application updates](docs/application-updates.md) for versions, completed router
 checks, installation requirements and publication status.
 
+### LuCI maintenance update
+
+LuCI uses the final `openwrt-18.06` revision, pinned to `20b3600`
+(9 February 2021), applied as a checksum-verified delta to the archived
+`50788da` snapshot. Existing Homeware and translation overlays are applied
+afterwards. See [LuCI update details](docs/luci-update.md) for provenance,
+validation and runtime checks. This remains the historical 18.06 LuCI stack.
+
+### Scanner packages
+
+Both userspace and full profiles explicitly select SANE 1.0.27 from the
+snapshot: `libsane`, `sane-frontends` (`scanimage` and `sane-find-scanner`),
+`sane-daemon` (`saned`), all backends supported by the target, and `xinetd`
+for the network service. For a targeted scanner build, use
+`feeds/packages/sane-backends feeds/packages/xinetd` as `package_targets`.
+On the router, install `sane-frontends` and the backend for your scanner
+(for example `sane-pixma` or `sane-epson2`), then check detection with
+`sane-find-scanner` and `scanimage -L`. Network sharing additionally needs
+`sane-daemon`, `xinetd`, and configuration of `/etc/sane.d/saned.conf` and
+`/etc/xinetd.d/sane-port` to allow the intended LAN clients.
+
 ### OpenVPN backport
 
 The userspace recipe overlay in `build/userspace-overlay/` updates OpenVPN

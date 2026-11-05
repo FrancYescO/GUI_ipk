@@ -1,0 +1,4 @@
+musl-1.2.5.tar.gz	a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4	https://musl.libc.org/releases/musl-1.2.5.tar.gz
+wireguard-tools-1.0.20210914.tar.xz	942ed32d1d6631932c82ff86c91ae8428d4c90bfec231a14ebdf6c29f068e60b	https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-1.0.20210914.tar.xz
+iperf-3.18.tar.gz	c0618175514331e766522500e20c94bfb293b4424eb27d7207fb427b88d20bab	https://downloads.es.net/pub/iperf/iperf-3.18.tar.gz
+wireguard.ko	98e392edb92a574444c0555c9576f6ded0041421c938d0a4921789836c46e6e5	https://raw.githubusercontent.com/FrancYescO/GUI_ipk/441772b3fc4d2ff8586bd055dd8d3e04b90aaa90/artifacts/damson-4.1.52-manual/wireguard.ko

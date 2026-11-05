@@ -1,0 +1,80 @@
+
+./baseline-bcmspu.ko: OK
+./bcmspu.ko: OK
+./cryptodev_cbc_lab.ko: OK
+./sha1_spu_cbc_lab.ko: OK
+./spu_cbc_kat.ko: OK
+./spu_cbc_lab.ko: OK
+./spu_cbc_probe.ko: OK
+./spu_sha1_kat.ko: OK
+./vbntj_abi_canary.ko: OK
+session-test: OK
+redirect-crypto.so: OK
+evp-test: OK
+MODE=4
+f5f36629-c02e-420f-ba8f-ed6632ac1f57
+4
+PRIVATE_ALGORITHMS=12
+[16303.038294] spu_cbc_kat: ALL PASS
+[16303.038299] spu_cbc_kat: result=0
+[16414.398499] spu_cbc_kat: allocate hw=0 sw=0
+[16414.398680] spu_cbc_kat: AES128 len=16 inplace=0: PASS (0)
+[16414.399048] spu_cbc_kat: AES128 len=16 inplace=1: PASS (0)
+[16414.399152] spu_cbc_kat: AES128 len=32 inplace=0: PASS (0)
+[16414.399246] spu_cbc_kat: AES128 len=32 inplace=1: PASS (0)
+[16414.399343] spu_cbc_kat: AES128 len=64 inplace=0: PASS (0)
+[16414.399437] spu_cbc_kat: AES128 len=64 inplace=1: PASS (0)
+[16414.399698] spu_cbc_kat: AES128 len=1504 inplace=0: PASS (0)
+[16414.400286] spu_cbc_kat: AES128 len=1504 inplace=1: PASS (0)
+[16414.402417] spu_cbc_kat: AES128 len=16016 inplace=0: PASS (0)
+[16414.404559] spu_cbc_kat: AES128 len=16016 inplace=1: PASS (0)
+[16414.404690] spu_cbc_kat: AES192 len=16 inplace=0: PASS (0)
+[16414.404975] spu_cbc_kat: AES192 len=16 inplace=1: PASS (0)
+[16414.405072] spu_cbc_kat: AES192 len=32 inplace=0: PASS (0)
+[16414.405163] spu_cbc_kat: AES192 len=32 inplace=1: PASS (0)
+[16414.405258] spu_cbc_kat: AES192 len=64 inplace=0: PASS (0)
+[16414.405352] spu_cbc_kat: AES192 len=64 inplace=1: PASS (0)
+[16414.405623] spu_cbc_kat: AES192 len=1504 inplace=0: PASS (0)
+[16414.406327] spu_cbc_kat: AES192 len=1504 inplace=1: PASS (0)
+[16414.408630] spu_cbc_kat: AES192 len=16016 inplace=0: PASS (0)
+[16414.410969] spu_cbc_kat: AES192 len=16016 inplace=1: PASS (0)
+[16414.411100] spu_cbc_kat: AES256 len=16 inplace=0: PASS (0)
+[16414.411187] spu_cbc_kat: AES256 len=16 inplace=1: PASS (0)
+[16414.411280] spu_cbc_kat: AES256 len=32 inplace=0: PASS (0)
+[16414.411371] spu_cbc_kat: AES256 len=32 inplace=1: PASS (0)
+[16414.411465] spu_cbc_kat: AES256 len=64 inplace=0: PASS (0)
+[16414.411559] spu_cbc_kat: AES256 len=64 inplace=1: PASS (0)
+[16414.412328] spu_cbc_kat: AES256 len=1504 inplace=0: PASS (0)
+[16414.412619] spu_cbc_kat: AES256 len=1504 inplace=1: PASS (0)
+[16414.415136] spu_cbc_kat: AES256 len=16016 inplace=0: PASS (0)
+[16414.417567] spu_cbc_kat: AES256 len=16016 inplace=1: PASS (0)
+[16414.417691] spu_cbc_kat: AES128 len=16 inplace=0: PASS (0)
+[16414.417988] spu_cbc_kat: AES128 len=16 inplace=1: PASS (0)
+[16414.418088] spu_cbc_kat: AES128 len=32 inplace=0: PASS (0)
+[16414.418177] spu_cbc_kat: AES128 len=32 inplace=1: PASS (0)
+[16414.418270] spu_cbc_kat: AES128 len=64 inplace=0: PASS (0)
+[16414.418363] spu_cbc_kat: AES128 len=64 inplace=1: PASS (0)
+[16414.418621] spu_cbc_kat: AES128 len=1504 inplace=0: PASS (0)
+[16414.418916] spu_cbc_kat: AES128 len=1504 inplace=1: PASS (0)
+[16414.421660] spu_cbc_kat: AES128 len=16016 inplace=0: PASS (0)
+[16414.423894] spu_cbc_kat: AES128 len=16016 inplace=1: PASS (0)
+[16414.423902] spu_cbc_kat: ALL PASS
+[16414.423907] spu_cbc_kat: result=0
+Encryption stats
+     Ingress 0
+     Fallback 0
+     Egress 0
+     Error 0
+     Dropped 0
+Decryption stats
+     Ingress 96
+     Fallback 0
+     Egress 96
+     Error 0
+     Dropped 0
+CBC_ENCRYPT_CHUNKS
+48
+CBC_DECRYPT_CHUNKS
+48
+CLEANUP_OK
+f5f36629-c02e-420f-ba8f-ed6632ac1f57

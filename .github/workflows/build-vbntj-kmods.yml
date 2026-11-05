@@ -19,6 +19,7 @@ on:
           - network-feed
           - wireguard
           - spu-probe
+          - spu-cbc-probe
       wireguard_artifact_run_id:
         description: "Reverify existing WireGuard artifacts from this run without rebuilding"
         required: false
@@ -187,7 +188,7 @@ jobs:
         run: scripts/verify-wireguard-kmod.sh dist/vbntj-kmods 4.1.52
 
       - name: Verify SPU module and no boot autoload
-        if: inputs.module_set == 'spu-probe'
+        if: inputs.module_set == 'spu-probe' || inputs.module_set == 'spu-cbc-probe'
         run: python3 scripts/verify-kmod-spu.py dist/vbntj-kmods 4.1.52
 
       - name: Verify manual-only IPK safety
@@ -196,8 +197,36 @@ jobs:
       - name: Match rebuilt modules to the exact validation registry
         run: python3 scripts/verify-runtime-payloads.py dist/vbntj-kmods build/vbntj/validation/results.json
 
+      - name: Build isolated CBC userspace tools from pinned inputs
+        if: inputs.module_set == 'spu-cbc-probe'
+        run: |
+          mkdir -p .work/cbc-tools dist/vbntj-kmods/spu-cbc-lab
+          gh release download build-inputs-v1 --repo "$GITHUB_REPOSITORY" \
+            --pattern toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar --dir .work/cbc-tools
+          echo "9961ab5df4b863d07ab72cbb31fb9d95e365d00c057961e981b6a9f52c113395  .work/cbc-tools/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar" | sha256sum -c -
+          tar -xf .work/cbc-tools/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi.tar -C .work/cbc-tools
+          curl --fail --location --retry 3 https://sources.openwrt.org/openssl-1.0.2t.tar.gz --output .work/cbc-tools/openssl-1.0.2t.tar.gz
+          sudo chown -R 1000:1000 .work/cbc-tools dist/vbntj-kmods/spu-cbc-lab
+          docker run --rm --platform linux/amd64 --volume "$PWD:/repo" \
+            --volume "$PWD/.work/cbc-tools:/tools" --volume "$PWD/dist/vbntj-kmods/spu-cbc-lab:/out" \
+            vbntj-gpl-builder bash /repo/experiments/spu-cbc/build-userspace.sh \
+            /tools/toolchain-arm_cortex-a9+neon_gcc-4.8-linaro_glibc_eabi/bin/arm-openwrt-linux-gnueabi- \
+            /tools/openssl-1.0.2t.tar.gz /tools/build /out
+          sudo chown -R "$(id -u):$(id -g)" dist/vbntj-kmods/spu-cbc-lab
+          python3 experiments/spu-cbc/fetch-test-apps.py dist/vbntj-kmods/spu-cbc-lab/apps
+          python3 experiments/spu-cbc/audit-bundle.py dist/vbntj-kmods/spu-cbc-lab
+          python3 experiments/spu-cbc/manifest.py dist/vbntj-kmods/spu-cbc-lab
+          tar -czf dist/spu-cbc-4.1.52-vbntk.tar.gz -C dist/vbntj-kmods/spu-cbc-lab .
+      - name: Upload isolated experimental CBC bundle
+        if: inputs.module_set == 'spu-cbc-probe'
+        uses: actions/upload-artifact@v7
+        with:
+          name: spu-cbc-4.1.52-vbntk-${{ github.sha }}
+          path: dist/spu-cbc-4.1.52-vbntk.tar.gz
+          if-no-files-found: error
+          retention-days: 30
       - name: Upload VBNT-K modules and manual-only IPKs
-        if: always()
+        if: always() && inputs.module_set != 'spu-cbc-probe'
         uses: actions/upload-artifact@v7
         with:
           name: damson-4.1.52-${{ env.MODULE_SET }}-${{ github.sha }}
