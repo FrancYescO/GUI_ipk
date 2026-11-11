@@ -42,7 +42,7 @@ def write_report(source, destination, style, script):
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Linux 4.1.52 module validation</title><style>{style}code {{ overflow-wrap: anywhere; }}</style></head><body>
 <header><h1>Linux 4.1.52 module validation</h1>
-<p>Updated {html.escape(report['updated'])}. Device: VBNT-K at .69, firmware {html.escape(report['firmware'])}.
+<p>Updated {html.escape(report['updated'])}. Device: VBNT-K, firmware {html.escape(report['firmware'])}.
 Kernel: 4.1.52 SMP preempt mod_unload ARMv7. Kernel package: <code>{html.escape(report['kernel_package'])}</code>.</p>
 <p><strong>{functional} functional passes; {smoke} load/unload and namespace smoke passes;
 {counts['skip_busy']} busy stock modules left unchanged; {counts['compiled']} replacement payloads checked offline only.</strong> A smoke pass does not establish full functionality.

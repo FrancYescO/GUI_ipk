@@ -8,9 +8,9 @@ VBNT-K public feed alias.
 
 | Profile | Feed | New module validation |
 | --- | --- | --- |
-| 4.1.38-vbnto | `kernel/4.1.38-vbnto` | Final CI artifact functionally tested on .45 |
-| 4.1.38-vbntk | `kernel/4.1.38-vbntk` | Final CI artifact functionally tested on .204 |
-| 4.1.52-vbntk | `kernel/4.1.52-vbntk` | Offline symbols; existing stock cryptodev busy on .69 |
+| 4.1.38-vbnto | `kernel/4.1.38-vbnto` | Final CI artifact functionally tested on VBNT-O |
+| 4.1.38-vbntk | `kernel/4.1.38-vbntk` | Final CI artifact functionally tested on VBNT-S |
+| 4.1.52-vbntk | `kernel/4.1.52-vbntk` | Offline symbols; existing stock cryptodev busy on VBNT-K |
 | 4.1.52-vcnt3 | `kernel/4.1.52-vcnt3` | Offline checked |
 | 4.1.52-vcnt2 | `kernel/4.1.52-vcnt2` | Offline checked (both firmware 19.4.0381 and 19.4.0393) |
 | 4.1.52-vcntj | `kernel/4.1.52-vcntj` | Offline checked |
@@ -30,7 +30,7 @@ chmod 600 /dev/crypto
 rmmod cryptodev
 ```
 
-A stock driver already in use must be left loaded. In particular, the .69 has
+A stock driver already in use must be left loaded. In particular, the VBNT-K has
 stock cryptodev open in nginx and generic_pnpd; the new module was not substituted.
 Installing the package alone does not activate the driver. Applications
 need explicit cryptodev support; installing this module does not automatically
@@ -72,7 +72,7 @@ allocation failure. This regression test is run in CI before building modules.
 
 `build/cryptodev/tests/runtime.c` exercises AES-CBC using NIST known answers
 (encrypt/decrypt, separate/in-place buffers, copy/zero-copy), SHA256, RFC4231 HMAC,
-invalid requests and unprivileged-open rejection. On both .45 and .204, the exact
+invalid requests and unprivileged-open rejection. On both VBNT-O and VBNT-S, the exact
 CI payload (SHA256 `9736f4dc5d68dacbe021849f108fcaeefab611334302f79b74f9663ed96e65af`)
 passed all these tests, including EPERM on a temporary node in `/dev` with mode
 0666. The temporary nodes and modules were removed after testing. AES-GCM tests are included, but

@@ -53,16 +53,16 @@ def page(title, selected, groups, feeds, prefix):
 def kernel_manifest(records):
     vbntk = json.loads((ROOT / 'build/kernel-profiles/vbntk-4.1.52.json').read_text())
     definitions = [
-        ('4.1.38-vbnto', 'DGA4131FWB / VBNT-O', '18.3.n.0439', '.45', '4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d'),
-        ('4.1.38-vbntk', 'DGA4132 / VBNT-S', '18.3.k.0451', '.204', '4.1.38-1-8dd693635a152c8c7b822a64e6c5c470'),
-        ('4.1.52-vbntk', vbntk['device'], vbntk['firmware'], '.69', vbntk['kernel_package']),
+        ('4.1.38-vbnto', 'DGA4131FWB / VBNT-O', '18.3.n.0439', '4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d'),
+        ('4.1.38-vbntk', 'DGA4132 / VBNT-S', '18.3.k.0451', '4.1.38-1-8dd693635a152c8c7b822a64e6c5c470'),
+        ('4.1.52-vbntk', vbntk['device'], vbntk['firmware'], vbntk['kernel_package']),
     ]
     for profile, entry in firmware_definitions().items():
         if entry.get('bundle'):
             definitions.append((profile, entry['device'], ', '.join(entry['verified_firmwares']),
-                                'CDC/RNDIS partially tested on device' if profile == '4.1.52-vcnt3' else 'offline checks only', entry['kernel_package']))
+                                entry['kernel_package']))
     profiles, candidates = [], []
-    for profile, device, firmware, router, version in definitions:
+    for profile, device, firmware, version in definitions:
         for staging in (False, True):
             key = profile + ('-candidates' if staging else '')
             selected = [r for r in records if r['section'] == 'kernel/' + key]
@@ -70,7 +70,7 @@ def kernel_manifest(records):
                 continue
             name = 'modgui_kernel_' + key.replace('.', '_').replace('-', '_')
             url = SITE + '/kernel/' + key
-            row = {'profile': key, 'device': device, 'firmware': firmware, 'validation_router': router,
+            row = {'profile': key, 'device': device, 'firmware': firmware,
                    'kernel_package': version, 'count': len(selected),
                    'module_count': sum(parse(r['control']).get('X-Kernel-Capability') != 'yes' for r in selected),
                    'capability_count': sum(parse(r['control']).get('X-Kernel-Capability') == 'yes' for r in selected),
@@ -89,11 +89,11 @@ def kernel_manifest(records):
 def write_kernel_overview(site, manifest):
     rows = []
     for row in manifest['profiles'] + manifest['candidates']:
-        rows.append('<tr><td><a href="{url}/">{profile}</a></td><td>{device}<br>{firmware} ({router})</td>'
+        rows.append('<tr><td><a href="{url}/">{profile}</a></td><td>{device}<br>{firmware}</td>'
                     '<td>{count}</td><td>{status}</td><td><code>{abi}</code></td></tr>'.format(
                         url=html.escape(row['url']), profile=html.escape(row['profile']),
                         device=html.escape(row['device']), firmware=html.escape(row['firmware']),
-                        router=row['validation_router'], count=str(row['count']) + '<br><small>' + str(row['module_count']) + ' module IPKs; ' + str(row['capability_count']) + ' capabilities</small>', status=row['status'] + '<br><a href="' + row['validation_url'] + '">Per-module results</a>',
+                        count=str(row['count']) + '<br><small>' + str(row['module_count']) + ' module IPKs; ' + str(row['capability_count']) + ' capabilities</small>', status=row['status'] + '<br><a href="' + row['validation_url'] + '">Per-module results</a>',
                         abi=html.escape(row['kernel_package'])))
     sources = ''.join('<h3>' + html.escape(r['profile']) + '</h3><pre>' + html.escape(r['source']) + '</pre>'
                       for r in manifest['profiles'])
@@ -101,14 +101,14 @@ def write_kernel_overview(site, manifest):
                          for r in manifest['candidates'])
     content = '''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Available kernel OPKG feeds</title><style>''' + pages.STYLE + '''code, pre {overflow-wrap:anywhere;white-space:pre-wrap}</style></head><body>
-<h1>Available kernel OPKG feeds</h1><p>''' + str(len(manifest['profiles'])) + ''' installable ABI feeds and ''' + str(len(manifest['candidates'])) + ''' separate candidate feeds, all hosted on Pages.
+<h1>Available kernel OPKG feeds</h1><p>''' + str(len(manifest['profiles'])) + ''' installable ABI feeds and ''' + str(len(manifest['candidates'])) + ''' separate candidate feeds. All installable modules use standard firmware paths.
 Enable only the feed matching your complete installed <code>kernel</code> package version.
 Linux version or operator branding alone is insufficient. Other firmware sharing the ABI still needs runtime validation.</p>
 <nav><a href="../index.html">All packages</a><a href="../compatibility/">Firmware compatibility</a>
 <a href="../feeds.json">Feed manifest</a><a href="../validation/4.1.38/">4.1.38 candidate history</a><a href="../validation/4.1.52/">4.1.52 tests</a></nav>
 <pre>opkg status kernel</pre><div class="table-wrap"><table><thead><tr><th>Feed</th><th>Reference device / firmware</th><th>IPKs</th><th>Validation</th><th>Required kernel package version</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
 <h2>Installable OPKG sources — choose one exact ABI</h2>''' + sources + '''
-<p>The three original hardware-tested profiles contain the same 50 module names. The five additional 4.1.52 profiles install modules at standard firmware paths and retain per-module offline or runtime validation labels.
+<p>The 4.1.38 profiles include the audited former candidates, with duplicates consolidated in favor of existing validated payloads. The five additional 4.1.52 profiles install modules at standard firmware paths and retain per-module offline or runtime validation labels.
 VBNT-O: 14 new functional passes and 30 busy stock modules left unchanged.
 VBNT-S: 15 new functional passes, 1 namespace smoke pass and 28 busy stock modules left unchanged.
 Both 4.1.38 profiles also reuse the exact five previously validated TUN, WireGuard, SPU, CDC Ethernet and RNDIS host payloads.
@@ -128,14 +128,14 @@ the existing stock cryptodev was busy in nginx and generic_pnpd and was left act
 Cryptodev on VCNT-2/3/J/A and VBNT-V remains verified offline only. This synchronous build requires CAP_SYS_ADMIN; firmware may override device modes,
 so set <code>chmod 600 /dev/crypto</code> after manual loading. No OpenSSL engine or hardware acceleration is enabled automatically.
 <a href="https://github.com/FrancYescO/GUI_ipk/blob/main/build/cryptodev/README.md">Source, tests and loading instructions</a>.</p>
-<h2>Legacy 4.1.38 candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages remain separate pending further audit.
-The five additional 4.1.52 profiles are now ordinary exact-ABI feeds, selected by the source helper.
-Only the VCNT-3 CDC Ethernet/RNDIS pair has hardware evidence for USB binding and DHCP; reboot persistence, reconnect and Internet traffic remain untested.
-Other modules are clearly labelled offline-checked. No installation hook loads modules automatically. xt_nat remains withheld.</p>''' + candidates + '''
+<h2>Per-module validation and historical aliases</h2><p>All eight exact-ABI feeds install modules in standard /lib/modules paths.
+Descriptions distinguish offline checks from hardware tests. Original 4.1.38 duplicate payloads are retained only as source provenance; existing validated payloads take precedence.
+VCNT-3 CDC Ethernet/RNDIS has USB binding and DHCP hardware evidence; reboot, reconnect and Internet traffic remain untested.
+Previous candidate URLs are aliases of the canonical feeds. No package hook loads modules automatically. xt_nat remains withheld.</p>''' + candidates + '''
 <h2>VBNT-K canonical feeds and VBNT-S aliases</h2><p>VBNT-K is the canonical public feed name for each kernel version.
 <a href="4.1.38-vbnts/Packages.gz">4.1.38-vbnts</a> is an OPKG alias of 4.1.38-vbntk;
 <a href="4.1.52-vbnts/Packages.gz">4.1.52-vbnts</a> is an OPKG alias of 4.1.52-vbntk.
-The VBNT-S candidate URL likewise aliases 4.1.38-vbntk-candidates.
+The historical candidate URLs likewise alias the canonical installable feeds.
 Aliases serve real package indexes pointing to the canonical IPKs, with unchanged exact ABI dependencies.
 Validation device names and package names retain their original provenance. Enable each ABI feed only once.</p>
 <h2>Historical paths</h2><p><a href="4.1.52/">kernel/4.1.52</a> is an OPKG-compatible alias of 4.1.52-vbntk.

@@ -46,10 +46,10 @@ kernel sources, configuration, exported symbols and structure layouts must match
 Equal kernel packages or stock modules identify candidates; they do not certify newly built modules.</p>
 <p>The tested 4.1.38 profiles cover DGA4131FWB 18.3.n.0439 and DGA4132 18.3.k.0451.
 Other operators in this inventory do not share their complete kernel package identifiers.
-VBNT-K 4.1.52 tests were performed on .69, firmware 19.4.1051-3401200. Other rows sharing its kernel package remain candidates requiring runtime checks.</p>
+VBNT-K 4.1.52 tests were performed on VBNT-K, firmware 19.4.1051-3401200. Other rows sharing its kernel package remain candidates requiring runtime checks.</p>
 <p>FW261/FW264 are awaiting complete kernel images from an original RBI or bank dump; a saved runtime configuration is another option. No supported feed is claimed for them.
 The five additional 4.1.52 feeds install modules in standard /lib/modules paths with per-module offline or runtime validation labels.
-The remaining legacy 4.1.38 candidate feeds install modules in a staging directory and require manual checks.
+Both 4.1.38 feeds also install their audited modules in standard paths; historical candidate URLs are aliases.
 They do not replace stock modules or configure autoload. xt_nat remains withheld.</p>
 <nav><a href="../index.html">All packages</a>
 <a href="../kernel/4.1.38-vbnto-candidates/index.html">VBNT-O candidates</a>

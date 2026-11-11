@@ -214,3 +214,22 @@ including five explicit CDC/RNDIS standard-path migrations retaining stock
 USBnet. Evidence is in `validation/standard-paths-*` beside this document's
 source metadata. Rendered manifests expose eight selectable profiles and only
 two legacy staging profiles. No new hardware run or reboot is claimed.
+
+## 4.1.38 consolidation (metadata policy 5)
+
+The 4.1.38 feeds now use standard `/lib/modules/4.1.38/` paths for all active
+packages. All candidate URLs are aliases; no staging-only feed remains.
+Duplicate consolidation retains 223 unique modules on VBNT-O and 214 on
+VBNT-K/S. Ninety-five archived duplicates are omitted, always preferring the
+already published standard-path payload, including all exact hardware-tested
+reference payloads. Source archives remain available for historical audits.
+
+The active catalog has 735 unique module payloads and 974 complete capability
+packages (1,709 kernel records). ELF bytes are unchanged. Legacy import closure
+is checked against pinned kernel exports and the retained module exports.
+SPU is the explicit exception: the saved kernel-only list lacks vendor
+RDPA/BDMF exports, while the identical retained SPU payload already has
+hardware validation. `validation/legacy-4138-selection.json` records input
+hashes, discarded/retained hashes and the exact exception. Runtime labels
+are tied to existing per-payload evidence; all other modules retain offline
+labels. Public pages identify model and firmware without private IP suffixes.

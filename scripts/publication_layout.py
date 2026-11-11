@@ -18,7 +18,9 @@ KERNEL_ALIASES = {
     '4.1.52': '4.1.52-vbntk',
     '4.1.38-vbnts': '4.1.38-vbntk',
     '4.1.52-vbnts': '4.1.52-vbntk',
-    '4.1.38-vbnts-candidates': '4.1.38-vbntk-candidates',
+    '4.1.38-vbnts-candidates': '4.1.38-vbntk',
+    '4.1.38-vbnto-candidates': '4.1.38-vbnto',
+    '4.1.38-vbntk-candidates': '4.1.38-vbntk',
     **{p + '-candidates': p for p in ('4.1.52-vcnt3', '4.1.52-vcnt2', '4.1.52-vcntj', '4.1.52-vcnta', '4.1.52-vbntv')},
 }
 TRANSPORT = {'Filename', 'Size', 'SHA256sum', 'MD5Sum'}
@@ -221,6 +223,10 @@ def prepare(userspace, applications, output):
                 if Path(old_name).name != old_name:
                     raise ValueError('Unsafe archived kernel input name')
                 shutil.copyfile(row['_archive_source'], pages / section / old_name)
+            for old in row.get('_legacy_archives', []):
+                destination = pages / 'kernel' / (row['profile'] + '-candidates')
+                destination.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(old['path'], destination / old['filename'])
     # Retain profile diagnostics beside their candidate feeds, without overwriting
     # the generated indexes or duplicating package bytes.
     for profile in ('vbnto', 'vbnts'):

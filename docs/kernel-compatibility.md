@@ -14,15 +14,15 @@ source lines, package counts, exact ABIs and reference firmware.
 
 | Feed | Scope |
 | --- | --- |
-| `kernel/4.1.38-vbnto` | 49 packages aligned with VBNT-K; reference DGA4131FWB, 18.3.n.0439, kernel package ending `08839f3f6145d3a5d2d04be7567e3f9d` |
-| `kernel/4.1.38-vbntk` | 49 packages aligned with VBNT-K; reference DGA4132, 18.3.k.0451, kernel package ending `8dd693635a152c8c7b822a64e6c5c470` |
-| `kernel/4.1.52-vbntk` | VBNT-K at .69, firmware 19.4.1051-3401200; per-module validation levels |
+| `kernel/4.1.38-vbnto` | 223 unique standard-path modules; reference DGA4131FWB, 18.3.n.0439, kernel package ending `08839f3f6145d3a5d2d04be7567e3f9d` |
+| `kernel/4.1.38-vbntk` | 214 unique standard-path modules; reference DGA4132, 18.3.k.0451, kernel package ending `8dd693635a152c8c7b822a64e6c5c470` |
+| `kernel/4.1.52-vbntk` | VBNT-K, firmware 19.4.1051-3401200; per-module validation levels |
 | `kernel/4.1.52` | Compatibility alias of `4.1.52-vbntk` |
-| `kernel/4.1.38-vbnto-candidates` | 220 staged candidate IPKs for the exact VBNT-O kernel package above |
-| `kernel/4.1.38-vbntk-candidates` | 212 staged candidate IPKs for the exact VBNT-S kernel package above |
+| `kernel/4.1.38-vbnto-candidates` | Historical alias of the VBNT-O ordinary feed |
+| `kernel/4.1.38-vbntk-candidates` | Historical alias of the VBNT-K/S ordinary feed |
 | `kernel/4.1.38` | Historical archive only; no active OPKG feed or identified compatible firmware |
 
-There are three runtime feeds. Enable only the one whose complete kernel
+There are eight ordinary exact-ABI feeds. Enable only the one whose complete kernel
 package version matches `opkg status kernel`:
 
 ```text
@@ -35,29 +35,19 @@ These lines are alternatives, not a combined configuration. The source-selection
 helper chooses exactly one matching ABI. See the per-module reports for test
 levels; matching firmware metadata alone is not runtime validation.
 
-### Optional staging-only candidates
+### Standard paths and historical candidate URLs
 
-The two candidate feeds are separate and are not enabled by the helper. Add
-one only for manual validation, matching the firmware's installed `kernel` package, for example:
+Both 4.1.38 feeds now include the audited former candidates under
+`/lib/modules/4.1.38/`, with complete module dependencies and exact ABI guards.
+The former candidate URLs are aliases; the helper selects one canonical ABI
+feed. Duplicate archived modules are omitted in favor of existing validated
+payloads. Per-module labels distinguish runtime tests from offline checks.
 
-```text
-src/gz gui_kernel_vbntk_candidates https://francyesco.github.io/GUI_ipk/kernel/4.1.38-vbntk-candidates
-```
-
-Check the installed kernel package with `opkg status kernel`. These IPKs retain
-an exact kernel dependency. Do not replace the virtual kernel package or use
-`--force-depends` to bypass a mismatch.
-
-`opkg update` exposes the candidates; installing one stages its module under
-`/usr/lib/kernel-module-candidates/4.1.38/` (VBNT-O) or
-`/usr/lib/kernel-module-candidates/4.1.38-vbnts/` (VBNT-S). It does not replace
-stock modules, add boot autoload or activate the module. Loading is a separate
-manual operation after ABI and dependency checks. Candidate dependencies on
-other modules must be checked against stock exports and the build manifest;
-the packages do not represent a complete automatic kernel-module dependency
-resolver. Per-payload test status is exposed in the OPKG indexes; most
-candidates have only been compiled. Existing functional results apply only
-to their exact SHA-256 payload and firmware. `xt_nat` remains withheld.
+Installing a module does not load it or configure autoload. Existing stock
+ownership requires controlled migration after consumers are stopped and the
+module is unloaded. Old staging packages are not removed automatically.
+`xt_nat` remains withheld. Original source bundles and audit history retain
+their original paths for reproducibility.
 
 ## Firmware inventory
 
@@ -107,7 +97,7 @@ compatibility.
 Its virtual kernel package is `4.1.38-1-e5d0b8e85af0ba3d06a2ba17859e868a`.
 None of the 281 inventoried firmware branches declares that complete package
 identifier. There is no identified runtime target for these modules, and no
-claim that the generic feed works on the .45 or .204. It is useful as a build
+claim that the generic feed works on the VBNT-O or VBNT-S. It is useful as a build
 reference; the two exact runtime feeds provide the supported deployment path.
 
 ## USB RNDIS compatibility pair
@@ -130,7 +120,7 @@ FreeSWITCH sounds uses a binary package Release. The three immutable
 compiler/build-input releases remain necessary for CI.
 
 The VBNT-K 4.1.52 packages declare `arm_cortex-a9`, confirmed in OPKG on
-.69. The former `brcm963xx` package architecture is not accepted by that modem.
+VBNT-K. The former `brcm963xx` package architecture is not accepted by that modem.
 Package names and version `4.1.52-1` are retained for those traffic-tested corrections; container metadata and
 filenames change, while every module payload remains identical to the registry.
 Run `opkg update` to obtain the refreshed indexes.
@@ -143,9 +133,8 @@ checksum-pinned profile candidate bundles and are repackaged reproducibly as
 manual runtime IPKs. No 4.1.52 binary is reused on 4.1.38. The original vendor
 4.1.38 source/configuration builds remain the source path for recompilation.
 
-On 2026-10-27, 44 network-module probes completed on each modem. VBNT-O (.45)
-passed 14 functional tests and left 30 busy stock modules unchanged. VBNT-S
-(.204) passed 15 functional tests plus one load/unload and namespace smoke test,
+On 2026-10-27, 44 network-module probes completed on each modem. VBNT-O
+passed 14 functional tests and left 30 busy stock modules unchanged. VBNT-S passed 15 functional tests plus one load/unload and namespace smoke test,
 and left 28 busy stock modules unchanged. The five existing TUN, WireGuard,
 SPU, CDC Ethernet and RNDIS payloads retain their prior exact-payload evidence.
 
@@ -185,4 +174,4 @@ busy observation and original payload hash remain in the validation history.
 Current canonical sources and module-specific validation are listed in the
 [kernel overview](https://francyesco.github.io/GUI_ipk/kernel/). Automatic
 selection includes all eight installable profiles only when the full installed
-kernel package ABI matches. The two legacy 4.1.38 staging feeds remain separate.
+kernel package ABI matches. The historical 4.1.38 candidate URLs are aliases of the ordinary feeds.

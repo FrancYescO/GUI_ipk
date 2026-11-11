@@ -18,7 +18,8 @@ from kernel_firmware import config_options, elf_module
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build/kernel-opkg-providers'
-POLICY = '4'
+POLICY = '5'
+LEGACY_PROFILES = {'4.1.38-vbnto', '4.1.38-vbntk'}
 
 
 def sha(data):
@@ -53,12 +54,60 @@ def upgraded(version):
 
 
 def runtime_evidence(profile, module, payload):
+    if profile in LEGACY_PROFILES:
+        internal = 'vbnts' if profile.endswith('vbntk') else 'vbnto'
+        report = json.loads((ROOT / ('build/' + internal + '-4.1.38/runtime-validation/results.json')).read_text())
+        if report['kernel_package'] != definitions()[profile]['kernel_package']:
+            raise ValueError('Runtime evidence ABI mismatch: ' + profile)
+        for item in report['modules']:
+            if item['name'] == module and item['sha256'] == sha(payload) and item['status'] == 'passed':
+                return {'tests': [item['level'], item.get('note', '')], 'status': 'passed; see exact test scope'}
+        return None
     evidence = json.loads((ROOT / 'build/kernel-firmware-profiles/runtime-validation.json').read_text())
     entry = evidence.get(profile, {})
     result = entry.get('modules', {}).get(module)
     if result and (result['sha256'] != sha(payload) or entry['kernel_package'] != definitions()[profile]['kernel_package']):
         raise ValueError('Runtime evidence belongs to a different payload or ABI: ' + profile + '/' + module)
     return result
+
+
+def select_legacy_inputs(rows):
+    """Prefer existing standard-path payloads over duplicate archived builds."""
+    selected, duplicates = {}, []
+    for row in sorted(rows, key=lambda r: fields(r['control']).get('X-Module-Staging-Only') == 'yes'):
+        if row['profile'] not in LEGACY_PROFILES:
+            continue
+        blob = Path(row['_path']).read_bytes()
+        if sha(blob) != row['sha256']:
+            raise ValueError('Unverified legacy source IPK')
+        data = unpack(unpack(blob)['data.tar.gz'])
+        if len(data) != 1:
+            raise ValueError('Expected one legacy module')
+        path, payload = next(iter(data.items()))
+        key = (row['profile'], Path(path).stem)
+        if key in selected:
+            duplicates.append({'profile': key[0], 'module': key[1], 'discarded_package': row['package'],
+                               'discarded_sha256': sha(payload), 'selected_sha256': selected[key][1]['sha256']})
+        else:
+            selected[key] = (row, dict(elf_module(payload), sha256=sha(payload), payload=payload))
+    audit = {'duplicates': duplicates, 'profiles': {}}
+    for profile in sorted(LEGACY_PROFILES):
+        modules = {name: value for (p, name), (_, value) in selected.items() if p == profile}
+        raw_exports = (ROOT / 'build/cryptodev' / (profile + '-exports.json.gz')).read_bytes()
+        exports = set(json.loads(gzip.decompress(raw_exports)))
+        exports.update(s for m in modules.values() for s in m['exports'])
+        exceptions = {}
+        for name, module in modules.items():
+            missing = sorted(set(module['imports']) - exports)
+            if missing:
+                if name != 'bcmspu' or not runtime_evidence(profile, name, module['payload']):
+                    raise ValueError('Unresolved legacy imports: ' + profile + '/' + name + ': ' + ', '.join(missing))
+                exceptions[name] = {'symbols': missing, 'module_sha256': module['sha256'],
+                                    'evidence': 'Exact-payload hardware validation; vendor RDPA/BDMF exports are absent from the saved kernel-only list'}
+        audit['profiles'][profile] = {'module_count': len(modules), 'kernel_package': definitions()[profile]['kernel_package'],
+                                      'exports_sha256': sha(raw_exports), 'runtime_proven_symbol_exceptions': exceptions}
+    retained = {row['package'] for row, _ in selected.values()}
+    return [r for r in rows if r['profile'] not in LEGACY_PROFILES or r['package'] in retained], audit
 
 
 def config(profile):
@@ -178,7 +227,9 @@ def emit(row, control, ipk, output):
 
 
 def apply(rows, output):
-    promoted = {p for p, entry in firmware_definitions().items() if entry.get('installable')}
+    original_rows = list(rows)
+    rows, selection = select_legacy_inputs(rows)
+    promoted = LEGACY_PROFILES | {p for p, entry in firmware_definitions().items() if entry.get('installable')}
     rows = [dict(r, section='kernel/' + r['profile'] + ('-candidates' if fields(r['control']).get('X-Module-Staging-Only') == 'yes' and r['profile'] not in promoted else '')) for r in rows]
     mapping = json.loads((BUILD / 'legacy-map.json').read_text())
     profiles = definitions()
@@ -223,7 +274,7 @@ def apply(rows, output):
         if evidence:
             f['X-Runtime-Validated'] = 'yes'
             f['X-Runtime-Test'] = '; '.join(evidence['tests'])
-            f['X-Runtime-Test-Status'] = 'passed; reboot, reconnect and Internet traffic not tested'
+            f['X-Runtime-Test-Status'] = evidence.get('status', 'passed; reboot, reconnect and Internet traffic not tested')
         if profile in promoted or module == 'cryptodev':
             level = 'runtime-tested' if f.get('X-Runtime-Validated') == 'yes' else 'offline-checked'
             f['X-Validation-Level'] = level
@@ -453,6 +504,11 @@ def apply(rows, output):
             row['_archive_filename'] = original['filename']
     if len({(r['section'], r['package'], r['version'], r['architecture']) for r in result}) != len(result):
         raise ValueError('Duplicate package identity within a feed')
+    for profile in LEGACY_PROFILES:
+        archives = [dict(path=r['_path'], filename=r['filename']) for r in original_rows
+                    if r['profile'] == profile and fields(r['control']).get('X-Module-Staging-Only') == 'yes']
+        next(r for r in result if r['profile'] == profile)['_legacy_archives'] = archives
+    (output / 'source-selection.json').write_text(json.dumps(selection, indent=2, sort_keys=True) + '\n')
     (output / 'coverage.json').write_text(json.dumps(reports, indent=2, sort_keys=True) + '\n')
     return result
 

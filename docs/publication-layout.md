@@ -1,10 +1,10 @@
 # Public OPKG publication
 
 Pages hosts the six main userspace feeds (`base`, `luci`, `packages`, `routing`,
-`telephony`, `target/packages`), Asterisk 20, eight installable exact-ABI kernel profiles and two legacy 4.1.38 candidate feeds. Only the eight large FreeSWITCH sound
+`telephony`, `target/packages`), Asterisk 20, eight installable exact-ABI kernel profiles with historical candidate URL aliases. Only the eight large FreeSWITCH sound
 packages use a binary Release feed (about 387 MiB).
 
-The catalog contains 7,015 records: 7,007 are on Pages, including 1,449 kernel
+The catalog contains 7,275 records: 7,267 are on Pages, including 1,709 kernel
 module/capability IPKs; eight FreeSWITCH sound packages use Release. Kernel ELF
 payloads are unchanged by the standard-path repack. `feeds.json` lists each
 source, while descriptions and validation reports distinguish hardware tests
@@ -18,11 +18,11 @@ status. Kernel release alone, such as `uname -r`, does not identify the ABI.
 
 | Pages path | Reference device / firmware | IPKs | Use |
 |---|---|---:|---|
-| `kernel/4.1.38-vbnto` | DGA4131FWB / VBNT-O, 18.3.n.0439 (.45) | 50 | Installable modules; per-module test levels differ |
-| `kernel/4.1.38-vbntk` | DGA4132 / VBNT-S, 18.3.k.0451 (.204) | 50 | Installable modules; per-module test levels differ |
-| `kernel/4.1.52-vbntk` | DGA4130 / VBNT-K, 19.4.1051-3401200 (.69) | 50 | Installable modules; per-module test levels differ |
-| `kernel/4.1.38-vbnto-candidates` | VBNT-O ABI above | 220 | Optional staging only; manual validation |
-| `kernel/4.1.38-vbntk-candidates` | VBNT-S ABI above | 212 | Optional staging only; manual validation |
+| `kernel/4.1.38-vbnto` | DGA4131FWB / VBNT-O, 18.3.n.0439 | 223 | Installable modules; per-module test levels differ |
+| `kernel/4.1.38-vbntk` | DGA4132 / VBNT-S, 18.3.k.0451 | 214 | Installable modules; per-module test levels differ |
+| `kernel/4.1.52-vbntk` | DGA4130 / VBNT-K, 19.4.1051-3401200 | 50 | Installable modules; per-module test levels differ |
+| `kernel/4.1.38-vbnto-candidates` | VBNT-O ABI above | — | Historical alias of the canonical ordinary feed |
+| `kernel/4.1.38-vbntk-candidates` | VBNT-S ABI above | — | Historical alias of the canonical ordinary feed |
 
 Five additional ordinary feeds are available: `kernel/4.1.52-vcnt3`,
 `kernel/4.1.52-vcnt2`, `kernel/4.1.52-vcntj`, `kernel/4.1.52-vcnta`, and
@@ -33,8 +33,8 @@ VCNT-3/A and VBNT-V use arm_cortex-a9. Telstra TUN is built in.
 All five sources participate in exact-ABI automatic selection. Modules install
 under `/lib/modules/4.1.52/` with no automatic loading. VCNT-3 CDC/RNDIS has
 USB-binding/DHCP hardware evidence; the other modules retain offline labels.
-Old `-candidates` URLs are aliases, not separate feeds. Only the two historical
-4.1.38 staging feeds remain separate. Stock ownership and dependency checks
+All former `-candidates` URLs, including 4.1.38, are aliases of ordinary feeds.
+The 4.1.38 feeds contain 223 and 214 unique module payloads after duplicate consolidation. Stock ownership and dependency checks
 remain enforced; xt_nat is withheld. See [firmware feeds](firmware-kernel-candidates.md).
 
 ## Reproducibility and release retention

@@ -123,11 +123,11 @@ runtime profiles:
 | --- | --- |
 | `kernel/4.1.38-vbnto` | DGA4131FWB, 18.3.n.0439 |
 | `kernel/4.1.38-vbntk` | DGA4132, 18.3.k.0451 |
-| `kernel/4.1.52-vbntk` | VBNT-K at .69, 19.4.1051-3401200 |
+| `kernel/4.1.52-vbntk` | VBNT-K, 19.4.1051-3401200 |
 
 The old `kernel/4.1.52` URL remains an alias of the VBNT-K profile. The generic
 `kernel/4.1.38` feed is retained as a legacy buildroot archive with no identified
-runtime-compatible firmware. Optional staged candidate feeds and per-payload
+runtime-compatible firmware. Per-profile feeds and per-payload
 validation levels are described in [kernel compatibility](docs/kernel-compatibility.md).
 The 4.1.52 tests include 14 functional passes, two load/unload namespace passes,
 32 busy stock modules left unchanged, one conntrack replacement checked offline only, and withheld xt_nat. A matching Linux
@@ -182,6 +182,6 @@ sound packages use a binary Release feed. See the [kernel feed overview](https:/
 VBNT-K is the canonical public feed name: `kernel/4.1.38-vbntk` and
 `kernel/4.1.52-vbntk`. The corresponding versioned `vbnts` URLs are OPKG aliases
 serving real indexes with relative paths to the canonical IPKs. The 4.1.38
-candidate feed follows the same convention. Unversioned device aliases are removed.
+historical candidate URL aliases the canonical ordinary feed. Unversioned device aliases are removed.
 Package names, payloads, exact ABI dependencies and original validation evidence
 are unchanged; the 4.1.38 reference test device remains VBNT-S.

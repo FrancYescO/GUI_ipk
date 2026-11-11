@@ -1,0 +1,17 @@
+{
+  "policy": 5,
+  "physical_modules": 735,
+  "capabilities": 974,
+  "kernel_records": 1709,
+  "legacy_modules": {
+    "4.1.38-vbnto": 223,
+    "4.1.38-vbntk": 214
+  },
+  "duplicates_consolidated": 95,
+  "old_opkg_abis_passed": 8,
+  "local_full_suite_passed": 158,
+  "latest_provider_suite_passed": 17,
+  "legacy_unique_paths_test": "passed",
+  "rendered_pages_private_ip_suffix_check": "passed",
+  "no_new_hardware_test_performed": true
+}

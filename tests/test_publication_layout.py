@@ -22,8 +22,8 @@ class PublicationTests(unittest.TestCase):
     def test_complete_bootstrap_has_semantic_components_and_all_updates(self):
         catalog = json.loads(gzip.decompress((ROOT / 'build/publication/bootstrap.json.gz').read_bytes()))
         rows = catalog['records']
-        self.assertEqual(len(rows), 7015)
-        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 7007)
+        self.assertEqual(len(rows), 7275)
+        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 7267)
         self.assertEqual(set(catalog['releases']), {'freeswitch-sounds'})
         self.assertLess(sum(r['size'] for r in rows if r['storage'] == 'pages'), 750 * 1024**2)
         pins = json.loads((ROOT / 'build/application-archive/manifest.json').read_text())
@@ -45,9 +45,9 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual({r['url'].rsplit('/', 1)[1]: r['profile'] for r in manifest['aliases']}, layout.KERNEL_ALIASES)
         self.assertNotIn('url', manifest)  # No misleading combined OPKG source.
         self.assertEqual([(r['profile'], r['module_count']) for r in manifest['profiles']],
-                         [('4.1.38-vbnto', 50), ('4.1.38-vbntk', 50), ('4.1.52-vbntk', 50), ('4.1.52-vcnt3', 50), ('4.1.52-vcnt2', 50), ('4.1.52-vcntj', 50), ('4.1.52-vcnta', 49), ('4.1.52-vbntv', 49)])
+                         [('4.1.38-vbnto', 223), ('4.1.38-vbntk', 214), ('4.1.52-vbntk', 50), ('4.1.52-vcnt3', 50), ('4.1.52-vcnt2', 50), ('4.1.52-vcntj', 50), ('4.1.52-vcnta', 49), ('4.1.52-vbntv', 49)])
         self.assertEqual([(r['profile'], r['module_count']) for r in manifest['candidates']],
-                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212)])
+                         [])
         for row in manifest['profiles'] + manifest['candidates']:
             self.assertEqual(row['url'], layout.SITE + '/kernel/' + row['profile'])
             self.assertTrue(row['source'].endswith(' ' + row['url']))
@@ -59,6 +59,8 @@ class PublicationTests(unittest.TestCase):
             (site / 'kernel').mkdir()
             renderer.write_kernel_overview(site, manifest)
             page = (site / 'kernel/index.html').read_text()
+            for suffix in ('(.45)', '(.204)', '(.69)', 'at .69'):
+                self.assertNotIn(suffix, page)
             for row in manifest['profiles'] + manifest['candidates']:
                 self.assertIn(row['source'], page)
             self.assertIn('no compatible runtime firmware', page)

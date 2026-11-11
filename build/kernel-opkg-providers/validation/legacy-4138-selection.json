@@ -1,0 +1,731 @@
+{
+  "duplicates": [
+    {
+      "discarded_package": "kmod-act-connmark-4.1.38-candidate",
+      "discarded_sha256": "2cde682ab9b363342341c12b09af0b8f0b35bb07920dd60c31cef6c23a1d4759",
+      "module": "act_connmark",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "2cde682ab9b363342341c12b09af0b8f0b35bb07920dd60c31cef6c23a1d4759"
+    },
+    {
+      "discarded_package": "kmod-act-skbedit-4.1.38-candidate",
+      "discarded_sha256": "e5072a30bb01263db9de6f4fcb0a59094a03c726176e060c3c2f28503d8b639f",
+      "module": "act_skbedit",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "e5072a30bb01263db9de6f4fcb0a59094a03c726176e060c3c2f28503d8b639f"
+    },
+    {
+      "discarded_package": "kmod-cdc-ether-4.1.38-candidate",
+      "discarded_sha256": "ef4e13212f3e6d19275ecdc3e5c9a5536600d0fe0c92dc823bd29cdb3f150400",
+      "module": "cdc_ether",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "7883cd569ee0132f646ef501c67dec02e281dc8d826b9bfbd3814f93cc0e67d2"
+    },
+    {
+      "discarded_package": "kmod-cls-flow-4.1.38-candidate",
+      "discarded_sha256": "7acf46b1f2bdc6f8963d161ad0b16fbf0ac8ecf298497b0f4edf335031eaa8f1",
+      "module": "cls_flow",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "7acf46b1f2bdc6f8963d161ad0b16fbf0ac8ecf298497b0f4edf335031eaa8f1"
+    },
+    {
+      "discarded_package": "kmod-em-u32-4.1.38-candidate",
+      "discarded_sha256": "78f4a980574df49162b45177114b8fdd82b3cf0b4f6061265c82b5cd218a6e33",
+      "module": "em_u32",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "78f4a980574df49162b45177114b8fdd82b3cf0b4f6061265c82b5cd218a6e33"
+    },
+    {
+      "discarded_package": "kmod-ip-tables-4.1.38-candidate",
+      "discarded_sha256": "13321891981a877bf6ee97857cc9056166170f164959757d27eb2dc339ba27e7",
+      "module": "ip_tables",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "13321891981a877bf6ee97857cc9056166170f164959757d27eb2dc339ba27e7"
+    },
+    {
+      "discarded_package": "kmod-ip6-tables-4.1.38-candidate",
+      "discarded_sha256": "2bd4ccb999bec4a63bd87a1e2456500c66f2f95fe2ebc77f8cc52c3c31d2d43e",
+      "module": "ip6_tables",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "2bd4ccb999bec4a63bd87a1e2456500c66f2f95fe2ebc77f8cc52c3c31d2d43e"
+    },
+    {
+      "discarded_package": "kmod-ip6t-reject-4.1.38-candidate",
+      "discarded_sha256": "b42e8e6ad596648a440d64c9552956196e96fd3d378fceafd3d3caee891bb4ae",
+      "module": "ip6t_REJECT",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "b42e8e6ad596648a440d64c9552956196e96fd3d378fceafd3d3caee891bb4ae"
+    },
+    {
+      "discarded_package": "kmod-ip6table-filter-4.1.38-candidate",
+      "discarded_sha256": "62a1e775cd49b76a463cd23b0b324c8873aecaaea7e9f9312fb5a18808304ab2",
+      "module": "ip6table_filter",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "62a1e775cd49b76a463cd23b0b324c8873aecaaea7e9f9312fb5a18808304ab2"
+    },
+    {
+      "discarded_package": "kmod-ip6table-mangle-4.1.38-candidate",
+      "discarded_sha256": "6575a9e25e3906692e84d74be7f9c8b112869a99e5f5f990160d3d3a5bc1276a",
+      "module": "ip6table_mangle",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "6575a9e25e3906692e84d74be7f9c8b112869a99e5f5f990160d3d3a5bc1276a"
+    },
+    {
+      "discarded_package": "kmod-ipt-masquerade-4.1.38-candidate",
+      "discarded_sha256": "2a664da030bd64a03ab008ce9279b8d1a03862b09a10c298f5b50f3a6667f01c",
+      "module": "ipt_MASQUERADE",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "2a664da030bd64a03ab008ce9279b8d1a03862b09a10c298f5b50f3a6667f01c"
+    },
+    {
+      "discarded_package": "kmod-ipt-reject-4.1.38-candidate",
+      "discarded_sha256": "b45640935e0f27dc1e6abd30537c663a21c3d6e038fe10bc2538e235ab88fb21",
+      "module": "ipt_REJECT",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "b45640935e0f27dc1e6abd30537c663a21c3d6e038fe10bc2538e235ab88fb21"
+    },
+    {
+      "discarded_package": "kmod-iptable-filter-4.1.38-candidate",
+      "discarded_sha256": "d4e7349caf43ef3a410172c7d08c0f75e44e2edc42e2eb369823f044e959607f",
+      "module": "iptable_filter",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "d4e7349caf43ef3a410172c7d08c0f75e44e2edc42e2eb369823f044e959607f"
+    },
+    {
+      "discarded_package": "kmod-iptable-mangle-4.1.38-candidate",
+      "discarded_sha256": "a4fd905abc6d66093dc10f9786a291f6afc5ce8f2d8a77cfa18c43da48934188",
+      "module": "iptable_mangle",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "a4fd905abc6d66093dc10f9786a291f6afc5ce8f2d8a77cfa18c43da48934188"
+    },
+    {
+      "discarded_package": "kmod-iptable-nat-4.1.38-candidate",
+      "discarded_sha256": "b579aeaafdcf6b0c61ccbd5dcc5cb1782e5b37fba8e1bbdadf90d4d0a83a99b3",
+      "module": "iptable_nat",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "b579aeaafdcf6b0c61ccbd5dcc5cb1782e5b37fba8e1bbdadf90d4d0a83a99b3"
+    },
+    {
+      "discarded_package": "kmod-nf-conntrack-4.1.38-candidate",
+      "discarded_sha256": "7d1e1dd4c8ac07735d83b354de24124afd443fc50a6d29598f062f63711520d8",
+      "module": "nf_conntrack",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "7d1e1dd4c8ac07735d83b354de24124afd443fc50a6d29598f062f63711520d8"
+    },
+    {
+      "discarded_package": "kmod-nf-conntrack-ipv4-4.1.38-candidate",
+      "discarded_sha256": "a822d90f768c57b660fb9e826fa94363b3f35de5d3a4c234d5e64c38f838721d",
+      "module": "nf_conntrack_ipv4",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "a822d90f768c57b660fb9e826fa94363b3f35de5d3a4c234d5e64c38f838721d"
+    },
+    {
+      "discarded_package": "kmod-nf-conntrack-ipv6-4.1.38-candidate",
+      "discarded_sha256": "e3eaae932ba058b37386da23ae10495b3ef3e3b7a53430a272cc256bc1b59d72",
+      "module": "nf_conntrack_ipv6",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "e3eaae932ba058b37386da23ae10495b3ef3e3b7a53430a272cc256bc1b59d72"
+    },
+    {
+      "discarded_package": "kmod-nf-defrag-ipv4-4.1.38-candidate",
+      "discarded_sha256": "0d1bebf8ecd7dbd4a4c071cf15c17687a0809f870e044efbae17d88b2c0c6519",
+      "module": "nf_defrag_ipv4",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "0d1bebf8ecd7dbd4a4c071cf15c17687a0809f870e044efbae17d88b2c0c6519"
+    },
+    {
+      "discarded_package": "kmod-nf-defrag-ipv6-4.1.38-candidate",
+      "discarded_sha256": "ae19c5b8ab0593e00c591b8669691423ad17303420a866d0f99daadc1cb8c8a1",
+      "module": "nf_defrag_ipv6",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "ae19c5b8ab0593e00c591b8669691423ad17303420a866d0f99daadc1cb8c8a1"
+    },
+    {
+      "discarded_package": "kmod-nf-log-common-4.1.38-candidate",
+      "discarded_sha256": "366fe533e362545a5bceecab6e1feca6c392cd6da4b80f33d9b90e287d7de80b",
+      "module": "nf_log_common",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "366fe533e362545a5bceecab6e1feca6c392cd6da4b80f33d9b90e287d7de80b"
+    },
+    {
+      "discarded_package": "kmod-nf-log-ipv4-4.1.38-candidate",
+      "discarded_sha256": "cf072309400ce0d8dc2efee181ae206d8b658efbcc2fc31d86ad58b4384fb93c",
+      "module": "nf_log_ipv4",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "cf072309400ce0d8dc2efee181ae206d8b658efbcc2fc31d86ad58b4384fb93c"
+    },
+    {
+      "discarded_package": "kmod-nf-log-ipv6-4.1.38-candidate",
+      "discarded_sha256": "e50072c6f5523a2bfdd3e45f8cfb1d4a36e37e758cedc03b25710a6bf32866cc",
+      "module": "nf_log_ipv6",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "e50072c6f5523a2bfdd3e45f8cfb1d4a36e37e758cedc03b25710a6bf32866cc"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-4.1.38-candidate",
+      "discarded_sha256": "8c0dede39f331b0abe8f248967939dba5bfcabc2aaa7cdfd3422b500fb3947ff",
+      "module": "nf_nat",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "8c0dede39f331b0abe8f248967939dba5bfcabc2aaa7cdfd3422b500fb3947ff"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-ipv4-4.1.38-candidate",
+      "discarded_sha256": "d8d513d4af819a07da35c77533145af382a97c2641be3c534574535e0c271ba8",
+      "module": "nf_nat_ipv4",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "d8d513d4af819a07da35c77533145af382a97c2641be3c534574535e0c271ba8"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-masquerade-ipv4-4.1.38-candidate",
+      "discarded_sha256": "e3b69862c2ba107b16df3ff922151b2748b220a72e8dd5af59d829502d2f77d8",
+      "module": "nf_nat_masquerade_ipv4",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "e3b69862c2ba107b16df3ff922151b2748b220a72e8dd5af59d829502d2f77d8"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-redirect-4.1.38-candidate",
+      "discarded_sha256": "4d1721303c0032f5185d0a0bfc44b8864864c3d2f5e9682b47084b8bd633c697",
+      "module": "nf_nat_redirect",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "4d1721303c0032f5185d0a0bfc44b8864864c3d2f5e9682b47084b8bd633c697"
+    },
+    {
+      "discarded_package": "kmod-sch-hfsc-4.1.38-candidate",
+      "discarded_sha256": "7ca6e51a8bb4895bc4c85f7bf8343d31b99b55a38a99c9456ff97369253b5d30",
+      "module": "sch_hfsc",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "7ca6e51a8bb4895bc4c85f7bf8343d31b99b55a38a99c9456ff97369253b5d30"
+    },
+    {
+      "discarded_package": "kmod-tun-4.1.38-candidate",
+      "discarded_sha256": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430",
+      "module": "tun",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430"
+    },
+    {
+      "discarded_package": "kmod-wireguard-4.1.38-candidate",
+      "discarded_sha256": "feb7ac9824f0615fe62a20ae4f1ff4385c0422d9f7892a20da6f4f4f64f97336",
+      "module": "wireguard",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "feb7ac9824f0615fe62a20ae4f1ff4385c0422d9f7892a20da6f4f4f64f97336"
+    },
+    {
+      "discarded_package": "kmod-xt-comment-4.1.38-candidate",
+      "discarded_sha256": "50821d404413d2da01747ed9d21644f74f8aa197a68290f2eb3afa187f5e3e2d",
+      "module": "xt_comment",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "50821d404413d2da01747ed9d21644f74f8aa197a68290f2eb3afa187f5e3e2d"
+    },
+    {
+      "discarded_package": "kmod-xt-connbytes-4.1.38-candidate",
+      "discarded_sha256": "22e5e108a2de0e389d9715777f36cbc2215e16c35eef0f630e028bcbc5f48350",
+      "module": "xt_connbytes",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "22e5e108a2de0e389d9715777f36cbc2215e16c35eef0f630e028bcbc5f48350"
+    },
+    {
+      "discarded_package": "kmod-xt-connlimit-4.1.38-candidate",
+      "discarded_sha256": "7c691e0185021174d40868c6c9c04b14f0db3777eca530a2a2ee1de86d6a3e85",
+      "module": "xt_connlimit",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "7c691e0185021174d40868c6c9c04b14f0db3777eca530a2a2ee1de86d6a3e85"
+    },
+    {
+      "discarded_package": "kmod-xt-connmark-4.1.38-candidate",
+      "discarded_sha256": "79fe5bb140b7bb561a537aa4fe3e210cb64222cb45d56973a460dc674d776ece",
+      "module": "xt_connmark",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "79fe5bb140b7bb561a537aa4fe3e210cb64222cb45d56973a460dc674d776ece"
+    },
+    {
+      "discarded_package": "kmod-xt-conntrack-4.1.38-candidate",
+      "discarded_sha256": "2e30db0184ddb9acff11d8ba773bf3516a06948b9481da2a6e762944b6b9345a",
+      "module": "xt_conntrack",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "2e30db0184ddb9acff11d8ba773bf3516a06948b9481da2a6e762944b6b9345a"
+    },
+    {
+      "discarded_package": "kmod-xt-ct-4.1.38-candidate",
+      "discarded_sha256": "5e3087b5496a0b79c5a504caf6ad21be4e93e7e278ecc044db586bf91bb644a3",
+      "module": "xt_CT",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "5e3087b5496a0b79c5a504caf6ad21be4e93e7e278ecc044db586bf91bb644a3"
+    },
+    {
+      "discarded_package": "kmod-xt-helper-4.1.38-candidate",
+      "discarded_sha256": "a8f342c5ee288fd5ade2c42bec1d3b157013e5213149b018ff00072bf94f7324",
+      "module": "xt_helper",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "a8f342c5ee288fd5ade2c42bec1d3b157013e5213149b018ff00072bf94f7324"
+    },
+    {
+      "discarded_package": "kmod-xt-limit-4.1.38-candidate",
+      "discarded_sha256": "8bbf6da6df6389a45b05abc63cf818ef7017b72c1ee64d4c6a9de73853aeada7",
+      "module": "xt_limit",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "8bbf6da6df6389a45b05abc63cf818ef7017b72c1ee64d4c6a9de73853aeada7"
+    },
+    {
+      "discarded_package": "kmod-xt-log-4.1.38-candidate",
+      "discarded_sha256": "6c84b91c31394961781867f74cb93a39059e7998978d568061d7d7df4c5c6673",
+      "module": "xt_LOG",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "6c84b91c31394961781867f74cb93a39059e7998978d568061d7d7df4c5c6673"
+    },
+    {
+      "discarded_package": "kmod-xt-mac-4.1.38-candidate",
+      "discarded_sha256": "29348cfd0566fd05fda2c29ab6322f4f3888ad598391267f902e6f389cc7b3a1",
+      "module": "xt_mac",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "29348cfd0566fd05fda2c29ab6322f4f3888ad598391267f902e6f389cc7b3a1"
+    },
+    {
+      "discarded_package": "kmod-xt-mark-4.1.38-candidate",
+      "discarded_sha256": "c61da93fcccb55343a637a170d7fc83682f4a4164dcc2b2859d1a9672865c376",
+      "module": "xt_mark",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "c61da93fcccb55343a637a170d7fc83682f4a4164dcc2b2859d1a9672865c376"
+    },
+    {
+      "discarded_package": "kmod-xt-multiport-4.1.38-candidate",
+      "discarded_sha256": "0cf2d68f27625df1d381a749354cb190a7ca11a7c09f3d6a476b33a3e2fe138a",
+      "module": "xt_multiport",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "0cf2d68f27625df1d381a749354cb190a7ca11a7c09f3d6a476b33a3e2fe138a"
+    },
+    {
+      "discarded_package": "kmod-xt-recent-4.1.38-candidate",
+      "discarded_sha256": "224f169ff9fb96e533938909a5394ef80ff1932c1de4c7d666a1f7a76cf43979",
+      "module": "xt_recent",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "224f169ff9fb96e533938909a5394ef80ff1932c1de4c7d666a1f7a76cf43979"
+    },
+    {
+      "discarded_package": "kmod-xt-redirect-4.1.38-candidate",
+      "discarded_sha256": "7b7e568d4b5a8df869643631d643b2149fd0ff27cd09ec43e48cd2936554076b",
+      "module": "xt_REDIRECT",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "7b7e568d4b5a8df869643631d643b2149fd0ff27cd09ec43e48cd2936554076b"
+    },
+    {
+      "discarded_package": "kmod-xt-state-4.1.38-candidate",
+      "discarded_sha256": "e30bb49969c97c7fdca3ef7815f8ba655df002297e03640061f7728b85e88ce3",
+      "module": "xt_state",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "e30bb49969c97c7fdca3ef7815f8ba655df002297e03640061f7728b85e88ce3"
+    },
+    {
+      "discarded_package": "kmod-xt-tcpmss-target-4.1.38-candidate",
+      "discarded_sha256": "b061c7a9fb5fe3eb82404dcca47e44fe24adb66d6d50d64e82f3eaa93a8a4105",
+      "module": "xt_TCPMSS",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "b061c7a9fb5fe3eb82404dcca47e44fe24adb66d6d50d64e82f3eaa93a8a4105"
+    },
+    {
+      "discarded_package": "kmod-xt-time-4.1.38-candidate",
+      "discarded_sha256": "7a8413d79685849ed1223be188f2f0f09810e2ba2872da2f62002ff7ed98baec",
+      "module": "xt_time",
+      "profile": "4.1.38-vbnto",
+      "selected_sha256": "7a8413d79685849ed1223be188f2f0f09810e2ba2872da2f62002ff7ed98baec"
+    },
+    {
+      "discarded_package": "kmod-act-connmark-vbnts-4.1.38-candidate",
+      "discarded_sha256": "2cde682ab9b363342341c12b09af0b8f0b35bb07920dd60c31cef6c23a1d4759",
+      "module": "act_connmark",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "2cde682ab9b363342341c12b09af0b8f0b35bb07920dd60c31cef6c23a1d4759"
+    },
+    {
+      "discarded_package": "kmod-act-skbedit-vbnts-4.1.38-candidate",
+      "discarded_sha256": "e5072a30bb01263db9de6f4fcb0a59094a03c726176e060c3c2f28503d8b639f",
+      "module": "act_skbedit",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "e5072a30bb01263db9de6f4fcb0a59094a03c726176e060c3c2f28503d8b639f"
+    },
+    {
+      "discarded_package": "kmod-cdc-ether-vbnts-4.1.38-candidate",
+      "discarded_sha256": "b5dbf99839774f1cb4308ec3bc2fd0c04eba4b12f6d14413238194ff2c35a147",
+      "module": "cdc_ether",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "7883cd569ee0132f646ef501c67dec02e281dc8d826b9bfbd3814f93cc0e67d2"
+    },
+    {
+      "discarded_package": "kmod-cls-flow-vbnts-4.1.38-candidate",
+      "discarded_sha256": "7acf46b1f2bdc6f8963d161ad0b16fbf0ac8ecf298497b0f4edf335031eaa8f1",
+      "module": "cls_flow",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "7acf46b1f2bdc6f8963d161ad0b16fbf0ac8ecf298497b0f4edf335031eaa8f1"
+    },
+    {
+      "discarded_package": "kmod-em-u32-vbnts-4.1.38-candidate",
+      "discarded_sha256": "78f4a980574df49162b45177114b8fdd82b3cf0b4f6061265c82b5cd218a6e33",
+      "module": "em_u32",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "78f4a980574df49162b45177114b8fdd82b3cf0b4f6061265c82b5cd218a6e33"
+    },
+    {
+      "discarded_package": "kmod-ip-tables-vbnts-4.1.38-candidate",
+      "discarded_sha256": "13321891981a877bf6ee97857cc9056166170f164959757d27eb2dc339ba27e7",
+      "module": "ip_tables",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "13321891981a877bf6ee97857cc9056166170f164959757d27eb2dc339ba27e7"
+    },
+    {
+      "discarded_package": "kmod-ip6-tables-vbnts-4.1.38-candidate",
+      "discarded_sha256": "2bd4ccb999bec4a63bd87a1e2456500c66f2f95fe2ebc77f8cc52c3c31d2d43e",
+      "module": "ip6_tables",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "2bd4ccb999bec4a63bd87a1e2456500c66f2f95fe2ebc77f8cc52c3c31d2d43e"
+    },
+    {
+      "discarded_package": "kmod-ip6t-reject-vbnts-4.1.38-candidate",
+      "discarded_sha256": "b42e8e6ad596648a440d64c9552956196e96fd3d378fceafd3d3caee891bb4ae",
+      "module": "ip6t_REJECT",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "b42e8e6ad596648a440d64c9552956196e96fd3d378fceafd3d3caee891bb4ae"
+    },
+    {
+      "discarded_package": "kmod-ip6table-filter-vbnts-4.1.38-candidate",
+      "discarded_sha256": "62a1e775cd49b76a463cd23b0b324c8873aecaaea7e9f9312fb5a18808304ab2",
+      "module": "ip6table_filter",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "62a1e775cd49b76a463cd23b0b324c8873aecaaea7e9f9312fb5a18808304ab2"
+    },
+    {
+      "discarded_package": "kmod-ip6table-mangle-vbnts-4.1.38-candidate",
+      "discarded_sha256": "6575a9e25e3906692e84d74be7f9c8b112869a99e5f5f990160d3d3a5bc1276a",
+      "module": "ip6table_mangle",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "6575a9e25e3906692e84d74be7f9c8b112869a99e5f5f990160d3d3a5bc1276a"
+    },
+    {
+      "discarded_package": "kmod-ipt-masquerade-vbnts-4.1.38-candidate",
+      "discarded_sha256": "2a664da030bd64a03ab008ce9279b8d1a03862b09a10c298f5b50f3a6667f01c",
+      "module": "ipt_MASQUERADE",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "2a664da030bd64a03ab008ce9279b8d1a03862b09a10c298f5b50f3a6667f01c"
+    },
+    {
+      "discarded_package": "kmod-ipt-reject-vbnts-4.1.38-candidate",
+      "discarded_sha256": "b45640935e0f27dc1e6abd30537c663a21c3d6e038fe10bc2538e235ab88fb21",
+      "module": "ipt_REJECT",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "b45640935e0f27dc1e6abd30537c663a21c3d6e038fe10bc2538e235ab88fb21"
+    },
+    {
+      "discarded_package": "kmod-iptable-filter-vbnts-4.1.38-candidate",
+      "discarded_sha256": "d4e7349caf43ef3a410172c7d08c0f75e44e2edc42e2eb369823f044e959607f",
+      "module": "iptable_filter",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "d4e7349caf43ef3a410172c7d08c0f75e44e2edc42e2eb369823f044e959607f"
+    },
+    {
+      "discarded_package": "kmod-iptable-mangle-vbnts-4.1.38-candidate",
+      "discarded_sha256": "a4fd905abc6d66093dc10f9786a291f6afc5ce8f2d8a77cfa18c43da48934188",
+      "module": "iptable_mangle",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "a4fd905abc6d66093dc10f9786a291f6afc5ce8f2d8a77cfa18c43da48934188"
+    },
+    {
+      "discarded_package": "kmod-iptable-nat-vbnts-4.1.38-candidate",
+      "discarded_sha256": "b579aeaafdcf6b0c61ccbd5dcc5cb1782e5b37fba8e1bbdadf90d4d0a83a99b3",
+      "module": "iptable_nat",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "b579aeaafdcf6b0c61ccbd5dcc5cb1782e5b37fba8e1bbdadf90d4d0a83a99b3"
+    },
+    {
+      "discarded_package": "kmod-nf-conntrack-ipv4-vbnts-4.1.38-candidate",
+      "discarded_sha256": "a822d90f768c57b660fb9e826fa94363b3f35de5d3a4c234d5e64c38f838721d",
+      "module": "nf_conntrack_ipv4",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "a822d90f768c57b660fb9e826fa94363b3f35de5d3a4c234d5e64c38f838721d"
+    },
+    {
+      "discarded_package": "kmod-nf-conntrack-ipv6-vbnts-4.1.38-candidate",
+      "discarded_sha256": "e3eaae932ba058b37386da23ae10495b3ef3e3b7a53430a272cc256bc1b59d72",
+      "module": "nf_conntrack_ipv6",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "e3eaae932ba058b37386da23ae10495b3ef3e3b7a53430a272cc256bc1b59d72"
+    },
+    {
+      "discarded_package": "kmod-nf-conntrack-vbnts-4.1.38-candidate",
+      "discarded_sha256": "7d1e1dd4c8ac07735d83b354de24124afd443fc50a6d29598f062f63711520d8",
+      "module": "nf_conntrack",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "7d1e1dd4c8ac07735d83b354de24124afd443fc50a6d29598f062f63711520d8"
+    },
+    {
+      "discarded_package": "kmod-nf-defrag-ipv4-vbnts-4.1.38-candidate",
+      "discarded_sha256": "0d1bebf8ecd7dbd4a4c071cf15c17687a0809f870e044efbae17d88b2c0c6519",
+      "module": "nf_defrag_ipv4",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "0d1bebf8ecd7dbd4a4c071cf15c17687a0809f870e044efbae17d88b2c0c6519"
+    },
+    {
+      "discarded_package": "kmod-nf-defrag-ipv6-vbnts-4.1.38-candidate",
+      "discarded_sha256": "ae19c5b8ab0593e00c591b8669691423ad17303420a866d0f99daadc1cb8c8a1",
+      "module": "nf_defrag_ipv6",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "ae19c5b8ab0593e00c591b8669691423ad17303420a866d0f99daadc1cb8c8a1"
+    },
+    {
+      "discarded_package": "kmod-nf-log-common-vbnts-4.1.38-candidate",
+      "discarded_sha256": "366fe533e362545a5bceecab6e1feca6c392cd6da4b80f33d9b90e287d7de80b",
+      "module": "nf_log_common",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "366fe533e362545a5bceecab6e1feca6c392cd6da4b80f33d9b90e287d7de80b"
+    },
+    {
+      "discarded_package": "kmod-nf-log-ipv4-vbnts-4.1.38-candidate",
+      "discarded_sha256": "cf072309400ce0d8dc2efee181ae206d8b658efbcc2fc31d86ad58b4384fb93c",
+      "module": "nf_log_ipv4",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "cf072309400ce0d8dc2efee181ae206d8b658efbcc2fc31d86ad58b4384fb93c"
+    },
+    {
+      "discarded_package": "kmod-nf-log-ipv6-vbnts-4.1.38-candidate",
+      "discarded_sha256": "e50072c6f5523a2bfdd3e45f8cfb1d4a36e37e758cedc03b25710a6bf32866cc",
+      "module": "nf_log_ipv6",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "e50072c6f5523a2bfdd3e45f8cfb1d4a36e37e758cedc03b25710a6bf32866cc"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-ipv4-vbnts-4.1.38-candidate",
+      "discarded_sha256": "d8d513d4af819a07da35c77533145af382a97c2641be3c534574535e0c271ba8",
+      "module": "nf_nat_ipv4",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "d8d513d4af819a07da35c77533145af382a97c2641be3c534574535e0c271ba8"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-masquerade-ipv4-vbnts-4.1.38-candidate",
+      "discarded_sha256": "e3b69862c2ba107b16df3ff922151b2748b220a72e8dd5af59d829502d2f77d8",
+      "module": "nf_nat_masquerade_ipv4",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "e3b69862c2ba107b16df3ff922151b2748b220a72e8dd5af59d829502d2f77d8"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-redirect-vbnts-4.1.38-candidate",
+      "discarded_sha256": "4d1721303c0032f5185d0a0bfc44b8864864c3d2f5e9682b47084b8bd633c697",
+      "module": "nf_nat_redirect",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "4d1721303c0032f5185d0a0bfc44b8864864c3d2f5e9682b47084b8bd633c697"
+    },
+    {
+      "discarded_package": "kmod-nf-nat-vbnts-4.1.38-candidate",
+      "discarded_sha256": "8c0dede39f331b0abe8f248967939dba5bfcabc2aaa7cdfd3422b500fb3947ff",
+      "module": "nf_nat",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "8c0dede39f331b0abe8f248967939dba5bfcabc2aaa7cdfd3422b500fb3947ff"
+    },
+    {
+      "discarded_package": "kmod-rndis-host-vbnts-4.1.38-candidate",
+      "discarded_sha256": "450ff3f50f3dd66eb470368a6c894024be224e04e04a96196440adef159aa5ab",
+      "module": "rndis_host",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "9bc13ec5f901f6ac7a0d8cdcb286a8bd4c861bb26fa8595bf7553c7299ef20d6"
+    },
+    {
+      "discarded_package": "kmod-sch-hfsc-vbnts-4.1.38-candidate",
+      "discarded_sha256": "7ca6e51a8bb4895bc4c85f7bf8343d31b99b55a38a99c9456ff97369253b5d30",
+      "module": "sch_hfsc",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "7ca6e51a8bb4895bc4c85f7bf8343d31b99b55a38a99c9456ff97369253b5d30"
+    },
+    {
+      "discarded_package": "kmod-tun-vbnts-4.1.38-candidate",
+      "discarded_sha256": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430",
+      "module": "tun",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "bb0ef2f018acad6904c5505a9a164dd23136c809b2294cf9d9c4dce1eded8430"
+    },
+    {
+      "discarded_package": "kmod-wireguard-vbnts-4.1.38-candidate",
+      "discarded_sha256": "feb7ac9824f0615fe62a20ae4f1ff4385c0422d9f7892a20da6f4f4f64f97336",
+      "module": "wireguard",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "bfa5cbe40da286805416ca421a0d604a5bd32f42573c64060a4106c9ea5d8b42"
+    },
+    {
+      "discarded_package": "kmod-xt-comment-vbnts-4.1.38-candidate",
+      "discarded_sha256": "50821d404413d2da01747ed9d21644f74f8aa197a68290f2eb3afa187f5e3e2d",
+      "module": "xt_comment",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "50821d404413d2da01747ed9d21644f74f8aa197a68290f2eb3afa187f5e3e2d"
+    },
+    {
+      "discarded_package": "kmod-xt-connbytes-vbnts-4.1.38-candidate",
+      "discarded_sha256": "22e5e108a2de0e389d9715777f36cbc2215e16c35eef0f630e028bcbc5f48350",
+      "module": "xt_connbytes",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "22e5e108a2de0e389d9715777f36cbc2215e16c35eef0f630e028bcbc5f48350"
+    },
+    {
+      "discarded_package": "kmod-xt-connlimit-vbnts-4.1.38-candidate",
+      "discarded_sha256": "7c691e0185021174d40868c6c9c04b14f0db3777eca530a2a2ee1de86d6a3e85",
+      "module": "xt_connlimit",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "7c691e0185021174d40868c6c9c04b14f0db3777eca530a2a2ee1de86d6a3e85"
+    },
+    {
+      "discarded_package": "kmod-xt-connmark-vbnts-4.1.38-candidate",
+      "discarded_sha256": "79fe5bb140b7bb561a537aa4fe3e210cb64222cb45d56973a460dc674d776ece",
+      "module": "xt_connmark",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "79fe5bb140b7bb561a537aa4fe3e210cb64222cb45d56973a460dc674d776ece"
+    },
+    {
+      "discarded_package": "kmod-xt-conntrack-vbnts-4.1.38-candidate",
+      "discarded_sha256": "2e30db0184ddb9acff11d8ba773bf3516a06948b9481da2a6e762944b6b9345a",
+      "module": "xt_conntrack",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "2e30db0184ddb9acff11d8ba773bf3516a06948b9481da2a6e762944b6b9345a"
+    },
+    {
+      "discarded_package": "kmod-xt-ct-vbnts-4.1.38-candidate",
+      "discarded_sha256": "5e3087b5496a0b79c5a504caf6ad21be4e93e7e278ecc044db586bf91bb644a3",
+      "module": "xt_CT",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "5e3087b5496a0b79c5a504caf6ad21be4e93e7e278ecc044db586bf91bb644a3"
+    },
+    {
+      "discarded_package": "kmod-xt-helper-vbnts-4.1.38-candidate",
+      "discarded_sha256": "a8f342c5ee288fd5ade2c42bec1d3b157013e5213149b018ff00072bf94f7324",
+      "module": "xt_helper",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "a8f342c5ee288fd5ade2c42bec1d3b157013e5213149b018ff00072bf94f7324"
+    },
+    {
+      "discarded_package": "kmod-xt-limit-vbnts-4.1.38-candidate",
+      "discarded_sha256": "8bbf6da6df6389a45b05abc63cf818ef7017b72c1ee64d4c6a9de73853aeada7",
+      "module": "xt_limit",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "8bbf6da6df6389a45b05abc63cf818ef7017b72c1ee64d4c6a9de73853aeada7"
+    },
+    {
+      "discarded_package": "kmod-xt-log-vbnts-4.1.38-candidate",
+      "discarded_sha256": "6c84b91c31394961781867f74cb93a39059e7998978d568061d7d7df4c5c6673",
+      "module": "xt_LOG",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "6c84b91c31394961781867f74cb93a39059e7998978d568061d7d7df4c5c6673"
+    },
+    {
+      "discarded_package": "kmod-xt-mac-vbnts-4.1.38-candidate",
+      "discarded_sha256": "29348cfd0566fd05fda2c29ab6322f4f3888ad598391267f902e6f389cc7b3a1",
+      "module": "xt_mac",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "29348cfd0566fd05fda2c29ab6322f4f3888ad598391267f902e6f389cc7b3a1"
+    },
+    {
+      "discarded_package": "kmod-xt-mark-vbnts-4.1.38-candidate",
+      "discarded_sha256": "c61da93fcccb55343a637a170d7fc83682f4a4164dcc2b2859d1a9672865c376",
+      "module": "xt_mark",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "c61da93fcccb55343a637a170d7fc83682f4a4164dcc2b2859d1a9672865c376"
+    },
+    {
+      "discarded_package": "kmod-xt-multiport-vbnts-4.1.38-candidate",
+      "discarded_sha256": "0cf2d68f27625df1d381a749354cb190a7ca11a7c09f3d6a476b33a3e2fe138a",
+      "module": "xt_multiport",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "0cf2d68f27625df1d381a749354cb190a7ca11a7c09f3d6a476b33a3e2fe138a"
+    },
+    {
+      "discarded_package": "kmod-xt-recent-vbnts-4.1.38-candidate",
+      "discarded_sha256": "224f169ff9fb96e533938909a5394ef80ff1932c1de4c7d666a1f7a76cf43979",
+      "module": "xt_recent",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "224f169ff9fb96e533938909a5394ef80ff1932c1de4c7d666a1f7a76cf43979"
+    },
+    {
+      "discarded_package": "kmod-xt-redirect-vbnts-4.1.38-candidate",
+      "discarded_sha256": "7b7e568d4b5a8df869643631d643b2149fd0ff27cd09ec43e48cd2936554076b",
+      "module": "xt_REDIRECT",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "7b7e568d4b5a8df869643631d643b2149fd0ff27cd09ec43e48cd2936554076b"
+    },
+    {
+      "discarded_package": "kmod-xt-state-vbnts-4.1.38-candidate",
+      "discarded_sha256": "e30bb49969c97c7fdca3ef7815f8ba655df002297e03640061f7728b85e88ce3",
+      "module": "xt_state",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "e30bb49969c97c7fdca3ef7815f8ba655df002297e03640061f7728b85e88ce3"
+    },
+    {
+      "discarded_package": "kmod-xt-tcpmss-target-vbnts-4.1.38-candidate",
+      "discarded_sha256": "b061c7a9fb5fe3eb82404dcca47e44fe24adb66d6d50d64e82f3eaa93a8a4105",
+      "module": "xt_TCPMSS",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "b061c7a9fb5fe3eb82404dcca47e44fe24adb66d6d50d64e82f3eaa93a8a4105"
+    },
+    {
+      "discarded_package": "kmod-xt-time-vbnts-4.1.38-candidate",
+      "discarded_sha256": "7a8413d79685849ed1223be188f2f0f09810e2ba2872da2f62002ff7ed98baec",
+      "module": "xt_time",
+      "profile": "4.1.38-vbntk",
+      "selected_sha256": "7a8413d79685849ed1223be188f2f0f09810e2ba2872da2f62002ff7ed98baec"
+    }
+  ],
+  "profiles": {
+    "4.1.38-vbntk": {
+      "exports_sha256": "7e2a73939fac508cad920b22746e1248c6bca85da0d6f6a6302ca657b1df89af",
+      "kernel_package": "4.1.38-1-8dd693635a152c8c7b822a64e6c5c470",
+      "module_count": 214,
+      "runtime_proven_symbol_exceptions": {
+        "bcmspu": {
+          "evidence": "Exact-payload hardware validation; vendor RDPA/BDMF exports are absent from the saved kernel-only list",
+          "module_sha256": "ef7a375495c71c4ff0d484856e1c7dbf9d737b9d5613aca7d2dfff3eb5e3a697",
+          "symbols": [
+            "bdmf_attrelem_get_as_buf",
+            "bdmf_attrelem_get_next",
+            "bdmf_attrelem_set_as_buf",
+            "bdmf_attrelem_set_as_num",
+            "bdmf_destroy",
+            "bdmf_lock",
+            "bdmf_new_and_set",
+            "bdmf_put",
+            "bdmf_type_num_attrs",
+            "bdmf_unlock",
+            "rdpa_cpu_get",
+            "rdpa_cpu_int_clear",
+            "rdpa_cpu_int_disable",
+            "rdpa_cpu_int_enable",
+            "rdpa_cpu_loopback_packet_get",
+            "rdpa_cpu_tx_ipsec_offload",
+            "rdpa_ipsec_drv"
+          ]
+        }
+      }
+    },
+    "4.1.38-vbnto": {
+      "exports_sha256": "e6c4eb68d723dbd2459144aaa7c1c7998eaf29629455afac36020d6785410534",
+      "kernel_package": "4.1.38-1-08839f3f6145d3a5d2d04be7567e3f9d",
+      "module_count": 223,
+      "runtime_proven_symbol_exceptions": {
+        "bcmspu": {
+          "evidence": "Exact-payload hardware validation; vendor RDPA/BDMF exports are absent from the saved kernel-only list",
+          "module_sha256": "f5280ce13913803daf53ad500b55b478ecd5575fa0014323471223ab329016b1",
+          "symbols": [
+            "bdmf_attrelem_get_as_buf",
+            "bdmf_attrelem_get_next",
+            "bdmf_attrelem_set_as_buf",
+            "bdmf_attrelem_set_as_num",
+            "bdmf_destroy",
+            "bdmf_lock",
+            "bdmf_new_and_set",
+            "bdmf_put",
+            "bdmf_type_num_attrs",
+            "bdmf_unlock",
+            "rdpa_cpu_get",
+            "rdpa_cpu_int_clear",
+            "rdpa_cpu_int_disable",
+            "rdpa_cpu_int_enable",
+            "rdpa_cpu_loopback_packet_get",
+            "rdpa_cpu_tx_ipsec_offload",
+            "rdpa_ipsec_drv"
+          ]
+        }
+      }
+    }
+  }
+}

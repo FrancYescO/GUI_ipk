@@ -64,7 +64,7 @@ class KernelProviderTests(unittest.TestCase):
                 self.assertNotIn(b'rmmod ', script)
                 self.assertNotIn(b'--force-depends', script)
                 self.assertNotIn(b'opkg status', script)
-        self.assertEqual(module_count, 830)
+        self.assertEqual(module_count, 735)
 
     def test_staging_is_never_a_module_provider(self):
         for row in self.rows:
@@ -120,6 +120,27 @@ class KernelProviderTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             providers.runtime_evidence('4.1.52-vcnt3', 'rndis_host', b'different payload')
 
+    def test_legacy_profiles_are_unique_and_installable(self):
+        for profile, count in [('4.1.38-vbnto', 223), ('4.1.38-vbntk', 214)]:
+            modules = {}
+            for row in self.rows:
+                if row['profile'] != profile:
+                    continue
+                fields = providers.fields(row['control'])
+                self.assertEqual(row['section'], 'kernel/' + profile)
+                self.assertNotIn('X-Module-Staging-Only', fields)
+                self.assertNotIn('-candidate', row['package'])
+                path = fields.get('X-Module-Path')
+                if path:
+                    self.assertTrue(path.startswith('/lib/modules/4.1.38/'))
+                    self.assertNotIn(Path(path).stem, modules)
+                    modules[Path(path).stem] = fields['X-Module-SHA256']
+            self.assertEqual(len(modules), count)
+            internal = 'vbnts' if profile.endswith('vbntk') else 'vbnto'
+            report = json.loads((ROOT / ('build/' + internal + '-4.1.38/runtime-validation/results.json')).read_text())
+            for module in report['modules']:
+                self.assertEqual(modules[module['name']], module['sha256'])
+
     def test_module_dependencies_preserve_stock_owners(self):
         firmware = json.loads((providers.BUILD / 'firmware-packages.json').read_text())
         configs = {p: providers.config(p)[0] for p in providers.definitions()}
@@ -133,8 +154,9 @@ class KernelProviderTests(unittest.TestCase):
                     continue
                 cfg = configs[row['profile']]
                 for module in providers.elf_module(payload)['modinfo'].get('depends', [''])[0].split(','):
-                    if Path(path).stem == 'rndis_host' and module == 'cdc_ether' and row['profile'] in providers.firmware_definitions():
-                        self.assertIn('kmod-cdc-ether-' + row['profile'].replace('4.1.52-', '') + '-4.1.52-manual (= ', row['control'])
+                    if Path(path).stem == 'rndis_host' and module == 'cdc_ether' and row['profile'] != '4.1.52-vbntk':
+                        dependency = next(r['package'] for r in self.rows if r['profile'] == row['profile'] and providers.fields(r['control']).get('X-Module-Path', '').endswith('/cdc_ether.ko'))
+                        self.assertIn(dependency + ' (= ', row['control'])
                         continue
                     if cfg.get(mapping['builtin_configs'].get(module, '')) == 'y':
                         continue

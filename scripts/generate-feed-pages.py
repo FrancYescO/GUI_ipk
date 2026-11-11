@@ -149,7 +149,7 @@ def page(title, selected, groups, prefix, partial=False):
     elif selected in ("kernel/4.1.52", "kernel/4.1.52-vbntk"):
         notice = (
             '<p><strong>Linux 4.1.52 requires the matching firmware ABI.</strong> '
-            'Runtime tests on VBNT-K 19.4.1051 at .69 distinguish functional '
+            'Runtime tests on VBNT-K 19.4.1051 distinguish functional '
             'passes from smoke tests and busy stock modules that were not replaced. '
             'Corrected QoS statistic and NAT range layouts retain version 4.1.52-1. '
             'xt_nat is withheld pending safe validation. '
@@ -246,8 +246,8 @@ SPU is validated separately in the tested feed. A successful smoke test does not
 The cause remains unresolved. Stock conntrack core remains in use; its candidate has not been runtime validated.</p>
 <p>New tests use temporary payloads under /tmp and disposable network namespaces. The latest session retained its boot ID,
 restored original modules and left no test namespaces or test helper loaded. An earlier session rebooted as described above.</p>
-<p>Downloads below are <strong>staged candidates, separate from the tested OPKG feed</strong>.
-They install under <code>/usr/lib/kernel-module-candidates/4.1.38/</code>, with no boot autoload or stock module replacement.
+<p>Downloads below are <strong>historical staged source artifacts, excluded from active OPKG indexes</strong>.
+Archived source IPKs retain their original staging paths. Current installable packages use standard module paths; choose the exact ABI feed above.
 Tested-feed TUN, SPU and WireGuard are available in the <a href="../../kernel/4.1.38-vbnto/index.html">manual feed</a>.
 These results apply to the listed SHA-256 payloads and firmware ABI, not every Linux 4.1.38 device.</p></header>
 <nav><a href="../../index.html">All packages</a><a href="results.json">Machine-readable results</a>
