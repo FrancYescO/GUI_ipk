@@ -31,6 +31,17 @@ assert all(after.get(name) == value for name, value in before.items())
 PY
     echo 'PASS QoS installation preserves stock module files and package records'
 fi
+if [ -n "$CDC_PACKAGE" ]; then
+    # Explicit one-file migrations in inert offline roots; stock USBnet is retained.
+    before=$(sha256sum "$base/usb/lib/modules/${profile%%-*}/usbnet.ko" | cut -d' ' -f1)
+    run usb update
+    OPKG_BIN="$opkg_bin" sh "$fixtures/migrate.sh" --apply --offline-root "$base/usb" --config "$base/usb.conf" --ipk "$base/repo/$CDC_FILENAME" "$CDC_PACKAGE"
+    OPKG_BIN="$opkg_bin" sh "$fixtures/migrate.sh" --apply --offline-root "$base/usb" --config "$base/usb.conf" --ipk "$base/repo/$RNDIS_FILENAME" "$RNDIS_PACKAGE"
+    test "$(sha256sum "$base/usb/lib/modules/${profile%%-*}/usbnet.ko" | cut -d' ' -f1)" = "$before"
+    run usb search "$base/usb/lib/modules/${profile%%-*}/cdc_ether.ko" | grep -F "$CDC_PACKAGE"
+    run usb search "$base/usb/lib/modules/${profile%%-*}/rndis_host.ko" | grep -F "$RNDIS_PACKAGE"
+    echo 'PASS standard-path CDC/RNDIS migration preserves stock USBnet'
+fi
 for mode in clean legacy group wrong; do run "$mode" update; done
 if [ -z "$TUN_PACKAGE" ]; then
  if run clean install fixture-vpn; then echo 'FAIL staging-only module satisfied TUN'; exit 1; fi

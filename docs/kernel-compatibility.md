@@ -168,15 +168,21 @@ to a modem or install packages.
 
 ## Additional static-image builds
 
-The VCNT-3 and VCNT-2 4.1.52 profiles now have 49 compiled, offline-checked staged
-IPKs each. These are separate candidate feeds, not runtime-validated additions
-to the existing three reference-device feeds. Configurations and stock exports
-come from original RBI/bank images; CPU and full vermagic differences are
-preserved. See [firmware candidate builds](firmware-kernel-candidates.md).
+Five additional 4.1.52 profiles are ordinary exact-ABI feeds, with 49 network
+modules each on VCNT-3/2/J and 48 on Telstra VCNT-A/VBNT-V, plus cryptodev and
+capability packages. Modules install under `/lib/modules/4.1.52/` without
+automatic loading. Original firmware configurations and export checks are
+preserved; each module is labelled offline-checked or runtime-tested. The
+VCNT-3 CDC/RNDIS pair has USB-binding and DHCP evidence, with reboot persistence,
+reconnect and Internet traffic untested. The five previous candidate URLs are
+aliases of the ordinary feeds. See [firmware feeds](firmware-kernel-candidates.md).
 
 The offline audit also found two unavailable Altibox symbols in the old VBNT-K
 conntrack payload. Revision `4.1.52-2` removes those SDK-only hooks and passes
 original-firmware symbol checks. The replacement has not been loaded; the prior
 busy observation and original payload hash remain in the validation history.
 
-Latest firmware candidate feeds are listed in the [kernel overview](https://francyesco.github.io/GUI_ipk/kernel/) and [firmware build matrix](firmware-kernel-candidates.md). VCNT-J Sorgenia 19.4.0629 has 49 staged packages; Telstra VCNT-A 20.3.c.0501 and VBNT-V 20.3.c.0432 have 48 each, with TUN already built into their kernels. These are offline checks only and require manual device validation.
+Current canonical sources and module-specific validation are listed in the
+[kernel overview](https://francyesco.github.io/GUI_ipk/kernel/). Automatic
+selection includes all eight installable profiles only when the full installed
+kernel package ABI matches. The two legacy 4.1.38 staging feeds remain separate.

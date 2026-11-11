@@ -12,7 +12,7 @@ def write_compatibility(root, style, script):
     report = json.loads((source / 'firmware-compatibility.json').read_text())
     profiles = json.loads((repo / 'build/kernel-firmware-profiles/profiles.json').read_text())
     firmware_links = ''.join('<a href="../' + html.escape(entry['feed'], quote=True) + '/">'
-                             + html.escape(entry['device']) + ' candidates</a>\n'
+                             + html.escape(entry['device']) + ' exact-ABI feed</a>\n'
                              for entry in profiles.values() if entry.get('bundle'))
     destination = root / 'compatibility'
     destination.mkdir(parents=True, exist_ok=True)
@@ -48,7 +48,8 @@ Equal kernel packages or stock modules identify candidates; they do not certify 
 Other operators in this inventory do not share their complete kernel package identifiers.
 VBNT-K 4.1.52 tests were performed on .69, firmware 19.4.1051-3401200. Other rows sharing its kernel package remain candidates requiring runtime checks.</p>
 <p>FW261/FW264 are awaiting complete kernel images from an original RBI or bank dump; a saved runtime configuration is another option. No supported feed is claimed for them.
-Optional candidate feeds install modules in a staging directory and require manual dependency and loading checks.
+The five additional 4.1.52 feeds install modules in standard /lib/modules paths with per-module offline or runtime validation labels.
+The remaining legacy 4.1.38 candidate feeds install modules in a staging directory and require manual checks.
 They do not replace stock modules or configure autoload. xt_nat remains withheld.</p>
 <nav><a href="../index.html">All packages</a>
 <a href="../kernel/4.1.38-vbnto-candidates/index.html">VBNT-O candidates</a>

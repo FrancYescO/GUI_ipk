@@ -32,6 +32,8 @@ def page(title, selected, groups, feeds, prefix):
         for record in groups[group]:
             fields = parse(record['control'])
             description = html.escape(fields.get('Description', ''))
+            if fields.get('X-Validation-Level'):
+                description += '<br>Validation: ' + html.escape(fields['X-Validation-Level'])
             if fields.get('X-Kernel-Capability') == 'yes':
                 description += '<br>Exact-ABI capability package; no module loading or automatic driver replacement.'
             elif fields.get('X-Module-Staging-Only') == 'yes':
@@ -58,7 +60,7 @@ def kernel_manifest(records):
     for profile, entry in firmware_definitions().items():
         if entry.get('bundle'):
             definitions.append((profile, entry['device'], ', '.join(entry['verified_firmwares']),
-                                'not runtime tested', entry['kernel_package']))
+                                'CDC/RNDIS partially tested on device' if profile == '4.1.52-vcnt3' else 'offline checks only', entry['kernel_package']))
     profiles, candidates = [], []
     for profile, device, firmware, router, version in definitions:
         for staging in (False, True):
@@ -75,7 +77,7 @@ def kernel_manifest(records):
                    'url': url,
                    'source': 'src/gz ' + name + ' ' + url, 'staging_only': staging,
                    'status': 'Staging only; manual validation required' if staging else
-                             'Runtime packages; see per-module test results',
+                             'Standard module paths; see per-module validation level',
                    'validation_url': SITE + '/validation/' + ('4.1.52' if profile == '4.1.52-vbntk' else profile.replace('vbntk', 'vbnts')) + '/'}
             (candidates if staging else profiles).append(row)
     return {'index_url': SITE + '/kernel/', 'profiles': profiles, 'candidates': candidates,
@@ -99,14 +101,14 @@ def write_kernel_overview(site, manifest):
                          for r in manifest['candidates'])
     content = '''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Available kernel OPKG feeds</title><style>''' + pages.STYLE + '''code, pre {overflow-wrap:anywhere;white-space:pre-wrap}</style></head><body>
-<h1>Available kernel OPKG feeds</h1><p>''' + str(len(manifest['profiles'])) + ''' runtime feeds and ''' + str(len(manifest['candidates'])) + ''' separate candidate feeds, all hosted on Pages.
-Enable only the runtime feed matching your complete installed <code>kernel</code> package version.
+<h1>Available kernel OPKG feeds</h1><p>''' + str(len(manifest['profiles'])) + ''' installable ABI feeds and ''' + str(len(manifest['candidates'])) + ''' separate candidate feeds, all hosted on Pages.
+Enable only the feed matching your complete installed <code>kernel</code> package version.
 Linux version or operator branding alone is insufficient. Other firmware sharing the ABI still needs runtime validation.</p>
 <nav><a href="../index.html">All packages</a><a href="../compatibility/">Firmware compatibility</a>
 <a href="../feeds.json">Feed manifest</a><a href="../validation/4.1.38/">4.1.38 candidate history</a><a href="../validation/4.1.52/">4.1.52 tests</a></nav>
 <pre>opkg status kernel</pre><div class="table-wrap"><table><thead><tr><th>Feed</th><th>Reference device / firmware</th><th>IPKs</th><th>Validation</th><th>Required kernel package version</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
-<h2>Runtime OPKG sources — choose one exact ABI</h2>''' + sources + '''
-<p>All three runtime feeds contain the same 50 module names (including the separately staged cryptodev package).
+<h2>Installable OPKG sources — choose one exact ABI</h2>''' + sources + '''
+<p>The three original hardware-tested profiles contain the same 50 module names. The five additional 4.1.52 profiles install modules at standard firmware paths and retain per-module offline or runtime validation labels.
 VBNT-O: 14 new functional passes and 30 busy stock modules left unchanged.
 VBNT-S: 15 new functional passes, 1 namespace smoke pass and 28 busy stock modules left unchanged.
 Both 4.1.38 profiles also reuse the exact five previously validated TUN, WireGuard, SPU, CDC Ethernet and RNDIS host payloads.
@@ -118,20 +120,18 @@ Candidate modules in staging never satisfy ordinary application dependencies. Fi
 <code>Replaces</code> parser, so normalized indexes and IPKs omit that field. Existing unverified generic modules require
 controlled file-ownership migration; no dependency bypass or forced kernel loading is used.
 <a href="https://github.com/FrancYescO/GUI_ipk/blob/main/docs/kernel-opkg-providers.md">Provider coverage and migration procedure</a>.</p>
-<h2>Cryptodev 1.14 — explicit manual load</h2><p>All eight ABI profiles include a cryptodev package, staged under
-<code>/usr/lib/kernel-module-candidates/PROFILE/cryptodev.ko</code> without autoload or stock-driver replacement.
+<h2>Cryptodev 1.14 — explicit manual load</h2><p>All eight ABI profiles include a cryptodev package under
+<code>/lib/modules/KERNEL/cryptodev.ko</code> without autoload or stock-driver replacement.
 Final CI artifacts passed AES-CBC (copy/zero-copy, in-place/separate buffers), SHA256, HMAC and privileged-open enforcement on VBNT-O and VBNT-K/S 4.1.38.
 AES-GCM was unavailable on those test configurations. The new 4.1.52 VBNT-K module is checked offline only:
 the existing stock cryptodev was busy in nginx and generic_pnpd and was left active.
-VCNT-2/3/J/A and VBNT-V remain offline candidates. This synchronous build requires CAP_SYS_ADMIN; firmware may override device modes,
+Cryptodev on VCNT-2/3/J/A and VBNT-V remains verified offline only. This synchronous build requires CAP_SYS_ADMIN; firmware may override device modes,
 so set <code>chmod 600 /dev/crypto</code> after manual loading. No OpenSSL engine or hardware acceleration is enabled automatically.
 <a href="https://github.com/FrancYescO/GUI_ipk/blob/main/build/cryptodev/README.md">Source, tests and loading instructions</a>.</p>
-<h2>Candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages.
-Additional firmware candidate feeds below have configurations recovered from original firmware images and pass offline symbol checks.
-These checks do not establish complete structure-layout compatibility or runtime behavior.
-SPU is omitted from the additional firmware feeds. Telstra VCNT-A and VBNT-V already have TUN built into the kernel, so they contain 48 packages each without tun.ko; VCNT-3, VCNT-2 and VCNT-J contain 49 each.
-These feeds are separate from the runtime sources and are never enabled by the source-selection helper.
-They stage modules outside boot paths; a successful build does not prove runtime compatibility. xt_nat remains withheld.</p>''' + candidates + '''
+<h2>Legacy 4.1.38 candidate sources — optional manual validation</h2><p>220 VBNT-O and 212 VBNT-S staging-only packages remain separate pending further audit.
+The five additional 4.1.52 profiles are now ordinary exact-ABI feeds, selected by the source helper.
+Only the VCNT-3 CDC Ethernet/RNDIS pair has hardware evidence for USB binding and DHCP; reboot persistence, reconnect and Internet traffic remain untested.
+Other modules are clearly labelled offline-checked. No installation hook loads modules automatically. xt_nat remains withheld.</p>''' + candidates + '''
 <h2>VBNT-K canonical feeds and VBNT-S aliases</h2><p>VBNT-K is the canonical public feed name for each kernel version.
 <a href="4.1.38-vbnts/Packages.gz">4.1.38-vbnts</a> is an OPKG alias of 4.1.38-vbntk;
 <a href="4.1.52-vbnts/Packages.gz">4.1.52-vbnts</a> is an OPKG alias of 4.1.52-vbntk.
@@ -182,7 +182,7 @@ def render(publication):
     for profile in ('vbnto', 'vbnts'):
         write_runtime_report(ROOT / 'build' / (profile + '-4.1.38/runtime-validation'),
                              site / 'validation' / ('4.1.38-' + profile), pages.STYLE)
-    write_firmware_reports(site)
+    write_firmware_reports(site, catalog['records'])
     userspace = [{'name': 'modgui_' + key.replace('/', '_').replace('-', '_'), 'url': url,
                   'source': 'src/gz modgui_' + key.replace('/', '_').replace('-', '_') + ' ' + url}
                  for key, url in feeds.items() if not key.startswith('kernel/') and key != 'telephony/asterisk-20']
@@ -202,7 +202,7 @@ def render(publication):
     print('Rendered', len(catalog['records']), 'catalog entries;', len(list(site.rglob('*.ipk'))), 'Pages IPKs;', size, 'estimated TAR bytes')
 
 
-def write_firmware_reports(site):
+def write_firmware_reports(site, records):
     for profile, entry in firmware_definitions().items():
         if not entry.get('bundle'):
             continue
@@ -211,22 +211,38 @@ def write_firmware_reports(site):
         destination = site / 'validation' / profile
         destination.mkdir(parents=True, exist_ok=True)
         (destination / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
+        published = {Path(parse(r['control']).get('X-Module-Path', '')).stem: r for r in records
+                     if r['profile'] == profile and parse(r['control']).get('X-Module-Path')}
+        tested = []
+        for module in report['modules']:
+            row = published[module['name']]
+            fields = parse(row['control'])
+            module.update(asset=row['filename'], package=row['package'], ipk_sha256=row['sha256'], control=row['control'],
+                          runtime_validated=fields.get('X-Runtime-Validated') == 'yes',
+                          validation_level=fields.get('X-Validation-Level', 'offline-checked'),
+                          runtime_tests='; '.join(filter(None, (fields.get('X-Runtime-Test', ''), fields.get('X-Runtime-Test-Status', '')))))
+            if module['runtime_validated']:
+                tested.append(module['name'])
+        report['runtime_tested_modules'] = tested
+        report['limitations'] = 'Standard module paths; offline checks do not verify all structure layouts or runtime behavior. Hardware evidence applies only to the listed exact module hashes. No automatic module loading.'
+        (destination / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
         rows = ''.join('<tr><td>' + html.escape(m['name']) + '</td><td><code>' + m['sha256'] +
-                       '</code></td><td><a href="' + SITE + '/' + entry['feed'] + '/' + m['asset'] +
-                       '">Staged IPK</a></td></tr>' for m in report['modules'])
+                       '</code></td><td>' + html.escape(m['validation_level']) + '</td><td>' +
+                       html.escape(m['runtime_tests']) + '</td><td><a href="' + SITE + '/' + entry['feed'] + '/' + m['asset'] +
+                       '">IPK</a></td></tr>' for m in report['modules'])
         sources = ''.join('<li>' + html.escape(check['input']) + ': original image SHA256 <code>' +
                           check['image_sha256'] + '</code>; no unresolved imports</li>' for check in report['firmware_checks'])
         content = ('<!doctype html><html lang="en"><meta charset="utf-8"><title>' + html.escape(profile) +
-                   ' offline candidate checks</title><style>' + pages.STYLE +
+                   ' module validation</title><style>' + pages.STYLE +
                    'code{overflow-wrap:anywhere}</style><h1>' + html.escape(profile) +
-                   ' offline candidate checks</h1><p><strong>No runtime validation has been performed.</strong> ' +
+                   ' module validation</h1><p><strong>Hardware-tested modules: ' + (', '.join(tested) or 'none; offline checks only') + '.</strong> ' +
                    html.escape(report['limitations']) + '</p><p>Reference device: ' + html.escape(entry['device']) +
                    '. Exact kernel dependency: <code>' + html.escape(entry['kernel_package']) +
                    '</code>.</p><p>Compiler: GCC 5.5.0. Pinned GPL SDK with documented ABI adaptations. '
                    'SPU is omitted when disabled by the original configuration; xt_nat remains quarantined.</p>' +
                    '<ul>' + sources + '</ul><p><a href="results.json">Per-module evidence</a> · '
                    '<a href="../../kernel/">Kernel feed selection</a></p><table><thead><tr><th>Module</th>'
-                   '<th>Payload SHA256</th><th>Download</th></tr></thead><tbody>' + rows + '</tbody></table></html>')
+                   '<th>Payload SHA256</th><th>Validation</th><th>Tests and limits</th><th>Download</th></tr></thead><tbody>' + rows + '</tbody></table></html>')
         (destination / 'index.html').write_text(content)
 
 

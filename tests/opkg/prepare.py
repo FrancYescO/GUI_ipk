@@ -75,7 +75,7 @@ def prepare(base, rows, remote_base=None):
                 continue
             status += (f'Package: {name}\nVersion: {value["version"]}\nArchitecture: {definition["architecture"]}\n'
                        f'Depends: {value["depends"]}\nStatus: install ok installed\n\n')
-        for case in ['clean', 'legacy', 'group', 'wrong', 'qos']:
+        for case in ['clean', 'legacy', 'group', 'wrong', 'qos', 'usb']:
             folder = directory / case
             (folder / 'usr/lib/opkg/info').mkdir(parents=True, exist_ok=True)
             (folder / 'var/lock').mkdir(parents=True, exist_ok=True)
@@ -100,6 +100,10 @@ def prepare(base, rows, remote_base=None):
         tun = raw.get('tun')
         meta = capabilities.get('kmod-tun')
         env = {'kernel': kernel, 'tun_package': tun['package'] if tun else meta['package'] if meta else '',
+               'cdc_package': raw['cdc_ether']['package'] if definition.get('installable') else '',
+               'cdc_filename': raw['cdc_ether']['filename'] if definition.get('installable') else '',
+               'rndis_package': raw['rndis_host']['package'] if definition.get('installable') else '',
+               'rndis_filename': raw['rndis_host']['filename'] if definition.get('installable') else '',
                'qos_package': capabilities['kmod-act-connmark']['package'] if 'kmod-act-connmark' in capabilities and 'act_connmark' in raw else '',
                'canonical_tun': 'yes' if meta and meta['package'] == 'kmod-tun' else 'no',
                'modular': 'yes' if tun else 'no', 'group': group,

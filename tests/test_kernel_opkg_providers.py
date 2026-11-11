@@ -46,7 +46,9 @@ class KernelProviderTests(unittest.TestCase):
             scripts = providers.unpack(outer['control.tar.gz'])
             if row.get('_archive_source'):
                 original = providers.unpack(Path(row['_archive_source']).read_bytes())
-                self.assertEqual(data, providers.unpack(original['data.tar.gz']), row['package'])
+                original_data = providers.unpack(original['data.tar.gz'])
+                self.assertEqual({Path(p).name: b for p, b in data.items()},
+                                 {Path(p).name: b for p, b in original_data.items()}, row['package'])
             module_count += len(data)
             self.assertTrue(all(name.endswith('.ko') for name in data))
             with tarfile.open(fileobj=io.BytesIO(outer['data.tar.gz'])) as archive:
@@ -78,7 +80,7 @@ class KernelProviderTests(unittest.TestCase):
             selected = [r for r in self.rows if r['profile'] == profile and r['section'] == providers.definitions()[profile]['feed']]
             advertised = {providers.fields(r['control'])['Package'] for r in selected}
             advertised |= {v.strip() for r in selected for v in providers.fields(r['control']).get('Provides', '').split(',') if v.strip()}
-            self.assertEqual('kmod-tun' in advertised, profile in ('4.1.38-vbnto', '4.1.38-vbntk', '4.1.52-vbntk', '4.1.52-vcnta', '4.1.52-vbntv'))
+            self.assertIn('kmod-tun', advertised)
             for row in selected:
                 f = providers.fields(row['control'])
                 if f.get('X-Kernel-Capability') == 'yes':
@@ -95,6 +97,29 @@ class KernelProviderTests(unittest.TestCase):
                 self.assertNotIn((row['section'], row['_archive_filename']), active)
                 self.assertEqual(hashlib.sha256(Path(row['_archive_source']).read_bytes()).hexdigest(), providers.fields(row['control'])['X-Original-IPK-SHA256'])
 
+    def test_promoted_profiles_use_standard_paths_and_module_validation(self):
+        profiles = {p for p, entry in providers.firmware_definitions().items() if entry.get('installable')}
+        tested = []
+        for row in self.rows:
+            f = providers.fields(row['control'])
+            if row['profile'] not in profiles:
+                continue
+            self.assertEqual(row['section'], 'kernel/' + row['profile'])
+            self.assertNotIn('X-Module-Staging-Only', f)
+            self.assertNotIn('-candidate', row['package'])
+            outer = providers.unpack(Path(row['_path']).read_bytes())
+            for path in providers.unpack(outer['data.tar.gz']):
+                self.assertTrue(path.startswith('lib/modules/4.1.52/'), path)
+                self.assertEqual('/' + path, f['X-Module-Path'])
+                self.assertIn(f['X-Validation-Level'], ('runtime-tested', 'offline-checked'))
+                if f.get('X-Runtime-Validated') == 'yes':
+                    tested.append((row['profile'], Path(path).stem))
+        self.assertEqual(sorted(tested), [('4.1.52-vcnt3', 'cdc_ether'), ('4.1.52-vcnt3', 'rndis_host')])
+
+    def test_runtime_evidence_rejects_different_payload(self):
+        with self.assertRaises(ValueError):
+            providers.runtime_evidence('4.1.52-vcnt3', 'rndis_host', b'different payload')
+
     def test_module_dependencies_preserve_stock_owners(self):
         firmware = json.loads((providers.BUILD / 'firmware-packages.json').read_text())
         configs = {p: providers.config(p)[0] for p in providers.definitions()}
@@ -108,6 +133,9 @@ class KernelProviderTests(unittest.TestCase):
                     continue
                 cfg = configs[row['profile']]
                 for module in providers.elf_module(payload)['modinfo'].get('depends', [''])[0].split(','):
+                    if Path(path).stem == 'rndis_host' and module == 'cdc_ether' and row['profile'] in providers.firmware_definitions():
+                        self.assertIn('kmod-cdc-ether-' + row['profile'].replace('4.1.52-', '') + '-4.1.52-manual (= ', row['control'])
+                        continue
                     if cfg.get(mapping['builtin_configs'].get(module, '')) == 'y':
                         continue
                     owners = sorted(p for p, value in stock.items() if module in value['modules'])
@@ -199,6 +227,7 @@ class PackageHookLockTests(unittest.TestCase):
         for dep, accepted in [('', False),
                 (self.stanza('kmod-base', '1', 'kernel (= wrong)'), False),
                 (self.stanza('kmod-base', '1', 'kernel (= 4.1.38-1-exact)'), True),
+                (self.stanza('kmod-base', '1', 'kernel (=4.1.38-1-exact)'), True),
                 (self.stanza('kmod-base-extra', '1', 'kernel (= 4.1.38-1-exact)'), False)]:
             with self.subTest(dep=dep):
                 result = self.run_guard(base+dep, dependencies=['kmod-base'])

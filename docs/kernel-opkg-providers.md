@@ -181,3 +181,36 @@ La prova con OPKG 2017 passa sulle otto ABI, inclusa l'installazione QoS sui tre
 profili runtime. I risultati e il log compresso sono conservati in
 `build/kernel-opkg-providers/validation/stock-owners-*`. La suite locale passa
 155 test (tre saltati per i requisiti dell'ambiente).
+
+## Standard-path firmware feeds (metadata policy 4)
+
+The five additional 4.1.52 profiles now publish modules in `/lib/modules/4.1.52/`,
+including cryptodev. Cryptodev on the three original profiles also uses the
+standard module directory. The source bundles remain immutable and the 830
+ELF payloads retain their hashes; the publication repacks paths and metadata.
+Physical packages replace the `-candidate` suffix with `-manual`. Source IPKs
+are archived for provenance and are excluded from active indexes. Previous
+4.1.52 candidate URLs serve aliases of the canonical feeds.
+
+Firmware OPKG ownership inventories for all five profiles are pinned to
+original-image repository commits, with per-control/list SHA256 hashes. Exact
+stock dependency owners are preferred over rebuilt components. The active
+catalog contains 1,449 kernel records, including 619 complete capabilities.
+All eight profiles provide TUN through a real module or verified builtin.
+Pre-install guards accept vendor whitespace variants in exact kernel bindings
+and still reject missing, wrong or ambiguous installed ABI records.
+
+Runtime evidence is bound to module SHA256 and ABI. Only VCNT-3 CDC Ethernet
+and RNDIS host gained runtime labels for USB binding/DHCP. Other new modules
+remain labelled offline-checked. No package hook loads or unloads drivers, adds
+autoload entries, forces replacement or bypasses dependencies. Existing stock
+ownership needs the controlled migration helper after quiescing the module;
+old installed staging packages are removed separately after migration. The
+legacy 4.1.38 candidate feeds retain their staging behavior.
+
+Validation passes 158 local tests (three environment-dependent skips). The
+unpatched OPKG 2017 passes installation/migration scenarios on eight ABIs,
+including five explicit CDC/RNDIS standard-path migrations retaining stock
+USBnet. Evidence is in `validation/standard-paths-*` beside this document's
+source metadata. Rendered manifests expose eight selectable profiles and only
+two legacy staging profiles. No new hardware run or reboot is claimed.

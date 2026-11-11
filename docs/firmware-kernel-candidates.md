@@ -1,28 +1,25 @@
-# Firmware kernel candidates from static images
+# Exact-ABI firmware kernel feeds
 
 Five firmware profiles are compiled from the pinned GPL buildsystem,
 Broadcom 502L07 SDK, GCC 5.5.0 and repository ABI/backport patches. These are
-**offline-checked candidates, not runtime-validated modules**.
+**installable packages with per-module validation levels**. Public packages use `/lib/modules/4.1.52/`; immutable source bundles retain their original staging layout for reproducibility.
 
 | Feed on Pages | Original reference firmware | Architecture / vermagic | Packages |
 |---|---|---|---:|
-| `kernel/4.1.52-vcnt3-candidates` | DGA4331 / VCNT-3, AGTHF 1.3.0 and 1.1.2 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 49 |
-| `kernel/4.1.52-vcnt2-candidates` | DWA0122 / VCNT-2, Belong 19.4.l.0393-MR1-RB and 19.4.0381-4961004 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
-| `kernel/4.1.52-vcntj-candidates` | DGA4134 / VCNT-J, Sorgenia 19.4.0629-5661052 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
-| `kernel/4.1.52-vcnta-candidates` | DJA0231 / VCNT-A, Telstra 20.3.c.0501-MR22.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
-| `kernel/4.1.52-vbntv-candidates` | DJA0230 / VBNT-V, Telstra 20.3.c.0432-MR21.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
+| `kernel/4.1.52-vcnt3` | DGA4331 / VCNT-3, AGTHF 1.3.0 and 1.1.2 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 49 |
+| `kernel/4.1.52-vcnt2` | DWA0122 / VCNT-2, Belong 19.4.l.0393-MR1-RB and 19.4.0381-4961004 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
+| `kernel/4.1.52-vcntj` | DGA4134 / VCNT-J, Sorgenia 19.4.0629-5661052 | `arm_cortex-a7`, `4.1.52 SMP preempt mod_unload ARMv7 p2v8` | 49 |
+| `kernel/4.1.52-vcnta` | DJA0231 / VCNT-A, Telstra 20.3.c.0501-MR22.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
+| `kernel/4.1.52-vbntv` | DJA0230 / VBNT-V, Telstra 20.3.c.0432-MR21.1 | `arm_cortex-a9`, `4.1.52 SMP preempt mod_unload ARMv7` | 48 |
 
-Enable a candidate source manually only after matching its complete virtual
-kernel package version. The source-selection helper does not enable candidates.
+Enable a source only after matching its complete virtual kernel package version. The source-selection helper now includes all five feeds automatically when the exact ABI matches.
 The exact source lines are in the public kernel overview and each feed's
 `opkg.conf`. These profiles cannot be interchanged despite sharing Linux 4.1.52.
 
 The module set contains the existing network, netfilter and QoS targets, TUN,
 WireGuard 1.0.20220627, CDC Ethernet, RNDIS and USBnet. SPU is not included:
 VCNT-3, VCNT-2 and VCNT-J disable it; Telstra enables vendor implementation 3, which needs separate ABI checks. `xt_nat` remains quarantined across
-profiles and was not loaded or tested. IPKs contain a single module under
-`/usr/lib/kernel-module-candidates/<profile>/`, an exact kernel dependency and
-no maintainer scripts or boot autoload files. TUN is already built into both Telstra kernels, so their feeds omit `tun.ko` and contain 48 packages each. The audit rejects modules that duplicate exports built into the kernel.
+profiles and was not loaded or tested. Published IPKs contain a single module under `/lib/modules/4.1.52/`, exact kernel/dependency versions and a pre-install ABI guard. They do not load modules or add boot autoload files. Stock-owned dependencies are reused; replacing a stock module itself requires the controlled migration helper. The archived source IPKs retain their original layout and hashes. TUN is already built into both Telstra kernels, so their feeds omit `tun.ko` and contain 48 packages each. The audit rejects modules that duplicate exports built into the kernel.
 
 ## Input recovery and checks
 
@@ -93,10 +90,27 @@ validation history. No stock module was unloaded for this correction.
 
 ## Newer firmware and acquisition limits
 
-AGTHF 1.3.6 is already mapped to the VCNT-3 candidate feed because its kernel package, kernel source reference and all 267 stock module blobs match 1.3.0. This is stock equivalence only: the full 1.3.6 RBI could not be downloaded from the TIM server or public mirror, so no direct embedded configuration or runtime validation is claimed.
+AGTHF 1.3.6 is already mapped to the VCNT-3 exact-ABI feed because its kernel package, kernel source reference and all 267 stock module blobs match 1.3.0. This is stock equivalence only: the full 1.3.6 RBI could not be downloaded from the TIM server or public mirror, so no direct embedded configuration validation is claimed. The identical-hash CDC/RNDIS pair was subsequently tested on a VCNT-3 device as documented below.
 
 VCNT-2 19.4.l.0393-MR1-RB was recovered from its public torrent after the HTTP/HTTPS server timed out. Its exact kernel package matches the older bank dump. The embedded configuration differs only in `CONFIG_NETFILTER_NETLINK_LOG` and `CONFIG_NETFILTER_XT_TARGET_NFLOG`, both enabled as modules in the newer image. The newest configuration is now the build reference, and the same 49 payloads are checked against both complete kernel/stock export inventories. All 255 new stock modules also match the historical Git extraction. No additional feed is needed.
 
 Fastweb FW261/FW264 still require an original image; a saved runtime configuration remains an alternative.
 
-The available VCNT-J Sorgenia image and latest inventoried Telstra images were therefore processed next. Each has a dedicated exact-dependency candidate feed. All new profiles remain offline checked only. Other kernel releases and CPU families need their own source, toolchain and ABI checks.
+The available VCNT-J Sorgenia image and latest inventoried Telstra images were therefore processed next. Each has a dedicated exact-dependency feed. Their modules remain offline checked except for the documented VCNT-3 USB pair. Other kernel releases and CPU families need their own source, toolchain and ABI checks.
+
+## Publication and device validation — 2026-11-11
+
+VCNT-3 CDC Ethernet and RNDIS host payloads passed explicit loading, Xiaomi Mi
+10T Lite RNDIS binding, usb0 carrier at 480 Mbit/s and a DHCP lease probe.
+Evidence is pinned by ELF SHA256 in `build/kernel-firmware-profiles/runtime-validation.json`.
+Reboot persistence, reconnect and Internet traffic were not tested. This does
+not validate DumaOS or the other modules. The remaining modules are labelled
+`offline-checked` individually; these labels do not prevent installation.
+
+The five canonical feed names no longer end in `-candidates`. Previous URLs
+serve alias indexes pointing to the canonical IPKs. Public physical package
+names use `-manual` instead of `-candidate`; old staging packages are not
+automatically removed. Existing stock or staged installations require reviewed
+migration with consumers stopped and the target module unloaded, followed by
+removal of obsolete staging packages if present. No package hook forces file
+ownership, unloads a driver or enables automatic loading.

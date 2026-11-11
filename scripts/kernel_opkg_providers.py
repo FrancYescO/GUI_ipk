@@ -13,12 +13,12 @@ import shlex
 import tarfile
 
 from cryptodev_packages import definitions
-from firmware_kernel_candidates import archive
+from firmware_kernel_candidates import archive, definitions as firmware_definitions
 from kernel_firmware import config_options, elf_module
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build/kernel-opkg-providers'
-POLICY = '3'
+POLICY = '4'
 
 
 def sha(data):
@@ -52,6 +52,15 @@ def upgraded(version):
     return match[1] + '-' + str(int(match[2]) + int(POLICY))
 
 
+def runtime_evidence(profile, module, payload):
+    evidence = json.loads((ROOT / 'build/kernel-firmware-profiles/runtime-validation.json').read_text())
+    entry = evidence.get(profile, {})
+    result = entry.get('modules', {}).get(module)
+    if result and (result['sha256'] != sha(payload) or entry['kernel_package'] != definitions()[profile]['kernel_package']):
+        raise ValueError('Runtime evidence belongs to a different payload or ABI: ' + profile + '/' + module)
+    return result
+
+
 def config(profile):
     if profile.startswith('4.1.38-'):
         internal = 'vbnts' if profile.endswith('vbntk') else 'vbnto'
@@ -68,7 +77,7 @@ def config(profile):
 def guard(kernel, replacements, stock_dependencies=None):
     """No module loading/unloading, dependency bypass or generic file overwrite."""
     q = shlex.quote
-    binding = q('kernel (= ' + kernel + ')')
+    binding = q('kernel(=' + kernel + ')')
     script = '''#!/bin/sh
 set -eu
 [ -z "${IPKG_INSTROOT:-}" ] || exit 0
@@ -87,19 +96,32 @@ package_status() {
     END { if (found > 1) exit 2 }
   ' /usr/lib/opkg/status
 }
+has_kernel_abi() {
+  printf '%s\\n' "$1" | awk -v wanted=EXPECTED_BINDING '
+    /^Depends:/ {
+      sub(/^Depends:[ \\t]*/, "")
+      count=split($0, parts, ",")
+      for (i=1; i<=count; i++) {
+        gsub(/[ \\t]/, "", parts[i])
+        if (parts[i] == wanted) found=1
+      }
+    }
+    END { exit !found }
+  '
+}
 metadata=$(package_status kernel)
 printf '%s\\n' "$metadata" | grep -q '^Status:.* installed' || { echo 'Kernel package is not installed' >&2; exit 1; }
 installed=$(printf '%s\\n' "$metadata" | sed -n 's/^Version: //p')
 [ "$installed" = EXPECTED_KERNEL ] || { echo 'Kernel ABI mismatch; refusing module installation' >&2; exit 1; }
-'''.replace('EXPECTED_KERNEL', q(kernel))
+'''.replace('EXPECTED_KERNEL', q(kernel)).replace('EXPECTED_BINDING', binding)
     for package in sorted(stock_dependencies or []):
         script += f'''metadata=$(package_status {q(package)})
-printf '%s\\n' "$metadata" | grep -q '^Status:.* installed' &&\nprintf '%s\\n' "$metadata" | grep -F -- {binding} >/dev/null || {{ echo 'Missing exact-ABI firmware dependency: {package}' >&2; exit 1; }}
+printf '%s\\n' "$metadata" | grep -q '^Status:.* installed' &&\nhas_kernel_abi "$metadata" || {{ echo 'Missing exact-ABI firmware dependency: {package}' >&2; exit 1; }}
 '''
     for generic, modules in sorted(replacements.items()):
         script += f'''metadata=$(package_status {q(generic)})
 if printf '%s\\n' "$metadata" | grep -q '^Status:.* installed' &&
-   ! printf '%s\\n' "$metadata" | grep -F -- {binding} >/dev/null; then
+   ! has_kernel_abi "$metadata"; then
 '''
         for module in sorted(modules):
             script += f'''  if [ -d {q('/sys/module/' + module.replace('-', '_'))} ]; then
@@ -156,7 +178,8 @@ def emit(row, control, ipk, output):
 
 
 def apply(rows, output):
-    rows = [dict(r, section='kernel/' + r['profile'] + ('-candidates' if fields(r['control']).get('X-Module-Staging-Only') == 'yes' else '')) for r in rows]
+    promoted = {p for p, entry in firmware_definitions().items() if entry.get('installable')}
+    rows = [dict(r, section='kernel/' + r['profile'] + ('-candidates' if fields(r['control']).get('X-Module-Staging-Only') == 'yes' and r['profile'] not in promoted else '')) for r in rows]
     mapping = json.loads((BUILD / 'legacy-map.json').read_text())
     profiles = definitions()
     firmware = json.loads((BUILD / 'firmware-packages.json').read_text())
@@ -164,12 +187,12 @@ def apply(rows, output):
     configs = {p: config(p) for p in profiles}
     inventory = {p: {} for p in profiles}
     sources = {}
-    for row in rows:
+    for index, row in enumerate(rows):
         profile = row['profile']
         if profile not in profiles or row['section'] != profiles[profile]['feed']:
             continue
         f = fields(row['control'])
-        if f.get('X-Module-Staging-Only') == 'yes':
+        if f.get('X-Module-Staging-Only') == 'yes' and profile not in promoted:
             continue
         path = Path(row['_path'])
         original = path.read_bytes()
@@ -180,14 +203,36 @@ def apply(rows, output):
         if len(data) != 1:
             continue
         member, payload = next(iter(data.items()))
+        if member.startswith('usr/lib/kernel-module-candidates/') and (profile in promoted or Path(member).name == 'cryptodev.ko'):
+            # Keep immutable build bundles as provenance; publish identical ELF
+            # bytes at the firmware's standard module location.
+            member = 'lib/modules/' + profile.split('-')[0] + '/' + Path(member).name
+            data = {member: payload}
+            previous = f['Package']
+            if previous.endswith('-candidate'):
+                f['Package'] = previous[:-len('-candidate')] + ('' if Path(member).name == 'cryptodev.ko' else '-manual')
+            f.pop('X-Module-Staging-Only', None)
+            f['X-Module-Path'] = '/' + member
+            f['Description'] = 'Exact-ABI ' + Path(member).stem + ' for ' + profile + '; offline symbol checks passed; see per-module runtime evidence'
+            row = dict(row, package=f['Package'], control=''.join(k + ': ' + v + '\n' for k, v in f.items()))
+            rows[index] = row
         if not member.startswith('lib/modules/') or not member.endswith('.ko'):
-            continue  # Includes deliberately staged cryptodev on runtime feeds.
+            continue  # Only single standard-path kernel modules advertise capabilities.
         module = Path(member).stem
+        evidence = runtime_evidence(profile, module, payload)
+        if evidence:
+            f['X-Runtime-Validated'] = 'yes'
+            f['X-Runtime-Test'] = '; '.join(evidence['tests'])
+            f['X-Runtime-Test-Status'] = 'passed; reboot, reconnect and Internet traffic not tested'
+        if profile in promoted or module == 'cryptodev':
+            level = 'runtime-tested' if f.get('X-Runtime-Validated') == 'yes' else 'offline-checked'
+            f['X-Validation-Level'] = level
+            f['Description'] = 'Exact-ABI ' + module + ' for ' + profile + '; ' + level + '; no automatic module loading'
         if module in inventory[profile]:
             raise ValueError('Ambiguous installable module: ' + profile + '/' + module)
         parsed = elf_module(payload)
         inventory[profile][module] = {'row': row, 'outer': outer, 'member': member,
-                                     'payload': payload, 'elf': parsed, 'fields': f}
+                                     'payload': payload, 'data': data, 'elf': parsed, 'fields': f}
         sources[row['package']] = inventory[profile][module]
         canonical = 'kmod-' + module.lower().replace('_', '-')
         groups.setdefault(canonical, {'modules': [module], 'depends': 'kernel', 'extra_files': [],
@@ -274,12 +319,12 @@ def apply(rows, output):
             modified[f['Package']] = {'fields': f, 'source': source, 'replacing': replacing}
 
     emitted = {}
-    def module_dependency(profile, module):
+    def module_dependency(profile, module, rebuilt=False):
         # A compatible firmware module must keep its original file owner.
         # Prefer that owner even when a rebuilt component is also in the feed.
         stock = plans[profile]['stock']
         owners = sorted(p for p, value in stock.items() if module in value['modules'])
-        if owners:
+        if owners and not rebuilt:
             name = owners[0]
             return name, stock[name]['version'], True
         if module not in inventory[profile]:
@@ -287,9 +332,9 @@ def apply(rows, output):
         name = inventory[profile][module]['row']['package']
         return name, versions[name], False
 
-    def capability_dependency(profile, generic):
+    def capability_dependency(profile, generic, rebuilt=False):
         plan = plans[profile]
-        if generic in plan['stock']:
+        if generic in plan['stock'] and not rebuilt:
             return generic, plan['stock'][generic]['version'], True
         name = plan['names'][generic]
         return name, versions.get(name, profile.split('-')[0] + '-' + str(int(POLICY) + 1)), False
@@ -297,6 +342,8 @@ def apply(rows, output):
     for package, item in modified.items():
         source, f = item['source'], item['fields']
         profile = source['row']['profile']
+        # The VCNT firmware USB fix was validated as a CDC/RNDIS pair.
+        paired = {'cdc_ether'} if profile in promoted and Path(source['member']).stem == 'rndis_host' else set()
         dependencies = []
         stock_deps = set()
         for mod in source['elf']['modinfo'].get('depends', [''])[0].split(','):
@@ -305,7 +352,7 @@ def apply(rows, output):
             cfg, _ = configs[profile]
             if cfg.get(mapping['builtin_configs'].get(mod, '')) == 'y':
                 continue
-            dep, version, firmware_dep = module_dependency(profile, mod)
+            dep, version, firmware_dep = module_dependency(profile, mod, mod in paired)
             if firmware_dep:
                 stock_deps.add(dep)
             dependencies.append(dep + ' (= ' + version + ')')
@@ -313,7 +360,8 @@ def apply(rows, output):
             if target != package:
                 continue
             for dep in plans[profile]['groups'][generic]['dependencies']:
-                name, version, firmware_dep = capability_dependency(profile, dep)
+                rebuilt = bool(paired.intersection(plans[profile]['groups'].get(dep, {}).get('modules', [])))
+                name, version, firmware_dep = capability_dependency(profile, dep, rebuilt)
                 if firmware_dep:
                     stock_deps.add(dep)
                 if name != package:
@@ -325,7 +373,7 @@ def apply(rows, output):
         controls['control'] = ''.join(k + ': ' + v + '\n' for k, v in f.items() if v).encode()
         controls['preinst'] = guard(profiles[profile]['kernel_package'], item['replacing'], stock_deps)
         outer = archive({'./debian-binary': b'2.0\n', './control.tar.gz': control_archive(controls),
-                         './data.tar.gz': data_archive(unpack(source['outer']['data.tar.gz']))})
+                         './data.tar.gz': data_archive(source['data'])})
         emitted[package] = emit(source['row'], f, outer, output)
 
     metas = []
@@ -361,7 +409,7 @@ def apply(rows, output):
                  'X-Builtin-Modules': ', '.join(capability['builtins']),
                  'X-Kernel-Config-SHA256': reports[profile]['config_sha256'],
                  'X-Manual-Install-Only': 'yes'}
-            if entry.get('candidate'):
+            if entry.get('candidate') and not entry.get('installable'):
                 f['X-Module-Staging-Only'] = 'yes'
                 f['X-Runtime-Validated'] = 'no'
             control = ''.join(k + ': ' + v + '\n' for k, v in f.items() if v).encode()

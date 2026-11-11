@@ -2,8 +2,10 @@ import gzip
 import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 import sys
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -20,8 +22,8 @@ class PublicationTests(unittest.TestCase):
     def test_complete_bootstrap_has_semantic_components_and_all_updates(self):
         catalog = json.loads(gzip.decompress((ROOT / 'build/publication/bootstrap.json.gz').read_bytes()))
         rows = catalog['records']
-        self.assertEqual(len(rows), 6744)
-        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 6736)
+        self.assertEqual(len(rows), 7015)
+        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 7007)
         self.assertEqual(set(catalog['releases']), {'freeswitch-sounds'})
         self.assertLess(sum(r['size'] for r in rows if r['storage'] == 'pages'), 750 * 1024**2)
         pins = json.loads((ROOT / 'build/application-archive/manifest.json').read_text())
@@ -43,9 +45,9 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual({r['url'].rsplit('/', 1)[1]: r['profile'] for r in manifest['aliases']}, layout.KERNEL_ALIASES)
         self.assertNotIn('url', manifest)  # No misleading combined OPKG source.
         self.assertEqual([(r['profile'], r['module_count']) for r in manifest['profiles']],
-                         [('4.1.38-vbnto', 50), ('4.1.38-vbntk', 50), ('4.1.52-vbntk', 50)])
+                         [('4.1.38-vbnto', 50), ('4.1.38-vbntk', 50), ('4.1.52-vbntk', 50), ('4.1.52-vcnt3', 50), ('4.1.52-vcnt2', 50), ('4.1.52-vcntj', 50), ('4.1.52-vcnta', 49), ('4.1.52-vbntv', 49)])
         self.assertEqual([(r['profile'], r['module_count']) for r in manifest['candidates']],
-                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212), ('4.1.52-vcnt3-candidates', 50), ('4.1.52-vcnt2-candidates', 50), ('4.1.52-vcntj-candidates', 50), ('4.1.52-vcnta-candidates', 49), ('4.1.52-vbntv-candidates', 49)])
+                         [('4.1.38-vbnto-candidates', 220), ('4.1.38-vbntk-candidates', 212)])
         for row in manifest['profiles'] + manifest['candidates']:
             self.assertEqual(row['url'], layout.SITE + '/kernel/' + row['profile'])
             self.assertTrue(row['source'].endswith(' ' + row['url']))
@@ -85,6 +87,37 @@ class PublicationTests(unittest.TestCase):
                     self.assertEqual(fields['SHA256sum'], row['sha256'])
                     self.assertEqual(fields['Depends'], layout.parse(row['control'])['Depends'])
                 self.assertEqual(sorted(p.name for p in directory.iterdir()), ['Packages', 'Packages.gz'])
+
+    def test_source_helper_selects_promoted_profiles_by_full_abi(self):
+        renderer = layout.load_script('render-publication')
+        catalog = fetch.read_catalog(ROOT / 'build/publication/bootstrap.json.gz', live=False)
+        kernels = renderer.kernel_manifest(catalog['records'])
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            manifest = directory / 'feeds.json'
+            manifest.write_text(json.dumps({'userspace': [], 'kernel': kernels}))
+            status = directory / 'status'
+            helper = (ROOT / 'scripts/print-opkg-sources.sh').read_text().replace('/usr/lib/opkg/status', str(status))
+            jsonfilter = directory / 'jsonfilter'
+            jsonfilter.write_text('#!' + sys.executable + '\n' + '''import json,re,sys
+args=sys.argv
+data=json.load(open(args[args.index('-i')+1]))
+expression=args[args.index('-e')+1]
+match=re.fullmatch(r'@.kernel.profiles\[(\d+)\].(kernel_package|source)',expression)
+if match:
+    try: print(data['kernel']['profiles'][int(match[1])][match[2]])
+    except IndexError: sys.exit(1)
+''')
+            jsonfilter.chmod(0o755)
+            promoted = [r for r in kernels['profiles'] if r['profile'].startswith('4.1.52-') and r['profile'] != '4.1.52-vbntk']
+            self.assertEqual(len(promoted), 5)
+            for row in promoted:
+                status.write_text('Package: kernel\nVersion: ' + row['kernel_package'] + '\n\n')
+                result = subprocess.run(['sh', '-s', str(manifest)], input=helper, text=True, capture_output=True,
+                                        env={**os.environ, 'PATH': str(directory) + ':' + os.environ['PATH']})
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout.strip(), row['source'])
+                self.assertNotIn('-candidates', result.stdout)
 
     def test_cached_bytes_are_verified_and_remote_urls_are_restricted(self):
         with tempfile.TemporaryDirectory() as temp:

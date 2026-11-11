@@ -19,6 +19,7 @@ KERNEL_ALIASES = {
     '4.1.38-vbnts': '4.1.38-vbntk',
     '4.1.52-vbnts': '4.1.52-vbntk',
     '4.1.38-vbnts-candidates': '4.1.38-vbntk-candidates',
+    **{p + '-candidates': p for p in ('4.1.52-vcnt3', '4.1.52-vcnt2', '4.1.52-vcntj', '4.1.52-vcnta', '4.1.52-vbntv')},
 }
 TRANSPORT = {'Filename', 'Size', 'SHA256sum', 'MD5Sum'}
 

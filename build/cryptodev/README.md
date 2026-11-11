@@ -1,9 +1,8 @@
 # Cryptodev for the eight kernel ABI profiles
 
 Cryptodev exposes kernel CryptoAPI operations through `/dev/crypto`. The IPKs
-are additive: they stage `cryptodev.ko` under
-`/usr/lib/kernel-module-candidates/<profile>/`, without replacing a stock module,
-installing an autoload entry, changing OpenSSL or loading a hardware accelerator.
+publish `cryptodev.ko` under `/lib/modules/<kernel>/`, with controlled ownership migration when a stock module already occupies the path. Installation does not add
+autoload entries, change OpenSSL or load a hardware accelerator.
 The exact installed `kernel` package dependency must match. VBNT-S uses the
 VBNT-K public feed alias.
 
@@ -12,11 +11,11 @@ VBNT-K public feed alias.
 | 4.1.38-vbnto | `kernel/4.1.38-vbnto` | Final CI artifact functionally tested on .45 |
 | 4.1.38-vbntk | `kernel/4.1.38-vbntk` | Final CI artifact functionally tested on .204 |
 | 4.1.52-vbntk | `kernel/4.1.52-vbntk` | Offline symbols; existing stock cryptodev busy on .69 |
-| 4.1.52-vcnt3 | `kernel/4.1.52-vcnt3-candidates` | Offline candidates |
-| 4.1.52-vcnt2 | `kernel/4.1.52-vcnt2-candidates` | Offline candidates (both firmware 19.4.0381 and 19.4.0393) |
-| 4.1.52-vcntj | `kernel/4.1.52-vcntj-candidates` | Offline candidates |
-| 4.1.52-vcnta | `kernel/4.1.52-vcnta-candidates` | Offline candidates; stock TUN is built in |
-| 4.1.52-vbntv | `kernel/4.1.52-vbntv-candidates` | Offline candidates; stock TUN is built in |
+| 4.1.52-vcnt3 | `kernel/4.1.52-vcnt3` | Offline checked |
+| 4.1.52-vcnt2 | `kernel/4.1.52-vcnt2` | Offline checked (both firmware 19.4.0381 and 19.4.0393) |
+| 4.1.52-vcntj | `kernel/4.1.52-vcntj` | Offline checked |
+| 4.1.52-vcnta | `kernel/4.1.52-vcnta` | Offline checked; stock TUN is built in |
+| 4.1.52-vbntv | `kernel/4.1.52-vbntv` | Offline checked; stock TUN is built in |
 
 Enable the matching source from https://francyesco.github.io/GUI_ipk/kernel/.
 For example, on the matching VBNT-K/S 4.1.38 ABI:
@@ -25,7 +24,7 @@ For example, on the matching VBNT-K/S 4.1.38 ABI:
 opkg update
 opkg install kmod-cryptodev-4.1.38-vbntk
 # Only if no cryptodev is already loaded or in use:
-insmod /usr/lib/kernel-module-candidates/4.1.38-vbntk/cryptodev.ko
+insmod /lib/modules/4.1.38/cryptodev.ko
 chmod 600 /dev/crypto
 # After applications have closed their handles:
 rmmod cryptodev
@@ -33,7 +32,7 @@ rmmod cryptodev
 
 A stock driver already in use must be left loaded. In particular, the .69 has
 stock cryptodev open in nginx and generic_pnpd; the new module was not substituted.
-Installing the staged package alone does not activate the driver. Applications
+Installing the package alone does not activate the driver. Applications
 need explicit cryptodev support; installing this module does not automatically
 accelerate OpenSSL. Actual drivers used by the 4.1.38 tests were `cbc(aes-generic)`,
 `sha256-generic` and `hmac(sha256-generic)` (software implementations).

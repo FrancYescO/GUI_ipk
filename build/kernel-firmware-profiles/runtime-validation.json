@@ -1,0 +1,39 @@
+{
+  "4.1.52-vcnt3": {
+    "kernel_package": "git_gitolite_openwrt__openwrt_broadcom_bcm963xx_5_02L_07_git-tch_bcm5_02L_07patch1_wlan19_1_1p2-1-036bded426297fe68ce5c3d8ab8c6658",
+    "device": "DGA4331 / VCNT-3",
+    "firmware": "19.4.1051-4661204-20241122090751-cf49b74e8c88c918fead0a0f9ad052f3283f4ee7",
+    "date": "2026-11-11",
+    "source": "smartphone-vcnt3-audit-2026-11-11.md in FrancYescO/tch-nginx-gui",
+    "modules": {
+      "cdc_ether": {
+        "sha256": "7da5c388f1b1c3acf3bafae9a2cc1f7d342b53b597b0d4350712f6705aed869b",
+        "tests": [
+          "load and USB binding",
+          "Xiaomi Mi 10T Lite RNDIS ef/04/01",
+          "usb0 carrier at 480 Mbit/s",
+          "DHCP lease and gateway received without changing routes"
+        ],
+        "not_tested": [
+          "reboot persistence",
+          "USB reconnect",
+          "Internet traffic via phone"
+        ]
+      },
+      "rndis_host": {
+        "sha256": "aab10d33d67729cebf8e5be41c4efdd16b33daf01624faf0e754ce9006aedb2f",
+        "tests": [
+          "load and USB binding",
+          "Xiaomi Mi 10T Lite RNDIS ef/04/01",
+          "usb0 carrier at 480 Mbit/s",
+          "DHCP lease and gateway received without changing routes"
+        ],
+        "not_tested": [
+          "reboot persistence",
+          "USB reconnect",
+          "Internet traffic via phone"
+        ]
+      }
+    }
+  }
+}

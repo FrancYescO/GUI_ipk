@@ -1,0 +1,17 @@
+{
+  "metadata_policy": 4,
+  "kernel_records": 1449,
+  "module_payloads": 830,
+  "capabilities": 619,
+  "unit_tests": 158,
+  "unit_tests_skipped": 3,
+  "opkg_revision": "4bd8601ebd95c130e504cc724b0c5eb163050982",
+  "offline_root_abis_passed": 8,
+  "cdc_rndis_migrations_passed": 5,
+  "qos_stock_ownership_checks_passed": 8,
+  "hardware_tested_promoted_modules": [
+    "4.1.52-vcnt3/cdc_ether",
+    "4.1.52-vcnt3/rndis_host"
+  ],
+  "note": "Offline-root installs never load modules. Hardware evidence is separately hash-bound in runtime-validation.json."
+}
