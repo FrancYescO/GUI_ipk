@@ -1,0 +1,23 @@
+{
+  "metadata_policy": 3,
+  "opkg_revision": "4bd8601ebd95c130e504cc724b0c5eb163050982",
+  "profiles": [
+    "4.1.38-vbnto",
+    "4.1.38-vbntk",
+    "4.1.52-vbntk",
+    "4.1.52-vcnt3",
+    "4.1.52-vcnt2",
+    "4.1.52-vcntj",
+    "4.1.52-vcnta",
+    "4.1.52-vbntv"
+  ],
+  "result": "pass",
+  "qos_stock_ownership_profiles": [
+    "4.1.38-vbnto",
+    "4.1.38-vbntk",
+    "4.1.52-vbntk"
+  ],
+  "unit_tests": 155,
+  "unit_tests_skipped": 3,
+  "method": "Inert stock ownership fixtures in Linux offline-root; no modules loaded."
+}

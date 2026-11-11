@@ -18,7 +18,7 @@ from kernel_firmware import config_options, elf_module
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build/kernel-opkg-providers'
-POLICY = '2'
+POLICY = '3'
 
 
 def sha(data):
@@ -200,6 +200,8 @@ def apply(rows, output):
         cfg, cfg_sha = configs[profile]
         available = inventory[profile]
         stock = firmware.get(profile, {}).get('packages', {})
+        if stock and firmware[profile]['kernel_package'] != entry['kernel_package']:
+            raise ValueError('Firmware package inventory ABI mismatch: ' + profile)
         local_groups = dict(groups)
         for name, data in stock.items():
             if name not in sources and data['modules']:
@@ -272,10 +274,29 @@ def apply(rows, output):
             modified[f['Package']] = {'fields': f, 'source': source, 'replacing': replacing}
 
     emitted = {}
+    def module_dependency(profile, module):
+        # A compatible firmware module must keep its original file owner.
+        # Prefer that owner even when a rebuilt component is also in the feed.
+        stock = plans[profile]['stock']
+        owners = sorted(p for p, value in stock.items() if module in value['modules'])
+        if owners:
+            name = owners[0]
+            return name, stock[name]['version'], True
+        if module not in inventory[profile]:
+            raise ValueError('Missing runtime module dependency: ' + profile + '/' + module)
+        name = inventory[profile][module]['row']['package']
+        return name, versions[name], False
+
+    def capability_dependency(profile, generic):
+        plan = plans[profile]
+        if generic in plan['stock']:
+            return generic, plan['stock'][generic]['version'], True
+        name = plan['names'][generic]
+        return name, versions.get(name, profile.split('-')[0] + '-' + str(int(POLICY) + 1)), False
+
     for package, item in modified.items():
         source, f = item['source'], item['fields']
         profile = source['row']['profile']
-        available = inventory[profile]
         dependencies = []
         stock_deps = set()
         for mod in source['elf']['modinfo'].get('depends', [''])[0].split(','):
@@ -284,27 +305,16 @@ def apply(rows, output):
             cfg, _ = configs[profile]
             if cfg.get(mapping['builtin_configs'].get(mod, '')) == 'y':
                 continue
-            if mod not in available:
-                owners = [p for p,v in plans[profile]['stock'].items() if mod in v['modules']]
-                if not owners:
-                    raise ValueError('Missing runtime module dependency: ' + profile + '/' + mod)
-                dep = sorted(owners)[0]
+            dep, version, firmware_dep = module_dependency(profile, mod)
+            if firmware_dep:
                 stock_deps.add(dep)
-                version = plans[profile]['stock'][dep]['version']
-            else:
-                dep = available[mod]['row']['package']
-                version = versions[dep]
             dependencies.append(dep + ' (= ' + version + ')')
         for generic, target in plans[profile]['direct'].items():
             if target != package:
                 continue
             for dep in plans[profile]['groups'][generic]['dependencies']:
-                if dep in plans[profile]['names']:
-                    name = plans[profile]['names'][dep]
-                    version = versions.get(name, profile.split('-')[0] + '-' + (POLICY if dep in plans[profile]['stock'] else str(int(POLICY) + 1)))
-                else:
-                    name = dep
-                    version = plans[profile]['stock'][dep]['version']
+                name, version, firmware_dep = capability_dependency(profile, dep)
+                if firmware_dep:
                     stock_deps.add(dep)
                 if name != package:
                     dependencies.append(name + ' (= ' + version + ')')
@@ -324,13 +334,20 @@ def apply(rows, output):
         for generic, capability in plan['groups'].items():
             if generic in plan['direct'] and generic in plan['stock']:
                 continue
-            physical = sorted({inventory[profile][m]['row']['package'] for m in capability['modules'] if m in inventory[profile]})
             dependencies = ['kernel (= ' + entry['kernel_package'] + ')']
-            dependencies += [name + ' (= ' + versions[name] + ')' for name in physical]
-            for dep in capability['dependencies']:
-                name = plan['names'].get(dep, dep)
-                version = versions.get(name, profile.split('-')[0] + '-' + (POLICY if dep in plans[profile]['stock'] else str(int(POLICY) + 1))) if dep in plan['names'] else plan['stock'][dep]['version']
+            stock_deps = set()
+            for module in capability['modules']:
+                if module not in inventory[profile]:
+                    continue
+                name, version, firmware_dep = module_dependency(profile, module)
                 dependencies.append(name + ' (= ' + version + ')')
+                if firmware_dep:
+                    stock_deps.add(name)
+            for dep in capability['dependencies']:
+                name, version, firmware_dep = capability_dependency(profile, dep)
+                dependencies.append(name + ' (= ' + version + ')')
+                if firmware_dep:
+                    stock_deps.add(name)
             migration_alias = generic not in plan['stock']
             package_name = generic if migration_alias else plan['names'][generic]
             provider_version = profile.split('-')[0] + '-' + str(int(POLICY) + 1) if migration_alias else profile.split('-')[0] + '-' + POLICY
@@ -348,7 +365,7 @@ def apply(rows, output):
                 f['X-Module-Staging-Only'] = 'yes'
                 f['X-Runtime-Validated'] = 'no'
             control = ''.join(k + ': ' + v + '\n' for k, v in f.items() if v).encode()
-            blob = archive({'./debian-binary': b'2.0\n', './control.tar.gz': control_archive({'control': control, 'preinst': guard(entry['kernel_package'], {}, [d for d in capability['dependencies'] if d not in plan['names']])}),
+            blob = archive({'./debian-binary': b'2.0\n', './control.tar.gz': control_archive({'control': control, 'preinst': guard(entry['kernel_package'], {}, stock_deps)}),
                             './data.tar.gz': archive({})})
             row = {'section': entry['feed'], 'profile': profile}
             metas.append(emit(row, f, blob, output))

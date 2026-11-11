@@ -8,6 +8,29 @@ profile=$2
 opkg_bin=${OPKG_BIN:-opkg}
 . "$base/case.env"
 run() { mode=$1; shift; "$opkg_bin" --offline-root "$base/$mode" -f "$base/$mode.conf" "$@"; }
+if [ -n "$QOS_PACKAGE" ]; then
+    find "$base/qos/lib/modules" -type f -exec sha256sum {} \; | sort > "$base/stock-before.sha256"
+    cp "$base/qos/usr/lib/opkg/status" "$base/stock-before.status"
+    run qos update
+    run qos install "$QOS_PACKAGE"
+    sha256sum -c "$base/stock-before.sha256"
+    # Preserve installed firmware versions/states/dependencies across OPKG's rewrite.
+    python3 - "$base/stock-before.status" "$base/qos/usr/lib/opkg/status" <<'PY'
+import sys
+from pathlib import Path
+def records(path):
+    result = {}
+    for block in Path(path).read_text().strip().split('\n\n'):
+        fields = dict(line.split(': ', 1) for line in block.splitlines() if ': ' in line)
+        if fields:
+            result[fields['Package']] = tuple(''.join(fields.get(k, '').split())
+                                            for k in ('Version', 'Status', 'Depends'))
+    return result
+before, after = map(records, sys.argv[1:])
+assert all(after.get(name) == value for name, value in before.items())
+PY
+    echo 'PASS QoS installation preserves stock module files and package records'
+fi
 for mode in clean legacy group wrong; do run "$mode" update; done
 if [ -z "$TUN_PACKAGE" ]; then
  if run clean install fixture-vpn; then echo 'FAIL staging-only module satisfied TUN'; exit 1; fi

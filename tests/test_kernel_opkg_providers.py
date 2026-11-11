@@ -95,6 +95,63 @@ class KernelProviderTests(unittest.TestCase):
                 self.assertNotIn((row['section'], row['_archive_filename']), active)
                 self.assertEqual(hashlib.sha256(Path(row['_archive_source']).read_bytes()).hexdigest(), providers.fields(row['control'])['X-Original-IPK-SHA256'])
 
+    def test_module_dependencies_preserve_stock_owners(self):
+        firmware = json.loads((providers.BUILD / 'firmware-packages.json').read_text())
+        configs = {p: providers.config(p)[0] for p in providers.definitions()}
+        mapping = json.loads((providers.BUILD / 'legacy-map.json').read_text())
+        checked = 0
+        for row in self.rows:
+            stock = firmware.get(row['profile'], {}).get('packages', {})
+            outer = providers.unpack(Path(row['_path']).read_bytes())
+            for path, payload in providers.unpack(outer['data.tar.gz']).items():
+                if not path.startswith('lib/modules/'):
+                    continue
+                cfg = configs[row['profile']]
+                for module in providers.elf_module(payload)['modinfo'].get('depends', [''])[0].split(','):
+                    if cfg.get(mapping['builtin_configs'].get(module, '')) == 'y':
+                        continue
+                    owners = sorted(p for p, value in stock.items() if module in value['modules'])
+                    if not owners:
+                        continue
+                    name = owners[0]
+                    self.assertIn(name + ' (= ' + stock[name]['version'] + ')',
+                                  providers.fields(row['control'])['Depends'], row['package'])
+                    preinst = providers.unpack(outer['control.tar.gz'])['preinst']
+                    self.assertIn(('package_status ' + name).encode(), preinst)
+                    checked += 1
+        self.assertGreater(checked, 0)
+
+    def test_dumaos_qos_dependencies_do_not_replace_stock_firewall(self):
+        profile = '4.1.52-vbntk'
+        stock = json.loads((providers.BUILD / 'firmware-packages.json').read_text())[profile]['packages']
+        rows = {r['package']: r for r in self.rows if r['profile'] == profile}
+        pending = ['kmod-act-connmark']
+        visited = set()
+        while pending:
+            name = pending.pop()
+            if name in visited or name in stock or name == 'kernel':
+                continue
+            visited.add(name)
+            row = rows[name]
+            outer = providers.unpack(Path(row['_path']).read_bytes())
+            payload = providers.unpack(outer['data.tar.gz'])
+            self.assertTrue(all(Path(p).stem == 'act_connmark' for p in payload), name)
+            for dependency in providers.fields(row['control'])['Depends'].split(','):
+                dep = dependency.strip().split()[0]
+                if dep in stock:
+                    self.assertEqual(dependency.strip(), dep + ' (= ' + stock[dep]['version'] + ')')
+                pending.append(dep)
+        self.assertEqual(visited, {'kmod-act-connmark', 'kmod-act-connmark-4.1.52-manual'})
+
+    def test_ip_tables_capability_uses_stock_owner_without_payload(self):
+        rows = [r for r in self.rows if r['profile'] == '4.1.52-vbntk' and r['package'] == 'kmod-ip-tables']
+        self.assertEqual(len(rows), 1)
+        row = rows[0]
+        outer = providers.unpack(Path(row['_path']).read_bytes())
+        self.assertEqual(providers.unpack(outer['data.tar.gz']), {})
+        self.assertIn('kmod-nf-ipt (= ', providers.fields(row['control'])['Depends'])
+        self.assertNotIn('kmod-ip-tables-4.1.52-manual', row['control'])
+
 
 if __name__ == '__main__':
     unittest.main()

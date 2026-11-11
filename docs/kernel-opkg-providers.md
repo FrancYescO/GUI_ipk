@@ -147,3 +147,37 @@ I log `validation/preinst-lock-{45,204}.log` sotto
 Sei test aggiuntivi verificano assenza di chiamate OPKG annidate, ABI errata,
 dipendenze stock, modulo attivo, duplicati non installati e record ambigui.
 La suite locale passa 138 test (uno saltato).
+
+## Dipendenze dei moduli stock (metadata policy 3)
+
+La migrazione QoS di DumaOS sul `.69` ha individuato un conflitto di ownership:
+installare `kmod-act-connmark` richiamava indirettamente il componente del feed
+contenente `ip_tables.ko`, già posseduto dal pacchetto firmware `kmod-nf-ipt`.
+Le dipendenze sceglievano il componente ricostruito anche quando lo stesso
+modulo era già fornito dal firmware con ABI esatta.
+
+La policy 3 preferisce il proprietario stock verificato per le dipendenze ELF,
+per le dipendenze dei gruppi e per i componenti delle capability senza payload.
+Ogni dipendenza stock mantiene la versione esatta del catalogo firmware e il
+preinst verifica la sua installazione e l'ABI kernel leggendo il database OPKG,
+senza acquisire nuovamente il lock. Un inventario firmware con ABI diversa dal
+profilo viene rifiutato. I componenti del feed restano disponibili per le
+migrazioni esplicite; la loro disponibilità non impone la sostituzione dei moduli
+già presenti come dipendenze di un'applicazione.
+
+Sul profilo 4.1.52 VBNT-K la catena di `kmod-act-connmark` richiede ora soltanto
+il nuovo `act_connmark.ko` e i pacchetti stock esatti di scheduler e netfilter.
+La capability `kmod-ip-tables` dipende da `kmod-nf-ipt` senza reinstallarne il
+file. Non servono `--force-overwrite`, `--force-depends` o rimozioni dei moduli
+firewall. La revisione dei 1.178 IPK kernel viene incrementata; gli 830 payload,
+i pacchetti userspace e i componenti Release restano invariati. Il helper di
+migrazione accetta anche la policy 3.
+
+Le fixture OPKG ora includono file stock inerti e le relative liste di ownership,
+oltre ai record dei pacchetti. La regressione QoS installa il pacchetto con
+l'OPKG 2017 originale e controlla che hash dei file, versioni, stato e dipendenze
+dei pacchetti firmware restino invariati. Non carica moduli né avvia DumaOS.
+La prova con OPKG 2017 passa sulle otto ABI, inclusa l'installazione QoS sui tre
+profili runtime. I risultati e il log compresso sono conservati in
+`build/kernel-opkg-providers/validation/stock-owners-*`. La suite locale passa
+155 test (tre saltati per i requisiti dell'ambiente).

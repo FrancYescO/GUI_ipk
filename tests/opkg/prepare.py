@@ -42,8 +42,8 @@ def prepare(base, rows, remote_base=None):
                       if g in capabilities and len(k.unpack(k.unpack(Path(capabilities[g]['_path']).read_bytes())['data.tar.gz'])) == 0), '')
         # A test with a real multi-module backend (rather than builtin-only metadata).
         if group:
-            deptext = k.fields(capabilities[group]['control'])['Depends']
-            components = [r for r in selected if r['package'] in deptext and r['package'] in {v['package'] for v in raw.values()}]
+            group_modules = json.loads((k.BUILD / 'legacy-map.json').read_text())['groups'][group]['modules']
+            components = [raw[m] for m in group_modules if m in raw]
             if len(components) < 2:
                 group = ''
                 components = []
@@ -64,27 +64,43 @@ def prepare(base, rows, remote_base=None):
                                                          {'usr/share/fixture-unrelated': b'KEEP-ME\n'}))
         old_group = {name: b'INERT-LEGACY-GROUP-FIXTURE\n' for r in components
                      for name in k.unpack(k.unpack(Path(r['_path']).read_bytes())['data.tar.gz'])}
-        (directory / 'legacy-group.ipk').write_bytes(package(group or 'fixture-unused', release + '-1', 'kernel', old_group))
         kernel = definition['kernel_package']
+        stock = source.get(profile, {}).get('packages', {})
+        group_version = stock[group]['version'] if group in stock else release + '-1'
+        (directory / 'legacy-group.ipk').write_bytes(package(group or 'fixture-unused', group_version,
+                                                            'kernel (= ' + kernel + ')', old_group))
         status = f'Package: kernel\nVersion: {kernel}\nArchitecture: {definition["architecture"]}\nStatus: install ok installed\n\n'
         for name, value in source.get(profile, {}).get('packages', {}).items():
             if name in ('kmod-tun', group):
                 continue
             status += (f'Package: {name}\nVersion: {value["version"]}\nArchitecture: {definition["architecture"]}\n'
                        f'Depends: {value["depends"]}\nStatus: install ok installed\n\n')
-        for case in ['clean', 'legacy', 'group', 'wrong']:
+        for case in ['clean', 'legacy', 'group', 'wrong', 'qos']:
             folder = directory / case
             (folder / 'usr/lib/opkg/info').mkdir(parents=True, exist_ok=True)
             (folder / 'var/lock').mkdir(parents=True, exist_ok=True)
-            (folder / 'usr/lib/opkg/status').write_text(status if case != 'wrong' else status.replace('Version: ' + kernel, 'Version: WRONG-ABI', 1))
+            case_status = status
+            if case == 'qos' and group in stock:
+                value = stock[group]
+                case_status += (f'Package: {group}\nVersion: {value["version"]}\nArchitecture: {definition["architecture"]}\n'
+                                f'Depends: {value["depends"]}\nStatus: install ok installed\n\n')
+            (folder / 'usr/lib/opkg/status').write_text(case_status if case != 'wrong' else status.replace('Version: ' + kernel, 'Version: WRONG-ABI', 1))
             (folder / 'usr/lib/opkg/info/kernel.list').write_text('')
-            for name in source.get(profile, {}).get('packages', {}):
-                (folder / 'usr/lib/opkg/info' / (name + '.list')).write_text('')
+            for name, value in stock.items():
+                paths = []
+                if name != 'kmod-tun' and (name != group or case == 'qos'):
+                    for module in value['modules']:
+                        path = Path('lib/modules') / release / (module + '.ko')
+                        (folder / path).parent.mkdir(parents=True, exist_ok=True)
+                        (folder / path).write_bytes(('INERT-STOCK-' + module + '\n').encode())
+                        paths.append('/' + str(path))
+                (folder / 'usr/lib/opkg/info' / (name + '.list')).write_text(''.join(p + '\n' for p in paths))
             (directory / (case + '.conf')).write_text('dest root /\nlists_dir ext /var/opkg-lists\narch all 1\narch ' + definition['architecture'] +
                                                     ' 100\nsrc fixture file://' + str(remote_base / profile / 'repo') + '\n')
         tun = raw.get('tun')
         meta = capabilities.get('kmod-tun')
         env = {'kernel': kernel, 'tun_package': tun['package'] if tun else meta['package'] if meta else '',
+               'qos_package': capabilities['kmod-act-connmark']['package'] if 'kmod-act-connmark' in capabilities and 'act_connmark' in raw else '',
                'canonical_tun': 'yes' if meta and meta['package'] == 'kmod-tun' else 'no',
                'modular': 'yes' if tun else 'no', 'group': group,
                'group_package': capabilities[group]['package'] if group else '',
