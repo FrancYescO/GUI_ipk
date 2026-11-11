@@ -52,8 +52,8 @@ The five additional 4.1.52 feeds install modules in standard /lib/modules paths 
 Both 4.1.38 feeds also install their audited modules in standard paths; historical candidate URLs are aliases.
 They do not replace stock modules or configure autoload. xt_nat remains withheld.</p>
 <nav><a href="../index.html">All packages</a>
-<a href="../kernel/4.1.38-vbnto-candidates/index.html">VBNT-O candidates</a>
-<a href="../kernel/4.1.38-vbntk-candidates/index.html">VBNT-K 4.1.38 candidates</a>
+<a href="../kernel/4.1.38-vbnto/index.html">VBNT-O feed</a>
+<a href="../kernel/4.1.38-vbntk/index.html">VBNT-K 4.1.38 feed</a>
 ''' + firmware_links + '''
 <a href="kernel-compatibility.md">Feed setup and scope</a>
 <a href="firmware-compatibility.json">JSON inventory</a>
@@ -62,7 +62,7 @@ They do not replace stock modules or configure autoload. xt_nat remains withheld
 <label for="search">Search firmware, kernel, profile or status</label>
 <input id="search" type="search" placeholder="Search firmware…"><p id="count"></p>
 <div class="table-wrap"><table><thead><tr><th>Firmware</th><th>Kernel</th><th>Architecture</th>
-<th>Exact kernel package</th><th>Build profile candidate</th><th>Evidence status</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
+<th>Exact kernel package</th><th>Build profile</th><th>Evidence status</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
 <script>''' + script + '</script></body></html>'
     (destination / 'index.html').write_text(content, encoding='utf-8')
     write_usb_report(root, style)
