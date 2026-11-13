@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-13",
+  "environment": "Ubuntu 24.04 ARM64 container; isolated offline roots; inert prior modules; no target modem contacted",
+  "feed_verification": {
+    "Packages_gz_matches_Packages": true,
+    "indexes": 8,
+    "packages": 1732
+  },
+  "log": "standard-usb-opkg-2017.log.gz",
+  "opkg": "4bd8601-2017-07-28 (unpatched pinned source)",
+  "profiles": {
+    "4.1.38-vbntk": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    },
+    "4.1.38-vbnto": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    },
+    "4.1.52-vbntk": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    },
+    "4.1.52-vbntv": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    },
+    "4.1.52-vcnt2": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    },
+    "4.1.52-vcnt3": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    },
+    "4.1.52-vcnta": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    },
+    "4.1.52-vcntj": {
+      "clean_install_and_complete_stock_usb_dependency_recovery": "passed",
+      "manual_file_ownership": "rejected until previous owner removed; migration passed",
+      "native_upgrade": "passed",
+      "regression": "passed",
+      "wrong_kernel_abi": "rejected"
+    }
+  },
+  "python_tests": {
+    "failed": 0,
+    "python": "3.12",
+    "run": 161,
+    "skipped": 3
+  },
+  "scope_limits": [
+    "No hardware reconnect or Internet traffic test",
+    "Feed generated locally; not deployed",
+    "Smartphone installer feed configuration belongs to tch-nginx-gui"
+  ],
+  "stock_bundle_sha256": "9d7e34a885305883df57ff1f0ed20b6acd638c1e6f659a0579e001b92bb77565"
+}

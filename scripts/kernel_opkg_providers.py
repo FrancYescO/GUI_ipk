@@ -510,7 +510,8 @@ def apply(rows, output):
         next(r for r in result if r['profile'] == profile)['_legacy_archives'] = archives
     (output / 'source-selection.json').write_text(json.dumps(selection, indent=2, sort_keys=True) + '\n')
     (output / 'coverage.json').write_text(json.dumps(reports, indent=2, sort_keys=True) + '\n')
-    return result
+    from usb_feed_packages import apply as usb_packages
+    return usb_packages(result, output)
 
 
 if __name__ == '__main__':

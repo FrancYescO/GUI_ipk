@@ -72,7 +72,8 @@ def kernel_manifest(records):
             url = SITE + '/kernel/' + key
             row = {'profile': key, 'device': device, 'firmware': firmware,
                    'kernel_package': version, 'count': len(selected),
-                   'module_count': sum(parse(r['control']).get('X-Kernel-Capability') != 'yes' for r in selected),
+                   'module_count': sum(parse(r['control']).get('X-Kernel-Capability') != 'yes' and
+                                       (parse(r['control']).get('X-Stock-Recovery') != 'yes' or bool(parse(r['control']).get('X-Stock-Modules'))) for r in selected),
                    'capability_count': sum(parse(r['control']).get('X-Kernel-Capability') == 'yes' for r in selected),
                    'url': url,
                    'source': 'src/gz ' + name + ' ' + url, 'staging_only': staging,

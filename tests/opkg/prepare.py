@@ -113,6 +113,39 @@ def prepare(base, rows, remote_base=None):
                    for name, payload in k.unpack(k.unpack(Path(r['_path']).read_bytes())['data.tar.gz']).items()),
                'module_sha256': k.sha(k.unpack(k.unpack(Path(tun['_path']).read_bytes())['data.tar.gz'])[f'lib/modules/{release}/tun.ko']) if tun else ''}
         (directory / 'case.env').write_text(''.join(name.upper() + '=' + shlex.quote(value) + '\n' for name, value in env.items()))
+        usb_names = ('kmod-usb-net-cdc-ether', 'kmod-usb-net-rndis')
+        by_name = {r['package']: r for r in selected}
+        recovery = json.loads(gzip.decompress((k.BUILD / 'stock-usb.json.gz').read_bytes()))[profile]['packages']
+        for case in ('usb-clean', 'usb-native', 'usb-manual', 'usb-wrong'):
+            folder = directory / case
+            shutil.copytree(directory / 'usb', folder)
+            database = folder / 'usr/lib/opkg/status'
+            missing = (*usb_names, *recovery) if case == 'usb-clean' else (*usb_names, 'kmod-usb-net')
+            removed = ['Package: ' + name for name in missing]
+            blocks = [b for b in database.read_text().split('\n\n') if b and b.splitlines()[0] not in removed]
+            for name in missing:
+                for path in (folder / 'usr/lib/opkg/info').glob(name + '.*'):
+                    path.unlink()
+            if case in ('usb-native', 'usb-manual'):
+                for name in usb_names:
+                    f = k.fields(by_name[name]['control'])
+                    owner = name if case == 'usb-native' else f['X-Previous-Module-Package']
+                    version = stock.get(name, {}).get('version', release + '-1')
+                    blocks.append(f'Package: {owner}\nVersion: {version}\nArchitecture: {definition["architecture"]}\nDepends: kernel (= {kernel})\nStatus: install ok installed')
+                    path = f['X-Module-Path']
+                    target = folder / path.lstrip('/')
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(b'INERT-OLD-USB-DRIVER\n')
+                    (folder / 'usr/lib/opkg/info' / (owner + '.list')).write_text(path + '\n')
+            text = '\n\n'.join(blocks) + '\n\n'
+            if case == 'usb-wrong':
+                text = text.replace('Version: ' + kernel, 'Version: WRONG-ABI', 1)
+            database.write_text(text)
+            (directory / (case + '.conf')).write_text((directory / 'usb.conf').read_text())
+        (directory / 'usb-checks').write_text('\n'.join(
+            k.fields(by_name[name]['control'])['X-Module-SHA256'] + '  ' +
+            k.fields(by_name[name]['control'])['X-Module-Path'].lstrip('/') for name in usb_names) + '\n')
+        (directory / 'usb-previous').write_text('\n'.join(k.fields(by_name[name]['control'])['X-Previous-Module-Package'] for name in usb_names) + '\n')
     shutil.copyfile(Path(__file__).with_name('run.sh'), base / 'run.sh')
     shutil.copyfile(ROOT / 'scripts/migrate-kernel-package.sh', base / 'migrate.sh')
 

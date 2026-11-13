@@ -22,8 +22,8 @@ class PublicationTests(unittest.TestCase):
     def test_complete_bootstrap_has_semantic_components_and_all_updates(self):
         catalog = json.loads(gzip.decompress((ROOT / 'build/publication/bootstrap.json.gz').read_bytes()))
         rows = catalog['records']
-        self.assertEqual(len(rows), 7275)
-        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 7267)
+        self.assertEqual(len(rows), 7298)
+        self.assertEqual(sum(r['storage'] == 'pages' for r in rows), 7290)
         self.assertEqual(set(catalog['releases']), {'freeswitch-sounds'})
         self.assertLess(sum(r['size'] for r in rows if r['storage'] == 'pages'), 750 * 1024**2)
         pins = json.loads((ROOT / 'build/application-archive/manifest.json').read_text())
@@ -45,7 +45,7 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual({r['url'].rsplit('/', 1)[1]: r['profile'] for r in manifest['aliases']}, layout.KERNEL_ALIASES)
         self.assertNotIn('url', manifest)  # No misleading combined OPKG source.
         self.assertEqual([(r['profile'], r['module_count']) for r in manifest['profiles']],
-                         [('4.1.38-vbnto', 223), ('4.1.38-vbntk', 214), ('4.1.52-vbntk', 50), ('4.1.52-vcnt3', 50), ('4.1.52-vcnt2', 50), ('4.1.52-vcntj', 50), ('4.1.52-vcnta', 49), ('4.1.52-vbntv', 49)])
+                         [('4.1.38-vbnto', 225), ('4.1.38-vbntk', 216), ('4.1.52-vbntk', 52), ('4.1.52-vcnt3', 52), ('4.1.52-vcnt2', 52), ('4.1.52-vcntj', 52), ('4.1.52-vcnta', 51), ('4.1.52-vbntv', 51)])
         self.assertEqual([(r['profile'], r['module_count']) for r in manifest['candidates']],
                          [])
         for row in manifest['profiles'] + manifest['candidates']:

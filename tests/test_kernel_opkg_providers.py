@@ -39,6 +39,8 @@ class KernelProviderTests(unittest.TestCase):
         module_count = 0
         for row in self.rows:
             control = providers.fields(row['control'])
+            if control.get('X-Stock-Recovery') == 'yes':
+                continue  # Original control, file lists and bytes are checked separately.
             self.assertNotIn('Replaces', control, row['package'])
             self.assertIn('kernel (= ' + providers.definitions()[row['profile']]['kernel_package'] + ')', control['Depends'])
             outer = providers.unpack(Path(row['_path']).read_bytes())
@@ -102,6 +104,8 @@ class KernelProviderTests(unittest.TestCase):
         tested = []
         for row in self.rows:
             f = providers.fields(row['control'])
+            if f.get('X-Stock-Recovery') == 'yes':
+                continue
             if row['profile'] not in profiles:
                 continue
             self.assertEqual(row['section'], 'kernel/' + row['profile'])
@@ -119,6 +123,69 @@ class KernelProviderTests(unittest.TestCase):
     def test_runtime_evidence_rejects_different_payload(self):
         with self.assertRaises(ValueError):
             providers.runtime_evidence('4.1.52-vcnt3', 'rndis_host', b'different payload')
+
+    def test_standard_usb_names_and_complete_stock_recovery(self):
+        import base64
+        pinned = json.loads(gzip.decompress((providers.BUILD / 'stock-usb.json.gz').read_bytes()))
+        for profile, source in pinned.items():
+            rows = {r['package']: r for r in self.rows if r['profile'] == profile}
+            for name in ('kmod-usb-net-cdc-ether', 'kmod-usb-net-rndis'):
+                row = rows[name]
+                f = providers.fields(row['control'])
+                self.assertTrue(f['Version'].startswith('1:'))
+                self.assertNotIn('X-Manual-Install-Only', f)
+                self.assertNotIn('Replaces', f)
+                self.assertNotIn(f['X-Previous-Module-Package'], rows)
+                self.assertIn('kmod-usb-net (= ' + source['packages']['kmod-usb-net']['control'].split('Version: ')[1].splitlines()[0] + ')', f['Depends'])
+            self.assertIn('kmod-usb-net-cdc-ether (= ' + rows['kmod-usb-net-cdc-ether']['version'] + ')', rows['kmod-usb-net-rndis']['control'])
+            for row in rows.values():
+                for name in ('kmod-usb-net-cdc-ether', 'kmod-usb-net-rndis'):
+                    for dep in providers.fields(row['control']).get('Depends', '').split(','):
+                        if dep.strip().split()[0] == name:
+                            self.assertEqual(dep.strip(), name + ' (= ' + rows[name]['version'] + ')')
+            for name, original in source['packages'].items():
+                row = rows[name]
+                f = providers.fields(row['control'])
+                for key, value in providers.fields(original['control']).items():
+                    self.assertEqual(f[key], value)
+                outer = providers.unpack(Path(row['_path']).read_bytes())
+                with tarfile.open(fileobj=io.BytesIO(outer['data.tar.gz'])) as data:
+                    actual = {m.name.removeprefix('./'): m for m in data if not m.isdir()}
+                    self.assertEqual(set(actual), set(original['data']))
+                    for path, item in original['data'].items():
+                        expected = base64.b64decode(item['base64'])
+                        member = actual[path]
+                        if item['mode'] == '120000':
+                            self.assertTrue(member.issym())
+                            self.assertEqual(member.linkname.encode(), expected)
+                        else:
+                            self.assertEqual(data.extractfile(member).read(), expected)
+                hooks = providers.unpack(outer['control.tar.gz'])
+                self.assertEqual(set(hooks), {'control', 'preinst'})
+                for forbidden in (b'insmod ', b'modprobe ', b'rmmod ', b'opkg '):
+                    self.assertNotIn(forbidden, hooks['preinst'])
+            self.assertIn('lib/modules/' + profile.split('-')[0] + '/usbnet.ko', source['packages']['kmod-usb-net']['data'])
+
+    def test_usb_hooks_reject_wrong_abi_and_previous_manual_owners(self):
+        import os
+        for row in self.rows:
+            f = providers.fields(row['control'])
+            if not f.get('X-Previous-Module-Package'):
+                continue
+            outer = providers.unpack(Path(row['_path']).read_bytes())
+            hook = providers.unpack(outer['control.tar.gz'])['preinst']
+            with tempfile.TemporaryDirectory() as temporary:
+                status = Path(temporary) / 'status'
+                hook = hook.replace(b'/usr/lib/opkg/status', str(status).encode())
+                kernel = providers.definitions()[row['profile']]['kernel_package']
+                base = PackageHookLockTests.stanza('kernel', kernel)
+                for dep in ('kmod-usb-net', 'kmod-usb-net-cdc-ether', 'kmod-mii'):
+                    base += PackageHookLockTests.stanza(dep, '1', 'kernel (= ' + kernel + ')')
+                for content, accepted in [(base, True), (base.replace(kernel, 'wrong'), False),
+                        (base + PackageHookLockTests.stanza(f['X-Previous-Module-Package'], '1'), False)]:
+                    status.write_text(content)
+                    check = subprocess.run(['sh'], input=hook, capture_output=True, env={**os.environ, 'IPKG_INSTROOT': ''})
+                    self.assertEqual(check.returncode == 0, accepted, (row['profile'], check.stderr))
 
     def test_legacy_profiles_are_unique_and_installable(self):
         for profile, count in [('4.1.38-vbnto', 223), ('4.1.38-vbntk', 214)]:
@@ -147,6 +214,8 @@ class KernelProviderTests(unittest.TestCase):
         mapping = json.loads((providers.BUILD / 'legacy-map.json').read_text())
         checked = 0
         for row in self.rows:
+            if providers.fields(row['control']).get('X-Stock-Recovery') == 'yes':
+                continue
             stock = firmware.get(row['profile'], {}).get('packages', {})
             outer = providers.unpack(Path(row['_path']).read_bytes())
             for path, payload in providers.unpack(outer['data.tar.gz']).items():
@@ -154,7 +223,7 @@ class KernelProviderTests(unittest.TestCase):
                     continue
                 cfg = configs[row['profile']]
                 for module in providers.elf_module(payload)['modinfo'].get('depends', [''])[0].split(','):
-                    if Path(path).stem == 'rndis_host' and module == 'cdc_ether' and row['profile'] != '4.1.52-vbntk':
+                    if Path(path).stem == 'rndis_host' and module == 'cdc_ether':
                         dependency = next(r['package'] for r in self.rows if r['profile'] == row['profile'] and providers.fields(r['control']).get('X-Module-Path', '').endswith('/cdc_ether.ko'))
                         self.assertIn(dependency + ' (= ', row['control'])
                         continue

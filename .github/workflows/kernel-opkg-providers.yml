@@ -2,10 +2,10 @@ name: Kernel OPKG dependency compatibility
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['scripts/kernel_opkg_providers.py', 'scripts/build-opkg-provider-tests.sh', 'scripts/migrate-kernel-package.sh', 'scripts/publication_layout.py', 'tests/test_kernel_opkg_providers.py', 'tests/opkg/**', 'build/kernel-opkg-providers/**', 'artifacts/opkg-provider-test-sources/**', '.github/workflows/kernel-opkg-providers.yml']
+    paths: ['scripts/kernel_opkg_providers.py', 'scripts/usb_feed_packages.py', 'scripts/pin-stock-usb.py', 'scripts/build-opkg-provider-tests.sh', 'scripts/migrate-kernel-package.sh', 'scripts/publication_layout.py', 'tests/test_kernel_opkg_providers.py', 'tests/opkg/**', 'build/kernel-opkg-providers/**', 'artifacts/opkg-provider-test-sources/**', '.github/workflows/kernel-opkg-providers.yml']
   push:
     branches: [main]
-    paths: ['scripts/kernel_opkg_providers.py', 'scripts/build-opkg-provider-tests.sh', 'scripts/migrate-kernel-package.sh', 'scripts/publication_layout.py', 'tests/test_kernel_opkg_providers.py', 'tests/opkg/**', 'build/kernel-opkg-providers/**', 'artifacts/opkg-provider-test-sources/**', '.github/workflows/kernel-opkg-providers.yml']
+    paths: ['scripts/kernel_opkg_providers.py', 'scripts/usb_feed_packages.py', 'scripts/pin-stock-usb.py', 'scripts/build-opkg-provider-tests.sh', 'scripts/migrate-kernel-package.sh', 'scripts/publication_layout.py', 'tests/test_kernel_opkg_providers.py', 'tests/opkg/**', 'build/kernel-opkg-providers/**', 'artifacts/opkg-provider-test-sources/**', '.github/workflows/kernel-opkg-providers.yml']
 permissions:
   contents: read
 jobs:
@@ -28,6 +28,8 @@ jobs:
           for profile in 4.1.38-vbnto 4.1.38-vbntk 4.1.52-vbntk 4.1.52-vcnt3 4.1.52-vcnt2 4.1.52-vcntj 4.1.52-vcnta 4.1.52-vbntv; do
             sudo env OPKG_BIN="$RUNNER_TEMP/old-opkg/opkg-build/src/opkg-cl" \
               sh tests/opkg/run.sh "$RUNNER_TEMP/opkg-fixtures" "$profile" >> old-opkg-tests.log 2>&1 || { tail -80 old-opkg-tests.log; exit 1; }
+            sudo env OPKG_BIN="$RUNNER_TEMP/old-opkg/opkg-build/src/opkg-cl" \
+              sh tests/opkg/usb.sh "$RUNNER_TEMP/opkg-fixtures" "$profile" >> old-opkg-tests.log 2>&1 || { tail -80 old-opkg-tests.log; exit 1; }
           done
       - uses: actions/upload-artifact@v7
         if: always()
