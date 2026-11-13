@@ -107,6 +107,9 @@ Enable only the feed matching your complete installed <code>kernel</code> packag
 Linux version or operator branding alone is insufficient. Other firmware sharing the ABI still needs runtime validation.</p>
 <nav><a href="../index.html">All packages</a><a href="../compatibility/">Firmware compatibility</a>
 <a href="../feeds.json">Feed manifest</a><a href="../validation/4.1.38/">4.1.38 candidate history</a><a href="../validation/4.1.52/">4.1.52 tests</a></nav>
+<p>Standard package names contain complete native module groups and their dependencies. Existing native packages can be upgraded normally.
+For previous manual providers, quiesce the affected modules and use the <a href="migrate-standard-kernel-package.sh">audited migration helper</a>.
+Run it without <code>--apply</code> first; it refuses active modules, unrelated file owners and mismatched payloads.</p>
 <pre>opkg status kernel</pre><div class="table-wrap"><table><thead><tr><th>Feed</th><th>Reference device / firmware</th><th>IPKs</th><th>Validation</th><th>Required kernel package version</th></tr></thead><tbody>''' + ''.join(rows) + '''</tbody></table></div>
 <h2>Installable OPKG sources — choose one exact ABI</h2>''' + sources + '''
 <p>The 4.1.38 profiles include the audited former candidates, with duplicates consolidated in favor of existing validated payloads. The five additional 4.1.52 profiles install modules at standard firmware paths and retain per-module offline or runtime validation labels.
@@ -148,6 +151,9 @@ Validation device names and package names retain their original provenance. Enab
 def render(publication):
     catalog = json.loads((publication / 'catalog.json').read_text())
     site = publication / 'site'
+    migration = site / 'kernel/migrate-standard-kernel-package.sh'
+    migration.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(ROOT / 'scripts/migrate-standard-kernel-package.sh', migration)
     groups, feeds = defaultdict(list), {}
     for record in catalog['records']:
         key = ('telephony/freeswitch-sounds' if record['storage'] == 'freeswitch-sounds' else record['section'])
@@ -212,16 +218,22 @@ def write_firmware_reports(site, records):
         destination = site / 'validation' / profile
         destination.mkdir(parents=True, exist_ok=True)
         (destination / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
-        published = {Path(parse(r['control']).get('X-Module-Path', '')).stem: r for r in records
-                     if r['profile'] == profile and parse(r['control']).get('X-Module-Path')}
+        published = {}
+        for record in records:
+            if record['profile'] != profile:
+                continue
+            fields = parse(record['control'])
+            for module in json.loads(fields.get('X-Rebuilt-Modules', '{}')):
+                published[module] = record
         tested = []
         for module in report['modules']:
             row = published[module['name']]
             fields = parse(row['control'])
+            evidence = json.loads(fields.get('X-Module-Tests', '{}')).get(module['name'], {})
             module.update(asset=row['filename'], package=row['package'], ipk_sha256=row['sha256'], control=row['control'],
-                          runtime_validated=fields.get('X-Runtime-Validated') == 'yes',
+                          runtime_validated=json.loads(fields.get('X-Module-Validation', '{}')).get(module['name'], False),
                           validation_level=fields.get('X-Validation-Level', 'offline-checked'),
-                          runtime_tests='; '.join(filter(None, (fields.get('X-Runtime-Test', ''), fields.get('X-Runtime-Test-Status', '')))))
+                          runtime_tests='; '.join(filter(None, (evidence.get('test', ''), evidence.get('status', '')))))
             if module['runtime_validated']:
                 tested.append(module['name'])
         report['runtime_tested_modules'] = tested

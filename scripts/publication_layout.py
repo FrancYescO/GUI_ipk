@@ -227,6 +227,10 @@ def prepare(userspace, applications, output):
                 destination = pages / 'kernel' / (row['profile'] + '-candidates')
                 destination.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(old['path'], destination / old['filename'])
+            for old in row.get('_package_archives', []):
+                if Path(old['filename']).name != old['filename']:
+                    raise ValueError('Unsafe archived kernel input name')
+                shutil.copyfile(old['path'], pages / section / old['filename'])
     # Retain profile diagnostics beside their candidate feeds, without overwriting
     # the generated indexes or duplicating package bytes.
     for profile in ('vbnto', 'vbnts'):

@@ -18,7 +18,7 @@ from kernel_firmware import config_options, elf_module
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build/kernel-opkg-providers'
-POLICY = '5'
+POLICY = '6'
 LEGACY_PROFILES = {'4.1.38-vbnto', '4.1.38-vbntk'}
 
 
@@ -510,8 +510,8 @@ def apply(rows, output):
         next(r for r in result if r['profile'] == profile)['_legacy_archives'] = archives
     (output / 'source-selection.json').write_text(json.dumps(selection, indent=2, sort_keys=True) + '\n')
     (output / 'coverage.json').write_text(json.dumps(reports, indent=2, sort_keys=True) + '\n')
-    from usb_feed_packages import apply as usb_packages
-    return usb_packages(result, output)
+    from kernel_feed_packages import apply as standard_packages
+    return standard_packages(result, output)
 
 
 if __name__ == '__main__':

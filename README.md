@@ -133,11 +133,17 @@ The 4.1.52 tests include 14 functional passes, two load/unload namespace passes,
 32 busy stock modules left unchanged, one conntrack replacement checked offline only, and withheld xt_nat. A matching Linux
 version alone does not establish module compatibility.
 
-Additional installable exact-ABI feeds provide 49 IPKs each for VCNT-3
-(DGA4331) and VCNT-2 (DWA0122), with distinct exact kernel dependencies and
+Additional installable exact-ABI feeds cover VCNT-3 (DGA4331), VCNT-2
+(DWA0122), VCNT-J, VCNT-A and VBNT-V, with distinct exact kernel dependencies and
 architectures. Packages use standard `/lib/modules` paths. Descriptions distinguish
 offline checks from per-module hardware tests; the VCNT-3 CDC/RNDIS pair has USB/DHCP evidence. See [firmware candidate builds](docs/firmware-kernel-candidates.md)
 for original-image hashes, source alignment, exclusions and CI reproduction.
+
+All eight profiles publish standard kernel package names, complete native
+module groups and the original dependencies needed to install them. Verified
+rebuilt modules retain their exact payload hashes. See
+[standard kernel packages](docs/kernel-feed-packages.md) for upgrades and
+audited migration from previous manual providers.
 
 Browse and search the published packages at
 [francyesco.github.io/GUI_ipk](https://francyesco.github.io/GUI_ipk/).

@@ -21,7 +21,8 @@ class KernelProviderTests(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory()
         cls.rows = layout.kernel_inputs(Path(cls.temp.name) / 'inputs')
         cls.catalog = json.loads(gzip.decompress((ROOT / 'build/publication/bootstrap.json.gz').read_bytes()))
-        cls.by_identity = {(r['section'], r['package'], r['version']): r for r in cls.rows}
+        cls.stock = json.loads(gzip.decompress((providers.BUILD / 'stock-kernel.json.gz').read_bytes()))
+        cls.raw = layout.kernel_inputs(Path(cls.temp.name) / 'raw', normalize=False)
 
     @classmethod
     def tearDownClass(cls):
@@ -29,251 +30,161 @@ class KernelProviderTests(unittest.TestCase):
 
     def test_all_published_kernel_bytes_are_reproduced(self):
         expected = {(r['section'], r['package'], r['version']): r for r in self.catalog['records'] if r['kind'] == 'kernel'}
-        self.assertEqual(set(expected), set(self.by_identity))
-        for key, row in expected.items():
-            actual = self.by_identity[key]
+        actual = {(r['section'], r['package'], r['version']): r for r in self.rows}
+        self.assertEqual(set(expected), set(actual))
+        for key in expected:
             for field in ('sha256', 'size', 'filename', 'control', 'architecture', 'profile'):
-                self.assertEqual(actual[field], row[field], (key, field))
+                self.assertEqual(expected[key][field], actual[key][field], (key, field))
 
-    def test_no_replaces_and_every_module_preserves_source_bytes(self):
-        module_count = 0
-        for row in self.rows:
-            control = providers.fields(row['control'])
-            if control.get('X-Stock-Recovery') == 'yes':
-                continue  # Original control, file lists and bytes are checked separately.
-            self.assertNotIn('Replaces', control, row['package'])
-            self.assertIn('kernel (= ' + providers.definitions()[row['profile']]['kernel_package'] + ')', control['Depends'])
+    def test_every_verified_module_preserves_source_bytes_after_grouping(self):
+        allowed = set()
+        for row in self.raw:
             outer = providers.unpack(Path(row['_path']).read_bytes())
-            data = providers.unpack(outer['data.tar.gz'])
-            scripts = providers.unpack(outer['control.tar.gz'])
-            if row.get('_archive_source'):
-                original = providers.unpack(Path(row['_archive_source']).read_bytes())
-                original_data = providers.unpack(original['data.tar.gz'])
-                self.assertEqual({Path(p).name: b for p, b in data.items()},
-                                 {Path(p).name: b for p, b in original_data.items()}, row['package'])
-            module_count += len(data)
-            self.assertTrue(all(name.endswith('.ko') for name in data))
-            with tarfile.open(fileobj=io.BytesIO(outer['data.tar.gz'])) as archive:
-                directories = {m.name.removeprefix('./').rstrip('/') for m in archive if m.isdir()}
-            for name in data:
-                self.assertTrue({str(p) for p in Path(name).parents if str(p) != '.'} <= directories, name)
-            for name, script in scripts.items():
-                if name == 'control':
-                    continue
-                check = subprocess.run(['sh', '-n'], input=script, capture_output=True)
-                self.assertEqual(check.returncode, 0, (row['package'], name, check.stderr))
-                self.assertNotIn(b'insmod ', script)
-                self.assertNotIn(b'rmmod ', script)
-                self.assertNotIn(b'--force-depends', script)
-                self.assertNotIn(b'opkg status', script)
-        self.assertEqual(module_count, 735)
-
-    def test_staging_is_never_a_module_provider(self):
-        for row in self.rows:
-            control = providers.fields(row['control'])
-            outer = providers.unpack(Path(row['_path']).read_bytes())
-            data = providers.unpack(outer['data.tar.gz'])
-            if any(name.startswith('usr/lib/kernel-module-candidates/') for name in data):
-                self.assertNotIn('Provides', control)
-                self.assertNotEqual(control['Package'], 'kmod-tun')
-
-    def test_tun_and_complete_group_capabilities(self):
-        for profile in providers.definitions():
-            selected = [r for r in self.rows if r['profile'] == profile and r['section'] == providers.definitions()[profile]['feed']]
-            advertised = {providers.fields(r['control'])['Package'] for r in selected}
-            advertised |= {v.strip() for r in selected for v in providers.fields(r['control']).get('Provides', '').split(',') if v.strip()}
-            self.assertIn('kmod-tun', advertised)
-            for row in selected:
-                f = providers.fields(row['control'])
-                if f.get('X-Kernel-Capability') == 'yes':
-                    self.assertEqual(providers.unpack(providers.unpack(Path(row['_path']).read_bytes())['data.tar.gz']), {})
-        # cls_basic is absent from the runtime replacement set on .69: do not lie
-        # that four of its five stock modules replace all of kmod-sched-core.
-        selected = [r for r in self.rows if r['profile'] == '4.1.52-vbntk']
-        self.assertFalse(any(providers.fields(r['control']).get('X-Kernel-Capability-Name') == 'kmod-sched-core' for r in selected))
-
-    def test_archived_sources_are_not_in_active_indexes(self):
-        active = {(r['section'], r['filename']) for r in self.rows}
-        for row in self.rows:
-            if row.get('_archive_source'):
-                self.assertNotIn((row['section'], row['_archive_filename']), active)
-                self.assertEqual(hashlib.sha256(Path(row['_archive_source']).read_bytes()).hexdigest(), providers.fields(row['control'])['X-Original-IPK-SHA256'])
-
-    def test_promoted_profiles_use_standard_paths_and_module_validation(self):
-        profiles = {p for p, entry in providers.firmware_definitions().items() if entry.get('installable')}
-        tested = []
+            for path, payload in providers.unpack(outer['data.tar.gz']).items():
+                if path.endswith('.ko'):
+                    allowed.add((row['profile'], Path(path).stem, providers.sha(payload)))
+        counts = {}
+        seen = set()
         for row in self.rows:
             f = providers.fields(row['control'])
-            if f.get('X-Stock-Recovery') == 'yes':
-                continue
-            if row['profile'] not in profiles:
-                continue
-            self.assertEqual(row['section'], 'kernel/' + row['profile'])
-            self.assertNotIn('X-Module-Staging-Only', f)
-            self.assertNotIn('-candidate', row['package'])
+            hashes = json.loads(f.get('X-Rebuilt-Modules', '{}'))
             outer = providers.unpack(Path(row['_path']).read_bytes())
-            for path in providers.unpack(outer['data.tar.gz']):
-                self.assertTrue(path.startswith('lib/modules/4.1.52/'), path)
-                self.assertEqual('/' + path, f['X-Module-Path'])
-                self.assertIn(f['X-Validation-Level'], ('runtime-tested', 'offline-checked'))
-                if f.get('X-Runtime-Validated') == 'yes':
-                    tested.append((row['profile'], Path(path).stem))
-        self.assertEqual(sorted(tested), [('4.1.52-vcnt3', 'cdc_ether'), ('4.1.52-vcnt3', 'rndis_host')])
+            data = providers.unpack(outer['data.tar.gz'])
+            actual = {Path(p).stem: providers.sha(b) for p, b in data.items() if p.endswith('.ko')}
+            for module, checksum in hashes.items():
+                self.assertEqual(actual[module], checksum)
+                self.assertIn((row['profile'], module, checksum), allowed)
+                self.assertNotIn((row['profile'], module), seen)
+                seen.add((row['profile'], module))
+            counts[row['profile']] = counts.get(row['profile'], 0) + len(hashes)
+        self.assertEqual(counts, {'4.1.38-vbntk': 214, '4.1.38-vbnto': 223, '4.1.52-vbntk': 50,
+                                 '4.1.52-vcnt3': 50, '4.1.52-vcnt2': 50, '4.1.52-vcntj': 50,
+                                 '4.1.52-vcnta': 49, '4.1.52-vbntv': 49})
 
-    def test_runtime_evidence_rejects_different_payload(self):
-        with self.assertRaises(ValueError):
-            providers.runtime_evidence('4.1.52-vcnt3', 'rndis_host', b'different payload')
-
-    def test_standard_usb_names_and_complete_stock_recovery(self):
+    def test_complete_native_groups_preserve_all_unmodified_files_and_symlinks(self):
         import base64
-        pinned = json.loads(gzip.decompress((providers.BUILD / 'stock-usb.json.gz').read_bytes()))
-        for profile, source in pinned.items():
-            rows = {r['package']: r for r in self.rows if r['profile'] == profile}
-            for name in ('kmod-usb-net-cdc-ether', 'kmod-usb-net-rndis'):
-                row = rows[name]
-                f = providers.fields(row['control'])
-                self.assertTrue(f['Version'].startswith('1:'))
-                self.assertNotIn('X-Manual-Install-Only', f)
-                self.assertNotIn('Replaces', f)
-                self.assertNotIn(f['X-Previous-Module-Package'], rows)
-                self.assertIn('kmod-usb-net (= ' + source['packages']['kmod-usb-net']['control'].split('Version: ')[1].splitlines()[0] + ')', f['Depends'])
-            self.assertIn('kmod-usb-net-cdc-ether (= ' + rows['kmod-usb-net-cdc-ether']['version'] + ')', rows['kmod-usb-net-rndis']['control'])
-            for row in rows.values():
-                for name in ('kmod-usb-net-cdc-ether', 'kmod-usb-net-rndis'):
-                    for dep in providers.fields(row['control']).get('Depends', '').split(','):
-                        if dep.strip().split()[0] == name:
-                            self.assertEqual(dep.strip(), name + ' (= ' + rows[name]['version'] + ')')
-            for name, original in source['packages'].items():
-                row = rows[name]
-                f = providers.fields(row['control'])
-                for key, value in providers.fields(original['control']).items():
-                    self.assertEqual(f[key], value)
-                outer = providers.unpack(Path(row['_path']).read_bytes())
-                with tarfile.open(fileobj=io.BytesIO(outer['data.tar.gz'])) as data:
-                    actual = {m.name.removeprefix('./'): m for m in data if not m.isdir()}
-                    self.assertEqual(set(actual), set(original['data']))
-                    for path, item in original['data'].items():
-                        expected = base64.b64decode(item['base64'])
-                        member = actual[path]
-                        if item['mode'] == '120000':
-                            self.assertTrue(member.issym())
-                            self.assertEqual(member.linkname.encode(), expected)
-                        else:
-                            self.assertEqual(data.extractfile(member).read(), expected)
-                hooks = providers.unpack(outer['control.tar.gz'])
-                self.assertEqual(set(hooks), {'control', 'preinst'})
-                for forbidden in (b'insmod ', b'modprobe ', b'rmmod ', b'opkg '):
-                    self.assertNotIn(forbidden, hooks['preinst'])
-            self.assertIn('lib/modules/' + profile.split('-')[0] + '/usbnet.ko', source['packages']['kmod-usb-net']['data'])
+        for row in self.rows:
+            original = self.stock[row['profile']]['packages'].get(row['package'])
+            if not original:
+                continue
+            f = providers.fields(row['control'])
+            rebuilt = json.loads(f.get('X-Rebuilt-Modules', '{}'))
+            outer = providers.unpack(Path(row['_path']).read_bytes())
+            with tarfile.open(fileobj=io.BytesIO(outer['data.tar.gz'])) as archive:
+                actual = {m.name.removeprefix('./'): m for m in archive if not m.isdir()}
+                self.assertEqual(set(actual), {p.lstrip('/') for p in original['list'].splitlines()}, row['package'])
+                for path, member in actual.items():
+                    if path.endswith('.ko') and Path(path).stem in rebuilt:
+                        self.assertEqual(providers.sha(archive.extractfile(member).read()), rebuilt[Path(path).stem])
+                        continue
+                    item = original['data'][path]
+                    content = base64.b64decode(item['base64'])
+                    if item['mode'] == '120000':
+                        self.assertTrue(member.issym())
+                        self.assertEqual(member.linkname.encode(), content)
+                    else:
+                        self.assertEqual(archive.extractfile(member).read(), content)
+                        self.assertEqual(member.mode, 0o755 if item['mode'] == '100755' else 0o644)
+            for path in original.get('requires_rebuilt_files', []):
+                self.assertIn(Path(path).stem, rebuilt, 'Missing original must be replaced by a verified rebuilt module')
+            self.assertEqual(f['X-Stock-Control-SHA256'], original['control_sha256'])
+            if not rebuilt:
+                self.assertEqual(f['Version'], providers.fields(original['control'])['Version'])
 
-    def test_usb_hooks_reject_wrong_abi_and_previous_manual_owners(self):
+    def test_dependency_graph_is_closed_versioned_and_acyclic(self):
+        for profile, definition in providers.definitions().items():
+            rows = {r['package']: r for r in self.rows if r['profile'] == profile and providers.fields(r['control']).get('X-Module-Staging-Only') != 'yes'}
+            graph = {}
+            for name, row in rows.items():
+                f = providers.fields(row['control'])
+                self.assertIn('kernel (= ' + definition['kernel_package'] + ')', f['Depends'])
+                graph[name] = []
+                for dep in f['Depends'].split(','):
+                    dep = dep.strip()
+                    target = dep.split()[0]
+                    if target == 'kernel':
+                        continue
+                    self.assertIn(target, rows, (profile, name, target))
+                    self.assertEqual(dep, target + ' (= ' + rows[target]['version'] + ')')
+                    graph[name].append(target)
+            visited, active = set(), set()
+            def visit(name):
+                self.assertNotIn(name, active, (profile, name, 'dependency cycle'))
+                if name in visited:
+                    return
+                active.add(name)
+                for target in graph[name]:
+                    visit(target)
+                active.remove(name)
+                visited.add(name)
+            for name in graph:
+                visit(name)
+
+    def test_standard_names_hooks_and_explicit_legacy_ownership(self):
         import os
         for row in self.rows:
             f = providers.fields(row['control'])
-            if not f.get('X-Previous-Module-Package'):
-                continue
             outer = providers.unpack(Path(row['_path']).read_bytes())
-            hook = providers.unpack(outer['control.tar.gz'])['preinst']
+            hooks = providers.unpack(outer['control.tar.gz'])
+            self.assertNotIn('Replaces', f)
+            if f.get('X-Module-Staging-Only') == 'yes':
+                self.assertNotIn('Provides', f)
+                continue
+            self.assertNotIn('-manual', row['package'])
+            self.assertNotIn('-compat', row['package'])
+            self.assertNotIn('X-Manual-Install-Only', f)
+            self.assertNotIn('Provides', f)
+            self.assertEqual(set(hooks), {'control', 'preinst'})
+            hook = hooks['preinst']
+            with tarfile.open(fileobj=io.BytesIO(outer['data.tar.gz'])) as archive:
+                checksums = {p.strip().split(':', 1)[1]: p.strip().split(':', 1)[0] for p in f.get('X-Payload-Checksums', '').split(',') if p.strip()}
+                symlinks = {p.strip().split(':', 1)[0]: p.strip().split(':', 1)[1] for p in f.get('X-Payload-Symlinks', '').split(',') if p.strip()}
+                self.assertEqual(checksums, {m.name.removeprefix('./'): providers.sha(archive.extractfile(m).read()) for m in archive if m.isfile()})
+            with tarfile.open(fileobj=io.BytesIO(outer['data.tar.gz'])) as archive:
+                self.assertEqual(symlinks, {m.name.removeprefix('./'): m.linkname for m in archive if m.issym()})
+            self.assertEqual(subprocess.run(['sh', '-n'], input=hook, capture_output=True).returncode, 0)
+            for forbidden in (b'insmod ', b'modprobe ', b'rmmod ', b'opkg ', b'--force'):
+                self.assertNotIn(forbidden, hook)
+            if f.get('X-Rebuilt-Modules'):
+                self.assertTrue(f['Version'].startswith('1:'))
+            if row['package'] not in ('kmod-tun', 'kmod-nf-conntrack', 'kmod-usb-net', 'kmod-usb-net-rndis'):
+                continue
             with tempfile.TemporaryDirectory() as temporary:
                 status = Path(temporary) / 'status'
-                hook = hook.replace(b'/usr/lib/opkg/status', str(status).encode())
+                script = hook.replace(b'/usr/lib/opkg/status', str(status).encode())
                 kernel = providers.definitions()[row['profile']]['kernel_package']
                 base = PackageHookLockTests.stanza('kernel', kernel)
-                for dep in ('kmod-usb-net', 'kmod-usb-net-cdc-ether', 'kmod-mii'):
-                    base += PackageHookLockTests.stanza(dep, '1', 'kernel (= ' + kernel + ')')
-                for content, accepted in [(base, True), (base.replace(kernel, 'wrong'), False),
-                        (base + PackageHookLockTests.stanza(f['X-Previous-Module-Package'], '1'), False)]:
+                cases = [(base, True), (base.replace(kernel, 'wrong'), False)]
+                for previous in f.get('X-Previous-Module-Packages', '').split(','):
+                    if previous.strip():
+                        cases.append((base + PackageHookLockTests.stanza(previous.strip(), '1'), False))
+                for content, accepted in cases:
                     status.write_text(content)
-                    check = subprocess.run(['sh'], input=hook, capture_output=True, env={**os.environ, 'IPKG_INSTROOT': ''})
-                    self.assertEqual(check.returncode == 0, accepted, (row['profile'], check.stderr))
+                    check = subprocess.run(['sh'], input=script, capture_output=True, env={**os.environ, 'IPKG_INSTROOT': ''})
+                    self.assertEqual(check.returncode == 0, accepted, (row['profile'], row['package'], check.stderr))
 
-    def test_legacy_profiles_are_unique_and_installable(self):
-        for profile, count in [('4.1.38-vbnto', 223), ('4.1.38-vbntk', 214)]:
-            modules = {}
-            for row in self.rows:
-                if row['profile'] != profile:
-                    continue
-                fields = providers.fields(row['control'])
-                self.assertEqual(row['section'], 'kernel/' + profile)
-                self.assertNotIn('X-Module-Staging-Only', fields)
-                self.assertNotIn('-candidate', row['package'])
-                path = fields.get('X-Module-Path')
-                if path:
-                    self.assertTrue(path.startswith('/lib/modules/4.1.38/'))
-                    self.assertNotIn(Path(path).stem, modules)
-                    modules[Path(path).stem] = fields['X-Module-SHA256']
-            self.assertEqual(len(modules), count)
-            internal = 'vbnts' if profile.endswith('vbntk') else 'vbnto'
-            report = json.loads((ROOT / ('build/' + internal + '-4.1.38/runtime-validation/results.json')).read_text())
-            for module in report['modules']:
-                self.assertEqual(modules[module['name']], module['sha256'])
-
-    def test_module_dependencies_preserve_stock_owners(self):
-        firmware = json.loads((providers.BUILD / 'firmware-packages.json').read_text())
-        configs = {p: providers.config(p)[0] for p in providers.definitions()}
-        mapping = json.loads((providers.BUILD / 'legacy-map.json').read_text())
-        checked = 0
+    def test_immutable_source_urls_survive_group_merging(self):
+        active = {(r['profile'], r['filename']) for r in self.rows}
+        archives = [a for r in self.rows for a in r.get('_package_archives', [])]
+        self.assertGreaterEqual(len(archives), 735)
         for row in self.rows:
-            if providers.fields(row['control']).get('X-Stock-Recovery') == 'yes':
-                continue
-            stock = firmware.get(row['profile'], {}).get('packages', {})
-            outer = providers.unpack(Path(row['_path']).read_bytes())
-            for path, payload in providers.unpack(outer['data.tar.gz']).items():
-                if not path.startswith('lib/modules/'):
-                    continue
-                cfg = configs[row['profile']]
-                for module in providers.elf_module(payload)['modinfo'].get('depends', [''])[0].split(','):
-                    if Path(path).stem == 'rndis_host' and module == 'cdc_ether':
-                        dependency = next(r['package'] for r in self.rows if r['profile'] == row['profile'] and providers.fields(r['control']).get('X-Module-Path', '').endswith('/cdc_ether.ko'))
-                        self.assertIn(dependency + ' (= ', row['control'])
-                        continue
-                    if cfg.get(mapping['builtin_configs'].get(module, '')) == 'y':
-                        continue
-                    owners = sorted(p for p, value in stock.items() if module in value['modules'])
-                    if not owners:
-                        continue
-                    name = owners[0]
-                    self.assertIn(name + ' (= ' + stock[name]['version'] + ')',
-                                  providers.fields(row['control'])['Depends'], row['package'])
-                    preinst = providers.unpack(outer['control.tar.gz'])['preinst']
-                    self.assertIn(('package_status ' + name).encode(), preinst)
-                    checked += 1
-        self.assertGreater(checked, 0)
+            for entry in row.get('_package_archives', []):
+                self.assertTrue(Path(entry['path']).is_file())
+                self.assertNotIn((row['profile'], entry['filename']), active)
 
-    def test_dumaos_qos_dependencies_do_not_replace_stock_firewall(self):
-        profile = '4.1.52-vbntk'
-        stock = json.loads((providers.BUILD / 'firmware-packages.json').read_text())[profile]['packages']
-        rows = {r['package']: r for r in self.rows if r['profile'] == profile}
-        pending = ['kmod-act-connmark']
-        visited = set()
-        while pending:
-            name = pending.pop()
-            if name in visited or name in stock or name == 'kernel':
-                continue
-            visited.add(name)
-            row = rows[name]
-            outer = providers.unpack(Path(row['_path']).read_bytes())
-            payload = providers.unpack(outer['data.tar.gz'])
-            self.assertTrue(all(Path(p).stem == 'act_connmark' for p in payload), name)
-            for dependency in providers.fields(row['control'])['Depends'].split(','):
-                dep = dependency.strip().split()[0]
-                if dep in stock:
-                    self.assertEqual(dependency.strip(), dep + ' (= ' + stock[dep]['version'] + ')')
-                pending.append(dep)
-        self.assertEqual(visited, {'kmod-act-connmark', 'kmod-act-connmark-4.1.52-manual'})
+    def test_runtime_evidence_is_preserved_per_module_without_promotion(self):
+        rows = {r['package']: r for r in self.rows if r['profile'] == '4.1.52-vcnt3'}
+        for package, module in [('kmod-usb-net-cdc-ether', 'cdc_ether'), ('kmod-usb-net-rndis', 'rndis_host')]:
+            f = providers.fields(rows[package]['control'])
+            self.assertTrue(json.loads(f['X-Module-Validation'])[module])
+        with self.assertRaises(ValueError):
+            providers.runtime_evidence('4.1.52-vcnt3', 'rndis_host', b'different payload')
 
-    def test_ip_tables_capability_uses_stock_owner_without_payload(self):
-        rows = [r for r in self.rows if r['profile'] == '4.1.52-vbntk' and r['package'] == 'kmod-ip-tables']
-        self.assertEqual(len(rows), 1)
-        row = rows[0]
-        outer = providers.unpack(Path(row['_path']).read_bytes())
-        self.assertEqual(providers.unpack(outer['data.tar.gz']), {})
-        self.assertIn('kmod-nf-ipt (= ', providers.fields(row['control'])['Depends'])
-        self.assertNotIn('kmod-ip-tables-4.1.52-manual', row['control'])
+    def test_corrupt_stock_payload_fails_closed(self):
+        from kernel_feed_packages import stock_data
+        with self.assertRaises(ValueError):
+            stock_data({'lib/test.ko': {'base64': 'YWJj', 'sha256': '0' * 64, 'mode': '100644'}})
 
-
-if __name__ == '__main__':
-    unittest.main()
 
 class PackageHookLockTests(unittest.TestCase):
     def run_guard(self, status, replacements=None, dependencies=None, active=()):
